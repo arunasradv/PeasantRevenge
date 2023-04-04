@@ -1,0 +1,21 @@
+﻿230328	v6	
+Added:  Localisation (BR,CNs,CNt,DE,FR,IT,IT,JP,KO,PL,RU,SP,TR). (Google translated. Please report, if any line does not work, or should be changed)
+Change: Configuration variable name lordWillRansomMoneyIfHasTraits to lordWillAskRansomMoneyIfHasTraits (configuration will patch itself.)
+Added:  Configuration variable lordWillOfferRansomMoneyIfHasTraits
+Added:  Configuration variable lordWillOfferRansomMoneyWithProbabilityIfTraitFails
+Feature: AI heroes can offer "lost ransom" to other AI heroe party, when noble peasant kills the criminal heroe.. 
+         (Greedy lords will have probability of ""lordWillOfferRansomMoneyWithProbabilityIfTraitFails" to pay "lost ransom")
+230328	v7
+Added: You can now 
+       bribe (pay (goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal)),
+       teach (if player does not have traits as in peasantRevengerExcludeTrait configuration ), or 
+       execute (other notables will get positive or negative influence due to this action (random probability related to relations with notable)), 
+       notable peasants so they could do revenge.
+Changed: Information messages colors (only messages regarding peasant revenge and player clan related will be white)
+Added: More AI parameters. Relations for AI heroes are important now. 0 No good relations and 0 money means death... (parameters will be added in configuration file during game load)
+Feature: AI heroes can refuse to participate in peasant revenge (defined by parameters in partyLordLetNotableStartRevenge). Player clan members will participate
+Changed: Parameter ReparationsScaleToSettlementHearts will be reset to 20, if it was more than 30. (this value will be updated in configuration file during game load) 
+         It asures 2 AI executions due peasant revenge per year.
+Changed: Increased lordWillDemandRansomMoneyIfHasLessGoldThan to 2000 (will change if configuration file is deleted)
+
+

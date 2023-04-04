@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="5ypRJiWZ" text="Agradeço pela informação" />
+    <string id="62AkUCOw" text="Por que não se defende?" />
+    <string id="8xvSu9fX" text="Perdoe-me, {?NPC.GENDER}madame{?}senhor{\?}. Não sei onde eu estava com a cabeça." />
+    <string id="fbM7drKO" text="Por que não faz um cerco?" />
+    <string id="fBt8X6Tw" text="Hein? O que você quer?" />
+    <string id="GUIwjFKP" text="Certo, vamos seguir seu conselho primeiro." />
+    <string id="gZSdus34" text="Eu ofereço a você uma única chance de se render, senão morrerá." />
+    <string id="HEJOdRwi" text="Perdoe-me, {?NPC.GENDER}madame{?}senhor{\?}. Não sei onde eu estava com a cabeça." />
+    <string id="hjZkoJbc" text="Acho que faria mais sentido agora {ACTION} {#GENDER(SETTLEMENT)}o {#}a {#}os {#}as {#}{\#}{SETTLEMENT}. Pode me ajudar nessa tarefa? {AMOUNT}{GOLD_ICON}" />
+    <string id="HKMdHYb7" text="Daqui eu não saio. Prepare-se para lutar!" />
+    <string id="ltS8zmH8" text="Enlouqueceu? O inimigo aqui não sou eu." />
+    <string id="M7O3AItb" text="Perdoe-me. Nada, não." />
+    <string id="s61RscYw" text="Onde?" />
+    <string id="vsxVIDqT" text="Então vá embora." />
+    <string id="ztuhSo8h" text="Por que não saqueia..." />
+  </strings>
+</base>

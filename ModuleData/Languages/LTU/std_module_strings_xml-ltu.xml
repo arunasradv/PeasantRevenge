@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Lietuvių" />
+  </tags>
+  <strings>
+     <string id="PRev0001" text="{=PRev0001}Jūs apiplėšėte gretimą kaimą. Valstiečiai reikalauja kažkam nukirsti galvą. Ką jūs pasakysite?[rf:idle_angry][ib:closed][if:idle_angry]" />
+     <string id="PRev0002" text="{=PRev0002} convo_thinking][if:idle_happy]" />
+     <string id="PRev0003" text="{=PRev0003}Sumokėsiu {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0004" text="{=PRev0004}Nemokėsiu." />
+     <string id="PRev0005" text="{=PRev0005}Aš nemokėsiu šiai žiurkei." />
+     <string id="PRev0006" text="{=PRev0006}Visa tai buvo {COMPANION.NAME} planas! (melas)" />
+     <string id="PRev0007" text="{=PRev0007}Ar tikrai buvo taip, kaip sakote?[if:convo_thinking][ib:closed]" />
+     <string id="PRev0008" text="{=PRev0008}Ne!" />
+     <string id="PRev0009" text="{=PRev0009}Taip!" />
+     <string id="PRev0010" text="{=PRev0010}Na, gal ne valstietis turi spręsti jūsų likimą...[if:convo_thinking]" />
+     <string id="PRev0011" text="{=PRev0011}Mokėkite už savo nusikaltimą.[rf:idle_angry][if:convo_bored]" />
+     <string id="PRev0012" text="{=PRev0012}Na, aš tuo patenkintas.[ib:happy]" />
+     <string id="PRev0013" text="{=PRev0013}Na, gaila.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0014" text="{=PRev0014}Jūsų kalinys {CRIMINAL.LINK} apiplėšė mūsų kaimą. Mes reikalaujame nusikaltėlio galvos ant smaigalio! Ką jūs pasakysite?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0015" text="{=PRev0015}{CRIMINAL.NAME} mirs." />
+     <string id="PRev0016" text="{=PRev0016}{CRIMINAL.NAME} sumokės {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0017" text="{=PRev0017}Ne, valstiete, tai ne jūsų reikalas!" />
+     <string id="PRev0018" text="{=PRev0018}Bet, bet...[ib:closed][if:convo_bared_teeth]" />
+     <string id="PRev0019" text="{=PRev0019}Geriau nei nieko...[ib:closed][if:idle_normal]" />
+     <string id="PRev0020" text="{=PRev0020}Kerštas![if:convo_happy][ib:happy]" />
+     <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} užklupo {CRIMINAL.LINK}, apiplėšdamas mūsų kaimą. Reikalaujame nusikaltėlio galvos ant smaigalio, nes niekšas turi sumokėti už nusikaltimą! Ką jūs pasakysite?[ ib:aggressive][if:convo_furious]" />
+     <string id="PRev0022" text="{=PRev0022}Nesilenksiu valstiečių reikalavimams! Ir {HERO.NAME} taip pat turėtų!" />
+     <string id="PRev0023" text="{=PRev0023}Nemokėsiu! Nusikaltėliai gali mirti!" />
+     <string id="PRev0024" text="{=PRev0024}Kaip tu drįsti! Tu mirsi!" />
+     <string id="PRev0025" text="{=PRev0025}Geriau nei nieko...[ib:closed][if:idle_angry][rf:idle_angry]" />
+     <string id="PRev0026" text="{=PRev0026}Bet, bet...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0027" text="{=PRev0027}Ir aš nusiųsiu tavo galvą {HERO.NAME}!" />
+     <string id="PRev0028" text="{=PRev0028}Taigi, nusikaltėlis mirs.[ib:closed][if:happy]" />
+     <string id="PRev0029" text="{=PRev0029}Nusikaltėlis mirė![ib:closed][if:happy]" />
+     <string id="PRev0030" text="{=PRev0030}Žiūrėk, valstietis nužudė mūsų kalinį![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+     <string id="PRev0031" text="{=PRev0031}{?GIFT_RECEIVER.GENDER}Ponia{?}Viešpats{\\?} {GIFT_RECEIVER.LINK} prašo jūsų išpirkos aukso {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0032" text="{=PRev0032}Nieko nemokėsiu." />
+     <string id="PRev0033" text="{=PRev0033}Prašome nunešti šią dovaną {?GIFT_RECEIVER.GENDER}Ponia{?}Viešpatie{\\?} {GIFT_RECEIVER.NAME}." />
+     <string id="PRev0034" text="{=PRev0034}Jūsų išpirka mirė, o dabar mirsite ir jūs!" />
+     <string id="PRev0035" text="{=PRev0035}Dovana?[if:convo_thinking]" />
+     <string id="PRev0036" text="{=PRev0036}Taigi jūs negalite mokėti...[ib:closed][if:idle_angry]" />
+     <string id="PRev0037" text="{=PRev0037}Džiaugiamės.[if:convo_happy]" />
+     <string id="PRev0038" text="{=PRev0038}Tai nesąžininga.[ib:closed][if:idle_angry]" />
+     <string id="PRev0039" text="{=PRev0039}Bet aš esu pasiuntinys...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0040" text="{=PRev0040}{PARTYOWNER.NAME} neįvykdė {PRISONER.NAME}, nes {SAVER.NAME} sumokėjo {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0041" text="{=PRev0041}{PARTYOWNER.NAME} neįvykdė {PRISONER.NAME}, nes {PRISONER.NAME} sumokėjo {REPARATION}{GOLD_ICON}" />
+     <string id="PRev0042" text="{=PRev0042}{PARTYOWNER.NAME} neįvykdė {PRISONER.NAME}, nes kitokia karalystė" />
+     <string id="PRev0043" text="{=PRev0043}{PARTYOWNER.NAME} neįvykdė {KALINIO.VARDĖS}, nes {SAVER.NAME} įvykdė kilmingąjį valstietį {EXECUTIONER.NAME}" />
+     <string id="PRev0044" text="{=PRev0044}{PARTYOWNER.NAME} neįvykdė {PRISONER.NAME}, nes draugai" />
+     <string id="PRev0045" text="{=PRev0045}{SAVER.NAME} sumokėjo {REPARATION}{GOLD_ICON} už {PRISONER.NAME} galvą {EXECUTIONER.NAME}." />
+     <string id="PRev0046" text="{=PRev0046}{HERO.NAME} sumokėjo {REPARATION}{GOLD_ICON} {EXECUTIONER.NAME}." />
+  </strings>
+</base>

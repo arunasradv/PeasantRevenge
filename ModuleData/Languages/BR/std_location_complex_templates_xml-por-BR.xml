@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="25pNV9E3" text="{.MS}Centro do Vilarejo" />
+    <string id="centerretreatcomplex" text="Centro" />
+    <string id="centertowncomplex" text="{.MS}Centro" />
+    <string id="DO7Vk4iw" text="{.FS}Taberna" />
+    <string id="e7i3UP8q" text="{.FS}Casa" />
+    <string id="mMU3H6HZ" text="{.FS}Arena" />
+    <string id="O7lU6qaU" text="{.MS}Pátio do Castelo" />
+    <string id="QTKck7Uj" text="{.MS}Salão dos Senhores" />
+    <string id="x04UGQDn" text="{.FS}Masmorra" />
+    <string id="XkrL8Wok" text="{.MS}Beco" />
+  </strings>
+</base>

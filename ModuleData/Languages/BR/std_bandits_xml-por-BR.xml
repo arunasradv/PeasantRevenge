@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="0Ikzzm71" text="{.MS}Líder Invasor do Mar" />
+    <string id="0qDNS83n" text="{.MS}Bandido Nômade" />
+    <string id="9laVlEH9" text="{.MS}Montanhês" />
+    <string id="Awc23bFS" text="Pilhador" />
+    <string id="Bg63YFnh" text="{.MS}Chefe Bandido da Estepe" />
+    <string id="C1Fkzdvu" text="{.MS}Chefe Invasor do Mar" />
+    <string id="C8DE6L73" text="{.MS}Desertor" />
+    <string id="C8hwcOdF" text="Pilhante Montado" />
+    <string id="cbnvgVhH" text="{.MS}Invasor" />
+    <string id="cdbSCr6G" text="{.NS}Harami" />
+    <string id="dc2qxanZ" text="{.MS}Chefe Bandido da Floresta" />
+    <string id="dq2cP8h0" text="{.MS}Invasor do Mar" />
+    <string id="freebootertroop" text="{.MS}Flibusteiro" />
+    <string id="HadsURl8" text="{.NS}Quebra-Mato" />
+    <string id="J6Yksji5" text="Rapinador Montado" />
+    <string id="Nr8NkHXU" text="{.MS}Guerreiro Invasor do Mar" />
+    <string id="P6Md9DpR" text="{.MS}Ladrão de Estrada" />
+    <string id="Q2V4uQrr" text="{.MS}Chefe Bandido do Deserto" />
+    <string id="sFgODQ1q" text="{.MS}Bandido da Floresta" />
+    <string id="uOAnHN47" text="{.MS}Viajante Beduíno" />
+    <string id="urUwa4bf" text="Saqueador" />
+    <string id="ZA4bgJ5V" text="{.MS}Bandido da Estepe" />
+    <string id="ziOBJSzR" text="{.MS}Chefe Bandido da Montanha" />
+    <string id="ZKdiaaFo" text="{.MS}Bandoleiro" />
+  </strings>
+</base>

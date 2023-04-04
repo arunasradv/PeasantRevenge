@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Français" />
+  </tags>
+  <strings>
+     <string id="PRev0001" text="Vous avez pillé le village voisin. Les paysans exigent de couper la tête de quelqu'un. Que direz-vous ?[rf:idle_angry][ib:closed][if:idle_angry]" />
+     <string id="PRev0002" text="Juste curieux, le {PEASANTREVENGER.LINK} dit que vous avez pillé votre propre village plus tôt. Le paysan veut votre tête. Que direz-vous ? [si : convo_thinking][if:idle_happy]" />
+     <string id="PRev0003" text="Je paierai {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0004" text="Je ne paierai pas." />
+     <string id="PRev0005" text="Je ne paierai pas à ce rat." />
+     <string id="PRev0006" text="C'était le plan de {COMPANION.NAME} ! (mensonge)" />
+     <string id="PRev0007" text="Êtes-vous sûr que c'était comme vous le dites ?[if:convo_thinking][ib:closed]" />
+     <string id="PRev0008" text="Non !" />
+     <string id="PRev0009" text="Oui !" />
+     <string id="PRev0010" text="Eh bien, ce n'est peut-être pas au paysan de décider de votre sort...[if:convo_thinking]" />
+     <string id="PRev0011" text="Payez pour votre crime.[rf:idle_angry][if:convo_bored]" />
+     <string id="PRev0012" text="Eh bien, j'en suis content.[ib:happy]" />
+     <string id="PRev0013" text="Eh bien, c'est dommage.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0014" text="Votre prisonnier {CRIMINAL.LINK} a pillé notre village. Nous exigeons la tête du criminel sur pique ! Que direz-vous ?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0015" text="{CRIMINAL.NAME} va mourir." />
+     <string id="PRev0016" text="{CRIMINAL.NAME} paiera {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0017" text="Non, ce ne sont pas tes affaires, paysan !" />
+     <string id="PRev0018" text="Chaussure, chaussure...[ib:closed][if:convo_bared_teeth]" />
+     <string id="PRev0019" text="Mieux que rien...[ib:closed][if:idle_normal]" />
+     <string id="PRev0020" text="Vengeance ![if:convo_happy][ib:happy]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} a attrapé {CRIMINAL.LINK} le pillage de notre village. Nous exigeons la tête du criminel, car ce bâtard doit payer pour le crime ! Que direz-vous ?[ ib:agressif][if:convo_furious]" />
+     <string id="PRev0022" text="Je ne me plierai pas aux demandes des paysans ! Et {HERO.NAME} devrait le faire aussi !" />
+     <string id="PRev0023" text="Je ne paierai pas ! Les criminels peuvent mourir !" />
+     <string id="PRev0024" text="Comment osez-vous ! Vous allez mourir !" />
+     <string id="PRev0025" text="Mieux que rien...[ib:closed][if:idle_angry][rf:idle_angry]" />
+     <string id="PRev0026" text="Chaussure, chaussure...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0027" text="Et j'enverrai ta tête à {HERO.NAME} !" />
+     <string id="PRev0028" text="Ainsi, le criminel va mourir.[ib:closed][if:happy]" />
+     <string id="PRev0029" text="Le seigneur criminel est mort ![ib:closed][if:happy]" />
+     <string id="PRev0030" text="Regardez, le paysan a tué notre prisonnier ![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Dame{?}Seigneur{\\?} {GIFT_RECEIVER.LINK} vous demande une rançon d'or {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0032" text="Je ne paierai rien." />
+     <string id="PRev0033" text="Veuillez apporter ce cadeau à {GIFT_RECEIVER.NAME}." />
+     <string id="PRev0034" text="Votre rançon est morte et maintenant vous allez mourir aussi !" />
+     <string id="PRev0035" text="Un cadeau ?[if:convo_thinking]" />
+     <string id="PRev0036" text="Vous ne pouvez donc pas payer...[ib:closed][if:idle_angry]" />
+     <string id="PRev0037" text="Nous sommes ravis.[if:convo_happy]" />
+     <string id="PRev0038" text="C'est injuste.[ib:closed][if:idle_angry]" />
+     <string id="PRev0039" text="Mais je suis le messager...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0040" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car {SAVER.NAME} a payé {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0041" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car {PRISONER.NAME} a payé {REPARATION}{GOLD_ICON}" />
+     <string id="PRev0042" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car un royaume différent" />
+     <string id="PRev0043" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car {SAVER.NAME} a exécuté le notable paysan {EXECUTIONER.NAME}" />
+     <string id="PRev0044" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car des amis" />
+     <string id="PRev0045" text="{SAVER.NAME} a payé {REPARATION}{GOLD_ICON} pour la tête de {PRISONER.NAME} à {EXECUTIONER.NAME}." />
+     <string id="PRev0046" text="{HERO.NAME} a payé {REPARATION}{GOLD_ICON} à {EXECUTIONER.NAME}." />
+     <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car des amis" />
+    <string id="PRev0048" text="Avez-vous affaire à des criminels dans ce village ?" />
+    <string id="PRev0049" text="Oui, mais comment les lâches qui pardonnent peuvent-ils les dissuader ? Avec des bâtons ?[ib:closed][if:convo_grave]" />
+    <string id="PRev0050" text="Le problème est dans ta tête !" />
+    <string id="PRev0051" text="Je peux essayer de vous enseigner par mon exemple..." />
+    <string id="PRev0052" text="Ici prenez {BRIBEVALUE}{GOLD_ICON}. Faites payer les criminels pour leurs crimes !" />
+    <string id="PRev0053" text="Merci beaucoup ![if:convo_astonished]" />
+    <string id="PRev0054" text="Je ne peux tout simplement pas.[if:convo_grave]" />
+    <string id="PRev0055" text="N'ont pas les traits nécessaires" />
+    <string id="PRev0056" text="{SETTLEMENTOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car nous avons de bonnes relations." />
+    <string id="PRev0057" text="{SETTLEMENTOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car ils sont parents." />
+    <string id="PRev0058" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car nous avons de bonnes relations." />
+    <string id="PRev0059" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, car ils sont parents." />
+    <string id="PRev0060" text="Cadeau à {PROPOSEDTO.NAME}" />
+    <string id="PRev0061" text="{PROPOSING_HERO.NAME} REPARATION " />
+  </strings>
+</base>

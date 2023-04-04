@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="7bjyJDaK" text="{.NS}Líder dos Mercenários da Facção do Jogador" />
+    <string id="EsJ3Drv7" text="{.NS}Líder dos Mercenários de Estúrgia" />
+    <string id="GIRpmax8" text="{.NS}Líder de Mercenários Asserais" />
+    <string id="jHVTqyI4" text="{.NS}Líder de Mercenários do Império" />
+    <string id="ugbfHGZ3" text="{.NS}Líder de Mercenários Mundiais" />
+    <string id="VPis3atP" text="{.NS}Líder de Mercenários Khozaits" />
+    <string id="XhbgteUK" text="{.NS}Líder de Mercenários de Vlândia" />
+    <string id="y6E1CTsv" text="{.NS}Líder de Mercenários de Batânia" />
+  </strings>
+</base>

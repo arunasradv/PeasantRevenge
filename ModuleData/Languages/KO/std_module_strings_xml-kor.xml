@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="한국어" />
+  </tags>
+  <strings>
+     <string id="PRev0001" text="근처 마을을 약탈했습니다. 농부들이 누군가의 머리를 자르라고 요구합니다. 뭐라고 하시겠습니까?[rf:idle_angry][ib:closed][if:idle_angry]" />
+     <string id="PRev0002" text="{PEASANTREVENGER.LINK}는 당신이 이전에 당신의 마을을 약탈했다고 말했습니다. 농부는 당신의 목을 베어버리고 싶어합니다. 당신은 뭐라고 말하시겠습니까?[if: convo_thinking][if:idle_happy]" />
+     <string id="PRev0003" text="{REPARATION}{GOLD_ICON}을(를) 지불하겠습니다." />
+     <string id="PRev0004" text="지불하지 않겠습니다." />
+     <string id="PRev0005" text="이 쥐에게 돈을 지불하지 않겠습니다." />
+     <string id="PRev0006" text="모두 {COMPANION.NAME}님의 계획이었습니다! (거짓말)" />
+     <string id="PRev0007" text="말씀대로였습니까?[if:convo_thinking][ib:closed]" />
+     <string id="PRev0008" text="아니요!" />
+     <string id="PRev0009" text="예!" />
+     <string id="PRev0010" text="음, 농부가 당신의 운명을 결정하는 것은 아닐 수도 있습니다...[if:convo_thinking]" />
+     <string id="PRev0011" text="범죄에 대한 대가를 치르십시오.[rf:idle_angry][if:convo_bored]" />
+     <string id="PRev0012" text="좋습니다.[ib:happy]" />
+     <string id="PRev0013" text="안타깝네요.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0014" text="당신의 수감자 {CRIMINAL.LINK}이(가) 우리 마을을 약탈했습니다. 우리는 범인의 머리를 스파이크에 요구합니다! 당신은 뭐라고 하시겠습니까?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0015" text="{CRIMINAL.NAME}님은 죽을 것입니다." />
+     <string id="PRev0016" text="{CRIMINAL.NAME}님이 {REPARATION}{GOLD_ICON}을(를) 지불할 것입니다." />
+     <string id="PRev0017" text="아니요, 당신의 일이 아닙니다, 농부님!" />
+     <string id="PRev0018" text="하지만, 하지만...[ib:closed][if:convo_bared_teeth]" />
+     <string id="PRev0019" text="없는 것보다 낫다...[ib:closed][if:idle_normal]" />
+     <string id="PRev0020" text="복수![if:convo_happy][ib:happy]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK}이(가) {CRIMINAL.LINK}이(가) 우리 마을을 약탈했다고 기침했습니다. 우리는 범인의 머리를 요구합니다. 놈은 범죄에 대한 대가를 치러야 하기 때문입니다! 당신은 뭐라고 말하시겠습니까?[ ib:공격적][if:convo_furious]" />
+     <string id="PRev0022" text="저는 농민의 요구에 굴복하지 않겠습니다! 그리고 {HERO.NAME}님도 그래야 합니다!" />
+     <string id="PRev0023" text="돈을 내지 않겠습니다! 범죄자는 죽을 수 있습니다!" />
+     <string id="PRev0024" text="감히! 넌 죽을거야!" />
+     <string id="PRev0025" text="아무것도 하지 않는 것보다는...[ib:closed][if:idle_angry][rf:idle_angry]" />
+     <string id="PRev0026" text="하지만, 하지만...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0027" text="그리고 당신의 머리를 {HERO.NAME}에게 보내드리겠습니다!" />
+     <string id="PRev0028" text="따라서 범죄자는 죽는다.[ib:closed][if:happy]" />
+     <string id="PRev0029" text="범죄 군주가 죽었습니다![ib:closed][if:happy]" />
+     <string id="PRev0030" text="봐, 농부가 우리 죄수를 죽였어![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}숙녀{?}자{\\?} {GIFT_RECEIVER.LINK}가 몸값을 요구하는 금{RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0032" text="아무것도 지불하지 않겠습니다." />
+     <string id="PRev0033" text="이 선물을 {GIFT_RECEIVER.NAME}에게 가져가세요." />
+     <string id="PRev0034" text="당신의 몸값은 죽었고 이제 당신도 죽을 것입니다!" />
+     <string id="PRev0035" text="선물?[if:convo_thinking]" />
+     <string id="PRev0036" text="따라서 지불할 수 없습니다...[ib:closed][if:idle_angry]" />
+     <string id="PRev0037" text="기쁩니다.[if:convo_happy]" />
+     <string id="PRev0038" text="불공평합니다.[ib:closed][if:idle_angry]" />
+     <string id="PRev0039" text="하지만 저는 메신저입니다...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+	   <string id="PRev0040" text="{PARTYOWNER.NAME}은(는) {PRISONER.NAME}님을 처형하지 않았습니다. 왜냐하면 {SAVER.NAME}님이 {REPARATION}{GOLD_ICON}을(를) 지불했기 때문입니다." />
+     <string id="PRev0041" text="{PARTYOWNER.NAME}은(는) {PRISONER.NAME}님이 {REPARATION}{GOLD_ICON}을(를) 지불했기 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
+     <string id="PRev0042" text="{PARTYOWNER.NAME}은(는) 다른 왕국 때문에 {PRISONER.NAME}을(를) 처형하지 않았습니다." />
+     <string id="PRev0043" text="{PARTYOWNER.NAME}은(는) {PRISONER.NAME}님을 처형하지 않았습니다. 왜냐하면 {SAVER.NAME}이(가) 주목할만한 농민 {EXECUTIONER.NAME}을(를) 처형했기 때문입니다." />
+     <string id="PRev0044" text="{PARTYOWNER.NAME}은(는) {PRISONER.NAME}님을 처형하지 않았습니다. 친구들 때문입니다." />
+     <string id="PRev0045" text="{SAVER.NAME}이(가) {PRISONER.NAME}의 머리를 {EXECUTIONER.NAME}에게 맡기기 위해 {REPARATION}{GOLD_ICON}을(를) 지불했습니다." />
+     <string id="PRev0046" text="{HERO.NAME}님이 {EXECUTIONER.NAME}님에게 {REPARATION}{GOLD_ICON}을(를) 지불했습니다." />
+     <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} 이(가) {PRISONER.NAME} 님을 처형하지 않았습니다. 친구들 때문입니다." />
+    <string id="PRev0048" text="이 마을에서 범죄자를 처리합니까?" />
+    <string id="PRev0049" text="그렇습니다. 하지만 용서하는 겁쟁이가 어떻게 겁쟁이를 저지할 수 있습니까? 막대기로?[ib:closed][if:convo_grave]" />
+    <string id="PRev0050" text="문제는 당신의 머릿속에 있습니다!" />
+    <string id="PRev0051" text="예를 들어 가르쳐 드릴 수 있습니다..." />
+    <string id="PRev0052" text="{BRIBEVALUE}{GOLD_ICON}을 가져가세요. 범죄자들이 범죄에 대한 대가를 치르게 하세요!" />
+    <string id="PRev0053" text="대단히 감사합니다![if:convo_astonished]" />
+    <string id="PRev0054" text="저는 할 수 없습니다.[if:convo_grave]" />
+    <string id="PRev0055" text="필요한 특성이 없습니다." />
+    <string id="PRev0056" text="{SETTLEMENTOWNER.NAME}은(는) 관계가 좋기 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
+    <string id="PRev0057" text="{SETTLEMENTOWNER.NAME}은 친척이기 때문에 {PRISONER.NAME}을(를) 처형하지 않았습니다." />
+    <string id="PRev0058" text="{PARTYOWNER.NAME}은(는) 관계가 좋기 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
+    <string id="PRev0059" text="{PARTYOWNER.NAME}은 친척이기 때문에 {PRISONER.NAME}을(를) 처형하지 않았습니다." />
+    <string id="PRev0060" text="{PROPOSEDTO.NAME}에게 선물하기" />
+    <string id="PRev0061" text="{PROPOSING_HERO.NAME} 배상 " />
+  </strings>
+</base>

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="1CCSLaXG" text="honorável" />
+    <string id="2LhoHBb4" text="indiferente e distante" />
+    <string id="2oLzxPGu" text="{?NOTABLE.GENDER}agressiva{?}agressivo{\?} e cobra muito das pessoas" />
+    <string id="3ojhI49j" text="{?NOTABLE.GENDER}fria{?}frio{\?}" />
+    <string id="4Kb43rdf" text="leal" />
+    <string id="52I465OW" text="{?NOTABLE.GENDER}ambiciosa e manipuladora{?}ambicioso e manipulador{\?}" />
+    <string id="5L4ox55u" text="Sempre {?NOTABLE.GENDER}a primeira{?}o primeiro{\?} a arriscar o pescoço pela causa" />
+    <string id="5ogR7oUW" text="nobre e {?NOTABLE.GENDER}generosa{?}generoso{\?}" />
+    <string id="6okDQlyn" text="{?NOTABLE.GENDER}cautelosa{?}cauteloso{\?}" />
+    <string id="6tOrCXWu" text="Cuida daqueles que {?NOTABLE.GENDER}a{?}o{\?} serviram bem" />
+    <string id="85SsQ1xA" text="não confiável" />
+    <string id="8aAbnMIo" text="indiferente" />
+    <string id="8D5Lx2LY" text="{?NOTABLE.GENDER}compassiva{?}compassivo{\?}" />
+    <string id="9bUlUrVI" text="hostil e cruel" />
+    <string id="A27HuUiz" text="{?NOTABLE.GENDER}destemida{?}destemido{\?}" />
+    <string id="aDkmS7iN" text="o tipo que age sem pensar" />
+    <string id="AgE2Wffg" text="{?NOTABLE.GENDER}uma boa amiga, mas uma inimiga perigosa{?}um bom amigo, mas um inimigo perigoso{\?}" />
+    <string id="aLO7V5ZZ" text="{?NOTABLE.GENDER}Ela{?}Ele{\?} é {?NOTABLE.GENDER}honesta{?}honesto{\?}, isso é inegável, mas tem um coração de pedra." />
+    <string id="bSQF8nac" text="{?NOTABLE.GENDER}ambiciosa{?}ambicioso{\?}" />
+    <string id="bYa051Bs" text="{?NOTABLE.GENDER}má, agressiva e ambiciosa{?}mau, agressivo e ambicioso{\?}" />
+    <string id="CaSahkj4" text="ignóbil em todos os sentidos" />
+    <string id="CUR5ZZtd" text="{?NOTABLE.GENDER}justa{?}justo{\?}, mas inclemente" />
+    <string id="Dkmja15D" text="Não inspira confiança." />
+    <string id="Dz3kGpkM" text="{?NOTABLE.GENDER}louca, má{?}louco, mau{\?}, e um perigo para quem conhece" />
+    <string id="dZ7OtsDv" text="{?NOTABLE.GENDER}cautelosa{?}cauteloso{\?}, mas confiável" />
+    <string id="etdkWOLn" text="{?NOTABLE.GENDER}maldosa{?}maldoso{\?}" />
+    <string id="euinlzab" text="tímido{?NOTABLE.GENDER}tímida{?}tímido{\?}" />
+    <string id="fgkQSbUE" text="um pouco rebelde, mas um coração de ouro" />
+    <string id="FNzGHbvb" text="{?NOTABLE.GENDER}propensa{?}propenso{\?} a acessos de raiva perigosos" />
+    <string id="GMMg8AwD" text="inclemente" />
+    <string id="gZMm5J4u" text="Nunca age precipitadamente... Sempre tem um plano" />
+    <string id="hFtm7jZT" text="profundamente convencional" />
+    <string id="HNoD0Xcw" text="valente, mas se enfurece facilmente e é {?NOTABLE.GENDER}rancorosa{?}rancoroso{\?}" />
+    <string id="HTBQ3E3Q" text="{?NOTABLE.GENDER}generosa{?}generoso{\?} com os amigos" />
+    <string id="isnEHNXl" text="Defende aquilo em que acredita" />
+    <string id="jFLPNGdH" text="valente e honorável" />
+    <string id="jqiKsw34" text="{?NOTABLE.GENDER}maldosa{?}maldoso{\?}, mas {?NOTABLE.GENDER}compassiva{?}compassivo{\?}" />
+    <string id="JWTKNySw" text="mão de vaca" />
+    <string id="KFvms0sR" text="um homem que gosta de correr riscos calculados" />
+    <string id="kKFLfWbJ" text="moralista" />
+    <string id="KxjSILpL" text="o tipo que aproveita qualquer vantagem" />
+    <string id="L3b9ZsLs" text="{?NOTABLE.GENDER}perdulária{?}perdulário{\?}" />
+    <string id="LCs7NMyz" text="Você não vai ver {?NOTABLE.GENDER}essa{?}esse{\?} aí encarando o perigo de frente" />
+    <string id="LfmWyPEk" text="convencional" />
+    <string id="LtBwSe0J" text="afável e cortês, mas há quem diga que tem coração mole" />
+    <string id="mH8FHX9r" text="{?NOTABLE.GENDER}cautelosa, mas perigosa{?}cauteloso, mas perigoso{\?}" />
+    <string id="MoQbaOOk" text="cruel e {?NOTABLE.GENDER}maldosa{?}maldoso{\?}" />
+    <string id="MVnA7tkN" text="honorável, {?NOTABLE.GENDER}raivosa{?}raivoso{\?} e cruel, incapaz de quebrar uma promessa ou perdoar uma ofensa" />
+    <string id="mWkCWB6j" text="gentil, mas {?NOTABLE.GENDER}cautelosa{?}cauteloso{\?}" />
+    <string id="nnDG8Ryc" text="valente, mas cabeça-dura" />
+    <string id="NOEYSbeR" text="honorável, mas {?NOTABLE.GENDER}teimosa{?}teimoso{\?} e cruel" />
+    <string id="nYHM3bmc" text="valente, mas {?NOTABLE.GENDER}piedosa{?}piedoso{\?}" />
+    <string id="OuXZbyeS" text="{?NOTABLE.GENDER}atenciosa{?}atencioso{\?}, tem o cuidado de recompensar seguidores fiéis" />
+    <string id="OwOdbwc5" text="Às vezes pula de cabeça sem pensar" />
+    <string id="peI78GmJ" text="Não sei o que achar..." />
+    <string id="ppTLY8tm" text="{?NOTABLE.GENDER}justa e honesta, mas ingrata{?}justo e honesto, mas ingrato{\?}" />
+    <string id="PW3Ya1AQ" text="de temperamento irritadiço" />
+    <string id="Q3TaYO39" text="o tipo que se empenha pela justiça" />
+    <string id="QtcN7aEk" text="audaz e {?NOTABLE.GENDER}ambiciosa{?}ambicioso{\?}" />
+    <string id="qXwYcJHa" text="razoável e gentil" />
+    <string id="QzNHs8Ch" text="passional e valente, embora algumas vezes não pare para pensar" />
+    <string id="RaecCLdK" text="{?NOTABLE.GENDER}corajosa e generosa, uma boa amiga{?}corajoso e generoso, um bom amigo{\?}" />
+    <string id="Raq3TcUa" text="{?NOTABLE.GENDER}atenciosa{?}atencioso{\?} com os outros" />
+    <string id="raQIsPly" text="benevolente com os inimigos, mas {?NOTABLE.GENDER}descuidada{?}descuidado{\?} com os amigos" />
+    <string id="rarG5Bqa" text="{?NOTABLE.GENDER}prestativa{?}prestativo{\?}" />
+    <string id="S6XcP7Wz" text="{?NOTABLE.GENDER}a melhor das amigas e a pior das inimigas{?}o melhor dos amigos e o pior dos inimigos{\?}" />
+    <string id="tc1PuNa8" text="leal aos amigos, mas também cruel e {?NOTABLE.GENDER}manipuladora{?}manipulador{\?}" />
+    <string id="TGQD4r5Z" text="galante" />
+    <string id="UoYPTOPV" text="{?NOTABLE.GENDER}traiçoeira{?}traiçoeiro{\?}, mas pelo menos não é cruel" />
+    <string id="URWSOAfG" text="{?NOTABLE.GENDER}sádica{?}sádico{\?}" />
+    <string id="Vis2eo0Y" text="Tem uma veia cruel inegável" />
+    <string id="VnaT2Ipq" text="gentil" />
+    <string id="VujjcI1C" text="Isso é que é ter coração bom, não tem como negar" />
+    <string id="WAzdB4DL" text="sagaz e {?NOTABLE.GENDER}capciosa{?}capcioso{\?}" />
+    <string id="WbyybDP6" text="Nem sempre se lembra de quem lhe prestou um bom serviço" />
+    <string id="wVfZh5eN" text="de temperamento exaltado e perigoso" />
+    <string id="XPU5mqSi" text="{?NOTABLE.GENDER}astuta{?}astuto{\?}" />
+    <string id="xSbcea2l" text="não confiável" />
+    <string id="Y8WpovVO" text="razoável, mas {?NOTABLE.GENDER}cautelosa{?}cauteloso{\?}" />
+    <string id="YeK2rAWJ" text="cruel" />
+    <string id="yl2q8dL8" text="implacável" />
+    <string id="Yyw81AGG" text="amigável, mas {?NOTABLE.GENDER}manipuladora{?}manipulador{\?}" />
+    <string id="znOeRtlb" text="{?NOTABLE.GENDER}uma conspiradora{?}um conspirador{\?}" />
+  </strings>
+</base>

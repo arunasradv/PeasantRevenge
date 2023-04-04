@@ -1,0 +1,17 @@
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\bin\Debug\PeasantRevenge.dll
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\bin\Debug\PeasantRevenge.pdb
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.AssemblyReference.cache
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.CoreCompileInputs.cache
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.dll
+C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.pdb
+D:\Kita\Banerlord\repos\BastardsMod\PeasantRevenge\bin\Debug\PeasantRevenge.dll
+D:\Kita\Banerlord\repos\BastardsMod\PeasantRevenge\bin\Debug\PeasantRevenge.pdb
+D:\Kita\Banerlord\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.CoreCompileInputs.cache
+D:\Kita\Banerlord\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.dll
+D:\Kita\Banerlord\repos\BastardsMod\PeasantRevenge\obj\Debug\PeasantRevenge.pdb
+D:\Kita\Banerlord\repos\PeasantRevenge\bin\Debug\PeasantRevenge.dll
+D:\Kita\Banerlord\repos\PeasantRevenge\bin\Debug\PeasantRevenge.pdb
+D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.csprojAssemblyReference.cache
+D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.CoreCompileInputs.cache
+D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.dll
+D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.pdb

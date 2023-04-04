@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="0B27RrYJ" text="Batânia" />
+    <string id="5djtBrHj" text="{.MS}Sultão" />
+    <string id="8HMyTKF6" text="Vlândios" />
+    <string id="aEfsyVH4" text="Muitas das famílias mais antigas do Império moram no norte. Chegaram aqui como senhores das fronteiras e receberam vastos territórios de seus colegas do Senado para manter sob controle as tribos nortenhas &apos;pacificadas&apos; e proteger as fronteiras contra os saqueadores batanianos, estúrgios e khozaits. Eles drenaram os pântanos e transformaram as várzeas em campos de trigo, desmataram as florestas e transformaram as encostas em pastagens. Porém, com a república se transformando em império, e os imperadores dependendo cada vez mais de dinheiro e de terras para recompensar seus soldados fiéis, a nobreza começou a temer que suas propriedades um dia fossem tomadas por algum tirano desesperado por dinheiro. Por isso, na guerra civil imperial em curso, eles se transformaram em fortíssimos campeões de Lucon, que vê o Senado (composto de proprietários de terras consolidados) como a autoridade suprema e o imperador como servo dela." />
+    <string id="afvM7XpQ" text="{.MS}Grão-Rei" />
+    <string id="aseraifaction" text="Asserais" />
+    <string id="aseraimembers" text="Asserais" />
+    <string id="bF7HmNGQ" text="Canato Khozait" />
+    <string id="bgjiFSHZ" text="Batanianos" />
+    <string id="bVihnRUu" text="A confederação de pequenos reinos que hoje é conhecida como Principado de Estúrgia ganhou forma há apenas um século. Com cidades pipocando à beira das baías e lagos do norte, os líderes tribais locais forçaram o estabelecimento de pactos de casamento com nórdicos e outros aventureiros, contratando mercenários para subjugar seus vizinhos. Sob a pressão do império, eles elegeram um príncipe para liderá-los na guerra, que por fim tornou-se um cargo hereditário. Mas a ideia de monarquia nunca foi bem aceita pelos boiardos, um povo sempre independente, e o potencial para uma rebelião sempre esteve à espreita sob a superfície da política estúrgia." />
+    <string id="C4qjBqLO" text="Estúrgios" />
+    <string id="fGNdo1BK" text="Por séculos, as tribos da vasta estepe do leste do Império se contentavam em viver como nômades, aventurando-se pelas terras imperiais para saquear e negociar, retornando em seguida para sua liberdade ancestral intrínseca. No entanto, há duas gerações, algo aconteceu em terras remotas ao leste – uma mudança nos ventos, talvez, ou algum conquistador terrível, porém distante –, e os clãs montados foram postos em movimento. O khozait Urkhun levou os nômades mais próximos do Império até suas províncias mais orientais, conquistando as cidades e formando um canato. Ele impôs disciplina aos clãs rebeldes, obrigando-os a marchar para a guerra sob seu comando, em vez de somente quando desejavam. Só que, após a morte dele, o espírito de união que ele trouxe consigo se dissipou. Os descendentes dele ainda governam o canato. No entanto, enquanto alguns dos líderes khozaits desrespeitam a autoridade do atual soberano, Monchug, outros sonham em arrebatar o título de Khan." />
+    <string id="FjwRsf1C" text="Vlândia" />
+    <string id="FmbgPGBL" text="{.MS}Grande Príncipe" />
+    <string id="frBQ9mbP" text="Império do Sul" />
+    <string id="GbnlN6na" text="{.MS}Império do Sul" />
+    <string id="hwnp9abW" text="{.MS}Rei" />
+    <string id="IudGLWQZ" text="A monarquia vlândia é oriunda de Osric Braço de Ferro, um senhor da guerra que tomou o controle dos litorais ocidentais do Império e foi reconhecido como rei pelos imperadores como preço pela paz. Em troca, ele reconheceu seus tenentes como barões e condes, concedendo suserania sobre as terras deles enquanto carregassem o estandarte do rei na guerra. Alguns reis vlândios buscaram ampliar os poderes da monarquia. Outros, permitiram que barões entrassem em conflito entre si contanto que o dinheiro e a mão de obra estivessem disponíveis quando requisitados." />
+    <string id="iYCR3xuQ" text="Principado de Estúrgia" />
+    <string id="lAWwcO6b" text="Reino de Vlândia" />
+    <string id="mOZsbV8j" text="Diz a tradição que os primeiros calradianos entraram no continente como exilados, vindos das terras do outro lado do mar ocidental. Porém, o império deslocou seu centro de gravidade para o leste e para o sul, e as terras originais foram, em sua maioria, perdidas para os vlândios. O atual oeste do império, terra verdejante e quente com florestas de carvalhos e afloramentos vulcânicos, foi em sua maior parte tomado das tribos palaicas. Elas se ligaram por casamento aos colonos calradianos, e hoje seus velhos idiomas e costumes estão praticamente esquecidos. O serviço militar nas legiões é uma forma tradicional de escapar da pobreza rural, e muitos generais ambiciosos encontraram recrutas fidelíssimos nessa região. Os proprietários de terra foram naturalmente atraídos por Garios, o defensor dos soldados e dos interesses deles, na guerra civil em curso." />
+    <string id="NF627oiX" text="Império do Norte" />
+    <string id="nsDj8Qxl" text="{.MS}Império do Norte" />
+    <string id="OoHhCa11" text="{.MS}Senador" />
+    <string id="PjO7oY16" text="Estúrgia" />
+    <string id="qaDIU0XC" text="Alto Reino dos Batanianos" />
+    <string id="qggtvf8Y" text="O Império sempre preferiu não enviar legiões para os desertos devoradores de exércitos de Nahasa. Em vez disso, ele projetou seu poder nessa região fronteiriça ao cultivar clientes soberanos entre os clãs, que competiam em uma eterna dança por poder. Os clãs capazes de estabelecer um território no oásis ganharam um subsídio imperial para proteger caravanas que passavam por lá e ficaram ricos. Os que não eram foram afugentados para o deserto, limitando-se a criar caprinos e atacar caravanas até que pudessem arquitetar uma retaliação. Hoje, com o declínio do império, os asserais concordaram em formar uma confederação sob o comando do sultão escolhido entre o mais ricos dos clãs, o Banu Hulyan. Mas todos sabem que a dança foi interrompida apenas temporariamente, e que ela será retomada no momento certo." />
+    <string id="sZLd6VHi" text="Khozait" />
+    <string id="UsbwPmYb" text="{.MS}Sultanado dos Asserais" />
+    <string id="vJOWy1QF" text="Khozaits" />
+    <string id="Xtyb9Dyr" text="As terras que agora compõem o Império do Sul já foram governadas por orgulhosas cidades-estados independentes que controlavam as rotas comerciais do Mar Perássico e da estepe. Elas envolveram o império em suas rixas internas e foram sendo absorvidas uma a uma; ora por tratado, ora por conquista. Os aristocratas calradianos ligaram-se por casamento a príncipes mercadores e chefes nômades, muitos alegando ser descendentes dos reis, campeões e semideuses das lendas orientais. Recentemente essas cidades começaram a figurar entre as mais ricas e populosas do continente, e muitas famílias senatoriais de outras regiões começaram a desconfiar que um dia os sulistas tentariam transformar um deles em monarca hereditário. Esses temores seriam aparentemente confirmados pelo apoio da nobreza sulista a Rhagaea, defensora convicta do princípio dinástico." />
+    <string id="yG3YUySN" text="Império Ocidental" />
+    <string id="ZEmH0MwL" text="{.MS}Império do oeste" />
+    <string id="ZjaaAoxd" text="Um Grão-Rei existe em Batânia desde o início dos tempos, coroado com grandes cerimônias na colina sagrada de Dunthanach. No entanto, pergunte a qualquer líder bataniano sob qual 'reinado' ele vive, e ele olhará em volta da casa, dos campos e dos pastos, dos rebanhos e dos empregados e responderá: 'Ora, sob o meu, é claro'. Foi só há pouco tempo, seguindo o exemplo do Império, que os Grãos-Reis tomaram medidas para exercer autoridade. &apos;Um rebanho rebelde como o meu povo requer um pastor de pulso firme para guiá-los pelo desfiladeiro e protegê-los contra os lobos&apos;, disse um grão-rei recentemente, pouco antes de ser traído por um primo invejoso e levado acorrentado até o posto avançado imperial mais próximo." />
+  </strings>
+</base>

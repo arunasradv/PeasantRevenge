@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Português (BR)" />
+  </tags>
+  <strings>
+    <string id="0m0IUnL1" text="{.MP}fen Uvain" />
+    <string id="0u8ipbgn" text="As tribos conhecidas como o Povo da Floresta praticam a agricultura de derrubada e queimada no meio da floresta, fora do alcance de boiardos estúrgios. Eles queimam extensões vastas da floresta, passam alguns anos cultivando plantações de solo virgem fertilizado pelas cinzas até empobrecer a terra e seguem em frente. Embora seja um uso ineficiente da terra, é eficaz para pequenas populações em grandes extensões de terra e mão de obra reduzida. Além disso, por ser difícil de mensurar e taxar grandes plantações, é um ótima estratégia para quem não se importa em ser governado." />
+    <string id="14GLGKNj" text="{.MP}fen Caernacht" />
+    <string id="1sbJQR4H" text="Saqueadores" />
+    <string id="3o5s6L3y" text="{.MP}dey Meroc" />
+    <string id="3PzgpFGq" text="Neutro" />
+    <string id="4Dbwdjbe" text="{.MP}Hongeros" />
+    <string id="4rr3d8hY" text="{.MP}Dolentos" />
+    <string id="4TiYXBqK" text="Os Gulans são um bando de mercenários que recruta membros das tribos do sul de Calrádia e das terras ao leste. Legalmente, eles são seus próprios escravos e mestres: cada um 'se vende' à ordem e, com isso, tornam-se coproprietários dela. Eles são conhecidos pelos cavalos e roupas de alta qualidade. Mas não devemos julgá-los pela aparência engomada, pelos perfumes e pelas penas de falcão – esses homens não deixaram o treinamento de lado. Suas habilidades como arqueiros montados são insuperáveis, e, como lanceiros, eles estão logo atrás dos vlândios e dos catafractários imperiais." />
+    <string id="6BvGhzao" text="{.MP}Karakhergits" />
+    <string id="6OEQJV6k" text="{.MP}Julios" />
+    <string id="7bhNgOKd" text="Os Pele de Lobo são herdeiros de uma tradição longínqua das terras batanianas, onde guerreiros em treinamento assumem uma vida selvagem durante a juventude, sobrevivendo na floresta e desvendando os segredos dela. Contanto que um Pele de Lobo não use roupas tecidas, não cozinhe os alimentos nem durma sob um teto, ele estará isento das leis dos homens. Na realidade, os Pele de Lobo modernos são em maioria filhos de famílias abastadas que decidem dar vazão à própria natureza primitiva, roubando viajantes e vivendo de forma cruel, sem necessariamente lavrar o antigo código." />
+    <string id="7k9izAvC" text="{.MP}Skolderbroda" />
+    <string id="7WL1LWdf" text="{.MP}Ratos do Lago" />
+    <string id="8ba4tpRU" text="{.MS}Jawwal" />
+    <string id="8Wi66Sp2" text="{.MP}Priênicos" />
+    <string id="9NWQNInC" text="{.MP}dey Molarn" />
+    <string id="9ORFG9l4" text="{.MP}Chonis" />
+    <string id="9qAUWcfa" text="{.MP}dey Gunric" />
+    <string id="9qAWNBvA" text="Os Eleftheroi, 'o povo livre', habita as estepes nos confins do Império. Oriundos de descendentes de escravos e devedores foragidos, eles não demoraram a serem reconhecidos pelos comandantes imperiais locais graças ao conhecimento que detêm sobre a zona fronteiriça. Seus líderes ganharam títulos, os jovens foram absorvidos por séquitos de arcontes e imperadores. Mas, embora agora sejam extremamente leais à ideia do Império, eles ainda cultivam grande hostilidade quanto à autoridade." />
+    <string id="9Y1u2onl" text="{.MS}Banu Hulyan" />
+    <string id="9ZEdEWmi" text="Os Ratos do Lago habitam os charcos das margens do grande lago do norte, morando em cabanas feitas com a madeira de navios destruídos. Eles fazem da destruição seu ganha pão, atraindo navios para bancos de areia com faróis e feixes de luz falsos. Por serem desprezados por toda Calrádia e descritos como &apos;criminosos que fedem a gás de pântano e peixe podre&apos;, eles retribuem esse mesmo desprezo. Embora sejam em sua maioria estúrgios, as fileiras deles foram avolumadas por fugitivos, devedores e qualquer um que prefira viver em meio a ladrões a seguir as leis dos nobres." />
+    <string id="a4GxTbPD" text="{.MP}Varros" />
+    <string id="A4wIVnM4" text="{.MP}Gundaroving" />
+    <string id="a67wFbUw" text="{.MP}fen Gruffendoc" />
+    <string id="Aft8nsgn" text="{.MS}Banu Sarmal" />
+    <string id="ApJrV7bA" text="{.MP}Sorados" />
+    <string id="AppNvfPv" text="{.MP}Ormidoving" />
+    <string id="as2TiAIJ" text="{.FS}Fraternidade da Floresta" />
+    <string id="b6SEM6Ab" text="{.MP}Koltit" />
+    <string id="B8c2mNKj" text="Os Brasas da Chama são descendentes de um movimento rebelde que se ergueu há quase um século após o virtuoso, porém ineficaz, jovem Imperador Darusos ter sido derrubado por um de seus generais. Eles alegam estar preparando o caminho para os céus, para assim trazer Darusos de volta e adentrar uma era de ouro. Só que eles foram forçados a recorrer à extorsão para sobreviver, assim como muitos outros movimentos rebeldes de Calrádia." />
+    <string id="bhxVA9w7" text="A Última Legião foi criada depois que o Imperador Arênicos aboliu o último dos exércitos ativos do Império após o fim da batalha de Pendraic, recorrendo a séquitos privados de arcontes, unidades consideravelmente mais baratas e eficientes na função de controlar territórios. A Legião é constituída por homens que detestaram essa mudança: eles amavam o antigo exército, seus preceitos, as histórias das unidades e a vida no campo. Eles culpam o novo sistema por destruir o império. Mas um exército não se mantém unido sem um salário regular, e eles firmam contratos tanto com senhores estrangeiros quanto com senhores imperiais." />
+    <string id="bjemmmcF" text="{.MP}Corênios" />
+    <string id="bsPd5zri" text="Os Skolderbroda, ou Irmãos de Escudo, são uma companhia de guerreiros que leva a luta e o treinamento muito a sério. Embora sejam nórdicos em maioria, eles permitem o ingresso de recrutas de outras culturas, contanto que um Irmão de Escudo já aceito se responsabilize pelo novato. As regras deles são quase monásticas: nenhuma mulher nos acampamentos e nada de entretenimento, e nenhum Irmão pode passar a noite fora sem permissão. No combate, eles usam lanças e machados no estilo nórdico e são reconhecidos por todas as casas nobres do norte." />
+    <string id="BxCRDt5m" text="{.MP}Vizartos" />
+    <string id="cd0yDTM1" text="{.MP}Lonalion" />
+    <string id="CibaXzG8" text="{.MP}Falentes" />
+    <string id="CRSFOSil" text="{.MP}Urkhunait" />
+    <string id="CS4rSk99" text="{.MP}dey Cortain" />
+    <string id="cYTdzMQ4" text="{.MP}Oburit" />
+    <string id="DeSGiCgF" text="{.MP}dey Rothad" />
+    <string id="dRaYhQva" text="As origens dos Beni Zilal, os Filhos das Sombras, são envoltas em lendas. Muitas das histórias falam de um pregador messiânico que governava de uma cidadela no coração do deserto, enfeitiçando seus seguidores com a ajuda de ervas alucinógenas e aterrorizando a nobreza asserai com a ameaça de assassinato. Seja qual for a verdade que essas histórias contêm, essa irmandade agora é uma instituição poderosa entranhada nos recônditos profundos do Nahasa, recebendo dinheiro para proteger as caravanas que cruzam seu território e firmando acordos com potentados locais enquanto espera o dia de dar sua própria cartada." />
+    <string id="Ds2vQVwr" text="{.MP}Avlonos" />
+    <string id="e6csp4ha" text="Bandidos da Estepe" />
+    <string id="eC6qIOzz" text="{.MP}Eleftheroi" />
+    <string id="EnZHNc2k" text="{.MP}Isyaroving" />
+    <string id="Eu932blQ" text="{.MP}Kuloving" />
+    <string id="fvYgmrjG" text="{.MS}Banu Sarran" />
+    <string id="fXENjJJL" text="{.MP}Osticos" />
+    <string id="GCy0xb6U" text="{.FS}Companhia" />
+    <string id="ghilmanClanName" text="{.MP}Gulans" />
+    <string id="gXeF1yKn" text="{.MP}Harfit" />
+    <string id="h7ujXmDx" text="{.MP}Mestricaros" />
+    <string id="HMnHaJac" text="{.MP}fen Morcar" />
+    <string id="hrWQWgaM" text="{.MP}Pethros" />
+    <string id="j3KtHQzn" text="{.FS}Mão" />
+    <string id="k3djFmuO" text="{.MP}fen Penraic" />
+    <string id="kbGk2so8" text="{.MP}Baltait" />
+    <string id="khnadIv1" text="{.FS}Fraternidade" />
+    <string id="kkUQObZn" text="Bandidos do Deserto" />
+    <string id="l6JtB97p" text="{.MS}Banu Atij" />
+    <string id="LqTTchsa" text="{.FS}Legião dos Traídos" />
+    <string id="LTWTTQ71" text="{.MP}Paládios" />
+    <string id="lUfFxWlk" text="{.MS}Banu Qaraz" />
+    <string id="LygSwU3i" text="{.MP}dey Jelind" />
+    <string id="LZVzzczs" text="{.MP}dey Fortes" />
+    <string id="m0teef5g" text="{.MP}Tigrit" />
+    <string id="mddbprXj" text="{.MP}Vagiroving" />
+    <string id="mOa9CX13" text="Bandidos da Montanha" />
+    <string id="mpjp1MT2" text="{.MP}dey Arromanc" />
+    <string id="mtZu1l2j" text="{.MP}Brasas da Chama" />
+    <string id="MVHawAEp" text="Mão Oculta" />
+    <string id="nclQqoam" text="{.MP}Serapides" />
+    <string id="nh4Y3LOc" text="{.MP}Pele de Lobo" />
+    <string id="NI1paia1" text="{.MS}Banu Ruwaid" />
+    <string id="NObV048p" text="{.MP}Beni Zilal" />
+    <string id="nQOf27Rx" text="A Mão Oculta é uma máfia que domina as áreas rurais, ou às vezes até cidades, das regiões ao sul do Império. Eles prosperam preenchendo lacunas para as autoridades: reprimindo agitações, silenciando pregadores indesejados e roubando dos concorrentes que competem com seu patronos. Muitos deles estão sempre alternando entre uma vida honesta nas cidades e uma vida criminosa na zona rural. Membros da Mão podem passar dois ou três meses por ano atuando como bandoleiros nas colinas, retornando depois para trabalhar como impositores e &quot;comerciantes&quot; de mercadorias roubadas, sabendo que ninguém terá a audácia de importuná-los." />
+    <string id="o0Xm5Rqk" text="{.FS}Jogadorlândia" />
+    <string id="o4wKMT9x" text="{.MS}Banu Habbab" />
+    <string id="o7ud4X2X" text="{.MS}Povo da Floresta" />
+    <string id="ObBvcDhJ" text="{.MP}fen Giall" />
+    <string id="OVQoC9fn" text="{.MP}Comnos" />
+    <string id="pBUc2pL8" text="Invasores do Mar" />
+    <string id="pdz4YsEf" text="{.MP}Maneolis" />
+    <string id="Q1nAHnV7" text="{.MP}Khergit" />
+    <string id="qFntgcGy" text="{.MP}dey Tihr" />
+    <string id="qoLWSdRE" text="{.MP}fen Eingal" />
+    <string id="RWOYui01" text="Os Jawwal, ou 'corre-mundos', são a principal confederação beduína no deserto de Nahasa. Eles vagam do planalto até áreas de pastagem das planícies, reivindicando zonas gigantescas do deserto como 'território' deles, e as caravanas que por ali passarem têm de pagar por proteção. Eles escrevem poemas sobre suas proezas e zombam de outros clãs dos Banu Asera que abriram mão da 'liberdade' das tendas de lã preta em troca de casas de pedra no oásis. Os outros clãs os consideram chatos e prepotentes, embora os respeitem a contragosto, já que eles protegem as antigas tradições dos asserais." />
+    <string id="s0AVQCbJ" text="{.MP}Togaroving" />
+    <string id="sAbjtZbB" text="Bandidos da Floresta" />
+    <string id="SCTf5cay" text="{.MP}Vatatzes" />
+    <string id="Ssl38GEF" text="{.FS}Legião" />
+    <string id="tA3IRBgv" text="{.MP}Impestores" />
+    <string id="tae3lhXh" text="A Companhia é composta por vlândios, em maioria soldados locais que não se ajustaram aos tempos de paz e preferem viver em estado de conflito constante. Eles provavelmente são os mercenários mais indisciplinados e bandoleiros de Calrádia — e o pior pesadelo de qualquer zona rural que tiver a infelicidade de aparecer pelo caminho deles. Ainda assim, como todos os mercenários, eles sabem que não há lucro sem reputação, e por isso honram seus contratos e aprimoram suas habilidades, em especial com a besta, para fazer por merecer o dinheiro investido por contratantes." />
+    <string id="tdGvElSy" text="{.MP}Diônicos" />
+    <string id="txCNVmSV" text="{.MP}Neretzes" />
+    <string id="UmVjzPI4" text="{.FS}Companhia do Javali Dourado" />
+    <string id="UQHUu2bj" text="{.MP}Leonipardes" />
+    <string id="UW8BjPXR" text="{.MP}Argoros" />
+    <string id="vbLAA0RF" text="{.MP}dey Valant" />
+    <string id="VpF6skYs" text="{.MP}Arkit" />
+    <string id="W2HkbCeX" text="{.MP}Ubroving" />
+    <string id="W9n5iPbB" text="{.MP}Yanserit" />
+    <string id="wFR1ukg9" text="{.MS}Banu Qild" />
+    <string id="WssI6mOE" text="{.MP}Kostoroving" />
+    <string id="xahrUc5n" text="A Fraternidade da Floresta começou como um movimento camponês vlândio, usando as florestas como esconderijo e roubando dos ricos para dar aos pobres. No entanto, ela se deparou com os problemas que qualquer grande movimento rebelde tende a enfrentar: precisavam garantir suprimentos constantes, além de impedir que algum pobre os apunhalasse pelas costas em troca de um saco de moedas. Na luta pela sobrevivência, métodos de extorsão, terrorismo e corrupção das autoridades locais ganharam espaço, tornando-a por fim quase idêntica a qualquer outra organização criminosa de Calrádia." />
+    <string id="xbkYPXCt" text="{.MP}Vetranis" />
+    <string id="XJbDRBfd" text="Os Karakhergits são um dos últimos clãs nômades da estepe ocidental. Os khans Urkhunianos tentaram persuadi-los a se estabelecer, oferecendo terras e servos em troca de impostos e do fornecimento de suprimentos militares, mas eles resistiram. Eles são tratados pelos outros clãs com um misto de inveja e desprezo. Eles negociam e às vezes até se casam entre si, mas também protagonizam alguns sequestros para faturar com o resgate e atacam rebanhos, fazendo escárnio de quem os culpa por seguir as antigas tradições heroicas." />
+    <string id="xqkKtWqa" text="{.MP}Elaches" />
+    <string id="xw0eTkkb" text="{.MP}Vezhoving" />
+    <string id="yQcZrUYi" text="{.MP}dey Folcun" />
+    <string id="zcLTthfN" text="{.MP}Brasas" />
+    <string id="zvas3ieB" text="{.MP}fen Derngil" />
+    <string id="zY2TQC9t" text="{.MS}Banu Arbas" />
+  </strings>
+</base>

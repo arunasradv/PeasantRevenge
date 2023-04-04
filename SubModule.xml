@@ -1,0 +1,27 @@
+﻿<Module>
+  <Name value="PeasantRevenge"/>
+  <Id value="PeasantRevenge"/>
+  <Version value="v1.1.2"/>
+  <SingleplayerModule value="true"/>
+  <MultiplayerModule value="false"/>
+  <DependedModules>
+    <DependedModule Id="Native" DependentVersion="v1.1.2.14580"/>
+    <DependedModule Id="SandBoxCore" DependentVersion="v1.1.2.14580"/>
+    <DependedModule Id="Sandbox" DependentVersion="v1.1.2.14580"/>
+    <DependedModule Id="CustomBattle" DependentVersion="v1.1.2.14580"/>
+    <DependedModule Id="StoryMode" DependentVersion="v1.1.2.14580"/>
+  </DependedModules>
+  <SubModules>
+    <SubModule>
+      <Name value="PeasantRevenge"/>
+      <DLLName value="PeasantRevenge.dll"/>
+      <SubModuleClassType value="PeasantRevenge.SubModule"/>
+      <Tags>
+        <Tag key="DedicatedServerType" value="none" />
+        <Tag key="IsNoRenderModeElement" value="false" />
+      </Tags>
+    </SubModule>
+  </SubModules>
+  <Xmls>
+  </Xmls>
+</Module>
