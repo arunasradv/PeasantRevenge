@@ -65,5 +65,8 @@
     <string id="PRev0059" text="{PARTYOWNER.NAME} は親戚であるため、{PRISONER.NAME} を処刑しませんでした。" />
     <string id="PRev0060" text="{PROPOSEDTO.NAME} へのギフト" />
     <string id="PRev0061" text="{PROPOSING_HERO.NAME} 修復 " />
+    <string id="PRev0062" text="支払いをしないとどうなりますか?" />
+    <string id="PRev0063" text="農民はあなたの頭を持つでしょう.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="大丈夫です。[if:convo_happy][if:convo_thinking][ib:closed]" />
   </strings>
 </base>

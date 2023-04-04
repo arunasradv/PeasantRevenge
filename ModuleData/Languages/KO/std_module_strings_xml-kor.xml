@@ -65,5 +65,8 @@
     <string id="PRev0059" text="{PARTYOWNER.NAME}은 친척이기 때문에 {PRISONER.NAME}을(를) 처형하지 않았습니다." />
     <string id="PRev0060" text="{PROPOSEDTO.NAME}에게 선물하기" />
     <string id="PRev0061" text="{PROPOSING_HERO.NAME} 배상 " />
+    <string id="PRev0062" text="내가 지불하지 않으면 어떻게 됩니까?" />
+    <string id="PRev0063" text="농민이 당신의 머리를 가질 것입니다.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="괜찮을 겁니다.[if:convo_happy][if:convo_thinking][ib:closed]" />
   </strings>
 </base>

@@ -1042,6 +1042,30 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray), null, 100, null);
 
             campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
+               "peasant_revenge_lord_start_grievance_received",
+               "peasant_revenge_lord_start_grievance_requested_if_not_pay_options", 
+               "{=PRev0062}And what if I'll not pay?",
+               null,
+               null, 110, null, null);
+
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options_die",
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
+            "peasant_revenge_lord_start_grievance_received",
+            "{=PRev0063}Peasant will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]",
+            () => { return (Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()); },
+            null, 100, null);
+            
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options_live",
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
+            "peasant_revenge_lord_start_grievance_received",
+            "{=PRev0064}You will be fine.[if:convo_happy][if:convo_thinking][ib:closed]",
+            () => !(Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()),
+            null, 100, null);
+
+            campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested",
                 "peasant_revenge_lord_start_grievance_received",
                 "peasant_revenge_lord_grievance_barter_reaction", "{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}.", 
@@ -1062,6 +1086,8 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray),
                 null, 100, null, null);
 
+           
+
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested_no_lie",
                 "peasant_revenge_lord_start_grievance_received",
@@ -1079,7 +1105,7 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_not_confirmed_lied",
               "peasant_revenge_lord_start_grievance_denied_confirm_a_lie",
-              "peasant_revenge_lord_start_grievance_denied_pay",
+              "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
               "{=PRev0008}No!", null,
               null, 100, null, null);
 
@@ -1842,8 +1868,7 @@ namespace PeasantRevenge
             bool canMainHeroDie = Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal();
             if (canMainHeroDie)
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, Hero.MainHero, SceneNotificationData.RelevantContextType.Map));               
-                KillCharacterAction.ApplyByDeathMark(Hero.MainHero, true);                
+                KillCharacterAction.ApplyByExecution(Hero.MainHero,currentRevenge.executioner.HeroObject, false);                
                 return true;
             }
             return false;

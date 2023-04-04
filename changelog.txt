@@ -17,5 +17,7 @@ Feature: AI heroes can refuse to participate in peasant revenge (defined by para
 Changed: Parameter ReparationsScaleToSettlementHearts will be reset to 20, if it was more than 30. (this value will be updated in configuration file during game load) 
          It asures 2 AI executions due peasant revenge per year.
 Changed: Increased lordWillDemandRansomMoneyIfHasLessGoldThan to 2000 (will change if configuration file is deleted)
-
+230404 v8
+Feature: Player and AI now play by the same rules (almost). Player can be killed if was caught after raid and "peasantRevengeTimeoutInDays" (5 days default) has not passed.  
+         Player must be relative or friend or have high relations with party lord, and do and avoid heroes with some dangerous traits.
 
