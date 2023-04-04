@@ -19,5 +19,5 @@ Changed: Parameter ReparationsScaleToSettlementHearts will be reset to 20, if it
 Changed: Increased lordWillDemandRansomMoneyIfHasLessGoldThan to 2000 (will change if configuration file is deleted)
 230404 v8
 Feature: Player and AI now play by the same rules (almost). Player can be killed if was caught after raid and "peasantRevengeTimeoutInDays" (5 days default) has not passed.  
-         Player must be relative or friend or have high relations with party lord, and do and avoid heroes with some dangerous traits.
+         Player must be relative or friend or have high relations with party lord, and avoid heroes with some dangerous traits.
 
