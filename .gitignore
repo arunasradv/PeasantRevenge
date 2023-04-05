@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 obj/Debug/PeasantRevenge.dll
 obj/Debug/PeasantRevenge.pdb
+
+/obj/Debug/PeasantRevenge.dll
+/obj/Debug/PeasantRevenge.pdb

@@ -68,5 +68,8 @@
     <string id="PRev0062" text="Et si je ne paye pas ?" />
     <string id="PRev0063" text="Paysan aura ta tête.[if:convo_thinking][rf:convo_grave][ib:closed]" />
     <string id="PRev0064" text="Tout ira bien.[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="J'ai des amis, qui paieront la réparation." />
+    <string id="PRev0066" text="{SAVER.NAME} vous soutiendra." />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} héros peuvent vous soutenir." />
   </strings>
 </base>
