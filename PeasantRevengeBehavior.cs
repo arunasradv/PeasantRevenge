@@ -416,6 +416,7 @@ namespace PeasantRevenge
                                         executioner.Gold += revenge.reparation;
                                         LogMessage = "{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.";
                                         message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} paid {revenge.reparation} gold. Prisoner gold {prisoner.Gold}";
+                                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(saver, prisoner, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, false); // because saver have expenses
                                     }
                                     else
                                     {
@@ -447,6 +448,7 @@ namespace PeasantRevenge
                                 prisoner.Gold -= revenge.reparation;
                                 executioner.Gold += revenge.reparation;
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeAfterReparationsReceived, false);
+
                                 LogMessage = "{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}.";
                                 message = $"{party.Owner.Name} did not executed {prisoner.Name} because paid reparation of {revenge.reparation} gold. Savings left {prisoner.Gold}";
                             }
@@ -1042,6 +1044,39 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray), null, 100, null);
 
             campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
+               "peasant_revenge_lord_start_grievance_received",
+               "peasant_revenge_lord_start_grievance_requested_if_not_pay_options", 
+               "{=PRev0062}And what if I'll not pay?",
+               null,
+               null, 110, null, null);
+            
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
+               "peasant_revenge_lord_start_grievance_received",
+               "peasant_revenge_lord_grievance_received_pay",
+               "{=PRev0065}I have friends, who will pay the reparation.",
+               null,
+               () => peasant_revenge_criminal_has_suporters_consequence(), 110, 
+               new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_criminal_has_suporters_clickable_condition), null);
+
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options_die",
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
+            "peasant_revenge_lord_start_grievance_received",
+            "{=PRev0063}Peasant will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]",
+            () => { return (Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()); },
+            null, 100, null);
+            
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options_live",
+            "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
+            "peasant_revenge_lord_start_grievance_received",
+            "{=PRev0064}You will be fine.[if:convo_happy][if:convo_thinking][ib:closed]",
+            () => !(Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()),
+            null, 100, null);
+
+            campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested",
                 "peasant_revenge_lord_start_grievance_received",
                 "peasant_revenge_lord_grievance_barter_reaction", "{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}.", 
@@ -1062,6 +1097,8 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray),
                 null, 100, null, null);
 
+           
+
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested_no_lie",
                 "peasant_revenge_lord_start_grievance_received",
@@ -1079,7 +1116,7 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_not_confirmed_lied",
               "peasant_revenge_lord_start_grievance_denied_confirm_a_lie",
-              "peasant_revenge_lord_start_grievance_denied_pay",
+              "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
               "{=PRev0008}No!", null,
               null, 100, null, null);
 
@@ -1512,6 +1549,43 @@ namespace PeasantRevenge
             }
         }
   
+        private void peasant_revenge_criminal_has_suporters_consequence()
+        {
+            List<Hero> savers = GetHeroSuportersWhoCouldPayUnpaidRansom(currentRevenge.criminal.HeroObject, currentRevenge.reparation);
+            if(!savers.IsEmpty())
+            {
+                Hero saver = savers.GetRandomElementInefficiently();
+                saver.Gold -= currentRevenge.reparation;
+                currentRevenge.executioner.HeroObject.Gold += currentRevenge.reparation;
+                string LogMessage = "{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.";
+                TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(LogMessage, null);
+                StringHelpers.SetCharacterProperties("SAVER", saver.CharacterObject, textObject, false);
+                StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal, textObject, false);
+                StringHelpers.SetCharacterProperties("PARTYOWNER", currentRevenge.party.Owner.CharacterObject, textObject, false);
+                textObject.SetTextVariable("REPARATION", (float)currentRevenge.reparation);
+                InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForClan)));
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(saver,Hero.MainHero , _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal!=0);
+            }
+        }
+
+        private bool peasant_revenge_criminal_has_suporters_clickable_condition(out TextObject textObject)
+        {
+            List<Hero> saver = GetHeroSuportersWhoCouldPayUnpaidRansom(currentRevenge.criminal.HeroObject, currentRevenge.reparation);
+            bool start = !saver.IsEmpty();
+            if(saver.Count() == 1)
+            {
+                textObject = new TextObject("{=PRev0066}{SAVER.NAME} will support you.");
+                StringHelpers.SetCharacterProperties("SAVER", saver.First().CharacterObject, textObject, false);
+            }
+            else
+            {
+                textObject = new TextObject("{=PRev0067}{SUPPORTERCOUNT} heroes can support you.");
+                MBTextManager.SetTextVariable("SUPPORTERCOUNT", (float)saver.Count());
+            }
+
+            return start;
+        }
+
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_condition(out TextObject text)
         {
             bool start = Hero.OneToOneConversationHero != null &&
@@ -1842,8 +1916,7 @@ namespace PeasantRevenge
             bool canMainHeroDie = Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal();
             if (canMainHeroDie)
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, Hero.MainHero, SceneNotificationData.RelevantContextType.Map));               
-                KillCharacterAction.ApplyByDeathMark(Hero.MainHero, true);                
+                KillCharacterAction.ApplyByExecution(Hero.MainHero,currentRevenge.executioner.HeroObject, false);                
                 return true;
             }
             return false;

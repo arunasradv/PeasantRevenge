@@ -1,4 +1,4 @@
-﻿#define TESTING
+﻿//#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +20,7 @@ namespace PeasantRevenge
         public int relationChangeWhenLordRefusedToPayReparations = -2;
         public int relationChangeWhenLordExecutedTheCriminal = 3;
         public int relationChangeWhenPlayerSavedTheCriminal = 3;
+        public int relationLordAndCriminalChangeWhenLordSavedTheCriminal = -3;
         public int relationChangeWithCriminalClanWhenPlayerExecutedTheCriminal = -3;
         public int relationChangeWhenLordKilledMessenger = -3;
         public int relationChangeWhenLordRefusedToSupportPeasantRevenge = -2;

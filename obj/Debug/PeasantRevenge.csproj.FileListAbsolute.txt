@@ -15,3 +15,9 @@ D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.csprojAssemblyRe
 D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.CoreCompileInputs.cache
 D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.dll
 D:\Kita\Banerlord\repos\PeasantRevenge\obj\Debug\PeasantRevenge.pdb
+C:\Users\37067\Documents\GitHub\PeasantRevenge\bin\Debug\PeasantRevenge.dll
+C:\Users\37067\Documents\GitHub\PeasantRevenge\bin\Debug\PeasantRevenge.pdb
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.AssemblyReference.cache
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Debug\PeasantRevenge.csproj.CoreCompileInputs.cache
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Debug\PeasantRevenge.dll
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Debug\PeasantRevenge.pdb

@@ -65,5 +65,11 @@
     <string id="PRev0059" text="{PARTYOWNER.NAME} nie wykonał egzekucji {PRISONER.NAME}, ponieważ są spokrewnieni." />
     <string id="PRev0060" text="Prezent dla {PROPOSEDTO.NAME}" />
     <string id="PRev0061" text="{PROPOSING_HERO.NAME} REPARACJA " />
+    <string id="PRev0062" text="A co jeśli nie zapłacę?" />
+    <string id="PRev0063" text="Chłop urwie ci głowę.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="Będzie dobrze.[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="Mam przyjaciół, którzy zapłacą odszkodowanie." />
+    <string id="PRev0066" text="{SAVER.NAME} będzie Cię wspierać." />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} bohaterów może Cię wesprzeć." />
   </strings>
 </base>

@@ -65,5 +65,11 @@
     <string id="PRev0059" text="{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
     <string id="PRev0060" text="{=PRev0060}Gift to {PROPOSEDTO.NAME}" />
     <string id="PRev0061" text="{=PRev0061}{PROPOSING_HERO.NAME} REPARATION " />
+    <string id="PRev0062" text="{=PRev0062}And what if I'll not pay?" />
+    <string id="PRev0063" text="{=PRev0063}Peasant will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="{=PRev0064}You will be fine.[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="{=PRev0065}I have friends, who will pay the reparation." />
+    <string id="PRev0066" text="{=PRev0066}{SAVER.NAME} will support you." />
+    <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." />  
   </strings>
 </base>
