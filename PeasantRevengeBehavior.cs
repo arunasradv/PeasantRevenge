@@ -288,6 +288,9 @@ namespace PeasantRevenge
             bool TheSameClan = settlement.OwnerClan == party.Owner.Clan;
             if (!_cfg.values.alwaysLetLiveTheCriminal)
             {
+                Hero victim = getAllyPrisonerTheEscapeGoat(prisoner)?.HeroObject;
+
+
                 bool party_relatives_with_criminal_condition = (party.Owner.Children.Contains(prisoner) || prisoner.Children.Contains(party.Owner)) &&
                                                           CheckConditions(party.Owner, prisoner, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
                
@@ -2054,6 +2057,26 @@ namespace PeasantRevenge
             }
 
             return currentRevenge.party.LeaderHero == Hero.OneToOneConversationHero;
+        }
+
+        private CharacterObject getAllyPrisonerTheEscapeGoat(Hero hero)
+        {
+            var prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes.Where((x) =>
+              !x.HeroObject.Clan.IsAtWarWith(hero.Clan) && x.HeroObject != hero &&
+              (x.HeroObject.Clan == hero.Clan || x.HeroObject.Clan.Kingdom == hero.Clan.Kingdom));
+
+            if (!prisoners.IsEmpty())
+            {
+                foreach (CharacterObject prisoner in prisoners)
+                {
+                    if (CheckConditions(hero, prisoner.HeroObject,
+                        _cfg.values.ai.criminalWillBlameOtherLordForTheCrime))
+                    {
+                        return prisoner;
+                    }
+                }
+            }
+            return null;
         }
 
         private bool peasant_revenge_lord_start_condition_lie()
