@@ -22,6 +22,7 @@ Feature: Player and AI now play by the same rules (almost). Player can be killed
          Player must be relative or friend or have high relations with party lord, and avoid heroes with some dangerous traits.
          Player can ask other clan or kingdom hero for reparation money (same rules as AI).
 Added:   Configuration variable relationLordAndCriminalChangeWhenLordSavedTheCriminal
-         
+230405 v9
+Fix: Compatibility with Diplomacy mod
 
 

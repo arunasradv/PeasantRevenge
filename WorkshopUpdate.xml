@@ -6,7 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Player can be killed."/>
+        <ChangeNotes Value="Fix: for Diplomacy mod crash, when main hero is killed by notable peasant."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
