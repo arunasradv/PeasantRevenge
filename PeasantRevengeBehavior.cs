@@ -1916,7 +1916,14 @@ namespace PeasantRevenge
             bool canMainHeroDie = Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal();
             if (canMainHeroDie)
             {
-                KillCharacterAction.ApplyByExecution(Hero.MainHero,currentRevenge.executioner.HeroObject, false);                
+                if (_cfg.values.allowPeasantToKillLord)
+                {
+                    KillCharacterAction.ApplyByExecution(Hero.MainHero, currentRevenge.executioner.HeroObject, false);
+                }
+                else
+                {
+                    KillCharacterAction.ApplyByExecution(Hero.MainHero, currentRevenge.party.Owner, false);                   
+                }             
                 return true;
             }
             return false;
