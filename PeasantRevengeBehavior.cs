@@ -37,6 +37,7 @@ namespace PeasantRevenge
         {
             public Village village;
             public CharacterObject criminal;
+            public CharacterObject criminal_victim; // it is hero who was blamed for the crime by criminal
             public PartyBase party; //party what arrested the criminal
 
             public CharacterObject executioner;
@@ -288,9 +289,8 @@ namespace PeasantRevenge
             bool TheSameClan = settlement.OwnerClan == party.Owner.Clan;
             if (!_cfg.values.alwaysLetLiveTheCriminal)
             {
-                Hero victim = getAllyPrisonerTheEscapeGoat(prisoner)?.HeroObject;
-
-
+                currentRevenge.criminal_victim = getAllyPrisonerTheEscapeGoat(prisoner);
+                
                 bool party_relatives_with_criminal_condition = (party.Owner.Children.Contains(prisoner) || prisoner.Children.Contains(party.Owner)) &&
                                                           CheckConditions(party.Owner, prisoner, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
                
