@@ -270,7 +270,7 @@ namespace PeasantRevenge
             Hero ransomer; // pays unpaid ransom, if criminal is killed
             List<Hero> savers;
             string message = "";
-            string LogMessage = "";
+            List<string> LogMessage = new List<string>();
 
             bool TheSameKingdom = party.Owner.Clan.Kingdom != null ? settlement.OwnerClan.Kingdom != null ? settlement.OwnerClan.Kingdom == party.Owner.Clan.Kingdom : false : false; // false for settlements or parties without kingdoms
 
@@ -279,7 +279,7 @@ namespace PeasantRevenge
                 if (!TheSameKingdom) // party or settlement is not in the same kingdom or is not part of any kingdom
                 {
                     //Cannot to pay (Kingdom does not care)
-                    LogMessage = "{=PRev0042}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because different kingdom";
+                    LogMessage.Add("{=PRev0042}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because different kingdom");
                     message = $"{party.Owner.Name} did not executed {prisoner.Name} because different kingdom.";
                     //ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenCannotPayReparations, false); // Already Talewords implemented this                        
                     goto SkipToEnd;
@@ -289,11 +289,13 @@ namespace PeasantRevenge
             bool TheSameClan = settlement.OwnerClan == party.Owner.Clan;
             if (!_cfg.values.alwaysLetLiveTheCriminal)
             {
-                currentRevenge.criminal_victim = getAllyPrisonerTheEscapeGoat(prisoner);
+                revenge.criminal_victim = getAllyPrisonerTheEscapeGoat(prisoner);
 
-                if(currentRevenge.criminal_victim != null)
+                if(revenge.criminal_victim != null)
                 {
-                    prisoner = currentRevenge.criminal_victim.HeroObject;
+                    log($"{prisoner.Name} blamed {revenge.criminal_victim.Name} for looting the village.");
+                    LogMessage.Add("{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village.");
+                    prisoner = revenge.criminal_victim.HeroObject;
                 }
                 
                 bool party_relatives_with_criminal_condition = (party.Owner.Children.Contains(prisoner) || prisoner.Children.Contains(party.Owner)) &&
@@ -392,7 +394,7 @@ namespace PeasantRevenge
 
                                 if (saver != null)
                                 {
-                                    LogMessage = "{=PRev0045}{SAVER.NAME} paid {REPARATION}{GOLD_ICON} for {PRISONER.NAME}'s head to {EXECUTIONER.NAME}.";
+                                    LogMessage.Add("{=PRev0045}{SAVER.NAME} paid {REPARATION}{GOLD_ICON} for {PRISONER.NAME}'s head to {EXECUTIONER.NAME}.");
                                 }
 
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordExecutedTheCriminal, false);
@@ -420,7 +422,7 @@ namespace PeasantRevenge
                                     if (hero_trait_list_condition(saver, _cfg.values.lordNotExecuteMessengerTrait))
                                     {//not Kill
                                         GiveGoldAction.ApplyBetweenCharacters(saver, executioner, (int)revenge.reparation, true);
-                                        LogMessage = "{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.";
+                                        LogMessage.Add("{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.");
                                         message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} paid {revenge.reparation} gold. Prisoner gold {prisoner.Gold}";
                                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(saver, prisoner, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, false); // because saver have expenses
                                     }
@@ -428,7 +430,7 @@ namespace PeasantRevenge
                                     {
                                         if (_cfg.values.allowLordToKillMessenger)
                                         {//Paid
-                                            LogMessage = "{=PRev0043}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} executed peasant notable {EXECUTIONER.NAME}";
+                                            LogMessage.Add("{=PRev0043}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} executed peasant notable {EXECUTIONER.NAME}");
                                             message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} executed peasant messenger {executioner.Name}. Saver gold {saver.Gold}. Prisoner gold {prisoner.Gold}.";
                                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, saver, _cfg.values.relationChangeWhenLordKilledMessenger, false);
                                             KillCharacterAction.ApplyByExecution(executioner, saver, false, false);
@@ -454,7 +456,7 @@ namespace PeasantRevenge
                                 GiveGoldAction.ApplyBetweenCharacters(prisoner, executioner, (int)revenge.reparation, true);
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeAfterReparationsReceived, false);
 
-                                LogMessage = "{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}.";
+                                LogMessage.Add("{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}.");
                                 message = $"{party.Owner.Name} did not executed {prisoner.Name} because paid reparation of {revenge.reparation} gold. Savings left {prisoner.Gold}";
                             }
                         }
@@ -473,17 +475,17 @@ namespace PeasantRevenge
 
                             if (sellement_owner_friend_to_criminal_con)
                             {
-                                LogMessage = "{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends.";
+                                LogMessage.Add("{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, prisoner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                             }
                             else if (sellement_owner_help_criminal_con)
                             {
-                                LogMessage = "{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations.";
+                                LogMessage.Add("{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations.");
                             }
                             else if (sellement_owner_relatives_with_criminal_condition)
                             {
-                                LogMessage = "{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.";
+                                LogMessage.Add("{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                             }
                         }
 
@@ -509,17 +511,17 @@ namespace PeasantRevenge
 
                     if (party_friend_to_criminal_con)
                     {
-                        LogMessage = "{=PRev0044}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because friends.";
+                        LogMessage.Add("{=PRev0044}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, prisoner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                     }
                     else if (party_help_criminal_con)
                     {
-                        LogMessage = "{=PRev0058}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations.";
+                        LogMessage.Add("{=PRev0058}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations.");
                     }
                     else if (party_relatives_with_criminal_condition)
                     {
-                        LogMessage = "{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.";
+                        LogMessage.Add("{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                     }
 
                     if (settlement.OwnerClan == Hero.MainHero.Clan && party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader)
@@ -549,34 +551,42 @@ namespace PeasantRevenge
                 {
                     log(message);
 
-                    if (!string.IsNullOrEmpty(LogMessage))
+                    if (!LogMessage.IsEmpty())
                     {
-                        TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(LogMessage, null);
-                        StringHelpers.SetCharacterProperties("PRISONER", prisoner.CharacterObject, textObject, false);
-                        StringHelpers.SetCharacterProperties("PARTYOWNER", party.Owner.CharacterObject, textObject, false);
-                        StringHelpers.SetCharacterProperties("EXECUTIONER", executioner.CharacterObject, textObject, false);
-                        StringHelpers.SetCharacterProperties("SETTLEMENTOWNER", settlement.Owner.CharacterObject, textObject, false);
-                        textObject.SetTextVariable("REPARATION", (float)revenge.reparation);
+                        foreach (string logMessage in LogMessage)
+                        {
+                            TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(logMessage, null);
+                            StringHelpers.SetCharacterProperties("PRISONER", prisoner.CharacterObject, textObject, false);
+                            if (revenge.criminal_victim != null)
+                            {
+                                StringHelpers.SetCharacterProperties("CRIMINALBLAMED", revenge.criminal_victim, textObject, false);
+                                StringHelpers.SetCharacterProperties("CRIMINAL", revenge.criminal, textObject, false);
+                            }
+                            StringHelpers.SetCharacterProperties("PARTYOWNER", party.Owner.CharacterObject, textObject, false);
+                            StringHelpers.SetCharacterProperties("EXECUTIONER", executioner.CharacterObject, textObject, false);
+                            StringHelpers.SetCharacterProperties("SETTLEMENTOWNER", settlement.Owner.CharacterObject, textObject, false);
+                            textObject.SetTextVariable("REPARATION", (float)revenge.reparation);
 
-                        if (saver != null)
-                        {
-                            StringHelpers.SetCharacterProperties("SAVER", saver.CharacterObject, textObject, false);
-                        }
+                            if (saver != null)
+                            {
+                                StringHelpers.SetCharacterProperties("SAVER", saver.CharacterObject, textObject, false);
+                            }
 
-                        // InformationManager.DisplayMessage(new InformationMessage(textObject.ToString()));
-                        if (prisoner.Clan == Hero.MainHero.Clan || party.Owner.Clan == Hero.MainHero.Clan || executioner.HomeSettlement.OwnerClan == Hero.MainHero.Clan)
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForClan)));
-                        }
-                        else if(Hero.MainHero.Clan.Kingdom != null  &&
-                            (prisoner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom || party.Owner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom ||
-                            executioner.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom))
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForKingdom)));
-                        }
-                        else
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForOtherFactions)));
+                            // InformationManager.DisplayMessage(new InformationMessage(textObject.ToString()));
+                            if (prisoner.Clan == Hero.MainHero.Clan || party.Owner.Clan == Hero.MainHero.Clan || executioner.HomeSettlement.OwnerClan == Hero.MainHero.Clan)
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForClan)));
+                            }
+                            else if (Hero.MainHero.Clan.Kingdom != null &&
+                                (prisoner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom || party.Owner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom ||
+                                executioner.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom))
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForKingdom)));
+                            }
+                            else
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForOtherFactions)));
+                            }
                         }
                     }
                 }
@@ -1226,7 +1236,8 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance",
                "start",
                "peasant_revenge_peasants_messenger_start_grievance_received",
-               "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
+              // "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
+               "{PEASANTDEMANDS}",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 120, null);
 
             //will pay
@@ -2025,11 +2036,23 @@ namespace PeasantRevenge
         private bool peasant_revenge_peasant_messenger_start_condition()
         {
             if (!currentRevenge.Can_peasant_revenge_messenger_peasant_start) return false;
-
-            StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, null, false);            
-            StringHelpers.SetCharacterProperties("PARTY", currentRevenge.party.LeaderHero.CharacterObject, null, false);
-            StringHelpers.SetCharacterProperties("PARTYLEADER", currentRevenge.party.LeaderHero.CharacterObject, null, false);
+            TextObject text;
+           
+            if (currentRevenge.criminal_victim == null)
+            {
+                text = new TextObject("{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");                 
+            }
+            else
+            {
+                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
+                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.criminal_victim, text, false);  
+            }
             
+            StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, text, false);                     
+            StringHelpers.SetCharacterProperties("PARTY", currentRevenge.party.LeaderHero.CharacterObject, text, false);
+            StringHelpers.SetCharacterProperties("PARTYLEADER", currentRevenge.party.LeaderHero.CharacterObject, text, false);
+            MBTextManager.SetTextVariable("PEASANTDEMANDS", text);
+
             return currentRevenge.executioner.HeroObject == Hero.OneToOneConversationHero;
         }
 
