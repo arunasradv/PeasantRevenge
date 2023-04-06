@@ -174,9 +174,10 @@ namespace PeasantRevenge
                  new List<RelationsPerTraits>
                  {
  //passive dependent
-                new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity > 0&Calculating < 0&Valor<0", relations = "Relations < 20"},
+                new RelationsPerTraits {traits = "Mercy < 2", relations = "Relations < 100"},
+                //new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity > 0&Calculating < 0&Valor<0", relations = "Relations < 20"},
 //dominant manipalutive
-                new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 0&Calculating > 0&Valor>0", relations =  "Relations < 20"},
+                //new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 0&Calculating > 0&Valor>0", relations =  "Relations < 20"},
                  };
             }
         }
