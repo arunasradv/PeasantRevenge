@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -42,8 +43,7 @@ namespace PeasantRevenge
         {
             if (HeroProposedTo != null)
             {
-                HeroProposedTo.Gold += Reparation;
-                OriginalOwner.Gold -= Reparation;
+                GiveGoldAction.ApplyBetweenCharacters(ProposingHero, HeroProposedTo, (int)Reparation, true);
             }
         }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -33,7 +34,7 @@ namespace PeasantRevenge
         {
             get
             {
-                StringHelpers.SetCharacterProperties("PROPOSEDTO", this.HeroProposedTo.CharacterObject, null, false);
+                StringHelpers.SetCharacterProperties("PROPOSEDTO", OriginalOwner.CharacterObject, null, false);
                 return new TextObject("{=PRev0060}Gift to {PROPOSEDTO.NAME}", null);
             }
         }
@@ -42,8 +43,7 @@ namespace PeasantRevenge
         {
             if (HeroProposedTo != null)
             {
-                HeroProposedTo.Gold += Value;
-                OriginalOwner.Gold -= Value;
+                GiveGoldAction.ApplyBetweenCharacters(OriginalOwner, HeroProposedTo, (int)Value, true);
             }
         }
 

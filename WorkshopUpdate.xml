@@ -6,7 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: for Diplomacy mod crash, when main hero is killed by notable peasant."/>
+        <ChangeNotes Value="Fix: Gold transfer action fix, when player pressed criminal will pay Fix: String {=PRev0021} fix, no more cought."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->

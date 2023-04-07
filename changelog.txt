@@ -24,5 +24,8 @@ Feature: Player and AI now play by the same rules (almost). Player can be killed
 Added:   Configuration variable relationLordAndCriminalChangeWhenLordSavedTheCriminal
 230405 v9
 Fix: Compatibility with Diplomacy mod
+230407 v10
+Fix: Gold transfer action fix, when player pressed "criminal will pay".
+Fix: String {=PRev0021} fix, no "cought".
 
 
