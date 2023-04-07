@@ -37,9 +37,8 @@ namespace PeasantRevenge
         {
             public Village village;
             public CharacterObject criminal;
-            public CharacterObject criminal_victim; // it is hero who was blamed for the crime by criminal
+            public CharacterObject accused_hero; // it is hero who was blamed for the crime by criminal
             public PartyBase party; //party what arrested the criminal
-
             public CharacterObject executioner;
             public PartyBase nobleParty; //
             public int reparation;
@@ -289,13 +288,13 @@ namespace PeasantRevenge
             bool TheSameClan = settlement.OwnerClan == party.Owner.Clan;
             if (!_cfg.values.alwaysLetLiveTheCriminal)
             {
-                revenge.criminal_victim = getAllyPrisonerTheEscapeGoat(prisoner);
+                revenge.accused_hero = getAllyPrisonerTheEscapeGoat(prisoner);
 
-                if(revenge.criminal_victim != null)
+                if(revenge.accused_hero != null)
                 {
-                    log($"{prisoner.Name} blamed {revenge.criminal_victim.Name} for looting the village.");
+                    log($"{prisoner.Name} blamed {revenge.accused_hero.Name} for looting the village.");
                     LogMessage.Add("{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village.");
-                    prisoner = revenge.criminal_victim.HeroObject;
+                    prisoner = revenge.accused_hero.HeroObject;
                 }
                 
                 bool party_relatives_with_criminal_condition = (party.Owner.Children.Contains(prisoner) || prisoner.Children.Contains(party.Owner)) &&
@@ -557,9 +556,9 @@ namespace PeasantRevenge
                         {
                             TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(logMessage, null);
                             StringHelpers.SetCharacterProperties("PRISONER", prisoner.CharacterObject, textObject, false);
-                            if (revenge.criminal_victim != null)
+                            if (revenge.accused_hero != null)
                             {
-                                StringHelpers.SetCharacterProperties("CRIMINALBLAMED", revenge.criminal_victim, textObject, false);
+                                StringHelpers.SetCharacterProperties("CRIMINALBLAMED", revenge.accused_hero, textObject, false);
                                 StringHelpers.SetCharacterProperties("CRIMINAL", revenge.criminal, textObject, false);
                             }
                             StringHelpers.SetCharacterProperties("PARTYOWNER", party.Owner.CharacterObject, textObject, false);
@@ -1781,45 +1780,46 @@ namespace PeasantRevenge
         private void peasant_revenge_peasant_messenger_not_kill_hero_consequence()
         {
             currentRevenge.Stop();
-            
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.criminal.HeroObject,  _cfg.values.relationChangeWhenPlayerSavedTheCriminal, _cfg.values.relationChangeWhenPlayerSavedTheCriminal!=0);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordRefusedToPayReparations, false);
 
-            if (_cfg.values.showPeasantRevengeLogMessages ||
-               (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
+            if (currentRevenge.accused_hero != null && currentRevenge.accused_hero != currentRevenge.criminal)
             {
-                string message = $"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} did not executed {currentRevenge.criminal.Name}";
-
-                log(message);
-
-                //TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject("{=*}" + message, null);
-                //StringHelpers.SetCharacterProperties("HERO", currentRevenge.criminal, textObject, false);
-                //InformationManager.DisplayMessage(new InformationMessage(textObject.ToString()));
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.accused_hero.HeroObject, _cfg.values.relationChangeWhenPlayerSavedTheCriminal, _cfg.values.relationChangeWhenPlayerSavedTheCriminal != 0);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.criminal.HeroObject, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal != 0);
             }
+            else
+            {
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.criminal.HeroObject, _cfg.values.relationChangeWhenPlayerSavedTheCriminal, _cfg.values.relationChangeWhenPlayerSavedTheCriminal != 0);
+            }
+            
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordRefusedToPayReparations, false);
+            
+            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} did not executed {currentRevenge.criminal.Name}");            
         }
 
         private void peasant_revenge_peasant_messenger_kill_hero_consequence()
         {
+            Hero victim = currentRevenge.accused_hero == null ? currentRevenge.criminal.HeroObject : currentRevenge.accused_hero.HeroObject;
+
+            if (currentRevenge.accused_hero != null && currentRevenge.accused_hero != currentRevenge.criminal)
+            {
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.criminal.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+            }
+
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);
+           
             if (_cfg.values.allowPeasantToKillLord)
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, currentRevenge.executioner.HeroObject, true, true);
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
             }
             else
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, Hero.MainHero, true, true);
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
             
-            if (_cfg.values.showPeasantRevengeLogMessages ||
-               (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-            {
-                string message = $"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name}, because lack {currentRevenge.reparation - currentRevenge.criminal.HeroObject.Gold} gold";
-                
-                log(message);
-            }
+            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
         }
 
       
@@ -1943,30 +1943,25 @@ namespace PeasantRevenge
         private void peasant_revenge_peasant_kill_hero_consequence()
         {
             currentRevenge.Stop();
-           
-            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.criminal.HeroObject, _cfg.values.relationChangeWithCriminalClanWhenPlayerExecutedTheCriminal, true, true);
-            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);
-           
+
+            Hero victim = currentRevenge.accused_hero == null ? currentRevenge.criminal.HeroObject : currentRevenge.accused_hero.HeroObject;
+
+            ChangeRelationAction.ApplyPlayerRelation(victim, _cfg.values.relationChangeWithCriminalClanWhenPlayerExecutedTheCriminal, true, true);
+            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);        
            
             if (_cfg.values.allowPeasantToKillLord)
             {
-                if (_cfg.values.showPeasantRevengeLogMessages ||
-                (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-                {
-                    log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name}");
-                }
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, currentRevenge.executioner.HeroObject, true, true);
+                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victim.Name}");
+                
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map));
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
             }
             else
             {
-                if (_cfg.values.showPeasantRevengeLogMessages ||
-               (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-                {
-                    log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {currentRevenge.criminal.Name}");
-                }
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, Hero.MainHero, true, true);
+                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {victim.Name}");
+                
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map));
+                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
         }
 
@@ -1982,32 +1977,24 @@ namespace PeasantRevenge
             { 
                 return;
             }
-            
+
+            Hero victim = victims.First().HeroObject;
+
             ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);
 
-            
-
-            currentRevenge.criminal = victims.First();
             if (_cfg.values.allowPeasantToKillLord)
             {
-                if (_cfg.values.showPeasantRevengeLogMessages ||
-               (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-                {
-                    log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victims.First().Name}");
-                }
+                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victim.Name}");                
 
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, currentRevenge.executioner.HeroObject, true, true);
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map));
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
             }
             else
             {
-                if (_cfg.values.showPeasantRevengeLogMessages ||
-                (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (currentRevenge.criminal.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-                {
-                    log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {victims.First().Name}");
-                }
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.criminal.HeroObject, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(currentRevenge.criminal.HeroObject, Hero.MainHero, true, true);
+                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {victim.Name}");
+
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map));
+                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
         }
 
@@ -2036,16 +2023,17 @@ namespace PeasantRevenge
         private bool peasant_revenge_peasant_messenger_start_condition()
         {
             if (!currentRevenge.Can_peasant_revenge_messenger_peasant_start) return false;
+            
             TextObject text;
            
-            if (currentRevenge.criminal_victim == null)
+            if (currentRevenge.accused_hero == null)
             {
                 text = new TextObject("{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");                 
             }
             else
             {
-                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
-                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.criminal_victim, text, false);  
+                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
+                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, text, false);  
             }
             
             StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, text, false);                     
@@ -2129,7 +2117,5 @@ namespace PeasantRevenge
                 File.AppendAllText(_cfg.values.log_file_name, $"{CampaignTime.Now}: {text}\r");
             }
         }
-
-
     }
 }
