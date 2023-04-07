@@ -342,8 +342,7 @@ namespace PeasantRevenge
                                         {
                                             if (WillLordSupportHeroClaim(ransomer, null))
                                             {
-                                                party.Owner.Gold += (int)reansomValue;
-                                                ransomer.Gold -= (int)reansomValue;
+                                                GiveGoldAction.ApplyBetweenCharacters(ransomer, party.Owner, (int)reansomValue, true);                                              
                                                 ransomstring = $" {ransomer.Name} paid to {party.Owner.Name} compensation {reansomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
                                                 saver = ransomer;
                                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, ransomer, _cfg.values.relationChangeAfterLordPartyGotPaid, false);
@@ -412,8 +411,7 @@ namespace PeasantRevenge
                                 {
                                     if (hero_trait_list_condition(saver, _cfg.values.lordNotExecuteMessengerTrait))
                                     {//not Kill
-                                        saver.Gold -= revenge.reparation;
-                                        executioner.Gold += revenge.reparation;
+                                        GiveGoldAction.ApplyBetweenCharacters(saver, executioner, (int)revenge.reparation, true);
                                         LogMessage = "{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.";
                                         message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} paid {revenge.reparation} gold. Prisoner gold {prisoner.Gold}";
                                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(saver, prisoner, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, false); // because saver have expenses
@@ -445,8 +443,7 @@ namespace PeasantRevenge
                             }
                             else// ai agreed to pay (here and  player companions as prisoners)
                             {
-                                prisoner.Gold -= revenge.reparation;
-                                executioner.Gold += revenge.reparation;
+                                GiveGoldAction.ApplyBetweenCharacters(prisoner, executioner, (int)revenge.reparation, true);
                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeAfterReparationsReceived, false);
 
                                 LogMessage = "{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}.";
@@ -1469,8 +1466,7 @@ namespace PeasantRevenge
                },
                () => {
                    int bribe = Hero.OneToOneConversationHero.Gold * _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal / 100;
-                   Hero.MainHero.Gold -= bribe; 
-                   Hero.OneToOneConversationHero.Gold += bribe;
+                   GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero,Hero.OneToOneConversationHero,bribe);
                    TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, false);                   
                }, 120, null);           
            campaignGameStarter.AddDialogLine(
@@ -1555,10 +1551,9 @@ namespace PeasantRevenge
             if(!savers.IsEmpty())
             {
                 Hero saver = savers.GetRandomElementInefficiently();
-                saver.Gold -= currentRevenge.reparation;
-                currentRevenge.executioner.HeroObject.Gold += currentRevenge.reparation;
+                GiveGoldAction.ApplyBetweenCharacters(saver, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, false);
                 string LogMessage = "{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.";
-                TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(LogMessage, null);
+                TextObject textObject = new TaleWorlds.Localization.TextObject(LogMessage, null);
                 StringHelpers.SetCharacterProperties("SAVER", saver.CharacterObject, textObject, false);
                 StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal, textObject, false);
                 StringHelpers.SetCharacterProperties("PARTYOWNER", currentRevenge.party.Owner.CharacterObject, textObject, false);
@@ -1723,7 +1718,7 @@ namespace PeasantRevenge
         {
             List<Barterable> barterables = new List<Barterable>();
             float reansomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(currentRevenge.criminal, null);
-            barterables.Add(new GiftBarterable(currentRevenge.party.LeaderHero, currentRevenge.party, currentRevenge.party.LeaderHero, Hero.MainHero,(int)reansomValue));
+            barterables.Add(new GiftBarterable(currentRevenge.party.LeaderHero, currentRevenge.party, null, Hero.MainHero,(int)reansomValue));
             BarterManager instance = BarterManager.Instance;
             instance.StartBarterOffer(
                 Hero.MainHero, 
@@ -1814,9 +1809,8 @@ namespace PeasantRevenge
         {
             currentRevenge.Stop();
 
-            currentRevenge.executioner.HeroObject.Gold += currentRevenge.reparation;
-            
-            TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject("{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}.", null);
+            GiveGoldAction.ApplyBetweenCharacters(currentRevenge.criminal.HeroObject, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, true);
+            TextObject textObject = new TextObject("{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}.", null);
             StringHelpers.SetCharacterProperties("HERO", currentRevenge.criminal, textObject, false);
             StringHelpers.SetCharacterProperties("EXECUTIONER", currentRevenge.executioner, textObject, false);
             textObject.SetTextVariable("REPARATION", (float)currentRevenge.reparation);
@@ -1829,10 +1823,8 @@ namespace PeasantRevenge
         {
             currentRevenge.Stop();
 
-            Hero.MainHero.Gold -= currentRevenge.reparation;
-            currentRevenge.executioner.HeroObject.Gold += currentRevenge.reparation;
-           
-            TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject("{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}.", null);
+            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, true);
+            TextObject textObject = new TextObject("{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}.", null);
             StringHelpers.SetCharacterProperties("HERO", Hero.MainHero.CharacterObject, textObject, false);
             StringHelpers.SetCharacterProperties("EXECUTIONER", currentRevenge.executioner, textObject, false);
             textObject.SetTextVariable("REPARATION", (float)currentRevenge.reparation);
@@ -1861,7 +1853,7 @@ namespace PeasantRevenge
             List<Barterable> barterables = new List<Barterable>();
             MobileParty partyBelongedTo = Hero.OneToOneConversationHero.PartyBelongedTo;
 
-            barterables.Add(new ReparationsBarterable(Hero.OneToOneConversationHero, PartyBase.MainParty, currentRevenge.executioner.HeroObject, Hero.MainHero, currentRevenge.reparation));
+            barterables.Add(new ReparationsBarterable(Hero.OneToOneConversationHero, PartyBase.MainParty, null, Hero.MainHero, currentRevenge.reparation));
             BarterManager instance = BarterManager.Instance;
             instance.StartBarterOffer(
                 Hero.MainHero, 
@@ -1879,7 +1871,7 @@ namespace PeasantRevenge
         private void peasant_revenge_player_payed_consecuence()
         {
             currentRevenge.Stop();
-
+            GiveGoldAction.ApplyBetweenCharacters(Hero.OneToOneConversationHero, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, true); //because party leader got all gold 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.OneToOneConversationHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeAfterReparationsReceived, false);           
         }
         
