@@ -15,12 +15,14 @@ using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 
 namespace PeasantRevenge
 {
@@ -41,6 +43,7 @@ namespace PeasantRevenge
 
             public CharacterObject executioner;
             public PartyBase nobleParty; //
+            public MobileParty xParty; //
             public int reparation;
             public string state = "";
 
@@ -87,11 +90,21 @@ namespace PeasantRevenge
             public void Stop()
             {
                 this.state = "stop";
+                if (this.xParty != null && this.xParty.IsVisible && this.xParty.IsActive)
+                {
+                    xParty.Ai.SetMoveGoToSettlement(executioner.HeroObject.HomeSettlement);
+                    //DestroyPartyAction.ApplyForDisbanding(this.xParty,executioner.HeroObject.HomeSettlement);
+                }
             }
 
             public void Start()
             {
                 state = "start";
+            }
+
+            public void Begin()
+            {
+                state = "begin";
             }
         }
 
@@ -179,8 +192,22 @@ namespace PeasantRevenge
             {
                 revengeData.Clear();
             }
-            revengeData.RemoveAll((x) => (x.state == "stop" || x.dueTime.IsPast));
-            IEnumerable<PeasantRevengeData> revenges = revengeData.Where((x) => x.state == "start" && (x.Can_peasant_revenge_peasant_start || x.Can_peasant_revenge_lord_start || x.Can_peasant_revenge_messenger_peasant_start));
+            
+            IEnumerable<PeasantRevengeData> revenges = revengeData.Where((x) => x.state == "begin");
+            if (revenges != null && revenges.Count() > 0)
+            {
+                foreach (PeasantRevengeData revenge in revenges)
+                {
+                    if (revenge.party.MobileParty.Position2D.Distance(revenge.xParty.Position2D) < 2f)
+                    {
+                        revenge.Start();
+                    }
+                }
+            }
+#warning remove disabled
+            // revengeData.RemoveAll((x) => (x.state == "stop" || x.dueTime.IsPast));
+
+            revenges = revengeData.Where((x) => x.state == "start" && (x.Can_peasant_revenge_peasant_start || x.Can_peasant_revenge_lord_start || x.Can_peasant_revenge_messenger_peasant_start));
 
             if (revenges != null && revenges.Count() > 0)
             {
@@ -207,6 +234,8 @@ namespace PeasantRevenge
                         new ConversationCharacterData(currentRevenge.executioner, currentRevenge.nobleParty, false, false, false, false, false, false));
                 }
             }
+
+          
         }
 
         private void DailyTickPartyEvent(MobileParty party)
@@ -223,18 +252,24 @@ namespace PeasantRevenge
                     {
                         if (Hero.MainHero.PartyBelongedTo == null ? false : revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                         {
-                            revenge.Start();                        
+                            //revenge.Start();
+                            revenge.Begin();
+                            revenge.xParty = CreateNotableParty(revenge);
                         }
                         else if (revenge.criminal == Hero.MainHero.CharacterObject)
                         {
-                            revenge.Start();
+                            //revenge.Start();
+                            revenge.Begin();
+                            revenge.xParty = CreateNotableParty(revenge);
                         }
                         else
                         {
                             if (RevengeAI(revenge)) // if player dialog start after AI run
                             {
-                                revenge.Start();
+                                //revenge.Start();
+                                revenge.Begin();
                                 revenge.nobleParty = revenge.party;
+                                revenge.xParty =  CreateNotableParty(revenge);                                
                             }
                             else
                             {
@@ -575,6 +610,35 @@ namespace PeasantRevenge
             }
             #endregion
             return false;
+        }
+
+        private MobileParty CreateNotableParty(PeasantRevengeData revenge)
+        {
+            MobileParty mobileParty = null;
+
+            mobileParty = MobileParty.CreateParty($"Revenger_{revenge.executioner.Name}".Replace(' ','_'), null, null);
+            CharacterObject villager = revenge.executioner.Culture.Villager;
+            TroopRoster troopRoster = new TroopRoster(mobileParty.Party);
+            TextObject textObject = new TextObject("Revenger", null);
+            troopRoster.AddToCounts(revenge.executioner, 1, true, 0, 0, true, -1);
+            troopRoster.AddToCounts(villager, 5, false, 0, 0, true, -1);
+            mobileParty.ChangePartyLeader(revenge.executioner.HeroObject);
+            mobileParty.InitializeMobilePartyAtPosition(troopRoster, new TroopRoster(mobileParty.Party), revenge.executioner.HeroObject.HomeSettlement.Position2D);
+            mobileParty.InitializePartyTrade(500);
+            mobileParty.SetCustomName(textObject);
+            mobileParty.SetCustomHomeSettlement(revenge.executioner.HeroObject.HomeSettlement);
+            mobileParty.SetPartyUsedByQuest(true);
+            mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"),6);
+            mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("butter"),3);
+            mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"),3);
+            mobileParty.IgnoreForHours(3f);
+            mobileParty.Ai.SetDoNotMakeNewDecisions(true);
+            mobileParty.Party.Visuals.SetMapIconAsDirty();
+            // base.AddTrackedObject(mobileParty);
+            mobileParty.Aggressiveness = 0f;
+            //mobileParty.Ai.SetMoveEngageParty(revenge.party.MobileParty);
+            mobileParty.Ai.SetMoveEscortParty(revenge.party.MobileParty);
+            return mobileParty;
         }
 
         private IEnumerable<PeasantRevengeData> GetStartedRevengeData()
