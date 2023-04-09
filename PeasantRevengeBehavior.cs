@@ -1169,15 +1169,18 @@ namespace PeasantRevenge
         }
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
-        {
-            #region When player is captured as criminal
+        { 
+            
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_any_revenger_start",
                "start",
                "close_window",
                "{=PRev0068}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_any_revenger_start_condition), null, 200, null);
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_any_revenger_start_condition), ()=> leave_encounter(), 200, null);
 
+            #region When player is captured as criminal
+
+          
             campaignGameStarter.AddDialogLine(
                 "peasant_revenge_lord_start_grievance",
                 "start",
