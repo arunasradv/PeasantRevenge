@@ -1336,7 +1336,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance",
                "start",
                "peasant_revenge_peasants_messenger_start_grievance_received",
-               "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
+               "{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 120, null);
 
             //will pay
