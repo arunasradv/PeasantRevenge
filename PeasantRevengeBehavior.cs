@@ -242,7 +242,7 @@ namespace PeasantRevenge
                     {
                         if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) < 4f)
                         {
-                            if (Hero.MainHero.PartyBelongedTo != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
+                            if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                             {
                                 revenge.Start();
                                 if (revenge.Can_peasant_revenge_peasant_start)
@@ -255,7 +255,7 @@ namespace PeasantRevenge
                                     revenge.Stop();
                                 }
                             }
-                            else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
+                            else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
                             {
                                 revenge.Start();                                
                                 if (revenge.Can_peasant_revenge_lord_start)
@@ -713,7 +713,7 @@ namespace PeasantRevenge
             mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), size);
             mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("butter"), size);
             mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"), size);
-            mobileParty.IgnoreForHours(_cfg.values.peasantRevengeTimeoutInDays*24f*10f);
+            //mobileParty.IgnoreForHours(_cfg.values.peasantRevengeTimeoutInDays*24f*10f); //if not ignored, ai can kill them and notable will respawn in the village
             mobileParty.Ai.SetDoNotMakeNewDecisions(true);
             mobileParty.Party.Visuals.SetMapIconAsDirty();
             mobileParty.Aggressiveness = 0f;
