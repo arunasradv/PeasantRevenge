@@ -776,6 +776,11 @@ namespace PeasantRevenge
                     }
                     _cfg.Save(_cfg.values.file_name, _cfg.values);
                 }
+                else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0)
+                { // patching new ai parameters
+                    _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
+                    _cfg.Save(_cfg.values.file_name, _cfg.values);
+                }
                 //File.Copy(_cfg.values.file_name, _cfg.values.file_name + "_autosaved_backup.xml");
             }
             else
@@ -1286,8 +1291,14 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance_received_not_pay",
                "peasant_revenge_peasants_messenger_start_grievance_received",
                "peasant_revenge_peasants_messenger_finish_not_paid",
-               "{=PRev0023}I'll not pay! Criminals can die!", null,
+               "{=PRev0023}I'll not pay! Criminal can die!", null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_hero_consequence), 100, null, null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_both_kill",
+              "peasant_revenge_peasants_messenger_start_grievance_received",
+              "peasant_revenge_peasants_messenger_finish_not_paid",
+              "{=PRev0070}You can have them both!", ()=> have_accused_hero(),
+              new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence), 100, null, null);
             //not pay and kill messenger
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_peasants_messenger_start_grievance_received_kill_messenger",
@@ -1837,7 +1848,40 @@ namespace PeasantRevenge
             log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
         }
 
-      
+        private void peasant_revenge_peasant_messenger_kill_both_consequence()
+        {
+            Hero victim =  currentRevenge.criminal.HeroObject;
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+
+            if (_cfg.values.allowPeasantToKillLord)
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
+            }
+            else
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
+            }
+
+            victim = currentRevenge.accused_hero.HeroObject;
+
+            if (_cfg.values.allowPeasantToKillLord)
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
+            }
+            else
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
+            }
+
+            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name} and {currentRevenge.accused_hero.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
+        }
+
 
         private void criminal_has_to_pay_in_gold_consequence()
         {
@@ -2035,20 +2079,27 @@ namespace PeasantRevenge
 
             return currentRevenge.executioner.HeroObject == Hero.OneToOneConversationHero;
         }
+
+        private bool have_accused_hero()
+        {
+            return currentRevenge.accused_hero != null;
+        }
+
         private bool peasant_revenge_peasant_messenger_start_condition()
         {
             if (!currentRevenge.Can_peasant_revenge_messenger_peasant_start) return false;
             
             TextObject text;
-           
-            if (currentRevenge.accused_hero == null)
+
+            if (have_accused_hero())
             {
-                text = new TextObject("{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");                 
+                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
+                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, text, false);
             }
             else
             {
-                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
-                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, text, false);  
+                text = new TextObject("{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
+
             }
             
             StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, text, false);                     

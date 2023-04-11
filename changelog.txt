@@ -27,5 +27,12 @@ Fix: Compatibility with Diplomacy mod
 230407 v10
 Fix: Gold transfer action fix, when player pressed "criminal will pay".
 Fix: String {=PRev0021} fix, no "cought".
+XXXXXX v11
+Feature: AI can now blame other AI for the village looting crime.
+         *** Not implemented, when player captures the lord.
+         *** Not implemented,dialog option to kill only accused AI
+         *** Not implemented,AI should too be able to decide if kill both or accused one, or criminal.
+         *** Not implemented,more dialog options (some missing yet)
+         
 
 

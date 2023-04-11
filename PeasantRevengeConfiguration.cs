@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -171,15 +171,21 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+                default_criminalWillBlameOtherLordForTheCrime();
+            }
+
+            public void default_criminalWillBlameOtherLordForTheCrime()
+            {
                 criminalWillBlameOtherLordForTheCrime =
-                 new List<RelationsPerTraits>
-                 {
+                                new List<RelationsPerTraits>
+                                {
                      //passive dependent
                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 90"},
                      //dominant manipalutive
                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 90"},
-                 };
+                                };
             }
+
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
