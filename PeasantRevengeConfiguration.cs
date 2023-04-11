@@ -102,6 +102,7 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordIfFriendsWillHelpTheCriminal;
             public List<RelationsPerTraits> lordIfRelativesWillHelpTheCriminal;
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
+          
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -173,11 +174,10 @@ namespace PeasantRevenge
                 criminalWillBlameOtherLordForTheCrime =
                  new List<RelationsPerTraits>
                  {
- //passive dependent
-                new RelationsPerTraits {traits = "Mercy < 2", relations = "Relations < 100"},
-                //new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity > 0&Calculating < 0&Valor<0", relations = "Relations < 20"},
-//dominant manipalutive
-                //new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 0&Calculating > 0&Valor>0", relations =  "Relations < 20"},
+                     //passive dependent
+                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 90"},
+                     //dominant manipalutive
+                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 90"},
                  };
             }
         }

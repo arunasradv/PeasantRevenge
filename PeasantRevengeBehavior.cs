@@ -788,7 +788,8 @@ namespace PeasantRevenge
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
             }
 
-           
+#warning check _cfg.values.ai.criminalWillBlameOtherLordForTheCrime cfg update before pushing
+
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
             //Test();            
@@ -828,11 +829,24 @@ namespace PeasantRevenge
 
             log($"Total vilages {total}. Can revenge :{sum}. Average hearts: {(sum_hearts / total)}. MinHearts {min_hearts}. MaxHearts{max_hearts}");
 
+            List<PeasantRevengeConfiguration.RelationsPerTraits> criminalWillBlameOtherLordForTheCrime = _cfg.values.ai.criminalWillBlameOtherLordForTheCrime;
+
             foreach (Hero s in Hero.AllAliveHeroes)
             {
                 if (s.IsLord)
                 {
-                    log($"{s.Name} {s.Gold} {s.Clan.Name}");
+                    int victims = 0;
+                    foreach (Hero h in Hero.AllAliveHeroes)
+                    {
+                        if (s.IsLord && s.Id.ToString()!=h.Id.ToString())
+                        {
+                            if(CheckConditions(s, h, criminalWillBlameOtherLordForTheCrime))
+                            {
+                                victims++;
+                            }
+                        }
+                    }
+                    log($" {s.Name}  {s.Gold} {s.Clan.Name} {(victims > 0 ? "blame: " + victims.ToString() : "" )}");
                 }
             }
         }
