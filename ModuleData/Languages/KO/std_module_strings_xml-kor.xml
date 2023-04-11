@@ -24,7 +24,7 @@
      <string id="PRev0018" text="하지만, 하지만...[ib:closed][if:convo_bared_teeth]" />
      <string id="PRev0019" text="없는 것보다 낫다...[ib:closed][if:idle_normal]" />
      <string id="PRev0020" text="복수![if:convo_happy][ib:happy]" />
-     <string id="PRev0021" text="{PARTYLEADER.LINK}이(가) {CRIMINAL.LINK}이(가) 우리 마을을 약탈했다고 기침했습니다. 우리는 범인의 머리를 요구합니다. 놈은 범죄에 대한 대가를 치러야 하기 때문입니다! 당신은 뭐라고 말하시겠습니까?[ ib:공격적][if:convo_furious]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK}이(가) 우리 마을을 약탈하는 {CRIMINAL.LINK}을(를) 잡았습니다. 우리는 범인의 머리를 요구합니다. 놈은 범죄에 대한 대가를 치러야 하기 때문입니다! 당신은 뭐라고 말하시겠습니까?[ ib:공격적][if:convo_furious]" />
      <string id="PRev0022" text="저는 농민의 요구에 굴복하지 않겠습니다! 그리고 {HERO.NAME}님도 그래야 합니다!" />
      <string id="PRev0023" text="돈을 내지 않겠습니다! 범죄자는 죽을 수 있습니다!" />
      <string id="PRev0024" text="감히! 넌 죽을거야!" />

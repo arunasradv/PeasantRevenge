@@ -39,6 +39,7 @@ namespace PeasantRevenge
             public CharacterObject criminal;
             public CharacterObject accused_hero; // it is hero who was blamed for the crime by criminal
             public PartyBase party; //party what arrested the criminal
+
             public CharacterObject executioner;
             public PartyBase nobleParty; //
             public int reparation;
@@ -1736,7 +1737,7 @@ namespace PeasantRevenge
         {
             List<Barterable> barterables = new List<Barterable>();
             float reansomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(currentRevenge.criminal, null);
-            barterables.Add(new GiftBarterable(currentRevenge.party.LeaderHero, currentRevenge.party, currentRevenge.party.LeaderHero, Hero.MainHero,(int)reansomValue));
+            barterables.Add(new GiftBarterable(currentRevenge.party.LeaderHero, currentRevenge.party, null, Hero.MainHero,(int)reansomValue));
             BarterManager instance = BarterManager.Instance;
             instance.StartBarterOffer(
                 Hero.MainHero, 
@@ -1872,7 +1873,7 @@ namespace PeasantRevenge
             List<Barterable> barterables = new List<Barterable>();
             MobileParty partyBelongedTo = Hero.OneToOneConversationHero.PartyBelongedTo;
 
-            barterables.Add(new ReparationsBarterable(Hero.OneToOneConversationHero, PartyBase.MainParty, currentRevenge.executioner.HeroObject, Hero.MainHero, currentRevenge.reparation));
+            barterables.Add(new ReparationsBarterable(Hero.OneToOneConversationHero, PartyBase.MainParty, null, Hero.MainHero, currentRevenge.reparation));
             BarterManager instance = BarterManager.Instance;
             instance.StartBarterOffer(
                 Hero.MainHero, 
@@ -1890,7 +1891,7 @@ namespace PeasantRevenge
         private void peasant_revenge_player_payed_consecuence()
         {
             currentRevenge.Stop();
-
+            GiveGoldAction.ApplyBetweenCharacters(Hero.OneToOneConversationHero, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, true); //because party leader got all gold 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.OneToOneConversationHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeAfterReparationsReceived, false);           
         }
         
@@ -2117,5 +2118,7 @@ namespace PeasantRevenge
                 File.AppendAllText(_cfg.values.log_file_name, $"{CampaignTime.Now}: {text}\r");
             }
         }
+
+
     }
 }
