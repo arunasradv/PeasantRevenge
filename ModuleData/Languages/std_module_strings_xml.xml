@@ -26,7 +26,7 @@
     <string id="PRev0020" text="{=PRev0020}Revenge![if:convo_happy][ib:happy]" />
     <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]" />
     <string id="PRev0022" text="{=PRev0022}I'll not bow to peasant demands! And {HERO.NAME} should too!" />
-    <string id="PRev0023" text="{=PRev0023}I'll not pay! Criminals can die!" />
+    <string id="PRev0023" text="{=PRev0023}I'll not pay! Criminal {CVICTIM.NAME} can die!" />
     <string id="PRev0024" text="{=PRev0024}How dare you! You'll die!" />
     <string id="PRev0025" text="{=PRev0025}Better than nothing...[ib:closed][if:idle_angry][rf:idle_angry]" />
     <string id="PRev0026" text="{=PRev0026}But, but...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />

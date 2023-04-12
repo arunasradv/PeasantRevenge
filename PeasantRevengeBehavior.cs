@@ -1309,7 +1309,18 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance_received_not_pay",
                "peasant_revenge_peasants_messenger_start_grievance_received",
                "peasant_revenge_peasants_messenger_finish_not_paid",
-               "{=PRev0023}I'll not pay! Criminal can die!", null,
+               "{=PRev0023}I'll not pay! Criminal {CVICTIM.NAME} can die!", () => 
+               {
+                   if (currentRevenge.accused_hero != null)
+                   {
+                       StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero);
+                   }
+                   else
+                   {
+                       StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.criminal);
+                   }
+                   return true; 
+               },
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_hero_consequence), 100, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_both_kill",
