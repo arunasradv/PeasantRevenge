@@ -26,7 +26,7 @@
      <string id="PRev0020" text="Месть![if:convo_happy][ib:happy]" />
      <string id="PRev0021" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни. Мы требуем голову преступника на пике, потому что этот ублюдок должен заплатить за преступление! Что вы скажете?[ ib:агрессивный][if:convo_furious]" />
      <string id="PRev0022" text="Я не подчиняюсь крестьянским требованиям! И {HERO.NAME} тоже должен!" />
-     <string id="PRev0023" text="Я не буду платить! Преступники могут умереть!" />
+     <string id="PRev0023" text="Я не буду платить! Преступник {CVICTIM.NAME} может умереть!" />
      <string id="PRev0024" text="Как ты смеешь! Ты умрешь!" />
      <string id="PRev0025" text="Лучше, чем ничего...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Но, но...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />

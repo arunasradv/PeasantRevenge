@@ -26,7 +26,7 @@
      <string id="PRev0020" text="Vendetta![if:convo_happy][ib:happy]" />
      <string id="PRev0021" text="{PARTYLEADER.LINK} ha sorpreso {CRIMINAL.LINK} a saccheggiare il nostro villaggio. Chiediamo la testa del criminale sulla punta, perché il bastardo deve pagare per il crimine! Cosa dirai?[ ib:aggressive][if:convo_furious]" />
      <string id="PRev0022" text="Non mi piegherò alle richieste dei contadini! E anche {HERO.NAME} dovrebbe farlo!" />
-     <string id="PRev0023" text="Non pagherò! I criminali possono morire!" />
+     <string id="PRev0023" text="non pagherò! Il criminale {CVICTIM.NAME} può morire!" />
      <string id="PRev0024" text="Come osi! Morirai!" />
      <string id="PRev0025" text="Meglio di niente...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Scarpa, scarpa...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
