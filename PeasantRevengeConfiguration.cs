@@ -102,7 +102,8 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordIfFriendsWillHelpTheCriminal;
             public List<RelationsPerTraits> lordIfRelativesWillHelpTheCriminal;
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
-          
+            public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
+
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -171,7 +172,17 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+                default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
+            }
+
+            public void default_lordWillKillBothAccusedHeroAndCriminalLord()
+            {
+                lordWillKillBothAccusedHeroAndCriminalLord =
+                 new List<RelationsPerTraits>
+                 {
+                new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" },
+                 };
             }
 
             public void default_criminalWillBlameOtherLordForTheCrime()

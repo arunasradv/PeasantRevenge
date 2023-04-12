@@ -70,6 +70,9 @@
     <string id="PRev0064" text="{=PRev0064}You will be fine.[if:convo_happy][if:convo_thinking][ib:closed]" />
     <string id="PRev0065" text="{=PRev0065}I have friends, who will pay the reparation." />
     <string id="PRev0066" text="{=PRev0066}{SAVER.NAME} will support you." />
-    <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." />  
+    <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." /> 
+    <string id="PRev0068" text="{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]" />     
+    <string id="PRev0069" text="{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village." /> 
+    <string id="PRev0070" text="{=PRev0070}You can kill them both!" /> 
   </strings>
 </base>

@@ -409,6 +409,25 @@ namespace PeasantRevenge
                                     message = $"{party.Owner.Name} captured and executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
+
+                                #region killing criminal too
+                                if(revenge.accused_hero != null)
+                                {
+                                    if (CheckConditions(party.Owner, revenge.criminal.HeroObject, _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord))
+                                    {
+                                        if (_cfg.values.allowPeasantToKillLord)
+                                        {
+                                            message = $"{executioner.Name} executed {revenge.criminal.Name} too.";
+                                            KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, executioner, true, true);
+                                        }
+                                        else
+                                        {
+                                            message = $"{party.Owner.Name} executed {revenge.criminal.Name} too.";
+                                            KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
+                                        }
+                                    }
+                                }
+                                #endregion
                             }
                             else
                             {
@@ -776,9 +795,10 @@ namespace PeasantRevenge
                     }
                     _cfg.Save(_cfg.values.file_name, _cfg.values);
                 }
-                else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0)
+                else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0 && _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord.Count == 0)
                 { // patching new ai parameters
                     _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
+                    _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
                     _cfg.Save(_cfg.values.file_name, _cfg.values);
                 }
                 //File.Copy(_cfg.values.file_name, _cfg.values.file_name + "_autosaved_backup.xml");
@@ -792,8 +812,6 @@ namespace PeasantRevenge
                 }
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
             }
-
-#warning check _cfg.values.ai.criminalWillBlameOtherLordForTheCrime cfg update before pushing
 
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
@@ -1297,7 +1315,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_both_kill",
               "peasant_revenge_peasants_messenger_start_grievance_received",
               "peasant_revenge_peasants_messenger_finish_not_paid",
-              "{=PRev0070}You can have them both!", ()=> have_accused_hero(),
+              "{=PRev0070}You can kill them both!", ()=> have_accused_hero(),
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence), 100, null, null);
             //not pay and kill messenger
             campaignGameStarter.AddPlayerLine(
@@ -2093,7 +2111,7 @@ namespace PeasantRevenge
 
             if (have_accused_hero())
             {
-                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand, that {CVICTIM.LINK} to pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
+                text = new TextObject("{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]");
                 StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, text, false);
             }
             else
