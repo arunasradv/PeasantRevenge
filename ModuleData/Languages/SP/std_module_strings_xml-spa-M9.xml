@@ -69,7 +69,7 @@
     <string id="PRev0063" text="Campesino tendrá tu cabeza.[if:convo_thinking][rf:convo_grave][ib:closed]" />
     <string id="PRev0064" text="Estarás bien.[if:convo_happy][if:convo_thinking][ib:closed]" />
     <string id="PRev0065" text="Tengo amigos que pagarán la reparación." />
-    <string id="PRev0066" text="{SAVER.NAME} te apoyará".="" />
-    <string id="PRev0067" text="{SUPPORTERCOUNT} héroes pueden apoyarte".="" />
+    <string id="PRev0066" text="{SAVER.NAME} te apoyará" />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} héroes pueden apoyarte" />
   </strings>
 </base>

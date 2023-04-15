@@ -73,6 +73,6 @@
     <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." /> 
     <string id="PRev0068" text="{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]" />     
     <string id="PRev0069" text="{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village." /> 
-    <string id="PRev0070" text="{=PRev0070}You can kill them both!" /> 
+    <string id="PRev0070" text="{=PRev0070}They are both criminals!" />
   </strings>
 </base>
