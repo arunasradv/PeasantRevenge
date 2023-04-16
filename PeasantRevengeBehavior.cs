@@ -24,6 +24,7 @@ using TaleWorlds.Localization;
 
 namespace PeasantRevenge
 {
+#pragma warning disable IDE1006 // Naming Styles
     internal class PeasantRevengeBehavior : CampaignBehaviorBase
     {
 
@@ -224,13 +225,10 @@ namespace PeasantRevenge
                 {
                     if (revenge.executioner != null)
                     {
-                        if (Hero.MainHero.PartyBelongedTo == null ? false : revenge.party == Hero.MainHero.PartyBelongedTo.Party)
+                        if ((Hero.MainHero.PartyBelongedTo == null ? false : revenge.party == Hero.MainHero.PartyBelongedTo.Party) ||
+                           (revenge.criminal == Hero.MainHero.CharacterObject))
                         {
                             revenge.Start();                        
-                        }
-                        else if (revenge.criminal == Hero.MainHero.CharacterObject)
-                        {
-                            revenge.Start();
                         }
                         else
                         {
@@ -350,9 +348,9 @@ namespace PeasantRevenge
 
                                     if (!ransomer.IsHumanPlayerCharacter)
                                     {
-                                        if (WillLordDemandSupport(null, party.Owner))
+                                        if (WillLordDemandSupport(party.Owner))
                                         {
-                                            if (WillLordSupportHeroClaim(ransomer, null))
+                                            if (WillLordSupportHeroClaim(ransomer, party.Owner))
                                             {
                                                 GiveGoldAction.ApplyBetweenCharacters(ransomer, party.Owner, (int)reansomValue, true);                                              
                                                 ransomstring = $" {ransomer.Name} paid to {party.Owner.Name} compensation {reansomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
@@ -373,19 +371,15 @@ namespace PeasantRevenge
                                     }
                                     else
                                     {
-                                        //Implement ransom to player here ?
-                                        if (_cfg.values.showPeasantRevengeLogMessages ||
-                                           (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (party.Owner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom || prisoner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom)))
-                                        {
-                                            log($"Player was selected as ransomer of {prisoner.Name}. Payment is not implemented.");
-                                        }
+
+                                        log($"Player was selected as ransomer of {prisoner.Name}. Payment is not implemented.");
                                     }
                                 }
                                 else
                                 {//have no ransomer, but execution is go,means that party clan leader allow execution to stisfy peasant demands
                                     if (party.Owner != party.Owner.Clan.Leader)
                                     {
-                                        if (WillLordDemandSupport(null, party.Owner))
+                                        if (WillLordDemandSupport(party.Owner))
                                         {
                                             ransomstring = $" {party.Owner.Clan.Leader.Name} does not have ransom money for {party.Owner.Name}'s asked ransom";
                                             //ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, party.Owner.Clan.Leader, _cfg.values.relationChangeAfterLordPartyGotNoReward, false);
@@ -621,11 +615,6 @@ namespace PeasantRevenge
             return false;
         }
 
-        private IEnumerable<PeasantRevengeData> GetStartedRevengeData()
-        {
-            return revengeData.Where((x) => x.state == "start");
-        }
-
         private CharacterObject GetRevengeNotable(Settlement settlement)
         {
             int k = -1;
@@ -697,8 +686,7 @@ namespace PeasantRevenge
                         else
                         {
                             log("Error in equation: " + equationAND.ToString() + ". Now will be using default cfg. Please fix or Delete cfg file.");
-                            _cfg = new PeasantRevengeModCfg();
-                            //_cfg.Save(_cfg.values.file_name, _cfg.values);
+                            ResetConfiguration();
                             break;
                         }
                     }
@@ -723,8 +711,7 @@ namespace PeasantRevenge
                     else
                     {
                         log("Error in equation: " + equationItem.ToString() + ". Now will be using default cfg. Please fix or Delete cfg file.");
-                        _cfg = new PeasantRevengeModCfg();
-                        //_cfg.Save(_cfg.values.file_name, _cfg.values);
+                        ResetConfiguration();
                         break;
                     }
                 }
@@ -735,7 +722,12 @@ namespace PeasantRevenge
             return result;
         }
 
-
+        private void ResetConfiguration()
+        {
+            _cfg = new PeasantRevengeModCfg();
+            _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
+            _cfg.values.ai.Default();
+        }
 
         private bool hero_relation_on_condition(Hero hero, Hero target, string operation, string weight)
         {
@@ -866,6 +858,7 @@ namespace PeasantRevenge
                 if (s.IsLord)
                 {
                     int victims = 0;
+                    int both = 0;
                     foreach (Hero h in Hero.AllAliveHeroes)
                     {
                         if (s.IsLord && s.Id.ToString()!=h.Id.ToString())
@@ -874,9 +867,13 @@ namespace PeasantRevenge
                             {
                                 victims++;
                             }
+                            if (CheckConditions(s, h, _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord))
+                            {
+                                both++;
+                            }
                         }
                     }
-                    log($" {s.Name}  {s.Gold} {s.Clan.Name} {(victims > 0 ? "blame: " + victims.ToString() : "" )}");
+                    log($" {s.Name}  {s.Gold} {s.Clan.Name} {(victims > 0 ? "blame: " + victims.ToString() : "" )} {(both > 0 ? "both: " + both.ToString() : "")}");
                 }
             }
         }
@@ -894,12 +891,6 @@ namespace PeasantRevenge
 
                     if (settlements != null && !settlements.IsEmpty())
                     {
-//#if DEBUG
-//                        if (settlements.Count() > 0)
-//                        {
-//                            log($"[AddRaidingParties] {criminal.Name} added and has {settlements.Count()} settlement records ({settlements.Last().Village}; {CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)})");
-//                        }
-//#endif
                         revengeData.Add(
                             new PeasantRevengeData
                             {
@@ -1274,7 +1265,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_ask_criminal_start_explain",
               "start",
               "peasant_revenge_peasants_ask_criminal_options_start",
-              "{=PRev0073} I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]",
+              "{=PRev0073}I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]",
               new ConversationSentence.OnConditionDelegate(peasant_revenge_ask_criminal_start_condition),
               null,
               120, null);
@@ -1299,7 +1290,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_ask_criminal_option_1",
               "peasant_revenge_peasants_ask_criminal_options",
               "close_window",
-              "{=PRev0076}I'm not convinced.",
+              "{=PRev0076}You are lying.",
               null,
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_the_criminal),
               90, null, null);
@@ -1648,9 +1639,7 @@ namespace PeasantRevenge
             if (string.IsNullOrEmpty(traits)) return;
 
             List<string> traits_con_pool =  traits.Split('|').ToList();
-            string[] traits_con = traits_con_pool.ToArray();//.GetRandomElement().Split('&');
-
-            //hero.ClearTraits();
+            string[] traits_con = traits_con_pool.ToArray();
 
             foreach (string trait_or in traits_con)
             {
@@ -1777,6 +1766,8 @@ namespace PeasantRevenge
             return start;
         }
 
+
+
         private bool peasant_revenge_lord_start_reparation_condition()
         {
             MBTextManager.SetTextVariable("REPARATION", currentRevenge.reparation);
@@ -1788,7 +1779,7 @@ namespace PeasantRevenge
             currentRevenge.Stop();
         }
 
-        private bool WillLordDemandSupport(Hero suporterHero, Hero receiverHero)
+        private bool WillLordDemandSupport(Hero receiverHero)
         {
             bool rezult =
                 receiverHero.Gold < _cfg.values.lordWillDemandRansomMoneyIfHasLessGoldThan ||
@@ -1798,7 +1789,7 @@ namespace PeasantRevenge
 
         private bool WillLordSupportHeroClaim(Hero suporterHero, Hero receiverHero)
         {
-            bool rezult = hero_trait_list_condition(suporterHero, _cfg.values.lordWillOfferRansomMoneyIfHasTraits);
+            bool rezult = hero_trait_list_condition(suporterHero, _cfg.values.lordWillOfferRansomMoneyIfHasTraits, receiverHero);
 
             if (!rezult)
             {
@@ -1810,7 +1801,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_party_need_compensation_for_killed_pow_condition()
         { 
-            currentRevenge.Can_peasant_revenge_support_lord_start = WillLordDemandSupport(Hero.MainHero, currentRevenge.party.LeaderHero);
+            currentRevenge.Can_peasant_revenge_support_lord_start = WillLordDemandSupport(currentRevenge.party.LeaderHero);
             return currentRevenge.Can_peasant_revenge_support_lord_start;
         }
 
@@ -1879,8 +1870,8 @@ namespace PeasantRevenge
             instance.StartBarterOffer(
                 Hero.MainHero, 
                 currentRevenge.party.LeaderHero,
-                PartyBase.MainParty, 
-                (currentRevenge.party != null) ? currentRevenge.party : null, null, 
+                PartyBase.MainParty,
+                currentRevenge.party ?? null, null,
                 new BarterManager.BarterContextInitializer(InitializeGiftBarterableBarterContext), 0, false, barterables);
         }
 
@@ -2068,7 +2059,7 @@ namespace PeasantRevenge
                 Hero.MainHero, 
                 Hero.OneToOneConversationHero,
                 PartyBase.MainParty, 
-                (partyBelongedTo != null) ? partyBelongedTo.Party : null, null, 
+                partyBelongedTo?.Party, null, 
                 new BarterManager.BarterContextInitializer(InitializeReparationsBarterableBarterContext), 0, false, barterables);
         }
 

@@ -5,7 +5,7 @@
   </tags>
   <strings>
      <string id="PRev0001" text="근처 마을을 약탈했습니다. 농부들이 누군가의 머리를 자르라고 요구합니다. 뭐라고 하시겠습니까?[rf:idle_angry][ib:closed][if:idle_angry]" />
-     <string id="PRev0002" text="{PEASANTREVENGER.LINK}는 당신이 이전에 당신의 마을을 약탈했다고 말했습니다. 농부는 당신의 목을 베어버리고 싶어합니다. 당신은 뭐라고 말하시겠습니까?[if: convo_thinking][if:idle_happy]" />
+     <string id="PRev0002" text="{PEASANTREVENGER.LINK}는 당신이 이전에 당신의 마을을 약탈했다고 말했습니다. 농부는 당신의 목을 베어버리고 싶어합니다. 당신은 뭐라고 말하시겠습니까?[if:convo_thinking][if:idle_happy]" />
      <string id="PRev0003" text="{REPARATION}{GOLD_ICON}을(를) 지불하겠습니다." />
      <string id="PRev0004" text="지불하지 않겠습니다." />
      <string id="PRev0005" text="이 쥐에게 돈을 지불하지 않겠습니다." />
@@ -34,7 +34,7 @@
      <string id="PRev0028" text="따라서 범죄자는 죽는다.[ib:closed][if:happy]" />
      <string id="PRev0029" text="범죄 군주가 죽었습니다![ib:closed][if:happy]" />
      <string id="PRev0030" text="봐, 농부가 우리 죄수를 죽였어![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
-     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}숙녀{?}자{\\?} {GIFT_RECEIVER.LINK}가 몸값을 요구하는 금{RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}숙녀{?}자{\\?} {GIFT_RECEIVER.LINK}가 몸값을 요구하는 금{RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
      <string id="PRev0032" text="아무것도 지불하지 않겠습니다." />
      <string id="PRev0033" text="이 선물을 {GIFT_RECEIVER.NAME}에게 가져가세요." />
      <string id="PRev0034" text="당신의 몸값은 죽었고 이제 당신도 죽을 것입니다!" />
@@ -71,5 +71,15 @@
     <string id="PRev0065" text="보상금을 지불할 친구가 있습니다." />
     <string id="PRev0066" text="{SAVER.NAME}이(가) 당신을 지원할 것입니다." />
     <string id="PRev0067" text="{SUPPORTERCOUNT}명의 영웅이 당신을 지원할 수 있습니다." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK}은(는) {CRIMINAL.LINK}이 우리 마을을 약탈하는 것을 적발했으며 {CVICTIM.LINK}은(는) 이 모든 것을 계획한 혐의로 기소되었습니다. 우리는 정의를 요구합니다![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME}님이 마을을 약탈했다고 {CRIMINALBLAMED.NAME}님을 고발했습니다." />
+    <string id="PRev0070" text="둘 다 범죄자입니다!" />
+    <string id="PRev0071" text="범인은 그것에 대해 뭐라고 말합니까?" />
+    <string id="PRev0072" text="이 쓰레기 같은 말 듣지 마세요.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="맹세할 수 있습니다! 모두 {CVICTIM.LINK}의 계획이었습니다![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK}이 범인입니다.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="당신을 믿습니다." />
+    <string id="PRev0076" text="당신은 거짓말을 하고 있습니다." />
+    <string id="PRev0077" text="두 분 모두 소작농의 복수를 받아 마땅합니다!" />
   </strings>
 </base>

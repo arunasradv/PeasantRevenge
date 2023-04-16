@@ -72,7 +72,14 @@
     <string id="PRev0066" text="{=PRev0066}{SAVER.NAME} will support you." />
     <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." /> 
     <string id="PRev0068" text="{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]" />     
-    <string id="PRev0069" text="{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village." /> 
+    <string id="PRev0069" text="{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village." />
     <string id="PRev0070" text="{=PRev0070}They are both criminals!" />
+    <string id="PRev0071" text="{=PRev0071}What does the criminal say about it?" />
+    <string id="PRev0072" text="{=PRev0072}Don't listen to this scumbag.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="{=PRev0073}I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{=PRev0074}{CVICTIM.LINK} is the criminal.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="{=PRev0075}I believe you." />
+    <string id="PRev0076" text="{=PRev0076}You are lying." />
+    <string id="PRev0077" text="{=PRev0077}You both deserve peasant revenge!" />
   </strings>
 </base>
