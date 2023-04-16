@@ -29,7 +29,8 @@ Fix: Gold transfer action fix, when player pressed "criminal will pay".
 Fix: String {=PRev0021} fix, no "cought".
 XXXXXX v11
 Feature: AI can now blame other AI for the village looting crime (AI and player can choose to kill them both)
-         *** Not implemented, AI blame other AI, when player captures the criminal. (wip)
+         AI blame other AI, when player captures the criminal.
+         Various language fixes.
          *** Not implemented,player let other lord to decide criminal's fate.(-)
          
 
