@@ -25,6 +25,8 @@ namespace PeasantRevenge
         public int relationChangeWhenLordKilledMessenger = -3;
         public int relationChangeWhenLordRefusedToSupportPeasantRevenge = -2;
         public int relationChangeWhenLordTeachPeasant = 2;
+        public int relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal = 1;
+
         public int goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal = 20;
         public bool alwaysExecuteTheCriminal = false;
         public bool alwaysLetLiveTheCriminal = false;
@@ -190,8 +192,8 @@ namespace PeasantRevenge
                 criminalWillBlameOtherLordForTheCrime =
                                 new List<RelationsPerTraits>
                                 {
-                     //passive dependent
-                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 90"},
+                                    //passive dependent
+                                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 90"},
                      //dominant manipalutive
                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 90"},
                                 };

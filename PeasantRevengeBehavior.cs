@@ -428,6 +428,11 @@ namespace PeasantRevenge
                                             KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
                                         }
                                     }
+                                    else
+                                    {
+                                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, revenge.criminal.HeroObject,
+                                            _cfg.values.relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal, false);
+                                    }
                                 }
                                 #endregion
                             }
@@ -1100,18 +1105,18 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
                "peasant_revenge_lord_start_grievance_received",
-               "peasant_revenge_lord_start_grievance_requested_if_not_pay_options", 
+               "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
                "{=PRev0062}And what if I'll not pay?",
                null,
                null, 110, null, null);
-            
+
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
                "peasant_revenge_lord_start_grievance_received",
                "peasant_revenge_lord_grievance_received_pay",
                "{=PRev0065}I have friends, who will pay the reparation.",
                null,
-               () => peasant_revenge_criminal_has_suporters_consequence(), 110, 
+               () => peasant_revenge_criminal_has_suporters_consequence(), 110,
                new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_criminal_has_suporters_clickable_condition), null);
 
             campaignGameStarter.AddDialogLine(
@@ -1121,7 +1126,7 @@ namespace PeasantRevenge
             "{=PRev0063}Peasant will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]",
             () => { return (Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()); },
             null, 100, null);
-            
+
             campaignGameStarter.AddDialogLine(
             "peasant_revenge_lord_start_grievance_requested_if_not_pay_options_live",
             "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
@@ -1133,17 +1138,17 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested",
                 "peasant_revenge_lord_start_grievance_received",
-                "peasant_revenge_lord_grievance_barter_reaction", "{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}.", 
+                "peasant_revenge_lord_grievance_barter_reaction", "{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}.",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_reparation_condition),
                 null, 100, null, null);
 
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested_no",
                 "peasant_revenge_lord_start_grievance_received",
-                "peasant_revenge_lord_start_grievance_denied_pay", "{=PRev0004}I'll not pay.", 
+                "peasant_revenge_lord_start_grievance_denied_pay", "{=PRev0004}I'll not pay.",
                 () => !this.peasant_revenge_lord_start_condition_betray(),
                 null, 100, null, null);
-            
+
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested_no_betray",
                 "peasant_revenge_lord_start_grievance_received",
@@ -1151,7 +1156,7 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray),
                 null, 100, null, null);
 
-           
+
 
             campaignGameStarter.AddPlayerLine(
                 "peasant_revenge_lord_start_grievance_requested_no_lie",
@@ -1186,7 +1191,7 @@ namespace PeasantRevenge
              "peasant_revenge_lord_start_grievance_denied_pay",
              "close_window",
              "{=PRev0010}Well, maybe it is not for peasant to decide your fate...[if:convo_thinking]",
-             ()=> !(Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()),             
+             () => !(Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()),
              new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_cannot_pay_consequence), 100, null);
 
             campaignGameStarter.AddDialogLine(
@@ -1238,7 +1243,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_start_grievance_received",
                "peasant_revenge_peasants_finish_criminal_killed",
                "{=PRev0015}{CRIMINAL.NAME} will die.", null,
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence), 100, null, null);
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_the_criminal), 100, null, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_pay",
                "peasant_revenge_peasants_start_grievance_received",
@@ -1251,47 +1256,42 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_start_grievance_received",
                "peasant_revenge_peasants_finish_denied",
                "{=PRev0017}No, it is not your business, peasant!", null,
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_not_kill_hero_consequence), 90, null, null);           
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_not_kill_hero_consequence), 90, null, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_ask_criminal",
                "peasant_revenge_peasants_start_grievance_received",
-               "close_window",
+               "peasant_revenge_peasants_start_grievance_requested_ask_criminal_ending",
                "{=PRev0071}What does the criminal say about it?",
-               new ConversationSentence.OnConditionDelegate(have_accused_hero),
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_criminal_blaming_consequence), 80, null, null);
-            
+               new ConversationSentence.OnConditionDelegate(have_accused_hero), null, 80, null, null);
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_peasants_start_grievance_requested_ask_criminal_end",
+            "peasant_revenge_peasants_start_grievance_requested_ask_criminal_ending",
+            "close_window",
+            "{=PRev0072}Don't listen to this scumbag.[rf:convo_angry][ib:closed]",null,
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_criminal_blaming_consequence)
+            , 110, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_peasants_ask_criminal_start_explain",
               "start",
-              "peasant_revenge_peasants_ask_criminal_options",
-              "", () =>
-              {
-                  if (Hero.OneToOneConversationHero != null && currentRevenge.criminal != null &&
-                  Hero.OneToOneConversationHero == currentRevenge.criminal.HeroObject &&
-                  currentRevenge.Can_peasant_revenge_accuser_lord_start)
-                  {
-                      return true;
-                  }
-                  return false;
-              }
-              , null, 120, null);
-            
+              "peasant_revenge_peasants_ask_criminal_options_start",
+              "{=PRev0073} I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]",
+              new ConversationSentence.OnConditionDelegate(peasant_revenge_ask_criminal_start_condition),
+              null,
+              120, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_ask_criminal_explain",
+             "peasant_revenge_peasants_ask_criminal_options_start",
              "peasant_revenge_peasants_ask_criminal_options",
-             "peasant_revenge_peasants_ask_criminal_options",
-             "{=PRev0072} I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]", () =>
-             {
-                     StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero);
-                     return true;
-             }
-             , () => { currentRevenge.Can_peasant_revenge_accuser_lord_start = false; }, 110, null);
-
+             "{=PRev0074}{CVICTIM.LINK} is the criminal.[rf:convo_angry][ib:closed]", 
+             () => {
+                 StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero);
+                 return true;
+             }, () => { currentRevenge.Can_peasant_revenge_accuser_lord_start = false; }, 110, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_peasants_ask_criminal_option_0",
               "peasant_revenge_peasants_ask_criminal_options",
               "close_window",
-              "{=PRev0073}I believe you.",
+              "{=PRev0075}I believe you.",
               null,
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence),
               90, null, null);
@@ -1299,7 +1299,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_ask_criminal_option_1",
               "peasant_revenge_peasants_ask_criminal_options",
               "close_window",
-              "{=PRev0074}I'm not convinced.",
+              "{=PRev0076}I'm not convinced.",
               null,
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_the_criminal),
               90, null, null);
@@ -1307,7 +1307,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_ask_criminal_option_2",
                "peasant_revenge_peasants_ask_criminal_options",
                "close_window",
-               "{=PRev0075}You are both rats!",
+               "{=PRev0077}You both deserve peasant revenge!",
                null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence),
                90, null, null);
@@ -1334,7 +1334,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance",
                "start",
                "peasant_revenge_peasants_messenger_start_grievance_received",
-              // "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
+               // "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
                "{PEASANTDEMANDS}",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 120, null);
 
@@ -1345,14 +1345,14 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_messenger_finish_paid",
               "{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}.",
               new ConversationSentence.OnConditionDelegate(this.player_has_enougth_gold_condition),
-              new ConversationSentence.OnConsequenceDelegate(this.player_pay_messenger_in_gold_consequence), 120, null, null);            
+              new ConversationSentence.OnConsequenceDelegate(this.player_pay_messenger_in_gold_consequence), 120, null, null);
             //will not pay wait ransom (should be only when criminal is not enemy. enemy should decide by his traits, persuation from player, relations...)
             //this dialog should add peasant dialog lines where he chooses to kill or not ... will forse player to look what lord traits are...
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_not_kill",
                "peasant_revenge_peasants_messenger_start_grievance_received",
                "close_window",
-               "{=PRev0022}I'll not bow to peasant demands! And {HERO.NAME} should too!", 
+               "{=PRev0022}I'll not bow to peasant demands! And {HERO.NAME} should too!",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_fill_hero_condition),
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_not_kill_hero_consequence), 110, null, null);
             //will not pay peasant go to criminal hero clan/kingdom to ask reparation
@@ -1370,7 +1370,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_messenger_start_grievance_received_not_pay",
                "peasant_revenge_peasants_messenger_start_grievance_received",
                "peasant_revenge_peasants_messenger_finish_not_paid",
-               "{=PRev0023}I'll not pay! Criminal {CVICTIM.NAME} can die!", () => 
+               "{=PRev0023}I'll not pay! Criminal {CVICTIM.NAME} can die!", () =>
                {
                    if (currentRevenge.accused_hero != null)
                    {
@@ -1380,14 +1380,14 @@ namespace PeasantRevenge
                    {
                        StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.criminal);
                    }
-                   return true; 
+                   return true;
                },
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_hero_consequence), 100, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_both_kill",
               "peasant_revenge_peasants_messenger_start_grievance_received",
               "peasant_revenge_peasants_messenger_finish_not_paid",
-              "{=PRev0070}They are both criminals!", ()=> have_accused_hero(),
+              "{=PRev0070}They are both criminals!", () => have_accused_hero(),
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence), 100, null, null);
             //not pay and kill messenger
             campaignGameStarter.AddPlayerLine(
@@ -1397,7 +1397,7 @@ namespace PeasantRevenge
                 "{=PRev0024}How dare you! You'll die!",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
                 null, 90, null, null);
-            
+
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_messenger_finish_paid_end",
              "peasant_revenge_peasants_messenger_finish_paid",
@@ -1437,8 +1437,8 @@ namespace PeasantRevenge
                 "close_window",
                 "{=PRev0027}And I'll send your head to {HERO.NAME}!",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
-                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_killed_consequence), 90, null, null);                 
-            
+                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_killed_consequence), 90, null, null);
+
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_not_paid_with_compensation",
                "peasant_revenge_peasants_messenger_finish_not_paid",
@@ -1453,10 +1453,10 @@ namespace PeasantRevenge
                "{=PRev0029}Criminal lord is dead![ib:closed][if:happy]",
                 () => !peasant_revenge_party_need_compensation_for_killed_pow_condition(),
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_end_revenge_consequence), 120, null);
-#endregion
+            #endregion
 
             #region Prisoner party demands compensation because no ransom 
-         
+
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_party_need_compensation_start",
                "start",
@@ -1484,7 +1484,7 @@ namespace PeasantRevenge
               "peasant_revenge_party_need_compensation_player_options",
                "peasant_revenge_party_need_compensation_barter_reaction",
               "{=PRev0033}Please, take this gift to {?GIFT_RECEIVER.GENDER}Lady{?}Lord{\\?} {GIFT_RECEIVER.NAME}.",
-              new ConversationSentence.OnConditionDelegate(this.peasant_revenge_party_get_compensation_gift_condition),null
+              new ConversationSentence.OnConditionDelegate(this.peasant_revenge_party_get_compensation_gift_condition), null
               , 110, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_party_need_compensation_player_options_2",
@@ -1513,10 +1513,10 @@ namespace PeasantRevenge
               "peasant_revenge_party_need_compensation_now_not_received_pay",
               "peasant_revenge_party_need_compensation_received_pay",
               "close_window",
-              "{=PRev0036}So you cannot pay...[ib:closed][if:idle_angry]", 
+              "{=PRev0036}So you cannot pay...[ib:closed][if:idle_angry]",
               () => !this.barter_successful_condition(),
               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_party_need_compensation_not_payed_consequence), 0, null);
-        
+
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_party_need_compensation_now_received_pay",
              "peasant_revenge_party_need_compensation_received_pay",
@@ -1552,7 +1552,7 @@ namespace PeasantRevenge
             #endregion
             //Dialogs for mod configuration in game
             #region Peasants are has no traits to resist
-           
+
             //campaignGameStarter.AddDialogLine(
             //    "peasant_revenge_player_not_happy_with_peasant_start_peasant",
             //    "lord_start",
@@ -1563,8 +1563,8 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_ask",
                "hero_main_options",
                "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
-               "{=PRev0048}Do you deal with criminals in this village?", 
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_condition), 
+               "{=PRev0048}Do you deal with criminals in this village?",
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_condition),
                null/*() => { SetHeroTraitValue(Hero.MainHero, "Valor", -2); SetHeroTraitValue(Hero.MainHero, "Mercy", 2); }*/
                , 100, null);
             campaignGameStarter.AddDialogLine(
@@ -1576,7 +1576,7 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_fast",
                "peasant_revenge_player_not_happy_with_peasant_start_options",
                 "close_window",
-               "{=PRev0050}The problem is in your head!",null,
+               "{=PRev0050}The problem is in your head!", null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_chop_consequence)
                , 100, null);
 
@@ -1594,22 +1594,24 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_options",
                "peasant_revenge_player_not_happy_with_peasant_post_learned",
                "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!",
-               () => {
+               () =>
+               {
                    int bribe = Hero.OneToOneConversationHero.Gold * _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal / 100;
-                   MBTextManager.SetTextVariable("BRIBEVALUE", bribe);  return Hero.MainHero.Gold >= bribe;  
+                   MBTextManager.SetTextVariable("BRIBEVALUE", bribe); return Hero.MainHero.Gold >= bribe;
                },
-               () => {
+               () =>
+               {
                    int bribe = Hero.OneToOneConversationHero.Gold * _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal / 100;
-                   GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero,Hero.OneToOneConversationHero,bribe);
-                   TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, false);                   
-               }, 120, null);           
-           campaignGameStarter.AddDialogLine(
-           "peasant_revenge_player_not_happy_with_peasant_learned",
-           "peasant_revenge_player_not_happy_with_peasant_post_learned",
-           "close_window",
-           "{=PRev0053}Thank you very much![if:convo_astonished]",
-            () => !this.peasant_revenge_player_not_happy_with_peasant_start_condition(),
-            () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
+                   GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, bribe);
+                   TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, false);
+               }, 120, null);
+            campaignGameStarter.AddDialogLine(
+            "peasant_revenge_player_not_happy_with_peasant_learned",
+            "peasant_revenge_player_not_happy_with_peasant_post_learned",
+            "close_window",
+            "{=PRev0053}Thank you very much![if:convo_astonished]",
+             () => !this.peasant_revenge_player_not_happy_with_peasant_start_condition(),
+             () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
             campaignGameStarter.AddDialogLine(
           "peasant_revenge_player_not_happy_with_peasant_learned",
           "peasant_revenge_player_not_happy_with_peasant_post_learned",
@@ -1619,6 +1621,18 @@ namespace PeasantRevenge
           () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, -_cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
             #endregion
 
+        }
+
+        private bool peasant_revenge_ask_criminal_start_condition()
+        {
+                if (Hero.OneToOneConversationHero != null && currentRevenge.criminal != null &&
+                Hero.OneToOneConversationHero == currentRevenge.criminal.HeroObject &&
+                currentRevenge.Can_peasant_revenge_accuser_lord_start)
+                {
+                    StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero);
+                    return true;
+                }
+                return false;
         }
 
         private void peasant_revenge_criminal_blaming_consequence()
@@ -2116,6 +2130,9 @@ namespace PeasantRevenge
             return false;
         }
 
+        /// <summary>
+        /// Kill crimminal or accused one, if exist
+        /// </summary>
         private void peasant_revenge_peasant_kill_hero_consequence()
         {
             currentRevenge.Stop();
@@ -2123,8 +2140,13 @@ namespace PeasantRevenge
             Hero victim = currentRevenge.accused_hero == null ? currentRevenge.criminal.HeroObject : currentRevenge.accused_hero.HeroObject;
 
             ChangeRelationAction.ApplyPlayerRelation(victim, _cfg.values.relationChangeWithCriminalClanWhenPlayerExecutedTheCriminal, true, true);
-            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);        
-           
+            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);
+            
+            if (currentRevenge.accused_hero != null)
+            {
+                ChangeRelationAction.ApplyPlayerRelation(currentRevenge.criminal.HeroObject, _cfg.values.relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal, true, true);
+            }
+
             if (_cfg.values.allowPeasantToKillLord)
             {
                 log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victim.Name}");
@@ -2192,14 +2214,12 @@ namespace PeasantRevenge
         {
             if (!currentRevenge.Can_peasant_revenge_peasant_start) return false;
 
-            StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, null, false);
-
             if (currentRevenge.executioner.HeroObject == Hero.OneToOneConversationHero)
             {
-                currentRevenge.accused_hero = getAllyPrisonerTheEscapeGoat(currentRevenge.criminal.HeroObject);
+                currentRevenge.accused_hero = getAllyPrisonerTheEscapeGoat(currentRevenge.criminal.HeroObject);               
+                StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, null, false);
                 return true;
             }
-
             return false;
         }
 
