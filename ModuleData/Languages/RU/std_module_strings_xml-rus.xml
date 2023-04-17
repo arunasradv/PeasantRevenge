@@ -24,9 +24,9 @@
      <string id="PRev0018" text="Но, но...[ib:closed][if:convo_bared_teeth]" />
      <string id="PRev0019" text="Лучше, чем ничего...[ib:closed][if:idle_normal]" />
      <string id="PRev0020" text="Месть![if:convo_happy][ib:happy]" />
-     <string id="PRev0021" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни. Мы требуем голову преступника на пике, потому что этот ублюдок должен заплатить за преступление! Что вы скажете?[ ib:агрессивный][if:convo_furious]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни. Мы требуем голову преступника на пике, потому что этот ублюдок должен заплатить за преступление! Что вы скажете?[ib:aggressive][if:convo_furious]" />
      <string id="PRev0022" text="Я не подчиняюсь крестьянским требованиям! И {HERO.NAME} тоже должен!" />
-     <string id="PRev0023" text="Я не буду платить! Преступники могут умереть!" />
+     <string id="PRev0023" text="Я не буду платить! Преступник {CVICTIM.NAME} может умереть!" />
      <string id="PRev0024" text="Как ты смеешь! Ты умрешь!" />
      <string id="PRev0025" text="Лучше, чем ничего...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Но, но...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
@@ -34,7 +34,7 @@
      <string id="PRev0028" text="Значит, преступник умрет.[ib:closed][if:happy]" />
      <string id="PRev0029" text="Криминальный авторитет мертв![ib:closed][if:happy]" />
      <string id="PRev0030" text="Смотрите, крестьянин убил нашего пленника![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
-     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}леди{?}правители{\\?} {GIFT_RECEIVER.LINK} просит у вас золото в качестве выкупа {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}леди{?}правители{\\?} {GIFT_RECEIVER.LINK} просит у вас золото в качестве выкупа {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
      <string id="PRev0032" text="Я ничего не буду платить." />
      <string id="PRev0033" text="Пожалуйста, передайте этот подарок {GIFT_RECEIVER.NAME}." />
      <string id="PRev0034" text="Ваш выкуп мертв, и теперь вы тоже умрете!" />
@@ -71,5 +71,15 @@
     <string id="PRev0065" text="У меня есть друзья, которые оплатят возмещение." />
     <string id="PRev0066" text="{SAVER.NAME} поддержит вас." />
     <string id="PRev0067" text="{SUPPORTERCOUNT} герои могут вас поддержать." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни, а {CVICTIM.LINK} был обвинен в планировании всего этого. Мы требуем справедливости![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} обвинил {CRIMINALBLAMED.NAME} в разграблении деревни." />
+    <string id="PRev0070" text="Они оба преступники!" />
+    <string id="PRev0071" text="Что говорит об этом преступник?" />
+    <string id="PRev0072" text="Не слушайте этого подонка.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Могу поклясться! Это был план {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} – преступник.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Я вам верю" />
+    <string id="PRev0076" text="Вы лжете." />
+    <string id="PRev0077" text="Вы оба заслуживаете крестьянской мести!" />
   </strings>
 </base>

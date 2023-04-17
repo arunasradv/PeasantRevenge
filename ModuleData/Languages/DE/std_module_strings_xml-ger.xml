@@ -5,7 +5,7 @@
   </tags>
   <strings>
      <string id="PRev0001" text="Du hast ein Dorf in der Nähe geplündert. Bauern verlangen, jemandem den Kopf abzuschneiden. Was wirst du sagen?[rf:idle_angry][ib:closed][if:idle_angry]" />
-     <string id="PRev0002" text="Nur neugierig, der {PEASANTREVENGER.LINK} sagt, dass du vorhin dein eigenes Dorf geplündert hast. Bauern wollen dir den Kopf abreißen. Was wirst du sagen?[if: convo_thinking][if:idle_happy]" />
+     <string id="PRev0002" text="Nur neugierig, der {PEASANTREVENGER.LINK} sagt, dass du vorhin dein eigenes Dorf geplündert hast. Bauern wollen dir den Kopf abreißen. Was wirst du sagen?[if:convo_thinking][if:idle_happy]" />
      <string id="PRev0003" text="Ich bezahle {REPARATION}{GOLD_ICON}." />
      <string id="PRev0004" text="Ich werde nicht bezahlen." />
      <string id="PRev0005" text="Ich werde diese Ratte nicht bezahlen." />
@@ -24,9 +24,9 @@
      <string id="PRev0018" text="Schuh, Schuh...[ib:closed][if:convo_bared_teeth]" />
      <string id="PRev0019" text="Besser als nichts...[ib:closed][if:idle_normal]" />
      <string id="PRev0020" text="Rache![if:convo_happy][ib:happy]" />
-     <string id="PRev0021" text="{PARTYLEADER.LINK} hat {CRIMINAL.LINK} beim Plündern unseres Dorfes erwischt. Wir fordern den Kopf des Verbrechers auf Spießen, weil der Bastard für das Verbrechen bezahlen muss! Was wirst du sagen?[ ib:aggressiv][if:convo_furious]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} hat {CRIMINAL.LINK} beim Plündern unseres Dorfes erwischt. Wir fordern den Kopf des Verbrechers auf Spießen, weil der Bastard für das Verbrechen bezahlen muss! Was wirst du sagen?[ib:aggressive][if:convo_furious]" />
      <string id="PRev0022" text="Ich werde mich den Forderungen der Bauern nicht beugen! Und {HERO.NAME} sollte es auch tun!" />
-     <string id="PRev0023" text="Ich werde nicht bezahlen! Kriminelle können sterben!" />
+     <string id="PRev0023" text="Ich werde nicht bezahlen! Der Kriminelle {CVICTIM.NAME} kann sterben!" />
      <string id="PRev0024" text="Wie kannst du es wagen! Du wirst sterben!" />
      <string id="PRev0025" text="Besser als nichts...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Schuh, Schuh...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
@@ -71,5 +71,15 @@
     <string id="PRev0065" text="Ich habe Freunde, die die Wiedergutmachung zahlen." />
     <string id="PRev0066" text="{SAVER.NAME} wird Sie dabei unterstützen." />
     <string id="PRev0067" text="{SUPPORTERCOUNT} Helden können dich unterstützen." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} hat {CRIMINAL.LINK} dabei erwischt, wie er unser Dorf plünderte, und {CVICTIM.LINK} wurde beschuldigt, das alles geplant zu haben. Wir fordern Gerechtigkeit![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} beschuldigte {CRIMINALBLAMED.NAME}, das Dorf geplündert zu haben." />
+    <string id="PRev0070" text="Sie sind beide Kriminelle!" />
+    <string id="PRev0071" text="Was sagt der Täter dazu?" />
+    <string id="PRev0072" text="Hör nicht auf diesen Drecksack.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Ich kann schwören! Es war alles der Plan von {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} ist der Verbrecher.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Ich glaube dir." />
+    <string id="PRev0076" text="Du lügst." />
+    <string id="PRev0077" text="Ihr verdient beide bäuerliche Rache!" />
   </strings>
 </base>
