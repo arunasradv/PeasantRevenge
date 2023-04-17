@@ -5,7 +5,7 @@
   </tags>
   <strings>
      <string id="PRev0001" text="Ograbiłeś pobliską wioskę. Wieśniacy żądają odcięcia komuś głowy. Co powiesz?[rf:idle_angry][ib:closed][if:idle_angry]" />
-     <string id="PRev0002" text="{=*}Ciekawe, {PEASANTREVENGER.LINK} mówi, że wcześniej splądrowałeś swoją wioskę. Wieśniacy chcą twojej głowy. Co powiesz?[jeśli: convo_thinking][if:idle_happy]" />
+     <string id="PRev0002" text="{=*}Ciekawe, {PEASANTREVENGER.LINK} mówi, że wcześniej splądrowałeś swoją wioskę. Wieśniacy chcą twojej głowy. Co powiesz?[if:convo_thinking][if:idle_happy]" />
      <string id="PRev0003" text="Zapłacę {REPARATION}{GOLD_ICON}." />
      <string id="PRev0004" text="Nie zapłacę." />
      <string id="PRev0005" text="Nie zapłacę temu szczurowi." />
@@ -16,7 +16,7 @@
      <string id="PRev0010" text="Cóż, może chłop nie decyduje o twoim losie...[if:convo_thinking]" />
      <string id="PRev0011" text="Zapłać za swoje przestępstwo.[rf:idle_angry][if:convo_bored]" />
      <string id="PRev0012" text="Cóż, cieszę się z tego.[ib:happy]" />
-     <string id="PRev0013" text="Cóż, to niefortunne.[ib:wojownik][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0013" text="Cóż, to niefortunne.[ib:warrior][if:convo_bored][rf:convo_grave]" />
      <string id="PRev0014" text="Twój więzień {CRIMINAL.LINK} splądrował naszą wioskę. Żądamy głowy przestępcy na szpikulcu! Co powiesz?[if:convo_furious][ib:agressive]" />
      <string id="PRev0015" text="{CRIMINAL.NAME} umrze." />
      <string id="PRev0016" text="{CRIMINAL.NAME} zapłaci {REPARATION}{GOLD_ICON}." />
@@ -24,9 +24,9 @@
      <string id="PRev0018" text="Ale, ale...[ib:closed][if:convo_bared_teeth]" />
      <string id="PRev0019" text="Lepszy rydz niż nic...[ib:closed][if:idle_normal]" />
      <string id="PRev0020" text="Zemsta![if:convo_happy][ib:happy]" />
-     <string id="PRev0021" text="{PARTYLEADER.LINK} przyłapał {CRIMINAL.LINK} na plądrowaniu naszej wioski. Żądamy głowy przestępcy na szpikulcu, bo drań musi zapłacić za zbrodnię! Co powiesz?[ ib:agresywny][if:convo_furious]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} przyłapał {CRIMINAL.LINK} na plądrowaniu naszej wioski. Żądamy głowy przestępcy na szpikulcu, bo drań musi zapłacić za zbrodnię! Co powiesz?[ib:agressive][if:convo_furious]" />
      <string id="PRev0022" text="Nie ustąpię chłopskim żądaniom! I {HERO.NAME} też powinien!" />
-     <string id="PRev0023" text="Nie zapłacę! Przestępcy mogą zginąć!" />
+     <string id="PRev0023" text="nie zapłacę! Przestępca {CVICTIM.NAME} może umrzeć!" />
      <string id="PRev0024" text="Jak śmiesz! Umrzesz!" />
      <string id="PRev0025" text="Lepszy rydz niż nic...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Ale, ale...[if:convo_furious][ib:convo_bared_teeth][ib:agressive][if:convo_astonished]" />
@@ -34,7 +34,7 @@
      <string id="PRev0028" text="Więc przestępca umrze.[ib:closed][if:happy]" />
      <string id="PRev0029" text="Przestępca nie żyje![ib:closed][if:happy]" />
      <string id="PRev0030" text="Patrz, wieśniak zabił naszego więźnia![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
-     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Pani{?}Pan{\\?} {GIFT_RECEIVER.LINK} prosi Cię o okup w złocie {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Pani{?}Pan{\\?} {GIFT_RECEIVER.LINK} prosi Cię o okup w złocie {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
      <string id="PRev0032" text="Nic nie zapłacę." />
      <string id="PRev0033" text="Proszę, zanieś ten prezent do {GIFT_RECEIVER.NAME}." />
      <string id="PRev0034" text="Twój okup nie żyje, a teraz ty też umrzesz!" />
@@ -71,5 +71,15 @@
     <string id="PRev0065" text="Mam przyjaciół, którzy zapłacą odszkodowanie." />
     <string id="PRev0066" text="{SAVER.NAME} będzie Cię wspierać." />
     <string id="PRev0067" text="{SUPPORTERCOUNT} bohaterów może Cię wesprzeć." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} przyłapał {CRIMINAL.LINK} na plądrowaniu naszej wioski, a {CVICTIM.LINK} został oskarżony o zaplanowanie tego wszystkiego. Żądamy sprawiedliwości![ib:agressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} oskarżył {CRIMINALBLAMED.NAME} o splądrowanie wioski." />
+    <string id="PRev0070" text="Oboje są przestępcami!" />
+    <string id="PRev0071" text="Co mówi o tym przestępca?" />
+    <string id="PRev0072" text="Nie słuchaj tego łajdaka.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Mogę przysiąc! To był plan {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} jest przestępcą.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Wierzę ci." />
+    <string id="PRev0076" text="Kłamiesz." />
+    <string id="PRev0077" text="Obaj zasługujecie na chłopską zemstę!" />
   </strings>
 </base>

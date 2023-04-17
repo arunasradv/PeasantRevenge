@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 
 namespace PeasantRevenge
 {
+#pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
         public int CfgVersion = 0;
@@ -25,6 +26,8 @@ namespace PeasantRevenge
         public int relationChangeWhenLordKilledMessenger = -3;
         public int relationChangeWhenLordRefusedToSupportPeasantRevenge = -2;
         public int relationChangeWhenLordTeachPeasant = 2;
+        public int relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal = 1;
+
         public int goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal = 20;
         public bool alwaysExecuteTheCriminal = false;
         public bool alwaysLetLiveTheCriminal = false;
@@ -48,7 +51,7 @@ namespace PeasantRevenge
         public int relationChangeAfterLordPartyGotPaid = 2;
         public int relationChangeAfterLordPartyGotNoReward = -2;
         public string lordWillAskRansomMoneyIfHasTraits = "Generosity < 1";
-        public string lordWillOfferRansomMoneyIfHasTraits = "Generosity > -2";
+        public string lordWillOfferRansomMoneyIfHasTraits = "Generosity > -2&Relations > 0";
         public int lordWillOfferRansomMoneyWithProbabilityIfTraitFails = 10;
         public int lordWillDemandRansomMoneyIfHasLessGoldThan = 2000;
         public bool otherKingdomClanCanCareOfPeasantRevenge = true;
@@ -101,6 +104,9 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordWillAffordToHelpPayLostRansom;
             public List<RelationsPerTraits> lordIfFriendsWillHelpTheCriminal;
             public List<RelationsPerTraits> lordIfRelativesWillHelpTheCriminal;
+            public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
+            public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
+
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -169,7 +175,31 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+                default_lordWillKillBothAccusedHeroAndCriminalLord();
+                default_criminalWillBlameOtherLordForTheCrime();
             }
+
+            public void default_lordWillKillBothAccusedHeroAndCriminalLord()
+            {
+                lordWillKillBothAccusedHeroAndCriminalLord =
+                 new List<RelationsPerTraits>
+                 {
+                    new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" },
+                 };
+            }
+
+            public void default_criminalWillBlameOtherLordForTheCrime()
+            {
+                criminalWillBlameOtherLordForTheCrime =
+                 new List<RelationsPerTraits>
+                 {
+                   //passive dependent
+                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
+                   //dominant manipalutive
+                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
+                 };
+            }
+
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."

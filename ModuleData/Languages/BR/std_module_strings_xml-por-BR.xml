@@ -5,7 +5,7 @@
   </tags>
   <strings>
      <string id="PRev0001" text="Você saqueou uma vila próxima. Camponeses exigem cortar a cabeça de alguém. O que você vai dizer?[rf:idle_angry][ib:closed][if:idle_angry]" />
-     <string id="PRev0002" text="Só por curiosidade, o {PEASANTREVENGER.LINK} diz que você saqueou sua própria aldeia mais cedo. O camponês quer sua cabeça. O que você vai dizer?[se: convo_thinking][if:idle_happy]" />
+     <string id="PRev0002" text="Só por curiosidade, o {PEASANTREVENGER.LINK} diz que você saqueou sua própria aldeia mais cedo. O camponês quer sua cabeça. O que você vai dizer?[if:convo_thinking][if:idle_happy]" />
      <string id="PRev0003" text="Pagarei {REPARATION}{GOLD_ICON}." />
      <string id="PRev0004" text="Não vou pagar." />
      <string id="PRev0005" text="Não vou pagar para esse rato." />
@@ -24,9 +24,9 @@
      <string id="PRev0018" text="Mas, mas...[ib:closed][if:convo_bared_teeth]" />
      <string id="PRev0019" text="Melhor que nada...[ib:closed][if:idle_normal]" />
      <string id="PRev0020" text="Vingança![if:convo_happy][ib:happy]" />
-     <string id="PRev0021" text="{PARTYLEADER.LINK} pegou {CRIMINAL.LINK} saqueando nossa aldeia. Exigimos a cabeça do criminoso na estaca, porque o bastardo deve pagar pelo crime! O que você vai dizer?[ ib:aggressive][if:convo_furious]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} pegou {CRIMINAL.LINK} saqueando nossa aldeia. Exigimos a cabeça do criminoso na estaca, porque o bastardo deve pagar pelo crime! O que você vai dizer?[ib:aggressive][if:convo_furious]" />
      <string id="PRev0022" text="Não vou me curvar às demandas dos camponeses! E {HERO.NAME} também deveria!" />
-     <string id="PRev0023" text="Não vou pagar! Criminosos podem morrer!" />
+     <string id="PRev0023" text="Eu não vou pagar! O criminoso {CVICTIM.NAME} pode morrer!" />
      <string id="PRev0024" text="Como você ousa! Você vai morrer!" />
      <string id="PRev0025" text="Melhor que nada...[ib:closed][if:idle_angry][rf:idle_angry]" />
      <string id="PRev0026" text="Mas, mas...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
@@ -34,7 +34,7 @@
      <string id="PRev0028" text="Então, o criminoso vai morrer.[ib:closed][if:happy]" />
      <string id="PRev0029" text="O senhor do crime está morto![ib:closed][if:happy]" />
      <string id="PRev0030" text="Olha, o camponês matou nosso prisioneiro![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
-     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Senhora{?}Senhor{\\?} {GIFT_RECEIVER.LINK} está pedindo ouro de resgate {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Senhora{?}Senhor{\\?} {GIFT_RECEIVER.LINK} está pedindo ouro de resgate {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
      <string id="PRev0032" text="Não pagarei nada." />
      <string id="PRev0033" text="Por favor, leve este presente para {GIFT_RECEIVER.NAME}." />
      <string id="PRev0034" text="Seu resgate está morto e agora você também morrerá!" />
@@ -71,5 +71,15 @@
     <string id="PRev0065" text="Tenho amigos que pagarão a reparação." />
     <string id="PRev0066" text="{SAVER.NAME} apoiará você." />
     <string id="PRev0067" text="{SUPPORTERCOUNT} heróis podem apoiá-lo." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} pegou {CRIMINAL.LINK} saqueando nosso vilarejo e {CVICTIM.LINK} foi acusado de planejar tudo isso. Exigimos justiça![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} acusou {CRIMINALBLAMED.NAME} de saquear a aldeia." />
+    <string id="PRev0070" text="Ambos são criminosos!" />
+    <string id="PRev0071" text="O que o criminoso diz sobre isso?" />
+    <string id="PRev0072" text="Não dê ouvidos a esse canalha.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Posso jurar! Foi tudo plano de {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} é o criminoso.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Acredito em você." />
+    <string id="PRev0076" text="Você está mentindo." />
+    <string id="PRev0077" text="Vocês dois merecem vingança camponesa!" />
   </strings>
 </base>
