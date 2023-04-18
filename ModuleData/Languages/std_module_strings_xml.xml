@@ -81,5 +81,6 @@
     <string id="PRev0075" text="{=PRev0075}I believe you." />
     <string id="PRev0076" text="{=PRev0076}You are lying." />
     <string id="PRev0077" text="{=PRev0077}You both deserve peasant revenge!" />
+    <string id="PRev0078" text="{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]" />
   </strings>
 </base>

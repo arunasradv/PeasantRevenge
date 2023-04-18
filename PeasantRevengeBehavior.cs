@@ -1237,14 +1237,15 @@ namespace PeasantRevenge
         }
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
-        { 
-            
+        {
+            #region Revenger who cannot start yet or finished the quest
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_any_revenger_start",
                "start",
                "close_window",
-               "{=PRev0068}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
+               "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_any_revenger_start_condition), ()=> leave_encounter(), 200, null);
+            #endregion
 
             #region When player is captured as criminal
             campaignGameStarter.AddDialogLine(
@@ -1389,7 +1390,7 @@ namespace PeasantRevenge
               new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_cannot_pay_consequence), 100, null);
 #endregion
 
-#region When player captured the criminal
+            #region When player captured the criminal
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_start_grievance",
                "start",
@@ -1485,14 +1486,13 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_finish_criminal_killed",
                "close_window",
                "{=PRev0020}Revenge![if:convo_happy][ib:happy]", null, () => leave_encounter(), 120, null);
-#endregion
+            #endregion
 
             #region When hero (from player clan/kingdom) cannot pay , and maybe player can pay the reparation
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_messenger_start_grievance",
                "start",
                "peasant_revenge_peasants_messenger_start_grievance_received",
-               // "{=PRev0021}{PARTYLEADER.LINK} cought {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]",
                "{PEASANTDEMANDS}",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 120, null);
 
@@ -1708,8 +1708,9 @@ namespace PeasantRevenge
             //bandit: somebody paid for your death 
 
             #endregion
+            
             //Dialogs for mod configuration in game
-            #region Peasants are has no traits to resist
+            #region Peasants has no traits to resist
            
             //campaignGameStarter.AddDialogLine(
             //    "peasant_revenge_player_not_happy_with_peasant_start_peasant",
@@ -1780,7 +1781,7 @@ namespace PeasantRevenge
             #endregion
 
         }
-private bool peasant_revenge_ask_criminal_start_condition()
+        private bool peasant_revenge_ask_criminal_start_condition()
         {
                 if (Hero.OneToOneConversationHero != null && currentRevenge.criminal != null &&
                 Hero.OneToOneConversationHero == currentRevenge.criminal.HeroObject &&
@@ -2161,6 +2162,7 @@ private bool peasant_revenge_ask_criminal_start_condition()
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
+            leave_encounter();
         }
 
         private void peasant_revenge_peasant_messenger_kill_both_consequence()
@@ -2195,6 +2197,7 @@ private bool peasant_revenge_ask_criminal_start_condition()
             }
 
             log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name} and {currentRevenge.accused_hero.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
+            leave_encounter();
         }
 
 
@@ -2345,6 +2348,7 @@ private bool peasant_revenge_ask_criminal_start_condition()
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map));
                 KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
+            leave_encounter();
         }
 
         private void peasant_revenge_peasant_kill_hero_consequence_lied()
@@ -2439,7 +2443,6 @@ private bool peasant_revenge_ask_criminal_start_condition()
             else
             {
                 text = new TextObject("{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]");
-
             }
             
             StringHelpers.SetCharacterProperties("CRIMINAL", currentRevenge.criminal, text, false);                     
