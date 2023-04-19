@@ -346,7 +346,7 @@ namespace PeasantRevenge
                 {
                     if (revenge.xParty != null)
                     {
-                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 3f)
+                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 1f)
                         {
                             if (!revenge.executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
@@ -682,16 +682,17 @@ namespace PeasantRevenge
             }
 
         SkipToEnd:
-#region Log messages
-            if (_cfg.values.showPeasantRevengeLogMessages ||
-               (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (party.Owner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom || prisoner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom))
-               )
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    log(message);
+            #region Log messages
 
-                    if (!LogMessage.IsEmpty())
+            if (!string.IsNullOrEmpty(message))
+            {
+                log(message);
+
+                if (!LogMessage.IsEmpty())
+                {
+                    if (_cfg.values.showPeasantRevengeLogMessages ||
+                       (_cfg.values.showPeasantRevengeLogMessagesForKingdom && (party.Owner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom || prisoner.Clan.Kingdom == Hero.MainHero.Clan.Kingdom))
+                       )
                     {
                         foreach (string logMessage in LogMessage)
                         {
@@ -758,7 +759,6 @@ namespace PeasantRevenge
             mobileParty.Ai.SetDoNotMakeNewDecisions(true);
             mobileParty.Party.Visuals.SetMapIconAsDirty();
             mobileParty.Aggressiveness = 0f;
-
             return mobileParty;
         }
 
@@ -1239,12 +1239,13 @@ namespace PeasantRevenge
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
         {
             #region Revenger who cannot start yet or finished the quest
+            //This line makes sure player do not attack revenger party (if enabled - crash, because it does not have leader hero)
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_any_revenger_start",
                "start",
                "close_window",
                "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_any_revenger_start_condition), ()=> leave_encounter(), 200, null);
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_any_revenger_start_condition), () => leave_encounter(), 200, null);
             #endregion
 
             #region When player is captured as criminal
