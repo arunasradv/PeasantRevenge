@@ -2269,6 +2269,8 @@ namespace PeasantRevenge
 
         private CharacterObject getAllyPrisonerTheEscapeGoat(Hero hero)
         {
+            if (hero.PartyBelongedToAsPrisoner == null) return null;
+
             var prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes.Where((x) =>
               !x.HeroObject.Clan.IsAtWarWith(hero.Clan) && x.HeroObject != hero &&
               (x.HeroObject.Clan == hero.Clan || x.HeroObject.Clan.Kingdom == hero.Clan.Kingdom));

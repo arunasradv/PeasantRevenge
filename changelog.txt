@@ -32,9 +32,8 @@ Feature: v1.1.3 support
 Feature: AI can now blame other AI for the village looting crime (AI and player can choose to kill them both)
 Feature: AI blame other AI, when player captures the criminal.
 Fix:     Various language fixes.
-xxxxxx v12
-Feature: Revenger parties (need enable/dissable parties configuration options...)
-Feature: Player let other lord to decide criminal's fate.(-)
+230420 v12
+Fix: Null exception when party, where criminal hero was disappeared.
          
 
 
