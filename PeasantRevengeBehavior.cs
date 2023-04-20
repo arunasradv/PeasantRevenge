@@ -95,7 +95,7 @@ namespace PeasantRevenge
 
             public void Stop()
             {
-                this.state = "stop";
+                state = "stop";
             }
 
             public void Start()
@@ -199,8 +199,11 @@ namespace PeasantRevenge
                             revenge.party = party;
                             revenge.dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays);
                             revenge.targetHero = party.LeaderHero.CharacterObject;
-                            revenge.xParty = CreateNotableParty(revenge);
-                            revenge.xParty.Ai.SetMoveEscortParty(party.MobileParty);
+                            if (_cfg.values.enableRevengerMobileParty)
+                            {
+                                revenge.xParty = CreateNotableParty(revenge);
+                                revenge.xParty.Ai.SetMoveEscortParty(party.MobileParty);
+                            }
                             revenge.Begin();
                         }
                         else
@@ -233,56 +236,53 @@ namespace PeasantRevenge
 
         private void HourlyTickEvent()
         {
-            //if (revengeData.Count() > 1000)
-            //{
-            //    revengeData.Clear();
-            //}
-           // PeasantRevengeData revenge = revengeData.Where((x) => x.xParty != null && x.xParty == party).FirstOrDefault();
             foreach (PeasantRevengeData revenge in revengeData)
             {
                 if (revenge.state == "begin")
                 {
                     if (revenge.executioner != null)
                     {
-                        if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) < 4f)
+                        if (revenge.xParty != null)
                         {
-                            if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
+                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) < 4f)
                             {
-                                revenge.Start();
-                                if (revenge.Can_peasant_revenge_peasant_start)
+                                if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                                 {
-                                    revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
-                                    break;
-                                }
-                                else
-                                {
-                                    revenge.Stop();
-                                }
-                            }
-                            else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
-                            {
-                                revenge.Start();                                
-                                if (revenge.Can_peasant_revenge_lord_start)
-                                {
-                                    CampaignMapConversation.OpenConversation(
-                                        new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
-                                        new ConversationCharacterData(revenge.party.Owner.CharacterObject, revenge.party, false, false, false, false, false, false));
-                                    break;
-                                }
-                                else
-                                {
-                                    revenge.Stop();
-                                }
-                            }
-                            else
-                            {
-                                if (revenge.targetHero != Hero.MainHero.CharacterObject)
-                                {
-                                    if (RevengeAI(revenge)) // if player dialog start after AI run
+                                    revenge.Start();
+                                    if (revenge.Can_peasant_revenge_peasant_start)
                                     {
-                                        revenge.Start();                                        
-                                        revenge.nobleParty = revenge.party;
-                                        revenge.targetHero = Hero.MainHero.CharacterObject;
+                                        revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        revenge.Stop();
+                                    }
+                                }
+                                else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
+                                {
+                                    revenge.Start();
+                                    if (revenge.Can_peasant_revenge_lord_start)
+                                    {
+                                        CampaignMapConversation.OpenConversation(
+                                            new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
+                                            new ConversationCharacterData(revenge.party.Owner.CharacterObject, revenge.party, false, false, false, false, false, false));
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        revenge.Stop();
+                                    }
+                                }
+                                else
+                                {
+                                    if (revenge.targetHero != Hero.MainHero.CharacterObject)
+                                    {
+                                        if (RevengeAI(revenge)) // if player dialog start after AI run
+                                        {
+                                            revenge.Start();
+                                            revenge.nobleParty = revenge.party;
+                                            revenge.targetHero = Hero.MainHero.CharacterObject;
 #if false
                                         TroopRoster troopsLordParty = revenge.party.MemberRoster;
                                         TroopRoster troopsNotableParty = revenge.xParty.MemberRoster;
@@ -307,25 +307,71 @@ namespace PeasantRevenge
                                             }
                                         }
 #endif
-                                        if (revenge.Can_peasant_revenge_messenger_peasant_start)
-                                        {
-                                            revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                                            if (revenge.Can_peasant_revenge_messenger_peasant_start)
+                                            {
+                                                revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                                            }
+                                            else
+                                            {
+                                                revenge.Stop();
+                                            }
                                         }
                                         else
                                         {
                                             revenge.Stop();
                                         }
                                     }
+                                }
+                            }
+                            else
+                            {
+                                revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                            }
+                        }
+                        else
+                        {
+                            if (!_cfg.values.enableRevengerMobileParty)
+                            {
+                                if ((Hero.MainHero.PartyBelongedTo == null ? false : revenge.party == Hero.MainHero.PartyBelongedTo.Party) ||
+                                    (revenge.criminal == Hero.MainHero.CharacterObject))
+                                {
+                                    revenge.Start();
+                                }
+                                else
+                                {
+                                    if (RevengeAI(revenge)) // if player dialog start after AI run
+                                    {
+                                        revenge.Start();
+                                        revenge.nobleParty = revenge.party;
+                                    }
                                     else
                                     {
                                         revenge.Stop();
                                     }
                                 }
+
+                                if (revenge.Can_peasant_revenge_peasant_start)
+                                {
+                                    CampaignMapConversation.OpenConversation(
+                                       new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
+                                       new ConversationCharacterData(revenge.executioner, null, false, false, false, false, false, false));
+                                    break;
+                                }
+                                else if (revenge.Can_peasant_revenge_lord_start)
+                                {
+                                    CampaignMapConversation.OpenConversation(
+                                        new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
+                                        new ConversationCharacterData(revenge.party.Owner.CharacterObject, revenge.party, false, false, false, false, false, false));
+                                    break;
+                                }
+                                else if (revenge.Can_peasant_revenge_messenger_peasant_start)
+                                {
+                                    CampaignMapConversation.OpenConversation(
+                                        new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
+                                        new ConversationCharacterData(revenge.executioner, revenge.nobleParty, false, false, false, false, false, false));
+                                    break;
+                                }
                             }
-                        }
-                        else
-                        {
-                            revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
                         }
                     }
                 }
@@ -334,7 +380,14 @@ namespace PeasantRevenge
                     if (revenge.xParty != null)
                     {
                         revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
-                    }                        
+                    }
+                    else
+                    {
+                        if (!_cfg.values.enableRevengerMobileParty)
+                        {
+
+                        }
+                    }
                 }
                 
                 if (revenge.dueTime.IsPast)
@@ -360,7 +413,7 @@ namespace PeasantRevenge
                     }
                     else
                     {
-                        revenge.state = "clear";
+                        revenge.Clear();
                     }
                 }
             }
@@ -874,12 +927,7 @@ namespace PeasantRevenge
             return result;
         }
 
-        private void ResetConfiguration()
-        {
-            _cfg = new PeasantRevengeModCfg();
-            _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
-            _cfg.values.ai.Default();
-        }
+      
 
         private bool hero_relation_on_condition(Hero hero, Hero target, string operation, string weight)
         {
@@ -930,6 +978,18 @@ namespace PeasantRevenge
         {
             hero.SetTraitLevel(TraitObject.All.Where((x) => x.StringId.ToString() == tag).First(), value);
         }
+        #region Configuration 
+        private void ResetConfiguration()
+        {
+            _cfg = new PeasantRevengeModCfg();
+            _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
+            _cfg.values.ai.Default();
+        }
+        private void SetEnableRevengerMobileParty(bool value)
+        {
+            _cfg.values.enableRevengerMobileParty = value;
+            _cfg.Save(_cfg.values.file_name, _cfg.values);
+        }
 
         private void LoadConfiguration(CampaignGameStarter campaignGameStarter)
         {
@@ -978,6 +1038,7 @@ namespace PeasantRevenge
         {
             LoadConfiguration(campaignGameStarter);
         }
+        #endregion
 
         void Test()
         {
@@ -1238,6 +1299,51 @@ namespace PeasantRevenge
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
         {
+            #region Peasant revenge configuration via dialog
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_config_mod_start",
+               "hero_main_options",
+               "peasant_revenge_player_config_mod_options_set",
+               "{=PRev0079}Let me tell you how will you address me with your problems.",
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_config_mod_start_condition), null, 100, null);
+            campaignGameStarter.AddDialogLine(
+              "peasant_revenge_player_config_mod_npc_options",
+              "peasant_revenge_player_config_mod_options_set",
+              "peasant_revenge_player_config_mod_options_set",
+              "{=PRev0080}What problems?[if:convo_thinking]",null,null, 200, null);
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_config_mod_option_mp_dis",
+               "peasant_revenge_player_config_mod_options_set",
+               "peasant_revenge_player_config_mod_end_dis",
+               "{=PRev0081}You should not immediately interrupt me with any your matter.",
+                () => { return !_cfg.values.enableRevengerMobileParty; },()=> { SetEnableRevengerMobileParty(true); }, 100, null);
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_config_mod_option_mp_en",
+               "peasant_revenge_player_config_mod_options_set",
+               "peasant_revenge_player_config_mod_end_en",
+               "{=PRev0082}You should immediately interrupt me with any your matter.",
+                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100, null);
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_player_config_mod_option_exit",
+             "peasant_revenge_player_config_mod_options_set",
+             "close_window",
+             "{=PRev0083}Nevermind.", null, null, 200, null);
+
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_player_config_mod_npc_end_dis",
+             "peasant_revenge_player_config_mod_end_dis",
+             "close_window",
+             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]", 
+             () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_player_config_mod_npc_end_en",
+             "peasant_revenge_player_config_mod_end_en",
+             "close_window",
+             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_angry][ib:closed]",             
+             () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
+          
+            #endregion 
+
             #region Revenger who cannot start yet or finished the quest
             //This line makes sure player do not attack revenger party (if enabled - crash, because it does not have leader hero)
             campaignGameStarter.AddDialogLine(
@@ -1782,6 +1888,15 @@ namespace PeasantRevenge
             #endregion
 
         }
+
+        private bool peasant_revenge_player_config_mod_start_condition()
+        {
+            return (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
+                !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&
+                (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
+                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom);
+        }
+
         private bool peasant_revenge_ask_criminal_start_condition()
         {
                 if (Hero.OneToOneConversationHero != null && currentRevenge.criminal != null &&
@@ -2023,6 +2138,7 @@ namespace PeasantRevenge
 
         private void leave_encounter()
         {
+            if (PlayerEncounter.Current == null) return;
             PlayerEncounter.LeaveEncounter = true;
             if (currentRevenge.xParty != null) currentRevenge.xParty.Ai.SetMoveModeHold();
         }
@@ -2501,6 +2617,8 @@ namespace PeasantRevenge
         
         private CharacterObject getAllyPrisonerTheEscapeGoat(Hero hero)
         {
+            if (hero.PartyBelongedToAsPrisoner == null) return null;
+
             var prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes.Where((x) =>
               !x.HeroObject.Clan.IsAtWarWith(hero.Clan) && x.HeroObject != hero &&
               (x.HeroObject.Clan == hero.Clan || x.HeroObject.Clan.Kingdom == hero.Clan.Kingdom));

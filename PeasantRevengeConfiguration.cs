@@ -14,6 +14,7 @@ namespace PeasantRevenge
     public class PeasantRevengeConfiguration
     {
         public int CfgVersion = 0;
+        public bool enableRevengerMobileParty = true;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;
         public int relationChangeWhenCannotPayReparations = -2;
