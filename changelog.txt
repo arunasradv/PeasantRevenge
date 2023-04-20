@@ -34,6 +34,9 @@ Feature: AI blame other AI, when player captures the criminal.
 Fix:     Various language fixes.
 230420 v12
 Fix: Null exception when party, where criminal hero was disappeared.
+xxxxxx v13
+Feature: Revenger parties. Can be dissabled or enabled via dialog with notable peasant.
+Feature: Player let other lord to decide criminal's fate.(not implemented)
          
 
 
