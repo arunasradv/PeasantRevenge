@@ -30,7 +30,8 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     internal class PeasantRevengeBehavior : CampaignBehaviorBase
     {
-
+        bool revengerPartiesCleanUp = true;
+        string revengerPartyNameStart = "Revenger_";
         public PeasantRevengeModCfg _cfg = new PeasantRevengeModCfg();
         
         List<PeasantRevengeData> revengeData = new List<PeasantRevengeData>();
@@ -39,6 +40,16 @@ namespace PeasantRevenge
 
         internal class PeasantRevengeData
         {
+            public enum quest_state
+            {
+                none,
+                ready,
+                begin,
+                start,
+                stop,
+                clear
+            }
+
             public Village village;
             public CharacterObject criminal;
             public CharacterObject accused_hero; // it is hero who was blamed for the crime by criminal
@@ -49,8 +60,8 @@ namespace PeasantRevenge
             public MobileParty xParty; //
             public CharacterObject targetHero;
             public int reparation;
-            public string state = "";
-
+            public quest_state state = quest_state.none;
+            public CampaignTime startTime;
             public CampaignTime dueTime;
 
             private bool can_peasant_revenge_lord_start = false;
@@ -63,7 +74,7 @@ namespace PeasantRevenge
             {
                 get
                 {
-                    bool value = state == "start" && nobleParty == null && party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && party.LeaderHero != null; // will start if hero leader null - means karavan party
+                    bool value = state == quest_state.start && nobleParty == null && party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && party.LeaderHero != null; // will start if hero leader null - means karavan party
                     return value;
                 }
 
@@ -74,7 +85,7 @@ namespace PeasantRevenge
             {
                 get
                 {
-                    bool value = state == "start" && nobleParty == null && PartyBase.MainParty.PrisonerHeroes.Contains(criminal) && criminal.HeroObject.IsAlive;
+                    bool value = state == quest_state.start && nobleParty == null && PartyBase.MainParty.PrisonerHeroes.Contains(criminal) && criminal.HeroObject.IsAlive;
                     return value;
                 }
                 private set => can_peasant_revenge_peasant_start = value;
@@ -84,7 +95,7 @@ namespace PeasantRevenge
             {
                 get
                 {
-                    bool value = state == "start" && nobleParty != null && !party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && !Hero.MainHero.IsPrisoner;
+                    bool value = state == quest_state.start && nobleParty != null && !party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && !Hero.MainHero.IsPrisoner;
                     return value;
                 }
                 private set => can_peasant_revenge_messenger_peasant_start = value;
@@ -95,22 +106,27 @@ namespace PeasantRevenge
 
             public void Stop()
             {
-                state = "stop";
+                state = quest_state.stop;
+            }
+
+            public void Ready()
+            {
+                state = quest_state.ready;
             }
 
             public void Start()
             {
-                state = "start";
+                state = quest_state.start;
             }
 
             public void Begin()
             {
-                state = "begin";
+                state = quest_state.begin;
             }
 
             public void Clear()
             {
-                state = "clear";
+                state = quest_state.clear;
             }
         }
 
@@ -173,7 +189,8 @@ namespace PeasantRevenge
                 revengeData.Add(new PeasantRevengeData {
                     village = village, 
                     criminal = village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject,
-                    dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)
+                    dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays),
+                    startTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeSartTimeInDays)
                 });
             }
         }
@@ -198,13 +215,8 @@ namespace PeasantRevenge
                             revenge.reparation = (int)(revenge.village.Hearth * _cfg.values.ReparationsScaleToSettlementHearts);
                             revenge.party = party;
                             revenge.dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays);
-                            revenge.targetHero = party.LeaderHero.CharacterObject;
-                            if (_cfg.values.enableRevengerMobileParty)
-                            {
-                                revenge.xParty = CreateNotableParty(revenge);
-                                revenge.xParty.Ai.SetMoveEscortParty(party.MobileParty);
-                            }
-                            revenge.Begin();
+                            revenge.targetHero = party.LeaderHero.CharacterObject;                           
+                            revenge.Ready();
                         }
                         else
                         {
@@ -236,15 +248,34 @@ namespace PeasantRevenge
 
         private void HourlyTickEvent()
         {
+            if (revengerPartiesCleanUp) // clean spawned parties after load (because we do not save revenge data - revenger party is unusable)
+            {
+                revengerPartiesCleanUp = false;
+                DispandAllRevengeParties();
+            }
+
             foreach (PeasantRevengeData revenge in revengeData)
             {
-                if (revenge.state == "begin")
+                if (revenge.state == PeasantRevengeData.quest_state.ready)
+                {
+                    if (revenge.startTime.IsPast)
+                    {
+                        revenge.Begin();
+                        if (_cfg.values.enableRevengerMobileParty)
+                        {
+                            revenge.xParty = CreateNotableParty(revenge);
+                            revenge.xParty.Ai.SetMoveEscortParty(revenge.party.MobileParty);
+                        }
+                    }
+                }
+                
+                if (revenge.state == PeasantRevengeData.quest_state.begin)
                 {
                     if (revenge.executioner != null)
                     {
-                        if (revenge.xParty != null)
+                        if (revenge.xParty != null && revenge.targetHero.HeroObject.PartyBelongedTo != null)
                         {
-                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) < 4f)
+                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) < 3f)
                             {
                                 if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                                 {
@@ -375,18 +406,21 @@ namespace PeasantRevenge
                         }
                     }
                 }
-                else if (revenge.state == "start")
+                else if (revenge.state == PeasantRevengeData.quest_state.start)
                 {
-                    if (revenge.xParty != null)
+                    if (_cfg.values.enableRevengerMobileParty)
                     {
-                        revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                        if (revenge.xParty != null && revenge.targetHero.HeroObject.PartyBelongedTo != null)
+                        {
+                            revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                        }
+                        else
+                        {
+                        }
                     }
                     else
                     {
-                        if (!_cfg.values.enableRevengerMobileParty)
-                        {
 
-                        }
                     }
                 }
                 
@@ -395,7 +429,7 @@ namespace PeasantRevenge
                     revenge.Stop();
                 }
                 
-                if (revenge.state == "stop")
+                if (revenge.state == PeasantRevengeData.quest_state.stop)
                 {
                     if (revenge.xParty != null)
                     {
@@ -421,7 +455,7 @@ namespace PeasantRevenge
 
         private void DailyTickPartyEvent(MobileParty party)
         {
-            revengeData.RemoveAll((x) => ((x.state == "clear")));
+            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
         }
         /// <summary>
         /// When AI caught the criminal non player. Peasant revenge evets should follow sequence: 
@@ -793,7 +827,7 @@ namespace PeasantRevenge
         {
             MobileParty mobileParty = null;
             int size = (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth >= 4 ? 4 : (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth;
-            mobileParty = MobileParty.CreateParty($"Revenger_{revenge.executioner.Name}".Replace(' ','_'),null, null);
+            mobileParty = MobileParty.CreateParty($"{revengerPartyNameStart}{revenge.executioner.Name}".Replace(' ','_'),null, null);
             CharacterObject villager = revenge.executioner.Culture.Villager;
             TroopRoster troopRoster = new TroopRoster(mobileParty.Party);
             TextObject textObject = new TextObject($"Revenger of {revenge.executioner.HeroObject.HomeSettlement.Name}", null);
@@ -813,11 +847,6 @@ namespace PeasantRevenge
             mobileParty.Party.Visuals.SetMapIconAsDirty();
             mobileParty.Aggressiveness = 0f;
             return mobileParty;
-        }
-
-        private IEnumerable<PeasantRevengeData> GetStartedRevengeData()
-        {
-            return revengeData.Where((x) => x.state == "start");
         }
 
         private CharacterObject GetRevengeNotable(Settlement settlement)
@@ -1118,6 +1147,24 @@ namespace PeasantRevenge
                                 criminal = criminal.CharacterObject,
                                 dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)
                             });
+                    }
+                }
+            }
+        }
+
+        void DispandAllRevengeParties()
+        {
+            IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) => x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith("Revenger_") && x.IsActive);
+            for(int i = 0; i < parties.Count(); i++)
+            {
+                TroopRoster troopsLordParty = parties.ElementAt(i).MemberRoster;
+                for (int j = 0; j < troopsLordParty.Count; j++)
+                {
+                    CharacterObject troop = troopsLordParty.GetCharacterAtIndex(j);
+                    if (troop.IsHero)
+                    {
+                        DestroyPartyAction.ApplyForDisbanding(parties.ElementAt(i), troop.HeroObject.HomeSettlement);
+                        break;
                     }
                 }
             }
@@ -1926,7 +1973,22 @@ namespace PeasantRevenge
             !x.Can_peasant_revenge_peasant_start &&
             !x.Can_peasant_revenge_messenger_peasant_start).FirstOrDefault();
 
-            if (revenge == null) return false;
+            if (revenge == null)
+            {
+                if ((Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
+                     Hero.OneToOneConversationHero.PartyBelongedTo != null && 
+                     Hero.OneToOneConversationHero.PartyBelongedTo.StringId.StartsWith(revengerPartyNameStart))
+                {
+                    revenge = revengeData.Where((x) => 
+                    x.executioner != null && 
+                    x.executioner.HeroObject == Hero.OneToOneConversationHero).FirstOrDefault();
+                    return revenge == null;//party witch does not have revenge data (after game is loaded)
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
