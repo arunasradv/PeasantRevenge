@@ -189,8 +189,7 @@ namespace PeasantRevenge
                 revengeData.Add(new PeasantRevengeData {
                     village = village, 
                     criminal = village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject,
-                    dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays),
-                    startTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeSartTimeInDays)
+                    dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)                    
                 });
             }
         }
@@ -215,7 +214,8 @@ namespace PeasantRevenge
                             revenge.reparation = (int)(revenge.village.Hearth * _cfg.values.ReparationsScaleToSettlementHearts);
                             revenge.party = party;
                             revenge.dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays);
-                            revenge.targetHero = party.LeaderHero.CharacterObject;                           
+                            revenge.targetHero = party.LeaderHero.CharacterObject;
+                            revenge.startTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeSartTimeInDays);
                             revenge.Ready();
                         }
                         else
