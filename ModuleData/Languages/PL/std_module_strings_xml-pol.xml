@@ -81,5 +81,13 @@
     <string id="PRev0075" text="Wierzę ci." />
     <string id="PRev0076" text="Kłamiesz." />
     <string id="PRev0077" text="Obaj zasługujecie na chłopską zemstę!" />
+    <string id="PRev0078" text="Nie mam czasu na rozmowę.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Powiem ci, jak będziesz ze mną rozmawiał o swoich problemach." />
+    <string id="PRev0080" text="Jakie problemy?[if:convo_thinking]" />
+    <string id="PRev0081" text="Nie przerywaj mi od razu w żadnej sprawie." />
+    <string id="PRev0082" text="Powinieneś natychmiast przerwać mi w jakiejkolwiek sprawie." />
+    <string id="PRev0083" text="Nieważne." />
+    <string id="PRev0084" text="Tak, moja {?MAINHERO.GENDER}Pani{?}Pan{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Mściciel" />
   </strings>
 </base>

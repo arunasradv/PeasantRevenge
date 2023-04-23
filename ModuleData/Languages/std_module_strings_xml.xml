@@ -82,5 +82,12 @@
     <string id="PRev0076" text="{=PRev0076}You are lying." />
     <string id="PRev0077" text="{=PRev0077}You both deserve peasant revenge!" />
     <string id="PRev0078" text="{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="{=PRev0079}Let me tell you, how you will talk to me about your problems." />
+    <string id="PRev0080" text="{=PRev0080}What problems?[if:convo_thinking]" />
+    <string id="PRev0081" text="{=PRev0081}You should not immediately interrupt me with any your matter." />
+    <string id="PRev0082" text="{=PRev0082}You should immediately interrupt me with any your matter." />
+    <string id="PRev0083" text="{=PRev0083}Nevermind." />
+    <string id="PRev0084" text="{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="{=PRev0085}Revenger" />
   </strings>
 </base>

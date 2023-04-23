@@ -81,5 +81,13 @@
     <string id="PRev0075" text="당신을 믿습니다." />
     <string id="PRev0076" text="당신은 거짓말을 하고 있습니다." />
     <string id="PRev0077" text="두 분 모두 소작농의 복수를 받아 마땅합니다!" />
+    <string id="PRev0078" text="말할 시간이 없습니다.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="당신의 문제에 대해 어떻게 이야기할 것인지 말씀드리겠습니다." />
+    <string id="PRev0080" text="어떤 문제가 있나요?[if:convo_thinking]" />
+    <string id="PRev0081" text="당신의 문제로 저를 즉시 방해해서는 안 됩니다." />
+    <string id="PRev0082" text="어떤 일이든지 즉시 중단해야 합니다." />
+    <string id="PRev0083" text="신경쓰지 마세요." />
+    <string id="PRev0084" text="네, 제 {?MAINHERO.GENDER}숙녀{?}자{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="복수자" />
   </strings>
 </base>

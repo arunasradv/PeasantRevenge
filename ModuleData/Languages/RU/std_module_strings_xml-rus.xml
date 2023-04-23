@@ -81,5 +81,13 @@
     <string id="PRev0075" text="Я вам верю" />
     <string id="PRev0076" text="Вы лжете." />
     <string id="PRev0077" text="Вы оба заслуживаете крестьянской мести!" />
+    <string id="PRev0078" text="У меня нет времени говорить.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Позвольте мне рассказать вам, как вы будете говорить со мной о своих проблемах." />
+    <string id="PRev0080" text="Какие проблемы?[if:convo_thinking]" />
+    <string id="PRev0081" text="Вы не должны немедленно прерывать меня своими вопросами." />
+    <string id="PRev0082" text="Вы должны немедленно перебить меня любым вашим вопросом." />
+    <string id="PRev0083" text="Не важно." />
+    <string id="PRev0084" text="Да, моя {?MAINHERO.GENDER}леди{?}правители{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Мститель" />
   </strings>
 </base>

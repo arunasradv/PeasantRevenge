@@ -81,5 +81,13 @@
     <string id="PRev0075" text="Ich glaube dir." />
     <string id="PRev0076" text="Du lügst." />
     <string id="PRev0077" text="Ihr verdient beide bäuerliche Rache!" />
+    <string id="PRev0078" text="Ich habe keine Zeit zum Reden.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Lassen Sie mich Ihnen sagen, wie Sie mit mir über Ihre Probleme sprechen werden." />
+    <string id="PRev0080" text="Welche Probleme?[if:convo_thinking]" />
+    <string id="PRev0081" text="Sie sollten mich nicht gleich mit Ihrem Anliegen unterbrechen." />
+    <string id="PRev0082" text="Du solltest mich sofort mit deinem Anliegen unterbrechen." />
+    <string id="PRev0083" text="Macht nichts." />
+    <string id="PRev0084" text="Ja, meine {?MAINHERO.GENDER}Dame{?}Herrscher{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Rächer" />
   </strings>
 </base>

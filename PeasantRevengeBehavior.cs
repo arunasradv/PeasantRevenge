@@ -796,7 +796,7 @@ namespace PeasantRevenge
             mobileParty = MobileParty.CreateParty($"{revengerPartyNameStart}{revenge.executioner.Name}".Replace(' ','_'),null, null);
             CharacterObject villager = revenge.executioner.Culture.Villager;
             TroopRoster troopRoster = new TroopRoster(mobileParty.Party);
-            TextObject textObject = new TextObject($"Revenger of {revenge.executioner.HeroObject.HomeSettlement.Name}", null);
+            TextObject textObject = new TextObject("{=PRev0085}Revenger", null);
             troopRoster.AddToCounts(revenge.executioner, 1, true, 0, 0, true, -1);
             troopRoster.AddToCounts(villager, size, false, 0, 0, true, -1);
             mobileParty.InitializeMobilePartyAtPosition(troopRoster, new TroopRoster(mobileParty.Party), revenge.executioner.HeroObject.HomeSettlement.Position2D);
@@ -1317,7 +1317,7 @@ namespace PeasantRevenge
                "peasant_revenge_player_config_mod_start",
                "hero_main_options",
                "peasant_revenge_player_config_mod_options_set",
-               "{=PRev0079}Let me tell you how will you address me with your problems.",
+               "{=PRev0079}Let me tell you, how you will talk to me about your problems.",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_config_mod_start_condition), null, 100, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_player_config_mod_npc_options",
@@ -1335,12 +1335,12 @@ namespace PeasantRevenge
                "peasant_revenge_player_config_mod_options_set",
                "peasant_revenge_player_config_mod_end_en",
                "{=PRev0082}You should immediately interrupt me with any your matter.",
-                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 10, null);
+                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100, null);
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_player_config_mod_option_exit",
              "peasant_revenge_player_config_mod_options_set",
              "close_window",
-             "{=PRev0083}Nevermind.", null, null, 200, null);
+             "{=PRev0083}Nevermind.", null, null, 0, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_player_config_mod_npc_end_dis",
