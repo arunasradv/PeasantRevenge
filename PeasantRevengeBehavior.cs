@@ -171,11 +171,16 @@ namespace PeasantRevenge
             args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
             MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
             IFaction mapFaction = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            //this.CheckFactionAttackableHonorably(args, mapFaction);
             return !mapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction);
         }
         private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
         {
+            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
+            IFaction mapFaction = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
+            if (!mapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
+            {
+                DeclareWarAction.ApplyByPlayerHostility(MobileParty.MainParty.MapFaction, mapFaction);
+            }
             PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
             if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
             {
@@ -438,7 +443,7 @@ namespace PeasantRevenge
                 {
                     if (revenge.xParty != null)
                     {
-                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 1f)
+                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 2f)
                         {
                             if (!revenge.executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
