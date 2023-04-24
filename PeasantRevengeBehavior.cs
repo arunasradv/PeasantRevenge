@@ -152,6 +152,45 @@ namespace PeasantRevenge
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
+            AddGameMenus(campaignGameStarter);
+        }
+
+        private void AddGameMenus(CampaignGameStarter campaignGameStarter)
+        {
+            campaignGameStarter.AddGameMenuOption(
+                "join_encounter", 
+                "join_encounter_help_defenders_force",
+                "{=FwIgakj8}Help {DEFENDER}.",
+                new GameMenuOption.OnConditionDelegate(this.game_menu_join_encounter_help_defenders_on_condition),
+                new GameMenuOption.OnConsequenceDelegate(this.game_menu_join_encounter_help_defenders_on_consequence), 
+                false, -1, false, null);
+        }
+
+        private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
+            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
+            IFaction mapFaction = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
+            //this.CheckFactionAttackableHonorably(args, mapFaction);
+            return !mapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction);
+        }
+        private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
+        {
+            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
+            if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
+            {
+                PlayerEncounter.JoinBattle(BattleSideEnum.Defender);
+                GameMenu.ActivateGameMenu("encounter");
+                return;
+            }
+            if (PlayerEncounter.Current != null)
+            {
+                if (PlayerEncounter.EncounterSettlement != null && PlayerEncounter.EncounterSettlement.SiegeEvent != null && !PlayerEncounter.EncounterSettlement.MapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
+                {
+                    PlayerEncounter.RestartPlayerEncounter(PlayerEncounter.EncounterSettlement.SiegeEvent.BesiegerCamp.BesiegerParty.Party, PartyBase.MainParty, false);
+                }
+                GameMenu.ActivateGameMenu("encounter");
+            }
         }
 
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
@@ -1032,6 +1071,7 @@ namespace PeasantRevenge
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
+            AddGameMenus(campaignGameStarter);
         }
         #endregion
 
