@@ -89,5 +89,7 @@
     <string id="PRev0083" text="Non importa." />
     <string id="PRev0084" text="Sì, mia {?MAINHERO.GENDER}Signora{?}Signore{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="Vendicatore" />
+    <string id="PRev0086" text="Hai deciso di..." />
+    <string id="PRev0087" text="Dichiara guerra al {KINGDOM} e aiuta {DEFENDER}." />
   </strings>
 </base>

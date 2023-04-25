@@ -152,8 +152,86 @@ namespace PeasantRevenge
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
+            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
+            {
+                AddGameMenus(campaignGameStarter);
+            }
         }
+#region Help village menu
+        private void AddGameMenus(CampaignGameStarter campaignGameStarter)
+        {
+            campaignGameStarter.AddGameMenuOption(
+                "join_encounter", 
+                "join_encounter_help_defenders_force",
+                "{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}.",
+                new GameMenuOption.OnConditionDelegate(this.game_menu_join_encounter_help_defenders_on_condition),
+                new GameMenuOption.OnConsequenceDelegate(this.game_menu_join_encounter_help_defenders_on_consequence), 
+                false, -1, false, null);
+        }
+        
+        private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
+            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
+            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
+            IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
+           
+            bool canStartHelpVillageMenu = encounteredBattle.MapEventSettlement != null && 
+                !mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
+                !mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
+                encounteredBattle.MapEventSettlement.IsVillage &&
+                encounteredBattle.MapEventSettlement.IsUnderRaid;
+            
+            if (canStartHelpVillageMenu)
+            {
+                MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());
+                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture)
+                {
+                    args.IsEnabled = false;
+                    args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);
+                }
+                if (!Hero.MainHero.IsFactionLeader)
+                {
+                    //do restrictions
+                }
+            }
 
+            return canStartHelpVillageMenu;
+        }
+        private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
+        {
+            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
+            IFaction mapFaction = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
+            if (!mapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
+            {
+                DeclareWarAction.ApplyByPlayerHostility(MobileParty.MainParty.MapFaction, mapFaction);
+            }
+            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
+
+            TextObject menuText = new TextObject("{=PRev0086}You decided to...");
+           
+            if (!Hero.MainHero.IsFactionLeader)
+            {
+                //do consequences for starting the war here
+            }
+            if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
+            {
+                PlayerEncounter.JoinBattle(BattleSideEnum.Defender);
+                GameMenu.ActivateGameMenu("encounter");
+                MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
+                return;
+            }
+            if (PlayerEncounter.Current != null)
+            {
+                if (PlayerEncounter.EncounterSettlement != null && PlayerEncounter.EncounterSettlement.SiegeEvent != null && !PlayerEncounter.EncounterSettlement.MapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
+                {
+                    PlayerEncounter.RestartPlayerEncounter(PlayerEncounter.EncounterSettlement.SiegeEvent.BesiegerCamp.BesiegerParty.Party, PartyBase.MainParty, false);
+                }
+                GameMenu.ActivateGameMenu("encounter");
+                MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
+            }
+        }
+#endregion
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (x.xParty == party));
@@ -275,7 +353,7 @@ namespace PeasantRevenge
                     {
                         if (revenge.xParty != null && revenge.targetHero.HeroObject.PartyBelongedTo != null)
                         {
-                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 3f)
+                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
                             {
                                 revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);                               
                             }
@@ -399,7 +477,7 @@ namespace PeasantRevenge
                 {
                     if (revenge.xParty != null)
                     {
-                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 1f)
+                        if (revenge.xParty.Position2D.Distance(revenge.executioner.HeroObject.HomeSettlement.Position2D) < 2f)
                         {
                             if (!revenge.executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
@@ -1032,6 +1110,10 @@ namespace PeasantRevenge
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
+            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
+            {
+                AddGameMenus(campaignGameStarter);
+            }
         }
         #endregion
 

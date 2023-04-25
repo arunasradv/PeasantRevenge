@@ -15,6 +15,7 @@ namespace PeasantRevenge
     {
         public int CfgVersion = 0;
         public bool enableRevengerMobileParty = false;
+        public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;
         public int relationChangeWhenCannotPayReparations = -2;

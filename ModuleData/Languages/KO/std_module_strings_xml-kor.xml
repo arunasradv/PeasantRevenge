@@ -89,5 +89,7 @@
     <string id="PRev0083" text="신경쓰지 마세요." />
     <string id="PRev0084" text="네, 제 {?MAINHERO.GENDER}숙녀{?}자{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="복수자" />
+    <string id="PRev0086" text="당신이 결정한 것은..." />
+    <string id="PRev0087" text="{KINGDOM}에 전쟁을 선포하고 {DEFENDER}을(를) 도우십시오." />
   </strings>
 </base>

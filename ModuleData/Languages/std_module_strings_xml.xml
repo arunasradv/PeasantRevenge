@@ -89,5 +89,7 @@
     <string id="PRev0083" text="{=PRev0083}Nevermind." />
     <string id="PRev0084" text="{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="{=PRev0085}Revenger" />
+    <string id="PRev0086" text="{=PRev0086}You decided to..." />
+    <string id="PRev0087" text="{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}." />
   </strings>
 </base>
