@@ -89,5 +89,7 @@
     <string id="PRev0083" text="気にしないでください。" />
     <string id="PRev0084" text="はい、私の {?MAINHERO.GENDER}レディ{?}主{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="リベンジャー" />
+    <string id="PRev0086" text="あなたは…に決めました" />
+    <string id="PRev0087" text="{KINGDOM} に宣戦布告し、{DEFENDER} を助けてください。" />
   </strings>
 </base>

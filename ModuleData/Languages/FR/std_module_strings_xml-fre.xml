@@ -89,5 +89,7 @@
     <string id="PRev0083" text="C'est pas grave." />
     <string id="PRev0084" text="Oui, ma {?MAINHERO.GENDER}Dame{?}Seigneur{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="Revenger" />
+    <string id="PRev0086" text="Vous avez décidé de..." />
+    <string id="PRev0087" text="Déclarez la guerre au {KINGDOM} et aidez {DEFENDER}." />
   </strings>
 </base>

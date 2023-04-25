@@ -89,5 +89,7 @@
     <string id="PRev0083" text="Macht nichts." />
     <string id="PRev0084" text="Ja, meine {?MAINHERO.GENDER}Dame{?}Herrscher{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="Rächer" />
+    <string id="PRev0086" text="Du hast dich entschieden..." />
+    <string id="PRev0087" text="Erkläre {KINGDOM} den Krieg und hilf {DEFENDER}." />
   </strings>
 </base>

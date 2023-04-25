@@ -89,5 +89,7 @@
     <string id="PRev0083" text="Не важно." />
     <string id="PRev0084" text="Да, моя {?MAINHERO.GENDER}леди{?}правители{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="Мститель" />
+    <string id="PRev0086" text="Вы решили..." />
+    <string id="PRev0087" text="Объявите войну {KINGDOM} и помогите {DEFENDER}." />
   </strings>
 </base>

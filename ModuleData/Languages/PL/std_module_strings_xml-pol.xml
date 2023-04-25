@@ -89,5 +89,7 @@
     <string id="PRev0083" text="Nieważne." />
     <string id="PRev0084" text="Tak, moja {?MAINHERO.GENDER}Pani{?}Pan{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="Mściciel" />
+    <string id="PRev0086" text="Zdecydowałeś się..." />
+    <string id="PRev0087" text="Wypowiedz wojnę {KINGDOM} i pomóż {DEFENDER}." />
   </strings>
 </base>
