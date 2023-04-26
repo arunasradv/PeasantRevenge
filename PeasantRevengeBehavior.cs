@@ -174,27 +174,22 @@ namespace PeasantRevenge
             args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
             MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
             IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
+            //IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
            
             bool canStartHelpVillageMenu = encounteredBattle.MapEventSettlement != null && 
                 !mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
                 //!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
+                mapFactionAttacker != MobileParty.MainParty.MapFaction && // if removed can attack own party (not for this mod)
                 encounteredBattle.MapEventSettlement.IsVillage &&
                 encounteredBattle.MapEventSettlement.IsUnderRaid;
 
             if (canStartHelpVillageMenu)
-            {
-                MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());
-                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture
-                    || mapFactionAttacker == MobileParty.MainParty.MapFaction)//You can attack your own faction ! Internal conflict case!
+            {   
+                MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());             
+                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture)
                 {
                     args.IsEnabled = false;
-                    args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);
-                }
-
-                if (!Hero.MainHero.IsFactionLeader)
-                {
-                    //do restrictions
+                    args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);                          
                 }
             }
 
@@ -362,7 +357,7 @@ namespace PeasantRevenge
                                 {
                                     revenge.Start();
                                 }
-                                else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
+                                else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && Hero.MainHero.PartyBelongedToAsPrisoner != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
                                 {
                                     revenge.Start();
                                     if (revenge.Can_peasant_revenge_lord_start)
