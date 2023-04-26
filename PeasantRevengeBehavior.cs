@@ -178,18 +178,20 @@ namespace PeasantRevenge
            
             bool canStartHelpVillageMenu = encounteredBattle.MapEventSettlement != null && 
                 !mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
-                !mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
+                //!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
                 encounteredBattle.MapEventSettlement.IsVillage &&
                 encounteredBattle.MapEventSettlement.IsUnderRaid;
-            
+
             if (canStartHelpVillageMenu)
             {
                 MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());
-                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture)
+                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture
+                    || mapFactionAttacker == MobileParty.MainParty.MapFaction)//You can attack your own faction ! Internal conflict case!
                 {
                     args.IsEnabled = false;
                     args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);
                 }
+
                 if (!Hero.MainHero.IsFactionLeader)
                 {
                     //do restrictions
@@ -201,36 +203,33 @@ namespace PeasantRevenge
         private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
         {
             MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
-            IFaction mapFaction = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            if (!mapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
-            {
-                DeclareWarAction.ApplyByPlayerHostility(MobileParty.MainParty.MapFaction, mapFaction);
-            }
-            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
+            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
+            IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
 
-            TextObject menuText = new TextObject("{=PRev0086}You decided to...");
-           
-            if (!Hero.MainHero.IsFactionLeader)
+            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;           
+
+            if (!mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction))
             {
-                //do consequences for starting the war here
-            }
+                BeHostileAction.ApplyEncounterHostileAction(PartyBase.MainParty, encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker));
+                //if (MobileParty.MainParty.MapFaction == mapFactionAttacker)
+                //{
+                //    ChangeCrimeRatingAction.Apply(MobileParty.MainParty.MapFaction, 61f);
+                //}
+            }            
+
             if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
             {
                 PlayerEncounter.JoinBattle(BattleSideEnum.Defender);
                 GameMenu.ActivateGameMenu("encounter");
-                MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
+                if (!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction))
+                {
+                    TextObject menuText = new TextObject("{=PRev0086}You decided to...");
+                    MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
+                }
                 return;
             }
-            if (PlayerEncounter.Current != null)
-            {
-                if (PlayerEncounter.EncounterSettlement != null && PlayerEncounter.EncounterSettlement.SiegeEvent != null && !PlayerEncounter.EncounterSettlement.MapFaction.IsAtWarWith(MobileParty.MainParty.MapFaction))
-                {
-                    PlayerEncounter.RestartPlayerEncounter(PlayerEncounter.EncounterSettlement.SiegeEvent.BesiegerCamp.BesiegerParty.Party, PartyBase.MainParty, false);
-                }
-                GameMenu.ActivateGameMenu("encounter");
-                MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
-            }
         }
+
 #endregion
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
         {
@@ -870,7 +869,7 @@ namespace PeasantRevenge
         private MobileParty CreateNotableParty(PeasantRevengeData revenge)
         {
             MobileParty mobileParty = null;
-            int size = (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth >= 4 ? 4 : (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth;
+            int size = (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth >= _cfg.values.peasantRevengeMaxPartySize-1 ? _cfg.values.peasantRevengeMaxPartySize - 1 : (int)revenge.executioner.HeroObject.HomeSettlement.Village.Hearth;
             mobileParty = MobileParty.CreateParty($"{revengerPartyNameStart}{revenge.executioner.Name}".Replace(' ','_'),null, null);
             CharacterObject villager = revenge.executioner.Culture.Villager;
             TroopRoster troopRoster = new TroopRoster(mobileParty.Party);

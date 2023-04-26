@@ -59,7 +59,8 @@ namespace PeasantRevenge
         public bool otherKingdomClanCanCareOfPeasantRevenge = true;
         public bool alwwaysReportPeasantRevengeToClanLeader = true;
         public float peasantRevengeTimeoutInDays = 5.0f;
-        public float peasantRevengeSartTimeInDays = 1.0f;
+        public float peasantRevengeSartTimeInDays = 0.3f;
+        public int peasantRevengeMaxPartySize = 10;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
 #if TESTING
