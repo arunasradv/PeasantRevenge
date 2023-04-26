@@ -1071,13 +1071,11 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ReparationsScaleToSettlementHearts = 20;
                     }
-                    _cfg.Save(_cfg.values.file_name, _cfg.values);
                 }
                 else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0 && _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord.Count == 0)
                 { // patching new ai parameters
                     _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
                     _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
-                    _cfg.Save(_cfg.values.file_name, _cfg.values);
                 }
                 //File.Copy(_cfg.values.file_name, _cfg.values.file_name + "_autosaved_backup.xml");
             }
@@ -1088,10 +1086,10 @@ namespace PeasantRevenge
                     _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
                     _cfg.values.ai.Default();
                 }
-                _cfg.Save(_cfg.values.file_name, _cfg.values);
+               
             }
 
-           
+            _cfg.Save(_cfg.values.file_name, _cfg.values);
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
             //Test();            
