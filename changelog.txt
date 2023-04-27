@@ -34,14 +34,11 @@ Feature: AI blame other AI, when player captures the criminal.
 Fix:     Various language fixes.
 230420 v12
 Fix: Null exception when party, where criminal hero was disappeared.
-xxxxxx v13
+230427 v13
 Feature: Revenger parties. 
 Feature: Revenger parties can be dissabled or enabled via dialog with notable peasant (see in configuration file: enableRevengerMobileParty).
 Added: Changeable time duration before peasant can create party for revenge (see in configuration file: peasantRevengeSartTimeInDays).
 Feature: Menu for defending neutral village against neutral party (see in configuration file: enableHelpNeutralVillageAndDeclareWarToAttackerMenu).
-xxxxxx v14
-Feature: Player let other lord to decide criminal's fate.(not implemented)
-Feature: Cases with parties without party leader.(not implemented)
          
 
 
