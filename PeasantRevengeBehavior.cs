@@ -1090,13 +1090,10 @@ namespace PeasantRevenge
             }
 
             _cfg.Save(_cfg.values.file_name, _cfg.values);
+
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
-            //Test();            
-            //Check if compatible with some modules
-            //Helpers.ModuleHelper compatibility = new Helpers.ModuleHelper();
-            //_cfg.values = compatibility.CheckModules(_cfg.values);
-            //_cfg.Save(_cfg.values.file_name, _cfg.values);
+            //Test();
         }
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
