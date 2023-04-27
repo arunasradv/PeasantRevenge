@@ -1191,7 +1191,7 @@ namespace PeasantRevenge
 
         void DispandAllRevengeParties()
         {
-            IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) => x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith("Revenger_") && x.IsActive);
+            IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) => x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith(revengerPartyNameStart) && x.IsActive);
             for(int i = 0; i < parties.Count(); i++)
             {
                 TroopRoster troopsLordParty = parties.ElementAt(i).MemberRoster;
