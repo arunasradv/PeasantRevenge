@@ -81,5 +81,15 @@
     <string id="PRev0075" text="Ti credo." />
     <string id="PRev0076" text="Stai mentendo." />
     <string id="PRev0077" text="Vi meritate entrambi una vendetta contadina!" />
+    <string id="PRev0078" text="Non ho tempo per parlare.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Lascia che ti dica come mi parlerai dei tuoi problemi." />
+    <string id="PRev0080" text="Quali problemi?[if:convo_thinking]" />
+    <string id="PRev0081" text="Non dovresti interrompermi immediatamente con qualsiasi tua questione." />
+    <string id="PRev0082" text="Dovresti interrompermi immediatamente con qualsiasi tua questione." />
+    <string id="PRev0083" text="Non importa." />
+    <string id="PRev0084" text="Sì, mia {?MAINHERO.GENDER}Signora{?}Signore{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Vendicatore" />
+    <string id="PRev0086" text="Hai deciso di..." />
+    <string id="PRev0087" text="Dichiara guerra al {KINGDOM} e aiuta {DEFENDER}." />
   </strings>
 </base>

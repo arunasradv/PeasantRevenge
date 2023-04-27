@@ -81,5 +81,15 @@
     <string id="PRev0075" text="信じます。" />
     <string id="PRev0076" text="あなたは嘘をついています。" />
     <string id="PRev0077" text="二人とも農民の復讐に値する!" />
+    <string id="PRev0078" text="話す時間がありません.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="あなたの問題についてどのように私に話すか教えてください." />
+    <string id="PRev0080" text="どのような問題がありますか?[if:convo_thinking]" />
+    <string id="PRev0081" text="あなたのことですぐに私の邪魔をするべきではありません." />
+    <string id="PRev0082" text="あなたの問題はすぐに中断してください。" />
+    <string id="PRev0083" text="気にしないでください。" />
+    <string id="PRev0084" text="はい、私の {?MAINHERO.GENDER}レディ{?}主{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="リベンジャー" />
+    <string id="PRev0086" text="あなたは…に決めました" />
+    <string id="PRev0087" text="{KINGDOM} に宣戦布告し、{DEFENDER} を助けてください。" />
   </strings>
 </base>

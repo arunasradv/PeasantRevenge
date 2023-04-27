@@ -6,7 +6,10 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: Null exception when party, where criminal hero was disappeared."/>
+        <ChangeNotes Value="Feature: Revenger parties. 
+Feature: Revenger parties can be dissabled or enabled via dialog with notable peasant (see in configuration file: enableRevengerMobileParty).
+Added: Changeable time duration before peasant can create party for revenge (see in configuration file: peasantRevengeSartTimeInDays).
+Feature: Menu for defending neutral village against neutral party (see in configuration file: enableHelpNeutralVillageAndDeclareWarToAttackerMenu)."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->

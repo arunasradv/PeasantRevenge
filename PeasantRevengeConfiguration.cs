@@ -13,7 +13,9 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 0;
+        public int CfgVersion = 13;
+        public bool enableRevengerMobileParty = false;
+        public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;
         public int relationChangeWhenCannotPayReparations = -2;
@@ -57,6 +59,8 @@ namespace PeasantRevenge
         public bool otherKingdomClanCanCareOfPeasantRevenge = true;
         public bool alwwaysReportPeasantRevengeToClanLeader = true;
         public float peasantRevengeTimeoutInDays = 5.0f;
+        public float peasantRevengeSartTimeInDays = 0.2f;
+        public int peasantRevengeMaxPartySize = 5;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
 #if TESTING
