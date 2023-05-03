@@ -162,10 +162,10 @@ namespace PeasantRevenge
         public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
         {
             string[] moduleNames = Utilities.GetModulesNames();
-
+            
             foreach (string modulesId in moduleNames)
             {
-                if (modulesId.Contains("Diplomacy"))
+                if (modulesId.Contains("Bannerlord.Diplomacy")) // Diplomacy mod patch
                 {
                     cfg_source.allowLordToKillMessenger = false;
                     cfg_source.allowPeasantToKillLord = false;
@@ -1112,10 +1112,11 @@ namespace PeasantRevenge
                
             }
 
-            _cfg.values = CheckModules(_cfg.values);
+            _cfg.values = CheckModules(_cfg.values); // leave loaded cfg or change cfg only if needed !
             
             if (defaultVersion > _cfg.values.CfgVersion)
             {
+                _cfg.values.CfgVersion = defaultVersion;
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
             }
 
