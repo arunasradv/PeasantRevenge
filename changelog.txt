@@ -43,6 +43,7 @@ Feature: Menu for defending neutral village against neutral party (see in config
 Fix: Code function renaming.
 Feature: Loaded modules auto check. (Auto fix for Bannerlord.Diplomacy mod. Please load the Diplomacy mod before this mod).
 Feature: Saving configuration only if loaded configuration version is lesser than currently supported, during game load.
-
+230505 v14.0.0.1
+Fix: Saving configuration only if loaded configuration version is lesser than currently supported or file does not exists, during game load.
 
 

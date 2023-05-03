@@ -1086,21 +1086,17 @@ namespace PeasantRevenge
             if (File.Exists(_cfg.values.file_name))
             {
                 _cfg.Load(_cfg.values.file_name, typeof(PeasantRevengeConfiguration));
+                
                 if (_cfg.values.ai == null)
                 {
                     _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
-                    _cfg.values.ai.Default();                    
-                    if (_cfg.values.ReparationsScaleToSettlementHearts > 20)
-                    {
-                        _cfg.values.ReparationsScaleToSettlementHearts = 20;
-                    }
+                    _cfg.values.ai.Default();
                 }
                 else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0 && _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord.Count == 0)
-                { // patching new ai parameters
+                {
                     _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
                     _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
                 }
-                //File.Copy(_cfg.values.file_name, _cfg.values.file_name + "_autosaved_backup.xml");
             }
             else
             {
@@ -1109,12 +1105,11 @@ namespace PeasantRevenge
                     _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
                     _cfg.values.ai.Default();
                 }
-               
             }
 
             _cfg.values = CheckModules(_cfg.values); // leave loaded cfg or change cfg only if needed !
             
-            if (defaultVersion > _cfg.values.CfgVersion)
+            if (defaultVersion > _cfg.values.CfgVersion || !File.Exists(_cfg.values.file_name))
             {
                 _cfg.values.CfgVersion = defaultVersion;
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
