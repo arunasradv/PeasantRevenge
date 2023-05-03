@@ -21,6 +21,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -156,8 +157,28 @@ namespace PeasantRevenge
             {
                 AddGameMenus(campaignGameStarter);
             }
+        } 
+        
+        public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
+        {
+            string[] moduleNames = Utilities.GetModulesNames();
+            
+            foreach (string modulesId in moduleNames)
+            {
+                if (modulesId.Contains("Bannerlord.Diplomacy")) // Diplomacy mod patch
+                {
+                    cfg_source.allowLordToKillMessenger = false;
+                    cfg_source.allowPeasantToKillLord = false;
+                    break;
+                }
+            }
+
+            return cfg_source;
         }
-#region Help village menu
+
+        #region Help village menu
+
+    
         private void AddGameMenus(CampaignGameStarter campaignGameStarter)
         {
             campaignGameStarter.AddGameMenuOption(
@@ -323,7 +344,7 @@ namespace PeasantRevenge
             if (revengerPartiesCleanUp) // clean spawned parties after load (because we do not save revenge data - revenger party is unusable)
             {
                 revengerPartiesCleanUp = false;
-                DispandAllRevengeParties();
+                DisbandAllRevengeParties();
             }
 
             foreach (PeasantRevengeData revenge in revengeData)
@@ -1060,6 +1081,8 @@ namespace PeasantRevenge
 
         private void LoadConfiguration(CampaignGameStarter campaignGameStarter)
         {
+            int defaultVersion = (new PeasantRevengeConfiguration()).CfgVersion;
+
             if (File.Exists(_cfg.values.file_name))
             {
                 _cfg.Load(_cfg.values.file_name, typeof(PeasantRevengeConfiguration));
@@ -1089,7 +1112,13 @@ namespace PeasantRevenge
                
             }
 
-            _cfg.Save(_cfg.values.file_name, _cfg.values);
+            _cfg.values = CheckModules(_cfg.values); // leave loaded cfg or change cfg only if needed !
+            
+            if (defaultVersion > _cfg.values.CfgVersion)
+            {
+                _cfg.values.CfgVersion = defaultVersion;
+                _cfg.Save(_cfg.values.file_name, _cfg.values);
+            }
 
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
@@ -1189,7 +1218,7 @@ namespace PeasantRevenge
             }
         }
 
-        void DispandAllRevengeParties()
+        void DisbandAllRevengeParties()
         {
             IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) => x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith(revengerPartyNameStart) && x.IsActive);
             for(int i = 0; i < parties.Count(); i++)
