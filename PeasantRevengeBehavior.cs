@@ -21,6 +21,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -156,8 +157,28 @@ namespace PeasantRevenge
             {
                 AddGameMenus(campaignGameStarter);
             }
+        } 
+        
+        public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
+        {
+            string[] moduleNames = Utilities.GetModulesNames();
+
+            foreach (string modulesId in moduleNames)
+            {
+                if (modulesId.Contains("Diplomacy"))
+                {
+                    cfg_source.allowLordToKillMessenger = false;
+                    cfg_source.allowPeasantToKillLord = false;
+                    break;
+                }
+            }
+
+            return cfg_source;
         }
-#region Help village menu
+
+        #region Help village menu
+
+    
         private void AddGameMenus(CampaignGameStarter campaignGameStarter)
         {
             campaignGameStarter.AddGameMenuOption(
@@ -1091,6 +1112,8 @@ namespace PeasantRevenge
                
             }
 
+            _cfg.values = CheckModules(_cfg.values);
+            
             if (defaultVersion > _cfg.values.CfgVersion)
             {
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
