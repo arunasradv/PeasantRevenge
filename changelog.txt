@@ -39,6 +39,7 @@ Feature: Revenger parties.
 Feature: Revenger parties can be dissabled or enabled via dialog with notable peasant (see in configuration file: enableRevengerMobileParty).
 Added: Changeable time duration before peasant can create party for revenge (see in configuration file: peasantRevengeSartTimeInDays).
 Feature: Menu for defending neutral village against neutral party (see in configuration file: enableHelpNeutralVillageAndDeclareWarToAttackerMenu).
-         
+v13.0.0.1
+Fix: Code function renaming
 
 

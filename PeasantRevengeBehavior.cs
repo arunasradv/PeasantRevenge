@@ -323,7 +323,7 @@ namespace PeasantRevenge
             if (revengerPartiesCleanUp) // clean spawned parties after load (because we do not save revenge data - revenger party is unusable)
             {
                 revengerPartiesCleanUp = false;
-                DispandAllRevengeParties();
+                DisbandAllRevengeParties();
             }
 
             foreach (PeasantRevengeData revenge in revengeData)
@@ -1060,6 +1060,8 @@ namespace PeasantRevenge
 
         private void LoadConfiguration(CampaignGameStarter campaignGameStarter)
         {
+            int defaultVersion = (new PeasantRevengeConfiguration()).CfgVersion;
+
             if (File.Exists(_cfg.values.file_name))
             {
                 _cfg.Load(_cfg.values.file_name, typeof(PeasantRevengeConfiguration));
@@ -1089,7 +1091,10 @@ namespace PeasantRevenge
                
             }
 
-            _cfg.Save(_cfg.values.file_name, _cfg.values);
+            if (defaultVersion > _cfg.values.CfgVersion)
+            {
+                _cfg.Save(_cfg.values.file_name, _cfg.values);
+            }
 
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
@@ -1189,7 +1194,7 @@ namespace PeasantRevenge
             }
         }
 
-        void DispandAllRevengeParties()
+        void DisbandAllRevengeParties()
         {
             IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) => x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith(revengerPartyNameStart) && x.IsActive);
             for(int i = 0; i < parties.Count(); i++)
