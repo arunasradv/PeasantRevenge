@@ -45,5 +45,8 @@ Feature: Loaded modules auto check. (Auto fix for Bannerlord.Diplomacy mod. Plea
 Feature: Saving configuration only if loaded configuration version is lesser than currently supported, during game load.
 230505 v14.0.0.1
 Fix: Saving configuration only if loaded configuration version is lesser than currently supported or file does not exists, during game load.
-
+23xxxx v14.0.1.0
+Feature: Player can demand "lost ransom".(not implemented)
+Feature: Player let other lord to decide criminal's fate.(not implemented)
+Feature: Cases with parties without party leader.(not implemented)
 
