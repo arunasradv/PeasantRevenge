@@ -368,44 +368,51 @@ namespace PeasantRevenge
                     {
                         if (revenge.xParty != null && revenge.targetHero.HeroObject.PartyBelongedTo != null)
                         {
-                            if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
+                            if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                             {
-                                revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);                               
+                                revenge.Start();
+                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
+                                {
+                                    revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
+                                }
                             }
                             else
                             {
-                                if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
+                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
                                 {
-                                    revenge.Start();
-                                }
-                                else if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && Hero.MainHero.PartyBelongedToAsPrisoner != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
-                                {
-                                    revenge.Start();
-                                    if (revenge.Can_peasant_revenge_lord_start)
-                                    {
-                                        CampaignMapConversation.OpenConversation(
-                                            new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
-                                            new ConversationCharacterData(revenge.party.Owner.CharacterObject, revenge.party, false, false, false, false, false, false));
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        revenge.Stop();
-                                    }
+                                    revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
                                 }
                                 else
                                 {
-                                    if (revenge.targetHero != Hero.MainHero.CharacterObject)
+                                    if (revenge.criminal == Hero.MainHero.CharacterObject && revenge.party != null && Hero.MainHero.PartyBelongedToAsPrisoner != null && revenge.party == Hero.MainHero.PartyBelongedToAsPrisoner)
                                     {
-                                        if (RevengeAI(revenge)) // if player dialog start after AI run
+                                        revenge.Start();
+                                        if (revenge.Can_peasant_revenge_lord_start)
                                         {
-                                            revenge.Start();
-                                            revenge.nobleParty = revenge.party;
-                                            revenge.targetHero = Hero.MainHero.CharacterObject;
+                                            CampaignMapConversation.OpenConversation(
+                                                new ConversationCharacterData(Hero.MainHero.CharacterObject, null, false, false, false, false, false, false),
+                                                new ConversationCharacterData(revenge.party.Owner.CharacterObject, revenge.party, false, false, false, false, false, false));
+                                            break;
                                         }
                                         else
                                         {
                                             revenge.Stop();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (revenge.targetHero != Hero.MainHero.CharacterObject)
+                                        {
+                                            if (RevengeAI(revenge)) // if player dialog start after AI run
+                                            {
+                                                revenge.Start();
+                                                revenge.nobleParty = revenge.party;
+                                                revenge.targetHero = Hero.MainHero.CharacterObject;
+                                            }
+                                            else
+                                            {
+                                                revenge.Stop();
+                                            }
                                         }
                                     }
                                 }
@@ -1424,13 +1431,15 @@ namespace PeasantRevenge
                "peasant_revenge_player_config_mod_options_set",
                "peasant_revenge_player_config_mod_end_dis",
                "{=PRev0081}You should not immediately interrupt me with any your matter.",
-                () => { return !_cfg.values.enableRevengerMobileParty; },()=> { SetEnableRevengerMobileParty(true); }, 100, null);
+                () => { return !_cfg.values.enableRevengerMobileParty; },()=> { SetEnableRevengerMobileParty(true); }, 100, 
+                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_config_mod_option_mp_en",
                "peasant_revenge_player_config_mod_options_set",
                "peasant_revenge_player_config_mod_end_en",
                "{=PRev0082}You should immediately interrupt me with any your matter.",
-                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100, null);
+                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100, 
+                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_player_config_mod_option_exit",
              "peasant_revenge_player_config_mod_options_set",
@@ -2147,6 +2156,20 @@ namespace PeasantRevenge
             }
 
             return start;
+        }
+
+        private bool peasant_revenge_enable_party_clickable_condition(out TextObject textObject)
+        {
+            if (_cfg.values.enableRevengerMobileParty)
+            {
+                textObject = new TextObject("{=PRev0088}Disable notable peasant mobile party");
+            }
+            else
+            {
+                textObject = new TextObject("{=PRev0089}Enable notable peasant mobile party");
+            }
+
+            return true;
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_condition(out TextObject text)

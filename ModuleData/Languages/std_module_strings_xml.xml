@@ -91,5 +91,7 @@
     <string id="PRev0085" text="{=PRev0085}Revenger" />
     <string id="PRev0086" text="{=PRev0086}You decided to..." />
     <string id="PRev0087" text="{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}." />
+    <string id="PRev0088" text="{=PRev0088}Disable notable peasant mobile party" />
+    <string id="PRev0089" text="{=PRev0089}Enable notable peasant mobile party" />
   </strings>
 </base>
