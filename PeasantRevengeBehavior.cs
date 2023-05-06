@@ -2166,7 +2166,7 @@ namespace PeasantRevenge
             }
             else
             {
-                textObject = new TextObject("{= PRev0089}Enable notable peasant mobile party");
+                textObject = new TextObject("{=PRev0089}Enable notable peasant mobile party");
             }
 
             return true;
