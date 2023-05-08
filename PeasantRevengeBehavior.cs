@@ -1086,6 +1086,12 @@ namespace PeasantRevenge
             _cfg.Save(_cfg.values.file_name, _cfg.values);
         }
 
+        private void SetEnableHelpNeutralVillage(bool value)
+        {
+            _cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu = value;
+            _cfg.Save(_cfg.values.file_name, _cfg.values);
+        }
+
         private void LoadConfiguration(CampaignGameStarter campaignGameStarter)
         {
             int defaultVersion = (new PeasantRevengeConfiguration()).CfgVersion;
@@ -1419,13 +1425,13 @@ namespace PeasantRevenge
                "peasant_revenge_player_config_mod_start",
                "hero_main_options",
                "peasant_revenge_player_config_mod_options_set",
-               "{=PRev0079}Let me tell you, how you will talk to me about your problems.",
+               "{=PRev0095}There is something I'd like to discuss.",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_config_mod_start_condition), null, 100, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_player_config_mod_npc_options",
               "peasant_revenge_player_config_mod_options_set",
               "peasant_revenge_player_config_mod_options_set",
-              "{=PRev0080}What problems?[if:convo_thinking]",null,null, 200, null);
+              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:convo_thinking]", null,null, 200, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_config_mod_option_mp_dis",
                "peasant_revenge_player_config_mod_options_set",
@@ -1441,21 +1447,35 @@ namespace PeasantRevenge
                 () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100, 
                 new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
             campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_config_mod_option_np_en",
+              "peasant_revenge_player_config_mod_options_set",
+              "peasant_revenge_player_config_mod_end_dis",
+              "{=PRev0092}I'll defend villages against any looters.",
+               () => { return !_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; }, () => { SetEnableHelpNeutralVillage(true); }, 100,
+               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_config_mod_option_np_dis",
+              "peasant_revenge_player_config_mod_options_set",
+              "peasant_revenge_player_config_mod_end_en",
+              "{=PRev0093}I will defend villages against my enemies only.",
+               () => { return _cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; }, () => { SetEnableHelpNeutralVillage(false); }, 100,
+               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));
+            campaignGameStarter.AddPlayerLine(
              "peasant_revenge_player_config_mod_option_exit",
              "peasant_revenge_player_config_mod_options_set",
              "close_window",
-             "{=PRev0083}Nevermind.", null, null, 0, null);
+             "{=PRev0094}I must leave now.", null, null, 0, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_player_config_mod_npc_end_dis",
              "peasant_revenge_player_config_mod_end_dis",
-             "close_window",
+             "peasant_revenge_player_config_mod_options_set",
              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]", 
              () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_player_config_mod_npc_end_en",
              "peasant_revenge_player_config_mod_end_en",
-             "close_window",
+             "peasant_revenge_player_config_mod_options_set",
              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_angry][ib:closed]",             
              () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
           
@@ -2011,7 +2031,8 @@ namespace PeasantRevenge
             return (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
                 !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&
                 (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
-                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom);
+                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom ||
+                !Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.IsAtWarWith(Hero.MainHero.Clan.MapFaction));
         }
 
         private bool peasant_revenge_ask_criminal_start_condition()
@@ -2171,7 +2192,19 @@ namespace PeasantRevenge
 
             return true;
         }
+        private bool peasant_revenge_enable_neutral_village_attack_clickable_condition(out TextObject textObject)
+        {
+            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
+            {
+                textObject = new TextObject("{=PRev0090}Disable the option to defend the village against neutral mobile party");
+            }
+            else
+            {
+                textObject = new TextObject("{=PRev0091}Enable the option to defend the village against neutral mobile party");
+            }
 
+            return true;
+        }
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_condition(out TextObject text)
         {
             bool start = Hero.OneToOneConversationHero != null &&
