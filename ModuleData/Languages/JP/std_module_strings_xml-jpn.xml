@@ -91,5 +91,13 @@
     <string id="PRev0085" text="リベンジャー" />
     <string id="PRev0086" text="あなたは…に決めました" />
     <string id="PRev0087" text="{KINGDOM} に宣戦布告し、{DEFENDER} を助けてください。" />
+    <string id="PRev0088" text="著名な農民モバイル パーティーを無効にする" />
+    <string id="PRev0089" text="注目の農民移動パーティを有効にする" />
+    <string id="PRev0090" text="移動中立パーティから村を守るオプションを無効にする" />
+    <string id="PRev0091" text="中立の機動隊から村を守るオプションを有効にする" />
+    <string id="PRev0092" text="略奪者から村を守ります。" />
+    <string id="PRev0093" text="私は敵からのみ村を守ります。" />
+    <string id="PRev0094" text="今すぐ出発しなければなりません。" />
+    <string id="PRev0095" text="話したいことがある." />
   </strings>
 </base>

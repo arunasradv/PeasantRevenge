@@ -91,5 +91,14 @@
     <string id="PRev0085" text="{=PRev0085}Revenger" />
     <string id="PRev0086" text="{=PRev0086}You decided to..." />
     <string id="PRev0087" text="{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}." />
+    <string id="PRev0088" text="{=PRev0088}Disable notable peasant mobile party" />
+    <string id="PRev0089" text="{=PRev0089}Enable notable peasant mobile party" />
+    <string id="PRev0090" text="{=PRev0090}Disable the option to defend the village against neutral mobile party" />
+    <string id="PRev0091" text="{=PRev0091}Enable the option to defend the village against neutral mobile party" />
+    <string id="PRev0092" text="{=PRev0092}I'll defend villages against any looters." />
+    <string id="PRev0093" text="{=PRev0093}I will defend villages against my enemies only." />
+    <string id="PRev0094" text="{=PRev0094}I must leave now." />
+    <string id="PRev0095" text="{=PRev0095}There is something I'd like to discuss." />
+
   </strings>
 </base>

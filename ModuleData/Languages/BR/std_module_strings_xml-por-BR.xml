@@ -91,5 +91,13 @@
     <string id="PRev0085" text="Revenger" />
     <string id="PRev0086" text="Você decidiu..." />
     <string id="PRev0087" text="Declarar guerra a {KINGDOM} e ajudar {DEFENDER}." />
+    <string id="PRev0088" text="Desativar grupo móvel de camponeses notáveis" />
+    <string id="PRev0089" text="Ativar partido móvel camponês notável" />
+    <string id="PRev0090" text="Desabilite a opção de defender a vila contra grupos móveis neutros" />
+    <string id="PRev0091" text="Ativar a opção de defender a vila contra grupos móveis neutros" />
+    <string id="PRev0092" text="Vou defender aldeias contra qualquer saqueador." />
+    <string id="PRev0093" text="Vou defender aldeias apenas contra meus inimigos." />
+    <string id="PRev0094" text="Preciso sair agora." />
+    <string id="PRev0095" text="Há algo que gostaria de discutir." />
   </strings>
 </base>

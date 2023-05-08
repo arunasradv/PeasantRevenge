@@ -45,5 +45,7 @@ Feature: Loaded modules auto check. (Auto fix for Bannerlord.Diplomacy mod. Plea
 Feature: Saving configuration only if loaded configuration version is lesser than currently supported, during game load.
 230505 v14.0.0.1
 Fix: Saving configuration only if loaded configuration version is lesser than currently supported or file does not exists, during game load.
-
-
+230508 v14.0.1.0
+Fix: Peasant revenge start, when player captured the criminal.
+Feature: The tip for dialog options, when enabling or disabling notable peasant parties.
+Feature: Dialog option for enablin/disabling "help neutral village" menu option.

@@ -91,5 +91,13 @@
     <string id="PRev0085" text="Vendicatore" />
     <string id="PRev0086" text="Hai deciso di..." />
     <string id="PRev0087" text="Dichiara guerra al {KINGDOM} e aiuta {DEFENDER}." />
+    <string id="PRev0088" text="Disabilita gruppo mobile contadino degno di nota" />
+    <string id="PRev0089" text="Abilita festa mobile contadina degna di nota" />
+    <string id="PRev0090" text="Disattiva l'opzione per difendere il villaggio da un gruppo mobile neutrale" />
+    <string id="PRev0091" text="Abilita l'opzione per difendere il villaggio da un gruppo mobile neutrale" />
+    <string id="PRev0092" text="Difenderò i villaggi da eventuali saccheggiatori." />
+    <string id="PRev0093" text="Difenderò i villaggi solo dai miei nemici." />
+    <string id="PRev0094" text="Devo andarmene adesso." />
+    <string id="PRev0095" text="C'è qualcosa di cui vorrei discutere." />
   </strings>
 </base>
