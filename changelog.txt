@@ -49,3 +49,7 @@ Fix: Saving configuration only if loaded configuration version is lesser than cu
 Fix: Peasant revenge start, when player captured the criminal.
 Feature: The tip for dialog options, when enabling or disabling notable peasant parties.
 Feature: Dialog option for enablin/disabling "help neutral village" menu option.
+23xxxx v14.0.2.0
+Feature: Player can demand "lost ransom".(not implemented)
+Feature: Cases with parties without party leader.(not implemented)
+Feature: Player let other lord to decide criminal's fate.(not implemented)
