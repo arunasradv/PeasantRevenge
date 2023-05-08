@@ -91,5 +91,13 @@
     <string id="PRev0085" text="Mściciel" />
     <string id="PRev0086" text="Zdecydowałeś się..." />
     <string id="PRev0087" text="Wypowiedz wojnę {KINGDOM} i pomóż {DEFENDER}." />
+    <string id="PRev0088" text="Wyłącz godną uwagi wieśniacką imprezę mobilną" />
+    <string id="PRev0089" text="Włącz godną uwagi wieśniacką imprezę mobilną" />
+    <string id="PRev0090" text="Wyłącz opcję obrony wioski przed neutralną drużyną mobilną" />
+    <string id="PRev0091" text="Włącz opcję obrony wioski przed neutralną drużyną mobilną" />
+    <string id="PRev0092" text="Będę bronił wiosek przed rabusiami." />
+    <string id="PRev0093" text="Będę bronił wiosek tylko przed moimi wrogami." />
+    <string id="PRev0094" text="Muszę teraz wyjść." />
+    <string id="PRev0095" text="Chciałbym o czymś porozmawiać." />
   </strings>
 </base>

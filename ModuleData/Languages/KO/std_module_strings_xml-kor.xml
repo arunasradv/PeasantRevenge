@@ -91,5 +91,13 @@
     <string id="PRev0085" text="복수자" />
     <string id="PRev0086" text="당신이 결정한 것은..." />
     <string id="PRev0087" text="{KINGDOM}에 전쟁을 선포하고 {DEFENDER}을(를) 도우십시오." />
+    <string id="PRev0088" text="농민 모바일 파티 비활성화" />
+    <string id="PRev0089" text="농민 모바일 파티 활성화" />
+    <string id="PRev0090" text="중립 모바일 파티로부터 마을을 방어하는 옵션 비활성화" />
+    <string id="PRev0091" text="중립 모바일 파티로부터 마을을 방어하는 옵션을 활성화" />
+    <string id="PRev0092" text="약탈자로부터 마을을 지키겠습니다." />
+    <string id="PRev0093" text="적에 맞서서만 마을을 지키겠습니다." />
+    <string id="PRev0094" text="지금 떠나야 합니다." />
+    <string id="PRev0095" text="토론하고 싶은 것이 있습니다." />
   </strings>
 </base>

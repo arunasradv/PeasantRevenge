@@ -91,5 +91,13 @@
     <string id="PRev0085" text="Rächer" />
     <string id="PRev0086" text="Du hast dich entschieden..." />
     <string id="PRev0087" text="Erkläre {KINGDOM} den Krieg und hilf {DEFENDER}." />
+    <string id="PRev0088" text="Bemerkenswerte Bauernmobilpartei deaktivieren" />
+    <string id="PRev0089" text="Bemerkenswerte Bauernmobilpartei aktivieren" />
+    <string id="PRev0090" text="Deaktiviere die Option, das Dorf gegen neutrale mobile Parteien zu verteidigen" />
+    <string id="PRev0091" text="Aktiviere die Option, das Dorf gegen neutrale mobile Parteien zu verteidigen" />
+    <string id="PRev0092" text="Ich werde Dörfer gegen Plünderer verteidigen." />
+    <string id="PRev0093" text="Ich werde Dörfer nur gegen meine Feinde verteidigen." />
+    <string id="PRev0094" text="Ich muss jetzt gehen." />
+    <string id="PRev0095" text="Ich möchte etwas besprechen." />
   </strings>
 </base>

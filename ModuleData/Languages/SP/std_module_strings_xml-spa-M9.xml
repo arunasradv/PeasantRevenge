@@ -91,5 +91,13 @@
     <string id="PRev0085" text="Vengador" />
     <string id="PRev0086" text="Decidiste..." />
     <string id="PRev0087" text="Declara la guerra a {KINGDOM} y ayuda a {DEFENDER}." />
+    <string id="PRev0088" text="Deshabilitar la fiesta móvil campesina destacada"/>
+    <string id="PRev0089" text="Habilitar fiesta móvil campesina notable"/>
+    <string id="PRev0090" text="Deshabilitar la opción de defender la aldea contra una fiesta móvil neutral" />
+    <string id="PRev0091" text="Habilite la opción para defender la aldea contra una fiesta móvil neutral" />
+    <string id="PRev0092" text="Defenderé las aldeas de los saqueadores." />
+    <string id="PRev0093" text="Defenderé las aldeas solo contra mis enemigos." />
+    <string id="PRev0094" text="Debo irme ahora" />
+    <string id="PRev0095" text="Hay algo que me gustaría discutir" />
   </strings>
 </base>
