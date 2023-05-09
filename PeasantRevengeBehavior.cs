@@ -1728,8 +1728,29 @@ namespace PeasantRevenge
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_criminal_killed_end",
                "peasant_revenge_peasants_finish_criminal_killed",
-               "close_window",
-               "{=PRev0020}Revenge![if:convo_happy][ib:happy]", null, () => leave_encounter(), 120, null);
+               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
+               "{=PRev0020}Revenge![if:convo_happy][ib:happy]", null, null, 120, null);
+            
+            //Player now has dead lord body. Cases: Leave body, Take body for ransom, Return body. Send body via messenger. (it can be expanded to dialogs and persuations of relatives...and so on...)
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_demand_lost_ransom_leave",
+              "peasant_revenge_peasants_finish_criminal_killed_pl_options",
+              "close_window",
+              "{=PRev0094}I must leave now.",//left lord body with peasant (peasant takes all the blame)
+              null, () => leave_encounter(), 100, null, null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_demand_lost_ransom_take_body",
+              "peasant_revenge_peasants_finish_criminal_killed_pl_options",
+              "close_window",
+              "{=*}I'll take criminal's body to {?MAINHERO.GENDER}her{?}his{\\?} relatives.",//take lord body to relatives, do not demand ransom
+              null, () => leave_encounter(), 90, null, null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_demand_lost_ransom_take_body_ransom",
+              "peasant_revenge_peasants_finish_criminal_killed_pl_options",
+              "close_window",
+              "{=*}I'll sell criminal's body to {?MAINHERO.GENDER}her{?}his{\\?} relatives.",//take lord body to relatives, demand ransom 
+              null, () => leave_encounter(), 80, null, null);
+            
             #endregion
 
             #region When hero (from player clan/kingdom) cannot pay , and maybe player can pay the reparation
