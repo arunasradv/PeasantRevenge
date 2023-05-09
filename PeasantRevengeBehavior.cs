@@ -1709,7 +1709,7 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_ask_criminal_option_2",
                "peasant_revenge_peasants_ask_criminal_options",
-               "close_window",
+               "peasant_revenge_peasants_finish_criminal_killed",
                "{=PRev0077}You both deserve peasant revenge!",
                null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence),
@@ -1749,7 +1749,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
               "close_window",
               "{=*}I'll sell criminal's body to {?MAINHERO.GENDER}her{?}his{\\?} relatives.",//take lord body to relatives, demand ransom 
-              null, () => leave_encounter(), 80, null, null);
+              null, () => { peasant_revenge_player_demand_ransom_consequence(); leave_encounter(); }, 80, null, null);
             
             #endregion
 
@@ -2046,7 +2046,58 @@ namespace PeasantRevenge
             #endregion
 
         }
+        #region ransom offer
+        private void peasant_revenge_player_demand_ransom_consequence()
+        {
+            Hero hero = currentRevenge.criminal.HeroObject;
+            float ransomPrice = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(hero.CharacterObject, null);
 
+            TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. They offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} body.", null);
+            textObject.SetTextVariable("CLAN_NAME", hero.Clan.Name);
+            textObject.SetTextVariable("GOLD_AMOUNT", ransomPrice);
+            //textObject.SetTextVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
+            
+            StringHelpers.SetCharacterProperties("CAPTIVE_HERO", hero.CharacterObject, textObject, false);
+
+            InformationManager.ShowInquiry(
+                new InquiryData(
+                    new TextObject("{=ho5EndaV}Decision").ToString(),
+                   textObject.ToString(),
+                    true, 
+                    true,
+                    (new TextObject("{=Y94H6XnK}Accept", null)).ToString(),
+                    (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
+                    delegate ()
+                    {
+                        this.AcceptRansomOffer((int)ransomPrice);
+                    }, new Action(this.DeclineRansomOffer), "", 0f, null, null, null), true, false);
+        }
+
+        private void AcceptRansomOffer(int ransomPrice)
+        {
+            //if (this._heroesWithDeclinedRansomOffers.Contains(this._currentRansomHero))
+            //{
+            //    this._heroesWithDeclinedRansomOffers.Remove(this._currentRansomHero);
+            //}
+            //GiveGoldAction.ApplyBetweenCharacters(this._currentRansomPayer, this.GetCaptorClanOfPrisoner(this._currentRansomHero).Leader, ransomPrice, false);
+            //EndCaptivityAction.ApplyByRansom(this._currentRansomHero, this._currentRansomHero.Clan.Leader);
+            //IStatisticsCampaignBehavior behavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<IStatisticsCampaignBehavior>();
+            //if (behavior != null)
+            //{
+            //    behavior.OnPlayerAcceptedRansomOffer(ransomPrice);
+            //}
+        }
+
+        // Token: 0x06003A2E RID: 14894 RVA: 0x0010C584 File Offset: 0x0010A784
+        private void DeclineRansomOffer()
+        {
+            //if (this._currentRansomHero.IsPrisoner && this._currentRansomHero.IsAlive && !this._heroesWithDeclinedRansomOffers.Contains(this._currentRansomHero))
+            //{
+            //    this._heroesWithDeclinedRansomOffers.Add(this._currentRansomHero);
+            //}
+            //this.SetCurrentRansomHero(null, null);
+        }
+        #endregion
         private bool peasant_revenge_player_config_mod_start_condition()
         {
             return (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
@@ -2482,6 +2533,11 @@ namespace PeasantRevenge
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
+          
+            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
+            var items = MobileParty.MainParty.ItemRoster;
+            items.AddToCounts(lord_body, 1);
+
             leave_encounter();
         }
 

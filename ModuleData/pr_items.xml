@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+   <Item id="pr_wrapped_body"
+        name="{=*}Wrapped body{@Plural}Wrapped bodies{\@}"
+        mesh="bd_barrel_a"
+        IsFood="false"
+        item_category="animal"
+        value="1"
+        weight="70"
+        is_merchandise="true"
+        Type="Goods">
+    <ItemComponent>
+      <Trade morale_bonus="-1" />
+    </ItemComponent>
+    <Flags Civilian="true" />
+  </Item>
+</Items>
