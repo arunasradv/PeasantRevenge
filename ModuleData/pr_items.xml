@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Items>
    <Item id="pr_wrapped_body"
-        name="{=*}Wrapped body{@Plural}Wrapped bodies{\@}"
-        mesh="bd_barrel_a"
-        IsFood="false"
+        name="{=*}Wrapped corpse{@Plural}Wrapped corpses{\@}"
+        mesh="pr_wrapped_corpse_mesh"
+        IsFood="true"
         item_category="animal"
-        value="1"
+        value="100"
         weight="70"
         is_merchandise="true"
         Type="Goods">
     <ItemComponent>
-      <Trade morale_bonus="-1" />
+      <Trade morale_bonus="-10" />
     </ItemComponent>
-    <Flags Civilian="true" />
   </Item>
 </Items>
