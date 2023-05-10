@@ -378,7 +378,6 @@
     <Content Include="ModuleData\Languages\std_module_strings_xml.xml" />
     <Content Include="ModuleData\Languages\TR\language_data.xml" />
     <Content Include="ModuleData\Languages\TR\std_module_strings_xml_tr.xml" />
-    <Content Include="ModuleData\pr_items.xml" />
     <Content Include="SubModule.xml" />
     <Content Include="WorkshopUpdate.xml" />
   </ItemGroup>
