@@ -2533,10 +2533,6 @@ namespace PeasantRevenge
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
-          
-            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
-            var items = MobileParty.MainParty.ItemRoster;
-            items.AddToCounts(lord_body, 1);
 
             leave_encounter();
         }
