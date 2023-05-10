@@ -1743,7 +1743,7 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
               "close_window",
               "{=*}I'll take criminal's body to {?MAINHERO.GENDER}her{?}his{\\?} relatives.",//take lord body to relatives, do not demand ransom
-              null, () => leave_encounter(), 90, null, null);
+              null, () => { peasant_revenge_to_offer_ransom_consequence(); leave_encounter(); }, 90, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_demand_lost_ransom_take_body_ransom",
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
@@ -2051,13 +2051,23 @@ namespace PeasantRevenge
         {
             Hero hero = currentRevenge.criminal.HeroObject;
             float ransomPrice = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(hero.CharacterObject, null);
-
-            TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. They offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} body.", null);
-            textObject.SetTextVariable("CLAN_NAME", hero.Clan.Name);
-            textObject.SetTextVariable("GOLD_AMOUNT", ransomPrice);
-            //textObject.SetTextVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
             
-            StringHelpers.SetCharacterProperties("CAPTIVE_HERO", hero.CharacterObject, textObject, false);
+            List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(Hero.MainHero, (int)ransomPrice);
+            TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} body.", null);
+            Hero ransomer;
+            if (!ransomers.IsEmpty())
+            {
+               ransomer = ransomers.GetRandomElementInefficiently();
+               StringHelpers.SetCharacterProperties("RANSOMER", ransomer.CharacterObject, textObject, false);
+            }
+            else //nobody wants to pay for criminal's body
+            {
+                return;
+            }
+            
+            textObject.SetTextVariable("CLAN_NAME", hero.Clan.Name);
+            textObject.SetTextVariable("GOLD_AMOUNT", ransomPrice);            
+            StringHelpers.SetCharacterProperties("CAPTIVE_HERO", hero.CharacterObject, textObject, false);            
 
             InformationManager.ShowInquiry(
                 new InquiryData(
@@ -2069,34 +2079,24 @@ namespace PeasantRevenge
                     (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
                     delegate ()
                     {
-                        this.AcceptRansomOffer((int)ransomPrice);
-                    }, new Action(this.DeclineRansomOffer), "", 0f, null, null, null), true, false);
+                        this.AcceptRansomOffer((int)ransomPrice, ransomer);
+                    }, delegate ()
+                    {
+                        this.DeclineRansomOffer(ransomer);
+                    }, "", 0f, null, null, null), true, false);
         }
 
-        private void AcceptRansomOffer(int ransomPrice)
+        private void AcceptRansomOffer(int ransomPrice, Hero ransomer)
         {
-            //if (this._heroesWithDeclinedRansomOffers.Contains(this._currentRansomHero))
-            //{
-            //    this._heroesWithDeclinedRansomOffers.Remove(this._currentRansomHero);
-            //}
-            //GiveGoldAction.ApplyBetweenCharacters(this._currentRansomPayer, this.GetCaptorClanOfPrisoner(this._currentRansomHero).Leader, ransomPrice, false);
-            //EndCaptivityAction.ApplyByRansom(this._currentRansomHero, this._currentRansomHero.Clan.Leader);
-            //IStatisticsCampaignBehavior behavior = Campaign.Current.CampaignBehaviorManager.GetBehavior<IStatisticsCampaignBehavior>();
-            //if (behavior != null)
-            //{
-            //    behavior.OnPlayerAcceptedRansomOffer(ransomPrice);
-            //}
+            GiveGoldAction.ApplyBetweenCharacters(ransomer, Hero.MainHero, ransomPrice, false);           
         }
 
-        // Token: 0x06003A2E RID: 14894 RVA: 0x0010C584 File Offset: 0x0010A784
-        private void DeclineRansomOffer()
+        private void DeclineRansomOffer(Hero ransomer)
         {
-            //if (this._currentRansomHero.IsPrisoner && this._currentRansomHero.IsAlive && !this._heroesWithDeclinedRansomOffers.Contains(this._currentRansomHero))
-            //{
-            //    this._heroesWithDeclinedRansomOffers.Add(this._currentRansomHero);
-            //}
-            //this.SetCurrentRansomHero(null, null);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ransomer, Hero.MainHero,
+                _cfg.values.relationChangeAfterLordPartyGotNoReward, _cfg.values.relationChangeAfterLordPartyGotNoReward != 0);
         }
+
         #endregion
         private bool peasant_revenge_player_config_mod_start_condition()
         {
