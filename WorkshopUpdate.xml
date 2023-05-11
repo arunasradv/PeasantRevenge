@@ -6,8 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: Loaded modules auto check. (Auto fix for Bannerlord.Diplomacy mod. Please load the Diplomacy mod before this mod).
-Feature: Saving configuration only if loaded configuration version is lesser than currently supported, during game load."/>
+        <ChangeNotes Value="Fix: Neutral village attack menu fix (menu now will be activated without reloading game save)"/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
