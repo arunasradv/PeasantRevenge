@@ -2056,11 +2056,12 @@ namespace PeasantRevenge
         {
             Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
             affectedTraits.Append(Tuple.Create(DefaultTraits.Honor, -9)).Append(Tuple.Create(DefaultTraits.Calculating, -1)); // not a honorable to leave lord; does not think of consequences
-            TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(null, affectedTraits);
+           // TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(null, affectedTraits);
         }
 
         private void peasant_revenge_player_demand_ransom_consequence()
         {
+            AddKilledLordsCorpses(currentRevenge);
             Hero criminal = currentRevenge.criminal.HeroObject;
             float ransomValue= (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(criminal.CharacterObject, null);
 
@@ -2103,6 +2104,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_may_offer_ransom_consequence()
         {
+            AddKilledLordsCorpses(currentRevenge);
             Hero criminal = currentRevenge.criminal.HeroObject;
             float ransomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(criminal.CharacterObject, null);
 
@@ -2143,7 +2145,7 @@ namespace PeasantRevenge
 
         private void AcceptRansomOffer(int ransomValue, Hero ransomer)
         {
-            //GiveItemAction here?
+            GiveItemAction.ApplyForHeroes(Hero.MainHero, ransomer, MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"), 1);
             GiveGoldAction.ApplyBetweenCharacters(ransomer, Hero.MainHero, ransomValue, false);           
         }
 
@@ -2158,11 +2160,35 @@ namespace PeasantRevenge
 
         private void DeclineNotAskedRansomOffer(Hero ransomer)
         {
-            //GiveItemAction here?
+            GiveItemAction.ApplyForHeroes(Hero.MainHero, ransomer, MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"), 1);
             Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
             affectedTraits.Append(Tuple.Create(DefaultTraits.Generosity, 5)).Append(Tuple.Create(DefaultTraits.Honor, 5));
            //TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(ransomer, affectedTraits);
             //increase generosity? will lord accept ransom if offered ? (not done case)           
+        }
+
+        private static void AddCorpseToInventory(int count)
+        {
+            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
+            var items = MobileParty.MainParty.ItemRoster;
+            items.AddToCounts(lord_body, count);
+        }
+
+        private static int RemoveCorpseFromInventory(int count)
+        {
+            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
+            var items = MobileParty.MainParty.ItemRoster;
+            if (items.GetItemNumber(lord_body) < count) return 0;
+            items.AddToCounts(lord_body, -count);
+            return count;
+        }
+
+        private void AddKilledLordsCorpses(PeasantRevengeData revenge)
+        {
+            int count = 0;
+            if (revenge.accused_hero != null && !revenge.accused_hero.HeroObject.IsAlive) count++;
+            if (revenge.criminal != null && !revenge.criminal.HeroObject.IsAlive) count++;
+            AddCorpseToInventory(count);
         }
 
         #endregion
@@ -2635,7 +2661,6 @@ namespace PeasantRevenge
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
             }
-
             log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name} and {currentRevenge.accused_hero.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
             leave_encounter();
         }

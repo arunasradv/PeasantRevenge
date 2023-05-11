@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+   <Item id="pr_wrapped_body"
+        name="{=*}Remains of a corpse{@Plural}Remains of a corpse{\@}"
+        mesh="bd_barrel_a"
+        IsFood="false"
+        item_category="unassigned"
+        value="100"
+        weight="70"
+        is_merchandise="true"
+        Type="Goods">
+    <ItemComponent>
+      <Trade morale_bonus="-10" />
+    </ItemComponent>
+    <Flags Civilian="true" />
+  </Item>
+</Items>
