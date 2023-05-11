@@ -152,11 +152,8 @@ namespace PeasantRevenge
 
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
-            LoadConfiguration(campaignGameStarter);
-            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
-            {
-                AddGameMenus(campaignGameStarter);
-            }
+            LoadConfiguration(campaignGameStarter);           
+            AddGameMenus(campaignGameStarter);            
         } 
         
         public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
@@ -192,7 +189,9 @@ namespace PeasantRevenge
         
         private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
+            if(!_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu) return false;
+            
+                args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
             MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
             IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
             //IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
@@ -612,7 +611,14 @@ namespace PeasantRevenge
 #region Unpaid ransom
                                 //AI get unpaid RANSOM
                                 float reansomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(prisoner.CharacterObject, null);
-                                List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(party.Owner, (int)reansomValue);
+                                List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(prisoner, (int)reansomValue); // list who will buy dead body
+                                List<Hero> own_clan_ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(party.Owner, (int)reansomValue); // interesting feature: if could get money from kingdom clan?
+                               
+                                if (ransomers.IsEmpty())
+                                {
+                                    ransomers.AddRange(own_clan_ransomers);
+                                }
+
                                 string ransomstring = "";
 
                                 if (!ransomers.IsEmpty())
@@ -639,7 +645,7 @@ namespace PeasantRevenge
                                         }
                                         else
                                         {
-                                            //increase generosity?
+                                            //increase generosity? will lord accept ransom if offered ? (not done case)
                                         }
                                     }
                                     else
@@ -678,9 +684,9 @@ namespace PeasantRevenge
                                     message = $"{party.Owner.Name} captured and executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
-
+                              
                                 #region killing criminal too
-                                if(revenge.accused_hero != null)
+                                if (revenge.accused_hero != null)
                                 {
                                     if (CheckConditions(party.Owner, revenge.criminal.HeroObject, _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord))
                                     {
@@ -694,6 +700,7 @@ namespace PeasantRevenge
                                             message = $"{party.Owner.Name} executed {revenge.criminal.Name} too.";
                                             KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
                                         }
+#warning  here must be unpaid ransom demand regarding accused hero.
                                     }
                                     else
                                     {
@@ -1136,10 +1143,7 @@ namespace PeasantRevenge
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
-            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
-            {
-                AddGameMenus(campaignGameStarter);
-            }
+            AddGameMenus(campaignGameStarter);           
         }
         #endregion
 
@@ -1737,13 +1741,13 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
               "close_window",
               "{=PRev0094}I must leave now.",//left lord body with peasant (peasant takes all the blame)
-              null, () => leave_encounter(), 100, null, null);
+              null, () => { peasant_revenge_leave_lord_body_consequence(); leave_encounter(); }, 100, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_demand_lost_ransom_take_body",
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
               "close_window",
               "{=*}I'll take criminal's body to {?MAINHERO.GENDER}her{?}his{\\?} relatives.",//take lord body to relatives, do not demand ransom
-              null, () => { peasant_revenge_to_offer_ransom_consequence(); leave_encounter(); }, 90, null, null);
+              null, () => { peasant_revenge_may_offer_ransom_consequence(); leave_encounter(); }, 90, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_demand_lost_ransom_take_body_ransom",
               "peasant_revenge_peasants_finish_criminal_killed_pl_options",
@@ -1876,10 +1880,10 @@ namespace PeasantRevenge
                "{=PRev0029}Criminal lord is dead![ib:closed][if:happy]",
                 () => !peasant_revenge_party_need_compensation_for_killed_pow_condition(),
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_end_revenge_consequence), 120, null);
-#endregion
+            #endregion
 
             #region Prisoner party demands compensation because no ransom 
-         
+#warning  here must be unpaid ransom demand regarding accused hero too!
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_party_need_compensation_start",
                "start",
@@ -2047,54 +2051,118 @@ namespace PeasantRevenge
 
         }
         #region ransom offer
+
+        private void peasant_revenge_leave_lord_body_consequence()
+        {
+            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
+            affectedTraits.Append(Tuple.Create(DefaultTraits.Honor, -9)).Append(Tuple.Create(DefaultTraits.Calculating, -1)); // not a honorable to leave lord; does not think of consequences
+            TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(null, affectedTraits);
+        }
+
         private void peasant_revenge_player_demand_ransom_consequence()
         {
-            Hero hero = currentRevenge.criminal.HeroObject;
-            float ransomPrice = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(hero.CharacterObject, null);
-            
-            List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(Hero.MainHero, (int)ransomPrice);
+            Hero criminal = currentRevenge.criminal.HeroObject;
+            float ransomValue= (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(criminal.CharacterObject, null);
+
+            List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(criminal, (int)ransomValue);
+           
             TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} body.", null);
             Hero ransomer;
             if (!ransomers.IsEmpty())
             {
-               ransomer = ransomers.GetRandomElementInefficiently();
-               StringHelpers.SetCharacterProperties("RANSOMER", ransomer.CharacterObject, textObject, false);
-            }
-            else //nobody wants to pay for criminal's body
-            {
-                return;
-            }
-            
-            textObject.SetTextVariable("CLAN_NAME", hero.Clan.Name);
-            textObject.SetTextVariable("GOLD_AMOUNT", ransomPrice);            
-            StringHelpers.SetCharacterProperties("CAPTIVE_HERO", hero.CharacterObject, textObject, false);            
+                ransomer = ransomers.GetRandomElementInefficiently();
+                StringHelpers.SetCharacterProperties("RANSOMER", ransomer.CharacterObject, textObject, false);
+                textObject.SetTextVariable("CLAN_NAME", ransomer.Clan.Name);
+                textObject.SetTextVariable("GOLD_AMOUNT", ransomValue);
+                StringHelpers.SetCharacterProperties("CAPTIVE_HERO", criminal.CharacterObject, textObject, false);
 
-            InformationManager.ShowInquiry(
-                new InquiryData(
-                    new TextObject("{=ho5EndaV}Decision").ToString(),
-                   textObject.ToString(),
-                    true, 
-                    true,
-                    (new TextObject("{=Y94H6XnK}Accept", null)).ToString(),
-                    (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
-                    delegate ()
-                    {
-                        this.AcceptRansomOffer((int)ransomPrice, ransomer);
-                    }, delegate ()
-                    {
-                        this.DeclineRansomOffer(ransomer);
-                    }, "", 0f, null, null, null), true, false);
+                InformationManager.ShowInquiry(
+                    new InquiryData(
+                        new TextObject("{=ho5EndaV}Decision").ToString(),
+                       textObject.ToString(),
+                        true,
+                        true,
+                        (new TextObject("{=Y94H6XnK}Accept", null)).ToString(),
+                        (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
+                        delegate ()
+                        {
+                            this.AcceptRansomOffer((int)ransomValue, ransomer);
+                        }, delegate ()
+                        {
+                            this.DeclineRansomOffer(ransomer);
+                        }, "", 0f, null, null, null)
+                    , true, true);
+            }
+            else
+            {
+                textObject = new TextObject("{=*}Nobody want to pay for criminal {CAPTIVE_HERO.NAME} body");
+                StringHelpers.SetCharacterProperties("CAPTIVE_HERO", criminal.CharacterObject, textObject, false);
+                MBInformationManager.AddQuickInformation(textObject);
+            }
         }
 
-        private void AcceptRansomOffer(int ransomPrice, Hero ransomer)
+        private void peasant_revenge_may_offer_ransom_consequence()
         {
-            GiveGoldAction.ApplyBetweenCharacters(ransomer, Hero.MainHero, ransomPrice, false);           
+            Hero criminal = currentRevenge.criminal.HeroObject;
+            float ransomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(criminal.CharacterObject, null);
+
+            List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(criminal, (int)ransomValue);
+           
+            TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} for {CAPTIVE_HERO.NAME}'s body.", null);
+            Hero ransomer;
+            if (!ransomers.IsEmpty())
+            {
+                ransomer = ransomers.GetRandomElementInefficiently();
+
+                if (WillLordSupportHeroClaim(ransomer, Hero.MainHero))
+                {
+                    StringHelpers.SetCharacterProperties("RANSOMER", ransomer.CharacterObject, textObject, false);
+                    textObject.SetTextVariable("CLAN_NAME", ransomer.Clan.Name);
+                    textObject.SetTextVariable("GOLD_AMOUNT", ransomValue);
+                    StringHelpers.SetCharacterProperties("CAPTIVE_HERO", criminal.CharacterObject, textObject, false);
+
+                    InformationManager.ShowInquiry(
+                   new InquiryData(
+                       new TextObject("{=ho5EndaV}Decision").ToString(),
+                      textObject.ToString(),
+                       true,
+                       true,
+                       (new TextObject("{=Y94H6XnK}Accept", null)).ToString(),
+                       (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
+                       delegate ()
+                       {
+                           this.AcceptRansomOffer((int)ransomValue, ransomer);
+                       }, delegate ()
+                       {
+                           this.DeclineNotAskedRansomOffer(ransomer);
+                       }, "", 0f, null, null, null)
+                   , true, true);
+                }
+            }
+        }
+
+        private void AcceptRansomOffer(int ransomValue, Hero ransomer)
+        {
+            //GiveItemAction here?
+            GiveGoldAction.ApplyBetweenCharacters(ransomer, Hero.MainHero, ransomValue, false);           
         }
 
         private void DeclineRansomOffer(Hero ransomer)
         {
+            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
+            affectedTraits.Append(Tuple.Create(DefaultTraits.Generosity, -5)).Append(Tuple.Create(DefaultTraits.Honor, -5));
+           // TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(ransomer, affectedTraits);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ransomer, Hero.MainHero,
                 _cfg.values.relationChangeAfterLordPartyGotNoReward, _cfg.values.relationChangeAfterLordPartyGotNoReward != 0);
+        }
+
+        private void DeclineNotAskedRansomOffer(Hero ransomer)
+        {
+            //GiveItemAction here?
+            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
+            affectedTraits.Append(Tuple.Create(DefaultTraits.Generosity, 5)).Append(Tuple.Create(DefaultTraits.Honor, 5));
+           //TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(ransomer, affectedTraits);
+            //increase generosity? will lord accept ransom if offered ? (not done case)           
         }
 
         #endregion
