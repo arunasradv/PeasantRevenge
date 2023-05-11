@@ -49,3 +49,5 @@ Fix: Saving configuration only if loaded configuration version is lesser than cu
 Fix: Peasant revenge start, when player captured the criminal.
 Feature: The tip for dialog options, when enabling or disabling notable peasant parties.
 Feature: Dialog option for enablin/disabling "help neutral village" menu option.
+230511 v14.0.1.1
+Fix: Neutral village attack menu fix.
