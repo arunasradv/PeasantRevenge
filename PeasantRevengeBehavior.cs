@@ -152,11 +152,8 @@ namespace PeasantRevenge
 
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
-            LoadConfiguration(campaignGameStarter);
-            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
-            {
-                AddGameMenus(campaignGameStarter);
-            }
+            LoadConfiguration(campaignGameStarter);           
+            AddGameMenus(campaignGameStarter);            
         } 
         
         public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
@@ -192,7 +189,9 @@ namespace PeasantRevenge
         
         private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
+            if(!_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu) return false;
+            
+                args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
             MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
             IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
             //IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
@@ -1136,10 +1135,7 @@ namespace PeasantRevenge
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
-            if (_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
-            {
-                AddGameMenus(campaignGameStarter);
-            }
+            AddGameMenus(campaignGameStarter);           
         }
         #endregion
 
