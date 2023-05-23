@@ -51,7 +51,9 @@ Feature: The tip for dialog options, when enabling or disabling notable peasant 
 Feature: Dialog option for enablin/disabling "help neutral village" menu option.
 230511 v14.0.1.1
 Fix: Neutral village attack menu fix.
-23xxxx v14.0.2.0
+230523 v14.0.3.0
+Feature: Version 1.1.4 support.
+23xxxx v14.0.3.1
 Feature: Player can demand "lost ransom".(implementing)
 Feature: Cases with parties without party leader.(not implemented)
 Feature: Small reward to mobile party from notable peasant .(not implemented)
