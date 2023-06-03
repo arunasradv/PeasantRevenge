@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 14;
+        public int CfgVersion = 15;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -110,6 +110,11 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordIfRelativesWillHelpTheCriminal;
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
             public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
+            public List<TraitAndValue> lordTraitChangeWhenRansomRemainsDeclined;
+            public List<TraitAndValue> lordTraitChangeWhenRansomRemainsAccepted;
+            public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
+            public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
+            public List<RelationsPerTraits> lordWillAbandonTheVictimRemains;
 
             public void Default()
             {
@@ -181,6 +186,11 @@ namespace PeasantRevenge
                   };
                 default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
+                default_lordTraitChangeWhenRansomRemainsDeclined();
+                default_lordTraitChangeWhenRansomRemainsAccepted();
+                default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
+                default_lordWillDeclineRansomTheVictimRemains();
+                default_lordWillAbandonTheVictimRemains();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -204,6 +214,59 @@ namespace PeasantRevenge
                  };
             }
 
+            public void default_lordTraitChangeWhenRansomRemainsDeclined()
+            {
+                lordTraitChangeWhenRansomRemainsDeclined =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = -2},
+                        new TraitAndValue { trait = "Honor", value = -5},
+                        new TraitAndValue { trait = "Calculating", value = -2},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                    };
+            }
+
+            public void default_lordTraitChangeWhenRansomRemainsAccepted()
+            {
+                lordTraitChangeWhenRansomRemainsAccepted =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = 2},
+                        new TraitAndValue { trait = "Honor", value = 5},
+                        new TraitAndValue { trait = "Calculating", value = 2},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                    };
+            }
+
+            public void default_lordTraitChangeWhenRemainsOfLordAreAbandoned()
+            {
+                lordTraitChangeWhenRemainsOfLordAreAbandoned =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = -2},
+                        new TraitAndValue { trait = "Honor", value = -5},
+                        new TraitAndValue { trait = "Calculating", value = -2},
+                        new TraitAndValue { trait = "Valor", value = -1},
+                    };
+            }
+
+            public void default_lordWillDeclineRansomTheVictimRemains()
+            {
+                lordWillDeclineRansomTheVictimRemains =
+                 new List<RelationsPerTraits>
+                 {
+                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor > 0", relations = "Relations < -50"}
+                 };
+            }
+
+            public void default_lordWillAbandonTheVictimRemains()
+            {
+                lordWillAbandonTheVictimRemains =
+                 new List<RelationsPerTraits>
+                 {
+                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
+                 };
+            }
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
@@ -227,7 +290,21 @@ namespace PeasantRevenge
             [XmlAttribute]
             public string relations = "";
         }
+        public class TraitAndValue
+        {
+            [XmlAttribute]
+            public string trait = "";
+            [XmlAttribute]
+            public int value = 0;
+        }
 
+        public class TraitsAndValue
+        {
+            [XmlAttribute]
+            public string traits = "";
+            [XmlAttribute]
+            public int percent = 0;
+        }
 
         // public bool prisonerAILordCannotRansomTheCriminal = true;
         // public bool raidedSettlementOwnerCanInfluencePeasantRevenge = true;

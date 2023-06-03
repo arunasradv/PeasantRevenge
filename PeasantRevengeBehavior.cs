@@ -539,7 +539,7 @@ namespace PeasantRevenge
             PartyBase party = revenge.party;
             Settlement settlement = revenge.village.Settlement;
             Hero saver = null;
-            Hero ransomer; // pays unpaid ransom, if criminal is killed
+            Hero ransomer = null; // pays unpaid ransom, if criminal is killed
             List<Hero> savers;
             string message = "";
             List<string> LogMessage = new List<string>();
@@ -684,7 +684,10 @@ namespace PeasantRevenge
                                     message = $"{party.Owner.Name} captured and executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
-                              
+                                if (ransomer == null)
+                                { 
+                                    AIDealWithLordRemains(revenge, party.Owner, prisoner); 
+                                }
                                 #region killing criminal too
                                 if (revenge.accused_hero != null)
                                 {
@@ -700,7 +703,7 @@ namespace PeasantRevenge
                                             message = $"{party.Owner.Name} executed {revenge.criminal.Name} too.";
                                             KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
                                         }
-#warning  here must be unpaid ransom demand regarding accused hero.
+                                        AIDealWithLordRemains(revenge, party.Owner, revenge.criminal.HeroObject);
                                     }
                                     else
                                     {
@@ -894,6 +897,61 @@ namespace PeasantRevenge
             }
 #endregion
             return false;
+        }
+
+        private bool AIDealWithLordRemains(PeasantRevengeData revenge, Hero owner, Hero victim)
+        {
+            if (lordWillAbandonTheVictimRemains(owner, victim))
+            {
+                OnLordRemainsAbandoned(owner);
+            }
+            else
+            { 
+                AddKilledLordsCorpses(revenge);
+                float ransomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(victim.CharacterObject, null);
+                List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(victim, (int)ransomValue);
+                Hero ransomer;
+
+                if (!ransomers.IsEmpty())
+                {
+                    ransomer = ransomers.GetRandomElementInefficiently();
+
+                    if (lordWillDeclineRansomTheVictimRemains(owner, victim))
+                    {
+                        if (ransomer.IsHumanPlayerCharacter)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            OnRansomRemainsOfferDeclined(owner);
+                        }
+                    }
+                    else
+                    {
+                        if (ransomer.IsHumanPlayerCharacter)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            AcceptRansomRemainsOffer((int)ransomValue, owner, ransomer);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool lordWillDeclineRansomTheVictimRemains(Hero owner, Hero victim)
+        {
+            return CheckConditions(owner, victim, _cfg.values.ai.lordWillDeclineRansomTheVictimRemains);
+        }
+
+        private bool lordWillAbandonTheVictimRemains(Hero owner, Hero victim)
+        {
+            return CheckConditions(owner, victim, _cfg.values.ai.lordWillAbandonTheVictimRemains);
         }
 
         private MobileParty CreateNotableParty(PeasantRevengeData revenge)
@@ -1106,16 +1164,30 @@ namespace PeasantRevenge
             if (File.Exists(_cfg.values.file_name))
             {
                 _cfg.Load(_cfg.values.file_name, typeof(PeasantRevengeConfiguration));
-                
+
                 if (_cfg.values.ai == null)
                 {
                     _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
                     _cfg.values.ai.Default();
                 }
-                else if (_cfg.values.ai.criminalWillBlameOtherLordForTheCrime.Count == 0 && _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord.Count == 0)
+                else
                 {
-                    _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
-                    _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
+                    // configuration patch for new added configuration variables
+
+                    if (_cfg.values.CfgVersion < 14)
+                    {
+                        _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
+                        _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
+                    }
+
+                    if (_cfg.values.CfgVersion < 15)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsDeclined();
+                        _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsAccepted();
+                        _cfg.values.ai.default_lordTraitChangeWhenRemainsOfLordAreAbandoned();                        
+                        _cfg.values.ai.default_lordWillDeclineRansomTheVictimRemains();
+                        _cfg.values.ai.default_lordWillAbandonTheVictimRemains();
+                    }
                 }
             }
             else
@@ -2048,9 +2120,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_leave_lord_body_consequence()
         {
-            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[1];
-            affectedTraits.Append(Tuple.Create(DefaultTraits.Honor, -9)).Append(Tuple.Create(DefaultTraits.Calculating, -1)); // not a honorable to leave lord; does not think of consequences
-           // TraitLevelingHelper.OnIssueSolvedThroughAlternativeSolution(null, affectedTraits);
+            OnLordRemainsAbandoned(Hero.MainHero);
         }
 
         private void peasant_revenge_player_demand_ransom_consequence()
@@ -2061,7 +2131,7 @@ namespace PeasantRevenge
 
             List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(criminal, (int)ransomValue);
            
-            TextObject textObject = new TextObject("{=*}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains.", null);
+            TextObject textObject = new TextObject("{=PRev0096}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains.", null);
             Hero ransomer;
             if (!ransomers.IsEmpty())
             {
@@ -2081,45 +2151,46 @@ namespace PeasantRevenge
                         (new TextObject("{=cOgmdp9e}Decline", null)).ToString(),
                         delegate ()
                         {
-                            this.AcceptRansomOffer((int)ransomValue, ransomer);
+                            this.AcceptRansomRemainsOffer((int)ransomValue, Hero.MainHero, ransomer);
                         }, delegate ()
                         {
-                            this.DeclineRansomOffer(ransomer);
+                            this.DeclineRansomOffer(Hero.MainHero, ransomer);
                         }, "", 0f, null, null, null)
                     , true, true);
             }
             else
             {
-                textObject = new TextObject("{=*}Nobody want to pay for criminal {CAPTIVE_HERO.NAME} body");
+                textObject = new TextObject("{=PRev0097}Nobody want to pay for criminal {CAPTIVE_HERO.NAME} body");
                 StringHelpers.SetCharacterProperties("CAPTIVE_HERO", criminal.CharacterObject, textObject, false);
                 MBInformationManager.AddQuickInformation(textObject);
             }
         }
 
-        private void AcceptRansomOffer(int ransomValue, Hero ransomer)
+        private void AcceptRansomRemainsOffer(int ransomValue, Hero hero, Hero ransomer)
         {
-            GiveItemAction.ApplyForHeroes(Hero.MainHero, ransomer, MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"), 1);
-            GiveGoldAction.ApplyBetweenCharacters(ransomer, Hero.MainHero, ransomValue, false);           
+            OnRansomRemainsOfferAccepted(hero);
+            GiveItemAction.ApplyForHeroes(hero, ransomer, MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"), 1);
+            GiveGoldAction.ApplyBetweenCharacters(ransomer, hero, ransomValue, false);            
         }
 
-        private void DeclineRansomOffer(Hero ransomer)
+        private void DeclineRansomOffer(Hero hero, Hero ransomer)
         {
-            OnRansomRemainsDeclined(ransomer);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ransomer, Hero.MainHero,
+            OnRansomRemainsOfferDeclined(hero);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ransomer, hero,
                 _cfg.values.relationChangeAfterLordPartyGotNoReward, _cfg.values.relationChangeAfterLordPartyGotNoReward != 0);
         }
 
-        private static void AddCorpseToInventory(int count)
+        private static void AddCorpseToInventory(int count, MobileParty party)
         {
             ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
-            var items = MobileParty.MainParty.ItemRoster;
+            var items = party.ItemRoster;
             items.AddToCounts(lord_body, count);
         }
 
-        private static int RemoveCorpseFromInventory(int count)
+        private static int RemoveCorpseFromInventory(int count, MobileParty party)
         {
             ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
-            var items = MobileParty.MainParty.ItemRoster;
+            var items = party.ItemRoster;
             if (items.GetItemNumber(lord_body) < count) return 0;
             items.AddToCounts(lord_body, -count);
             return count;
@@ -2130,18 +2201,42 @@ namespace PeasantRevenge
             int count = 0;
             if (revenge.accused_hero != null && !revenge.accused_hero.HeroObject.IsAlive) count++;
             if (revenge.criminal != null && !revenge.criminal.HeroObject.IsAlive) count++;
-            AddCorpseToInventory(count);
+            if (revenge.targetHero.HeroObject.PartyBelongedTo != null)
+            {
+                AddCorpseToInventory(count, revenge.targetHero.HeroObject.PartyBelongedTo);
+            }
         }
 
         #endregion
 
         #region trait developement
-        public void OnRansomRemainsDeclined(Hero ransomer)
+        public void OnLordRemainsAbandoned(Hero hero)
         {
-            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[2];
-            affectedTraits[0] = Tuple.Create(DefaultTraits.Generosity, -5);
-            affectedTraits[1] = Tuple.Create(DefaultTraits.Honor, -5);
-            OnChangeTraits(ransomer, affectedTraits);
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned));
+        }
+
+        public void OnRansomRemainsOfferDeclined(Hero hero)
+        {
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined));
+        }
+
+        public void OnRansomRemainsOfferAccepted(Hero hero)
+        {
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted));
+        }
+
+        private Tuple<TraitObject, int>[] GetAffectedTraits(List<PeasantRevengeConfiguration.TraitAndValue> traitsAndValues)
+        {
+            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[traitsAndValues.Count];
+            for (int i = 0; i < affectedTraits.Length; i++)
+            {
+                affectedTraits[i] = Tuple.Create(
+                    TraitObject.All.Where((x) => x.StringId.ToString() ==
+                    _cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined[i].trait).First(),
+                    _cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined[i].value);
+            }
+
+            return affectedTraits;
         }
 
         public void OnChangeTraits(Hero targetHero, Tuple<TraitObject, int>[] effectedTraits)
@@ -2153,11 +2248,18 @@ namespace PeasantRevenge
         }
         private void ApplyTraitXP(TraitObject trait, int xpValue, ActionNotes context, Hero referenceHero)
         {
-            int traitLevel = Hero.MainHero.GetTraitLevel(trait);
-            Campaign.Current.PlayerTraitDeveloper.AddTraitXp(trait, xpValue);
-            if (traitLevel != Hero.MainHero.GetTraitLevel(trait))
+            if (referenceHero == Hero.MainHero)
             {
-                CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
+                int traitLevel = referenceHero.GetTraitLevel(trait);
+                Campaign.Current.PlayerTraitDeveloper.AddTraitXp(trait, xpValue);
+                if (traitLevel != referenceHero.GetTraitLevel(trait))
+                {
+                    CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
+                }
+            }
+            else
+            {
+                //???AddTraitXp(trait, xpValue); //Only player can develop trait XP by the game design.
             }
         }
         #endregion
