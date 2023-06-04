@@ -685,8 +685,8 @@ namespace PeasantRevenge
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
                                 if (ransomer == null)
-                                { 
-                                    AIDealWithLordRemains(revenge, party.Owner, prisoner); 
+                                {
+                                    message += AIDealWithLordRemains(revenge, party.Owner, prisoner); 
                                 }
                                 #region killing criminal too
                                 if (revenge.accused_hero != null)
@@ -703,7 +703,7 @@ namespace PeasantRevenge
                                             message = $"{party.Owner.Name} executed {revenge.criminal.Name} too.";
                                             KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
                                         }
-                                        AIDealWithLordRemains(revenge, party.Owner, revenge.criminal.HeroObject);
+                                        message += AIDealWithLordRemains(revenge, party.Owner, revenge.criminal.HeroObject);
                                     }
                                     else
                                     {
@@ -899,8 +899,9 @@ namespace PeasantRevenge
             return false;
         }
 
-        private bool AIDealWithLordRemains(PeasantRevengeData revenge, Hero owner, Hero victim)
+        private string AIDealWithLordRemains(PeasantRevengeData revenge, Hero owner, Hero victim)
         {
+            string message = "";
             if (lordWillAbandonTheVictimRemains(owner, victim))
             {
                 OnLordRemainsAbandoned(owner);
@@ -924,6 +925,7 @@ namespace PeasantRevenge
                         {
                             AddKilledLordsCorpses(revenge);
                             OnRansomRemainsOfferDeclined(owner);
+                            message = $" {owner.Name} declined to ransom {victim.Name}'s remains.";
                         }
                         else
                         {
@@ -933,7 +935,7 @@ namespace PeasantRevenge
                 }
             }
 
-            return true;
+            return message;
         }
 
         private bool lordWillDeclineRansomTheVictimRemains(Hero owner, Hero victim)
@@ -2120,7 +2122,7 @@ namespace PeasantRevenge
 
             List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(criminal, (int)ransomValue);
            
-            TextObject textObject = new TextObject("{=PRev0096}A courier arrives from the {CLAN_NAME}. {RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains.", null);
+            TextObject textObject = new TextObject("{=PRev0096}{RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains.", null);
             Hero ransomer;
             if (!ransomers.IsEmpty())
             {
