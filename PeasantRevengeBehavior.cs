@@ -906,8 +906,7 @@ namespace PeasantRevenge
                 OnLordRemainsAbandoned(owner);
             }
             else
-            { 
-                AddKilledLordsCorpses(revenge);
+            {                 
                 float ransomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(victim.CharacterObject, null);
                 List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(victim, (int)ransomValue);
                 Hero ransomer;
@@ -915,23 +914,16 @@ namespace PeasantRevenge
                 if (!ransomers.IsEmpty())
                 {
                     ransomer = ransomers.GetRandomElementInefficiently();
-
-                    if (lordWillDeclineRansomTheVictimRemains(owner, victim))
+                    if (ransomer.IsHumanPlayerCharacter)
                     {
-                        if (ransomer.IsHumanPlayerCharacter)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            OnRansomRemainsOfferDeclined(owner);
-                        }
+                        AcceptRansomRemainsOffer((int)ransomValue, owner, ransomer); //because player related hero death scenes are enabled 
                     }
                     else
                     {
-                        if (ransomer.IsHumanPlayerCharacter)
+                        if (lordWillDeclineRansomTheVictimRemains(owner, victim))
                         {
-                            return false;
+                            AddKilledLordsCorpses(revenge);
+                            OnRansomRemainsOfferDeclined(owner);
                         }
                         else
                         {
@@ -1086,8 +1078,6 @@ namespace PeasantRevenge
 
             return result;
         }
-
-      
 
         private bool hero_relation_on_condition(Hero hero, Hero target, string operation, string weight)
         {
@@ -1948,8 +1938,7 @@ namespace PeasantRevenge
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_end_revenge_consequence), 120, null);
             #endregion
 
-            #region Prisoner party demands compensation because no ransom 
-#warning  here must be unpaid ransom demand regarding accused hero too!
+            #region Prisoner party demands compensation because no ransom
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_party_need_compensation_start",
                "start",
@@ -2160,7 +2149,7 @@ namespace PeasantRevenge
             }
             else
             {
-                textObject = new TextObject("{=PRev0097}Nobody want to pay for criminal {CAPTIVE_HERO.NAME} body");
+                textObject = new TextObject("{=PRev0097}Nobody want to pay for {CAPTIVE_HERO.NAME} remains");
                 StringHelpers.SetCharacterProperties("CAPTIVE_HERO", criminal.CharacterObject, textObject, false);
                 MBInformationManager.AddQuickInformation(textObject);
             }
@@ -2177,7 +2166,7 @@ namespace PeasantRevenge
         {
             OnRansomRemainsOfferDeclined(hero);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ransomer, hero,
-                _cfg.values.relationChangeAfterLordPartyGotNoReward, _cfg.values.relationChangeAfterLordPartyGotNoReward != 0);
+                _cfg.values.relationChangeWhenLordDeclinedRansomOfferForCriminalLordRemains, _cfg.values.relationChangeWhenLordDeclinedRansomOfferForCriminalLordRemains != 0);
         }
 
         private static void AddCorpseToInventory(int count, MobileParty party)
@@ -2185,15 +2174,6 @@ namespace PeasantRevenge
             ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
             var items = party.ItemRoster;
             items.AddToCounts(lord_body, count);
-        }
-
-        private static int RemoveCorpseFromInventory(int count, MobileParty party)
-        {
-            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
-            var items = party.ItemRoster;
-            if (items.GetItemNumber(lord_body) < count) return 0;
-            items.AddToCounts(lord_body, -count);
-            return count;
         }
 
         private void AddKilledLordsCorpses(PeasantRevengeData revenge)

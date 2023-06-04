@@ -29,7 +29,7 @@ namespace PeasantRevenge
         public int relationChangeWhenLordRefusedToSupportPeasantRevenge = -2;
         public int relationChangeWhenLordTeachPeasant = 2;
         public int relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal = 1;
-
+        public int relationChangeWhenLordDeclinedRansomOfferForCriminalLordRemains = -10;
         public int goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal = 20;
         public bool alwaysExecuteTheCriminal = false;
         public bool alwaysLetLiveTheCriminal = false;
