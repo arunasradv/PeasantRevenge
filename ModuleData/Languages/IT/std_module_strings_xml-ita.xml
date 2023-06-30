@@ -99,5 +99,7 @@
     <string id="PRev0093" text="Difenderò i villaggi solo dai miei nemici." />
     <string id="PRev0094" text="Devo andarmene adesso." />
     <string id="PRev0095" text="C'è qualcosa di cui vorrei discutere." />
+    <string id="PRev0096" text="{RANSOMER.LINK} ti offre {GOLD_AMOUNT}{GOLD_ICON} in riscatto se darai i resti di {CAPTIVE_HERO.NAME}." />
+    <string id="PRev0097" text="Nessuno vuole pagare per {CAPTIVE_HERO.NAME} rimane" />
   </strings>
 </base>

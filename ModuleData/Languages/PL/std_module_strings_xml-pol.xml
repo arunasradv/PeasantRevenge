@@ -99,5 +99,7 @@
     <string id="PRev0093" text="Będę bronił wiosek tylko przed moimi wrogami." />
     <string id="PRev0094" text="Muszę teraz wyjść." />
     <string id="PRev0095" text="Chciałbym o czymś porozmawiać." />
+    <string id="PRev0096" text="{RANSOMER.LINK} zaoferuj {GOLD_AMOUNT}{GOLD_ICON} jako okup, jeśli oddasz szczątki {CAPTIVE_HERO.NAME}." />
+    <string id="PRev0097" text="Nikt nie chce płacić za szczątki {CAPTIVE_HERO.NAME}" />
   </strings>
 </base>

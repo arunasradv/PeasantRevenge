@@ -99,5 +99,7 @@
     <string id="PRev0093" text="私は敵からのみ村を守ります。" />
     <string id="PRev0094" text="今すぐ出発しなければなりません。" />
     <string id="PRev0095" text="話したいことがある." />
+    <string id="PRev0096" text="{RANSOMER.LINK} は、{CAPTIVE_HERO.NAME} の遺体を差し出す場合、身代金として {GOLD_AMOUNT}{GOLD_ICON} を提供します。" />
+    <string id="PRev0097" text="{CAPTIVE_HERO.NAME} の代金を払いたくない人は誰もいません" />
   </strings>
 </base>

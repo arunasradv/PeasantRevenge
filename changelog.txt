@@ -55,7 +55,7 @@ Fix: Neutral village attack menu fix.
 Feature: Version 1.1.4 support.
 230630 v14.0.4.0
 Feature: Version 1.1.5 support.
-23xxxx v15.0.0.0
+230630 v14.1.0.0 (beta 1.2.0)
 Feature: Player can demand "lost ransom".(implementing)
 Feature: Cases with parties without party leader.(not implemented)
 Feature: Small reward to mobile party from notable peasant .(not implemented)
