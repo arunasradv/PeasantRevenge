@@ -53,3 +53,5 @@ Feature: Dialog option for enablin/disabling "help neutral village" menu option.
 Fix: Neutral village attack menu fix.
 230523 v14.0.3.0
 Feature: Version 1.1.4 support.
+230630 v14.0.4.0
+Feature: Version 1.1.5 support.
