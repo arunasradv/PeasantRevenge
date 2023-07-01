@@ -1649,7 +1649,8 @@ namespace PeasantRevenge
               "peasant_revenge_lord_start_grievance_requested_if_not_pay_options",
               "{=PRev0008}No!", null,
               null, 100, null, null);
-
+#warning if confirmed, let AI to decide kill or not or kill both
+            //create reactions: "I do not beleve you... my friend, relative...", "I beleve you", "You both should die", "Cannot decide, no executions today"
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_confirmed_lied",
               "peasant_revenge_lord_start_grievance_denied_confirm_a_lie",
@@ -1782,7 +1783,8 @@ namespace PeasantRevenge
                null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence),
                90, null, null);
-
+#warning need option to abandon the killing due to disagreement
+            //create option  "Cannot decide, no executions today"
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_denied_end",
                "peasant_revenge_peasants_finish_denied",
