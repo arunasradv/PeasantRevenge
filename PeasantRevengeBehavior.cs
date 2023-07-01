@@ -969,7 +969,7 @@ namespace PeasantRevenge
             mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"), size);
             //mobileParty.IgnoreForHours(_cfg.values.peasantRevengeTimeoutInDays*24f*10f); //if not ignored, ai can kill them and notable will respawn in the village
             mobileParty.Ai.SetDoNotMakeNewDecisions(true);
-            mobileParty.Party.Visuals.SetMapIconAsDirty();
+            mobileParty.Party.SetVisualAsDirty();
             mobileParty.Aggressiveness = 0f;
             return mobileParty;
         }
@@ -2159,8 +2159,17 @@ namespace PeasantRevenge
 
         private void AcceptRansomRemainsOffer(int ransomValue, Hero hero, Hero ransomer)
         {
+            if (hero.PartyBelongedTo == null) return;
+
+            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
+            var items = hero.PartyBelongedTo.ItemRoster;
+
+            if (items.GetItemNumber(lord_body) < 1) return;
+
+            ItemRosterElement item = items.Where((x) => x.EquipmentElement.Item.Name.ToString().Equals("pr_wrapped_body")).FirstOrDefault();
+           
             OnRansomRemainsOfferAccepted(hero);
-            GiveItemAction.ApplyForHeroes(hero, ransomer, MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"), 1);
+            GiveItemAction.ApplyForHeroes(hero, ransomer, item);
             GiveGoldAction.ApplyBetweenCharacters(ransomer, hero, ransomValue, false);            
         }
 

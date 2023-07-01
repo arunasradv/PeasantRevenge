@@ -99,5 +99,7 @@
     <string id="PRev0093" text="적에 맞서서만 마을을 지키겠습니다." />
     <string id="PRev0094" text="지금 떠나야 합니다." />
     <string id="PRev0095" text="토론하고 싶은 것이 있습니다." />
+    <string id="PRev0096" text="{RANSOMER.LINK}는 {CAPTIVE_HERO.NAME}의 유해를 제공한다면 {GOLD_AMOUNT}{GOLD_ICON}의 몸값을 제안합니다." />
+    <string id="PRev0097" text="아무도 {CAPTIVE_HERO.NAME}의 유골에 대한 대가를 지불하고 싶어하지 않습니다" />
   </strings>
 </base>
