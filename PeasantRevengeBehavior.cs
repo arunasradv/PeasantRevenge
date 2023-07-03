@@ -721,14 +721,14 @@ namespace PeasantRevenge
                                     else
                                     {
                                         if (_cfg.values.allowLordToKillMessenger)
-                                        {//Paid
+                                        {
                                             LogMessage.Add("{=PRev0043}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} executed peasant notable {EXECUTIONER.NAME}");
                                             message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} executed peasant messenger {executioner.Name}. Saver gold {saver.Gold}. Prisoner gold {prisoner.Gold}.";
                                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, saver, _cfg.values.relationChangeWhenLordKilledMessenger, false);
                                             KillCharacterAction.ApplyByExecution(executioner, saver, false, false);
                                         }
                                         else
-                                        { //Cannot to pay()
+                                        {
                                             message = $"{party.Owner.Name} did not executed {prisoner.Name}, and {saver.Name} refused to pay to {executioner.Name}. Saver gold {saver.Gold}. Prisoner gold {prisoner.Gold}.";
                                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(executioner, saver, _cfg.values.relationChangeWhenCannotPayReparations, false);
                                         }
@@ -768,8 +768,6 @@ namespace PeasantRevenge
                             if (sellement_owner_friend_to_criminal_con)
                             {
                                 LogMessage.Add("{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, prisoner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                             }
                             else if (sellement_owner_help_criminal_con)
                             {
@@ -779,6 +777,9 @@ namespace PeasantRevenge
                             {
                                 LogMessage.Add("{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                             }
+                            
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                         }
 
                         if (settlement.OwnerClan == Hero.MainHero.Clan && party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader)
@@ -804,8 +805,6 @@ namespace PeasantRevenge
                     if (party_friend_to_criminal_con)
                     {
                         LogMessage.Add("{=PRev0044}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
-                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, prisoner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                     }
                     else if (party_help_criminal_con)
                     {
@@ -816,6 +815,9 @@ namespace PeasantRevenge
                         LogMessage.Add("{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                     }
 
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
+  
                     if (settlement.OwnerClan == Hero.MainHero.Clan && party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader)
                     {
                         //ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToPayReparations, true);
@@ -1123,7 +1125,17 @@ namespace PeasantRevenge
             
             if (defaultVersion > _cfg.values.CfgVersion || !File.Exists(_cfg.values.file_name))
             {
+                #region configuration patch
+                
+                if(_cfg.values.CfgVersion == 14)
+                {
+                    _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge = 
+                        _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge == -2 ? -1 : _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge; //reduced, because lords may lose recruitement village too fast
+                }
+
                 _cfg.values.CfgVersion = defaultVersion;
+                #endregion
+
                 _cfg.Save(_cfg.values.file_name, _cfg.values);
             }
 
@@ -2626,7 +2638,7 @@ namespace PeasantRevenge
             
             if (currentRevenge.accused_hero != null)
             {
-                ChangeRelationAction.ApplyPlayerRelation(currentRevenge.criminal.HeroObject, _cfg.values.relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal, true, true);
+                ChangeRelationAction.ApplyPlayerRelation(currentRevenge.criminal.HeroObject, _cfg.values.relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal, true, _cfg.values.relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal!=0);
             }
 
             if (_cfg.values.allowPeasantToKillLord)
