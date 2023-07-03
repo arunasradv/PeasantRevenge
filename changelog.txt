@@ -58,5 +58,15 @@ Feature: Version 1.1.5 support.
 230630 v14.1.0.0 (beta 1.2.0)
 Feature: Player can demand "lost ransom".(implementing)
 Feature: Cases with parties without party leader.(not implemented)
-Feature: Small reward to mobile party from notable peasant .(not implemented)
-Feature: Player let other lord to decide criminal's fate.(not implemented)
+Feature: (**not implemented**) hero let the other lord (AI will search other hero, who could save the criminal) to decide criminal's fate.
+Feature: (**not implemented**) Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
+Feature: (**not implemented**) do not allow the execution due to disagreements (criminal and blamed hero are not executed)
+Feature: (**not implemented**) player try to persuade the hero;
+Feature: (**not implemented**) When player encounter revenger party before revenger could meet the hero, who has the criminal as a prisoner.
+Feature: (**not implemented**) bribing effect should be temporary and depend on traits and relations.
+Feature: (**not implemented**) persuade notable peasant not to initiate the peasant revenge.
+Feature: (**not implemented**) Discussion with party hero, who refused to kill criminal.
+Feature: (**not implemented**) AI may try to encourage notable peasant to initiate the peasant revenge, if visited village does not have potential revengers and hero traits are appropriate.
+Feature: (**not implemented**) Player relations penalties can be set in the configuration file (see relationChangeForPlayerWhenNotableExecutedTheCriminal)
+Feature: (**not implemented**) peasantRevengeAiIgnorePartyForDays
+Feature: (**not implemented**) relationChangeForPlayerWhenNotableExecutedTheCriminal
