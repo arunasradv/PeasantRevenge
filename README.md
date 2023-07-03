@@ -51,6 +51,8 @@
      - execute the notable peasant (game will replace the notable peasant with a new one, criminal rating increase);
      - teach the notable peasant (use player's traits to change notable peasant's traits);
      - bribe the notable peasant (use money to change notable peasant's traits);
+#### - Other dialogues:
+ 1. (**not implemented**) Discussion with party hero, who refused to kill criminal.
 
 ### AI behaviour to handle peasant revenge
 - The peasant revenge can happen after hero committed to raid the village and the hero became a prisoner, and any notable village peasant has correct hero traits.
@@ -89,7 +91,7 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
 [GitHub](https://github.com/arunasradv/PeasantRevenge.git)
 
 ## Configuration parameters
-  - CfgVersion - mod will not update the configuration, if this version is higher than PeasantRevenge dll file version (first digits).
+  - CfgVersion - mod will not update the configuration, if this version is higher or equal than PeasantRevenge dll file version (first digits).
   - enableRevengerMobileParty - disable or enable revenger parties (true - revenger party will spawn).
   - enableHelpNeutralVillageAndDeclareWarToAttackerMenu - disable or enable menu option to help neutral villages, what are raided by neutral heroes.
   - ReparationsScaleToSettlementHearts - criminal heroes must pay reparation equal to ReparationsScaleToSettlementHearts multiplied by village hearts count.
@@ -134,8 +136,8 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
   - peasantRevengeSartTimeInDays - revenger party will spawn after some time.
   - peasantRevengeMaxPartySize - revenger max party size (including notable peasant).
   - (**not implemented**) peasantRevengeAiIgnorePartyForDays -  other hostile ai parties will not attack revenger party for some time.
-  - allowLordToKillMessenger - if true, AI hero will always refuse to pay reparation, instead of killing the notable peasant. 
-  - allowPeasantToKillLord -
+  - allowLordToKillMessenger - heroes cannot kill notable peasant.
+  - allowPeasantToKillLord - party leader (or player) will kill the criminal instead of notable peasant
   - logColorForClan - peasant revenge log colour for player's clan.
   - logColorForKingdom - peasant revenge log colour for other kingdom clans.
   - logColorForOtherFactions - peasant revenge log colour for other factions.
