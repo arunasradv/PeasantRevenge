@@ -1,7 +1,7 @@
 ﻿<Module>
   <Name value="PeasantRevenge"/>
   <Id value="PeasantRevenge"/>
-  <Version value="v1.5.0"/>
+  <Version value="v1.1.5"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>
