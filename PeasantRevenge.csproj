@@ -343,14 +343,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GiftBarterable.cs" />
-    <Compile Include="Helpers\XmlCfg.cs" />
-    <Compile Include="PeasantRevengeBehavior.cs" />
-    <Compile Include="PeasantRevengeConfiguration.cs" />
-    <Compile Include="PeasantRevengeModCfg.cs" />
-    <Compile Include="ReparationsBarterable.cs" />
-    <Compile Include="SubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\GiftBarterable.cs" />
+    <Compile Include="src\Helpers\XmlCfg.cs" />
+    <Compile Include="src\PeasantRevengeBehavior.cs" />
+    <Compile Include="src\PeasantRevengeConfiguration.cs" />
+    <Compile Include="src\PeasantRevengeModCfg.cs" />
+    <Compile Include="src\ReparationsBarterable.cs" />
+    <Compile Include="src\SubModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="changelog.txt" />
