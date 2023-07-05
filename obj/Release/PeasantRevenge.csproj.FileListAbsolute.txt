@@ -4,9 +4,9 @@ C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Release\PeasantReveng
 C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Release\PeasantRevenge.csproj.CoreCompileInputs.cache
 C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Release\PeasantRevenge.dll
 C:\Users\37067\source\repos\BastardsMod\PeasantRevenge\obj\Release\PeasantRevenge.pdb
-C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.csproj.AssemblyReference.cache
-C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.csproj.CoreCompileInputs.cache
 C:\Users\37067\Documents\GitHub\PeasantRevenge\bin\Release\PeasantRevenge.dll
 C:\Users\37067\Documents\GitHub\PeasantRevenge\bin\Release\PeasantRevenge.pdb
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.csproj.AssemblyReference.cache
+C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.csproj.CoreCompileInputs.cache
 C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.dll
 C:\Users\37067\Documents\GitHub\PeasantRevenge\obj\Release\PeasantRevenge.pdb
