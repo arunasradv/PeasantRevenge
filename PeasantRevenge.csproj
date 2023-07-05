@@ -343,13 +343,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GiftBarterable.cs" />
-    <Compile Include="Helpers\XmlCfg.cs" />
-    <Compile Include="PeasantRevengeBehavior.cs" />
-    <Compile Include="PeasantRevengeConfiguration.cs" />
-    <Compile Include="PeasantRevengeModCfg.cs" />
-    <Compile Include="ReparationsBarterable.cs" />
-    <Compile Include="SubModule.cs" />
+    <Compile Include="src\GiftBarterable.cs" />
+    <Compile Include="src\Helpers\XmlCfg.cs" />
+    <Compile Include="src\PeasantRevengeBehavior.cs" />
+    <Compile Include="src\PeasantRevengeConfiguration.cs" />
+    <Compile Include="src\PeasantRevengeModCfg.cs" />
+    <Compile Include="src\ReparationsBarterable.cs" />
+    <Compile Include="src\SubModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -379,6 +379,7 @@
     <Content Include="ModuleData\Languages\std_module_strings_xml.xml" />
     <Content Include="ModuleData\Languages\TR\language_data.xml" />
     <Content Include="ModuleData\Languages\TR\std_module_strings_xml_tr.xml" />
+    <Content Include="ModuleData\pr_items.xml" />
     <Content Include="SubModule.xml" />
     <Content Include="WorkshopUpdate.xml" />
   </ItemGroup>
@@ -386,7 +387,6 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)SubModule.xml" "F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge\" /y
 xcopy "$(TargetPath)" "F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge\bin\Win64_Shipping_Client\" /y
-xcopy "$(TargetPath)" "F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge\bin\Win64_Shipping_wEditor\" /y
-xcopy "$(ProjectDir)ModuleData\Languages\" "F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge\ModuleData\Languages\" /y /e /i</PostBuildEvent>
+xcopy "$(ProjectDir)ModuleData\" "F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge\ModuleData\" /y /e /i</PostBuildEvent>
   </PropertyGroup>
 </Project>
