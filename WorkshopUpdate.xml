@@ -6,8 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: heroes will always get relation penalty if they refuse peasant revenge, because of relations between criminal and hero.
-Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1"/>
+        <ChangeNotes Value="Feature: Hero can ransom criminal's remains."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
