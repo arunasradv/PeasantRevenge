@@ -1,4 +1,4 @@
-﻿#define TESTING
+﻿//#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,12 +40,11 @@ namespace PeasantRevenge
         public bool playerCanPayAnyKingdomClanReparations = true;
         public string peasantRevengerExcludeTrait = "Mercy > 0|Valor < 0";
         public string lordNotExecuteMessengerTrait = "Mercy > -1&Calculating > -1|Honor >= 1&Calculating > 0&Generosity > 0";
-        //#if TESTING
-        //        public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
-        //#else
-        //        public string log_file_name = "";// Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
-        //#endif
-        public string log_file_name = "";
+#if TESTING
+        public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
+#else
+        public string log_file_name = "";// Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
+#endif
         public string file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "PeasantRevengeModCfg.xml");
         public int criminalHeroFromKingdomSuporterMinimumRelation = -70;
         public float criminalHeroFromKingdomSuporterMinimumAge = 18.0f;

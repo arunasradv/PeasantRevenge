@@ -610,9 +610,9 @@ namespace PeasantRevenge
                             {
 #region Unpaid ransom
                                 //AI get unpaid RANSOM
-                                float reansomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(prisoner.CharacterObject, null);
-                                List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(prisoner, (int)reansomValue); // list who will buy dead body
-                                List<Hero> own_clan_ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(party.Owner, (int)reansomValue); // interesting feature: if could get money from kingdom clan?
+                                float ransomValue = (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(prisoner.CharacterObject, null);
+                                List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(prisoner, (int)ransomValue); // list who will buy dead body
+                                List<Hero> own_clan_ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(party.Owner, (int)ransomValue); // interesting feature: if could get money from kingdom clan?
                                
                                 if (ransomers.IsEmpty())
                                 {
@@ -620,7 +620,7 @@ namespace PeasantRevenge
                                 }
 
                                 string ransomstring = "";
-
+                                bool ransom_of_prisoner_is_paid = false;
                                 if (!ransomers.IsEmpty())
                                 {
                                     ransomer = ransomers.GetRandomElementInefficiently();
@@ -631,14 +631,15 @@ namespace PeasantRevenge
                                         {
                                             if (WillLordSupportHeroClaim(ransomer, party.Owner))
                                             {
-                                                GiveGoldAction.ApplyBetweenCharacters(ransomer, party.Owner, (int)reansomValue, true);                                              
-                                                ransomstring = $" {ransomer.Name} paid to {party.Owner.Name} compensation {reansomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
+                                                ransom_of_prisoner_is_paid = true;
+                                                GiveGoldAction.ApplyBetweenCharacters(ransomer, party.Owner, (int)ransomValue, true);                                              
+                                                ransomstring = $" {ransomer.Name} paid to {party.Owner.Name} compensation {ransomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
                                                 saver = ransomer;
                                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, ransomer, _cfg.values.relationChangeAfterLordPartyGotPaid, false);
                                             }
                                             else
                                             {
-                                                ransomstring = $" {ransomer.Name} did not paid {party.Owner.Name} compensation {reansomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
+                                                ransomstring = $" {ransomer.Name} did not paid {party.Owner.Name} compensation {ransomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
                                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, ransomer, _cfg.values.relationChangeAfterLordPartyGotNoReward, false);
                                                 //does not have money for ransom
                                             }
@@ -684,7 +685,7 @@ namespace PeasantRevenge
                                     message = $"{party.Owner.Name} captured and executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
-                                if (ransomer == null)
+                                if (ransom_of_prisoner_is_paid == false)
                                 {
                                     message += AIDealWithLordRemains(revenge, party.Owner, prisoner); 
                                 }
