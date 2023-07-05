@@ -55,6 +55,9 @@ Fix: Neutral village attack menu fix.
 Feature: Version 1.1.4 support.
 230630 v14.0.4.0
 Feature: Version 1.1.5 support.
+230703 v15.0.0.0
+Fix: heroes will always get relation penalty if they refuse peasant revenge, because of relations between criminal and hero.
+Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1
 ------ v15.0.0.1
 Feature: Player can demand "lost ransom".(implementing)
 Feature: Cases with parties without party leader.(not implemented)
