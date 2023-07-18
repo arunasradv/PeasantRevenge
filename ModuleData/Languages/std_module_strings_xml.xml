@@ -101,6 +101,7 @@
     <string id="PRev0095" text="{=PRev0095}There is something I'd like to discuss." />
     <string id="PRev0096" text="{=PRev0096}{RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains." />
     <string id="PRev0097" text="{=PRev0097}Nobody want to pay for {CAPTIVE_HERO.NAME} remains" />
-
+    <string id="PRev0098" text="{=PRev0098}I cannot make the decision..." />
+    <string id="PRev0099" text="{=PRev0099}A good decision...[ib:happy][if:idle_normal]" />
   </strings>
 </base>

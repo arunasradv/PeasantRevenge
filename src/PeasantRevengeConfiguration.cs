@@ -111,6 +111,7 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
             public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsDeclined;
+            public List<RelationsPerTraits> lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsAccepted;
             public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
@@ -184,6 +185,15 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
+                  new List<RelationsPerTraits>
+                  {
+                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
+                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
+                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
+                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
+                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
+                  };
                 default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
                 default_lordTraitChangeWhenRansomRemainsDeclined();
@@ -191,6 +201,7 @@ namespace PeasantRevenge
                 default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
                 default_lordWillDeclineRansomTheVictimRemains();
                 default_lordWillAbandonTheVictimRemains();
+                default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -266,6 +277,14 @@ namespace PeasantRevenge
                  {
                     new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
                  };
+            }
+
+            public void default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict()
+            {
+              lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
+                  {
+                    new RelationsPerTraits {traits = "Mercy > 0&Honor > -1&Calculating > 0&Valor < 0", relations = "Relations > 40" },
+                  };
             }
         }
 

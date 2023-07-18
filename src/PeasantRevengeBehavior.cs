@@ -1183,6 +1183,11 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lordWillDeclineRansomTheVictimRemains();
                         _cfg.values.ai.default_lordWillAbandonTheVictimRemains();
                     }
+
+                    if (_cfg.values.CfgVersion < 16)
+                    {
+                        _cfg.values.ai.default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
+                    }
                 }
             }
             else
@@ -1499,6 +1504,25 @@ namespace PeasantRevenge
             return list;
         }
 
+        private bool AIwillMakeNoDecisionDueConflict(Hero hero, PeasantRevengeData revenge)
+        {
+          bool traits_and_relations_with_criminal = CheckConditions(hero, revenge.criminal.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
+          bool child_cond_criminal = revenge.criminal.HeroObject.Children.Contains(hero) || hero.Children.Contains(revenge.criminal.HeroObject) && CheckConditions(revenge.criminal.HeroObject, hero, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
+          bool friend_cond_criminal = (revenge.criminal.HeroObject.IsFriend(hero) && CheckConditions(revenge.criminal.HeroObject, hero, _cfg.values.ai.lordIfFriendsWillHelpTheCriminal));
+          bool not_enemy_cond_criminal = !revenge.criminal.HeroObject.IsEnemy(hero);
+
+          bool for_criminal = (traits_and_relations_with_criminal || child_cond_criminal || friend_cond_criminal) && not_enemy_cond_criminal;
+          
+          bool traits_and_relations_with_accused = CheckConditions(hero, revenge.accused_hero.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
+          bool child_cond_accused = revenge.accused_hero.HeroObject.Children.Contains(hero) || hero.Children.Contains(revenge.accused_hero.HeroObject) && CheckConditions(revenge.accused_hero.HeroObject, hero, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
+          bool friend_cond_accused = (revenge.accused_hero.HeroObject.IsFriend(hero) && CheckConditions(revenge.accused_hero.HeroObject, hero, _cfg.values.ai.lordIfFriendsWillHelpTheCriminal));
+          bool not_enemy_cond_accused = !revenge.accused_hero.HeroObject.IsEnemy(hero);
+
+          bool for_accused = (traits_and_relations_with_accused || child_cond_accused || friend_cond_accused) && not_enemy_cond_accused;
+          
+          return for_accused && for_criminal;
+        }
+
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
         {
             #region Peasant revenge configuration via dialog
@@ -1667,9 +1691,29 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_confirmed_lied",
               "peasant_revenge_lord_start_grievance_denied_confirm_a_lie",
-              "close_window",
+              "peasant_revenge_lord_start_grievance_denied_confirm_lie_ai_decision",
               "{=PRev0009}Yes!", null,
-              new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence_lied), 100, null, null);
+              null, 100, null, null);
+ 
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_0",
+             "peasant_revenge_lord_start_grievance_denied_confirm_lie_ai_decision",
+             "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finish",
+             "{=PRev0100}I cannot make the decision...[if:convo_thinking][ib:closed]", 
+             () => AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
+             () => peasant_revenge_hero_cannot_make_decision_consequence(currentRevenge.party.LeaderHero), 100, null);
+             campaignGameStarter.AddDialogLine(
+             "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_1",
+             "peasant_revenge_lord_start_grievance_denied_confirm_lie_ai_decision",
+             "close_window",
+             "{=PRev0100}You are dead now![ib:closed]", () => !AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
+             new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence_lied), 100, null);
+             campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finishing",
+              "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finish",
+              "close_window",
+              "{=PRev0101}A good decision...", null,
+              null, 100, null, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_start_grievance_denied_pay_end",
@@ -1796,8 +1840,20 @@ namespace PeasantRevenge
                null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_both_consequence),
                90, null, null);
-#warning need option to abandon the killing due to disagreement
-            //create option  "Cannot decide, no executions today"
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_peasants_ask_criminal_option_2",
+               "peasant_revenge_peasants_ask_criminal_options",
+               "peasant_revenge_peasants_finish_nodecision",
+               "{=PRev0098}I cannot make the decision...",
+               null,
+               ()=> peasant_revenge_hero_cannot_make_decision_consequence(Hero.MainHero),
+               90, null, null);
+#warning add more variations here
+            campaignGameStarter.AddDialogLine(
+               "peasant_revenge_peasants_finish_nodecision_end",
+               "peasant_revenge_peasants_finish_nodecision",
+               "close_window",
+               "{=PRev0099}A good decision...[ib:happy][if:idle_normal]", null, ()=> leave_encounter(), 120, null);
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_denied_end",
                "peasant_revenge_peasants_finish_denied",
@@ -2733,6 +2789,15 @@ namespace PeasantRevenge
             leave_encounter();
         }
 
+        private void peasant_revenge_hero_cannot_make_decision_consequence(Hero hero) 
+        {
+            currentRevenge.Stop();
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, currentRevenge.executioner.HeroObject,
+             _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0 && hero == Hero.MainHero);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, currentRevenge.criminal.HeroObject, 
+            _cfg.values.relationChangeWhenPlayerSavedTheCriminal, _cfg.values.relationChangeWhenPlayerSavedTheCriminal!=0 && hero == Hero.MainHero);   
+        }
 
         private void criminal_has_to_pay_in_gold_consequence()
         {
