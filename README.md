@@ -66,7 +66,7 @@
 - (**not implemented**) AI may try to encourage notable peasant to initiate the peasant revenge, if visited village does not have potential revengers and hero traits are appropriate.
 ### Heroes relations and traits due to peasant revenge
 - Traits
-  - This mod add additional hero traits exp changes during peasant revenge (when player leave or sell, or decline to return the criminal hero remains ).When paying the reparation heroes will gain charisma and generosity exp (default game process).
+  - This mod add additional hero traits exp (for player only) changes during peasant revenge (when player leave or sell, or decline to return the criminal hero remains ).When paying the reparation heroes will gain charisma and generosity exp (default game process).
   - Hero (player only) can change notable peasant traits via dialogue, when encouraging them to initiate the peasant revenge.
 - Relations
   - Mod try to care of relations between the criminal, notable peasant, mobile party hero, other involved heroes (who paid "lost ransom", settlement owner).
@@ -152,3 +152,8 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
 	  - lordIfRelativesWillHelpTheCriminal -
 	  - criminalWillBlameOtherLordForTheCrime -
 	  - lordWillKillBothAccusedHeroAndCriminalLord -
+	  - lordTraitChangeWhenRansomRemainsDeclined - (for player only)
+      - lordTraitChangeWhenRansomRemainsAccepted - (for player only)
+      - lordTraitChangeWhenRemainsOfLordAreAbandoned - (for player only) 
+      - lordWillDeclineRansomTheVictimRemains -
+      - lordWillAbandonTheVictimRemains -
