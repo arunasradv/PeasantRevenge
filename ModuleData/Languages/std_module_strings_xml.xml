@@ -103,5 +103,10 @@
     <string id="PRev0097" text="{=PRev0097}Nobody want to pay for {CAPTIVE_HERO.NAME} remains" />
     <string id="PRev0098" text="{=PRev0098}I cannot make the decision..." />
     <string id="PRev0099" text="{=PRev0099}A good decision...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="{=PRev0100}I cannot make the decision...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="{=PRev0101}You are dead now![ib:closed]" />
+    <string id="PRev0102" text="{=PRev0102}A good decision..." />
+    <string id="PRev0102" text="{=PRev00103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
+    <string id="PRev0102" text="{=PRev00104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
   </strings>
 </base>

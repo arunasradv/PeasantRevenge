@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +58,7 @@ namespace PeasantRevenge
         public int lordWillDemandRansomMoneyIfHasLessGoldThan = 2000;
         public bool otherKingdomClanCanCareOfPeasantRevenge = true;
         public bool alwwaysReportPeasantRevengeToClanLeader = true;
-        public float peasantRevengeTimeoutInDays = 5.0f;
+        public float peasantRevengeTimeoutInDays = 50.0f;
         public float peasantRevengeSartTimeInDays = 0.2f;
         public int peasantRevengeMaxPartySize = 5;
         public bool allowLordToKillMessenger = true;
@@ -288,7 +288,8 @@ namespace PeasantRevenge
             {
               lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
-                    new RelationsPerTraits {traits = "Mercy > 0&Honor > -1&Calculating > 0&Valor < 0", relations = "Relations > 40" },
+                    new RelationsPerTraits {traits = "Generosity > -2", relations = "Relations > -50" },
+                    //new RelationsPerTraits {traits = "Mercy > 0&Honor > -1&Calculating > 0&Valor < 0", relations = "Relations > 40" },
                   };
             }
         }

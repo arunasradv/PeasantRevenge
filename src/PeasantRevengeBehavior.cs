@@ -576,8 +576,9 @@ namespace PeasantRevenge
                 bool party_help_criminal_con = CheckConditions(party.Owner, executioner, _cfg.values.ai.lordWillAffordToHelpTheCriminalEnemy);
                 bool party_friend_to_criminal_con = party.Owner.IsFriend(prisoner);
                 bool party_overide_con = CheckConditions(party.Owner, executioner, _cfg.values.ai.partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet) || party.Owner.IsFriend(executioner);
-                bool party_let_revenge_con = (!party_help_criminal_con && !party_friend_to_criminal_con && !party_relatives_with_criminal_condition) || party_overide_con;
-
+                bool party_let_due_accusations = revenge.accused_hero != null ? !AIwillMakeNoDecisionDueConflict(party.Owner, revenge) : true;
+                bool party_let_revenge_con = (!party_help_criminal_con && !party_friend_to_criminal_con && !party_relatives_with_criminal_condition && !party_let_due_accusations) || party_overide_con;
+                
                 if (party_let_revenge_con || _cfg.values.alwaysExecuteTheCriminal) //no conflict with party leader and peasant or override
                 {
                     bool sellement_owner_relatives_with_criminal_condition = (settlement.Owner.Children.Contains(prisoner) || prisoner.Children.Contains(settlement.Owner)) &&
@@ -585,7 +586,8 @@ namespace PeasantRevenge
                     bool sellement_owner_help_criminal_con = CheckConditions(settlement.Owner, executioner, _cfg.values.ai.lordWillAffordToHelpTheCriminalEnemy);
                     bool sellement_owner_friend_to_criminal_con = settlement.Owner.IsFriend(prisoner);
                     bool sellement_owner_overide_con = CheckConditions(settlement.Owner, executioner, _cfg.values.ai.settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet);
-                    bool sellement_owner_let_revenge_con = (!sellement_owner_help_criminal_con && !sellement_owner_friend_to_criminal_con && !sellement_owner_relatives_with_criminal_condition) || sellement_owner_overide_con;
+                    bool sellement_owner_let_due_accusations = revenge.accused_hero != null ? !AIwillMakeNoDecisionDueConflict(settlement.Owner, revenge) : true;
+                    bool sellement_owner_let_revenge_con = (!sellement_owner_help_criminal_con && !sellement_owner_friend_to_criminal_con && !sellement_owner_relatives_with_criminal_condition && !sellement_owner_let_due_accusations) || sellement_owner_overide_con;
 
                     if (sellement_owner_let_revenge_con || _cfg.values.alwaysExecuteTheCriminal) //no conflict with settlement leader and peasant or override
                     {
@@ -603,7 +605,7 @@ namespace PeasantRevenge
 
                             if (!savers.IsEmpty())
                             {
-                                saver = savers.Where((x) => x.IsHumanPlayerCharacter).IsEmpty() ? savers.GetRandomElementInefficiently() : savers.Where((x) => x.IsHumanPlayerCharacter).First();
+                                saver = savers.Where((x) => x.IsHumanPlayerCharacter).IsEmpty() ? savers.GetRandomElementInefficiently() : savers.Where((x) => x.IsHumanPlayerCharacter).First();   
                             }
 
                             if (savers.IsEmpty() || _cfg.values.alwaysExecuteTheCriminal)
@@ -775,6 +777,7 @@ namespace PeasantRevenge
                             if (sellement_owner_help_criminal_con) condition += " lordWillAffordToHelpTheCriminal";
                             if (sellement_owner_relatives_with_criminal_condition) condition += " lordIfRelativesWillHelpTheCriminal";
                             if (!sellement_owner_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
+                            if (!sellement_owner_let_due_accusations) condition += " sellement_owner_let_due_accusations";
                             message = $"Settlement owner {settlement.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
 
                             if (sellement_owner_friend_to_criminal_con)
@@ -789,7 +792,10 @@ namespace PeasantRevenge
                             {
                                 LogMessage.Add("{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                             }
-                            
+                            else if (!sellement_owner_let_due_accusations)
+                            {
+                                LogMessage.Add("{=PRev00104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
+                            }
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                         }
@@ -812,6 +818,7 @@ namespace PeasantRevenge
                     if (party_help_criminal_con) condition += " lordWillAffordToHelpTheCriminal";
                     if (party_relatives_with_criminal_condition) condition += " lordIfRelativesWillHelpTheCriminal";
                     if (!party_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
+                    if (!party_let_due_accusations) condition += " party_let_due_accusations";
                     message = $"Party {party.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
 
                     if (party_friend_to_criminal_con)
@@ -826,7 +833,10 @@ namespace PeasantRevenge
                     {
                         LogMessage.Add("{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives.");
                     }
-
+                    else if (!party_let_due_accusations)
+                    {
+                        LogMessage.Add("{=PRev00103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
+                    }
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
   
@@ -1528,18 +1538,12 @@ namespace PeasantRevenge
         private bool AIwillMakeNoDecisionDueConflict(Hero hero, PeasantRevengeData revenge)
         {
           bool traits_and_relations_with_criminal = CheckConditions(hero, revenge.criminal.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
-          bool child_cond_criminal = revenge.criminal.HeroObject.Children.Contains(hero) || hero.Children.Contains(revenge.criminal.HeroObject) && CheckConditions(revenge.criminal.HeroObject, hero, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
-          bool friend_cond_criminal = (revenge.criminal.HeroObject.IsFriend(hero) && CheckConditions(revenge.criminal.HeroObject, hero, _cfg.values.ai.lordIfFriendsWillHelpTheCriminal));
-          bool not_enemy_cond_criminal = !revenge.criminal.HeroObject.IsEnemy(hero);
-
-          bool for_criminal = (traits_and_relations_with_criminal || child_cond_criminal || friend_cond_criminal) && not_enemy_cond_criminal;
+          
+          bool for_criminal = traits_and_relations_with_criminal;
           
           bool traits_and_relations_with_accused = CheckConditions(hero, revenge.accused_hero.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
-          bool child_cond_accused = revenge.accused_hero.HeroObject.Children.Contains(hero) || hero.Children.Contains(revenge.accused_hero.HeroObject) && CheckConditions(revenge.accused_hero.HeroObject, hero, _cfg.values.ai.lordIfRelativesWillHelpTheCriminal);
-          bool friend_cond_accused = (revenge.accused_hero.HeroObject.IsFriend(hero) && CheckConditions(revenge.accused_hero.HeroObject, hero, _cfg.values.ai.lordIfFriendsWillHelpTheCriminal));
-          bool not_enemy_cond_accused = !revenge.accused_hero.HeroObject.IsEnemy(hero);
-
-          bool for_accused = (traits_and_relations_with_accused || child_cond_accused || friend_cond_accused) && not_enemy_cond_accused;
+         
+          bool for_accused = traits_and_relations_with_accused;
           
           return for_accused && for_criminal;
         }
@@ -1727,13 +1731,13 @@ namespace PeasantRevenge
              "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_1",
              "peasant_revenge_lord_start_grievance_denied_confirm_lie_ai_decision",
              "close_window",
-             "{=PRev0100}You are dead now![ib:closed]", () => !AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
+             "{=PRev0101}You are dead now![ib:closed]", () => !AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
              new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence_lied), 100, null);
              campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finishing",
               "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finish",
               "close_window",
-              "{=PRev0101}A good decision...", null,
+              "{=PRev0102}A good decision...", null,
               null, 100, null, null);
 
             campaignGameStarter.AddDialogLine(
