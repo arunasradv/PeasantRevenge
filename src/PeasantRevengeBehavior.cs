@@ -1214,7 +1214,28 @@ namespace PeasantRevenge
                 _cfg.values.CfgVersion = defaultVersion;
                 #endregion
 
-                _cfg.Save(_cfg.values.file_name, _cfg.values);
+                bool can_save = false;
+
+                try
+                {
+                    if (Directory.GetDirectories(_cfg.values.file_name) != null)
+                    {
+                        can_save = true;
+                    }
+                }
+                catch
+                {
+                    //
+                }
+                finally
+                {
+                    if(!can_save)
+                    {
+                        _cfg.values.file_name = PeasantRevengeConfiguration.default_file_name();
+                    }
+                }
+                
+                _cfg.Save(_cfg.values.file_name, _cfg.values);               
             }
 
             AddDialogs(campaignGameStarter);
