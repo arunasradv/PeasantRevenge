@@ -60,13 +60,13 @@
 - AI may not allow to kill the criminal due to relations or traits.
 - AI will try to find, who could pay the reparation (the criminal, criminal's clan members, criminal's relatives, friends...).
 - Heroes can kill notable peasants, when heroes have certain traits and does not want to pay reparation to notable peasant (Player cannot ask for "lost ransom" up to game version 1.1.5).
-- Mobile party (from game version 1.2.0 for player too) may demand "lost ransom" after the criminal has been killed.
+- Mobile party may demand "lost ransom" after the criminal has been killed.
 - Notables, who have active issue quests, do not participate in peasant revenge.
 - Mobile parties without leader hero, do not participate in peasant revenge.
 - (**not implemented**) AI may try to encourage notable peasant to initiate the peasant revenge, if visited village does not have potential revengers and hero traits are appropriate.
 ### Heroes relations and traits due to peasant revenge
 - Traits
-  - This mod does not add any additional hero traits exp changes during peasant revenge (up to game version 1.1.5).When paying the reparation heroes will gain charisma and generosity exp (default game process).
+  - This mod add additional hero traits exp changes during peasant revenge (when player leave or sell, or decline to return the criminal hero remains ).When paying the reparation heroes will gain charisma and generosity exp (default game process).
   - Hero (player only) can change notable peasant traits via dialogue, when encouraging them to initiate the peasant revenge.
 - Relations
   - Mod try to care of relations between the criminal, notable peasant, mobile party hero, other involved heroes (who paid "lost ransom", settlement owner).
@@ -85,7 +85,7 @@ If you enable notable parties, and remove mod later without waiting for revenge 
 - Should be Save file compatible (Can be loaded/unloaded any time. If notable parties are enabled - let AI to kill them off)).
 - Mod Diplomacy: Diplomacy mod does not allow kill heroes, if killer hero is without mobile party.
 Please load the Diplomacy mod before this mod (The mod will automatically set allowLordToKillMessenger and allowPeasantToKillLord values to "false" in the PeasantRevengeModCfg xml file).
-- For version 1.2.0 and higher: mod has item "Remains of a corpse". It is converted to "Trash item" by game design after mod removal.
+- Mod has item "Remains of a corpse". It is converted to "Trash item" by game design after mod removal.
 
 ## Source code
 [GitHub](https://github.com/arunasradv/PeasantRevenge.git)

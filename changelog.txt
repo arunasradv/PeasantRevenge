@@ -60,3 +60,5 @@ Fix: heroes will always get relation penalty if they refuse peasant revenge, bec
 Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1
 230705 v15.0.0.1
 Feature: Hero can ransom criminal's remains.
+230724 v15.0.0.2
+Fix: Crash when value of file_name is wrong.
