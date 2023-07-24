@@ -96,7 +96,7 @@ namespace PeasantRevenge
             {
                 get
                 {
-                    bool value = state == quest_state.start && nobleParty != null && !party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && !Hero.MainHero.IsPrisoner;
+                    bool value = state == quest_state.start && nobleParty != null && !party.PrisonerHeroes.Contains(Hero.MainHero.CharacterObject) && criminal.HeroObject.IsAlive && criminal.HeroObject.IsPrisoner  && !Hero.MainHero.IsPrisoner;
                     return value;
                 }
                 private set => can_peasant_revenge_messenger_peasant_start = value;
@@ -1594,7 +1594,7 @@ namespace PeasantRevenge
              "peasant_revenge_player_config_mod_option_exit",
              "peasant_revenge_player_config_mod_options_set",
              "close_window",
-             "{=PRev0094}I must leave now.", null, null, 0, null);
+             "{=PRev0094}I must leave now.", null, () => leave_encounter(), 0, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_player_config_mod_npc_end_dis",
@@ -2637,7 +2637,10 @@ namespace PeasantRevenge
         {
             if (PlayerEncounter.Current == null) return;
             PlayerEncounter.LeaveEncounter = true;
-            if (currentRevenge.xParty != null) currentRevenge.xParty.Ai.SetMoveModeHold();
+            if (currentRevenge.xParty != null)
+            {
+                currentRevenge.xParty.Ai.SetMoveModeHold();
+            }
         }
 
         private void peasant_revenge_party_need_compensation_not_payed_consequence()
