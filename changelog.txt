@@ -60,6 +60,8 @@ Fix: heroes will always get relation penalty if they refuse peasant revenge, bec
 Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1
 230705 v15.0.0.1
 Feature: Hero can ransom criminal's remains.
+230724 v15.0.0.2
+Fix: Crash when value of file_name is wrong.
 Feature: (**not implemented**) hero let the other lord (AI will search other hero, who could save the criminal) to decide criminal's fate.
 Feature: (**not implemented**) Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
 Feature: (**not implemented**) do not allow the execution due to disagreements (criminal and blamed hero are not executed)

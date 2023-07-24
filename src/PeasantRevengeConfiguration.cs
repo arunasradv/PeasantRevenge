@@ -45,7 +45,7 @@ namespace PeasantRevenge
 #else
         public string log_file_name = "";// Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
 #endif
-        public string file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "PeasantRevengeModCfg.xml");
+        public string file_name = default_file_name();
         public int criminalHeroFromKingdomSuporterMinimumRelation = -70;
         public float criminalHeroFromKingdomSuporterMinimumAge = 18.0f;
         public int criminalHeroFromClanSuporterMinimumRelation = -70;
@@ -74,6 +74,11 @@ namespace PeasantRevenge
 #endif
 
         public AIfilters ai;
+
+        public static string default_file_name()
+        {
+            return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "PeasantRevengeModCfg.xml");
+        }
 
         public class AIfilters
         {
@@ -201,7 +206,7 @@ namespace PeasantRevenge
                 default_lordTraitChangeWhenRansomRemainsAccepted();
                 default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
                 default_lordWillDeclineRansomTheVictimRemains();
-                default_lordWillAbandonTheVictimRemains();
+                default_lordWillAbandonTheVictimRemains();                
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
