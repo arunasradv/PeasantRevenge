@@ -62,3 +62,4 @@ Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1
 Feature: Hero can ransom criminal's remains.
 230724 v15.0.0.2
 Fix: Crash when value of file_name is wrong.
+Fix: DependedModules versions.
