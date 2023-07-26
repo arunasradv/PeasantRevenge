@@ -223,10 +223,10 @@ namespace PeasantRevenge
                 criminalWillBlameOtherLordForTheCrime =
                  new List<RelationsPerTraits>
                  {
-                   //passive dependent
-                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
-                   //dominant manipalutive
-                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
+                     //passive dependent
+                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
+                     //dominant manipalutive
+                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
                  };
             }
 
@@ -288,8 +288,7 @@ namespace PeasantRevenge
             {
               lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
-                    new RelationsPerTraits {traits = "Generosity > -2", relations = "Relations > -50" },
-                    //new RelationsPerTraits {traits = "Mercy > 0&Honor > -1&Calculating > 0&Valor < 0", relations = "Relations > 40" },
+                    new RelationsPerTraits {traits = "Mercy > 0&Valor < 0", relations = "Relations > 0" },
                   };
             }
         }
