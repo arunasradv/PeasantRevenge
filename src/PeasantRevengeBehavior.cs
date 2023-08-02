@@ -2667,10 +2667,7 @@ namespace PeasantRevenge
         {
             if (PlayerEncounter.Current == null) return;
             PlayerEncounter.LeaveEncounter = true;
-            if (currentRevenge.xParty != null)
-            {
-                currentRevenge.xParty.Ai.SetMoveModeHold();
-            }
+            if (currentRevenge.xParty != null) currentRevenge.xParty.Ai.SetMoveModeHold();
         }
 
         private void peasant_revenge_party_need_compensation_not_payed_consequence()
