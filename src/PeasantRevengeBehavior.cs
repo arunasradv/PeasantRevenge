@@ -1798,7 +1798,7 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_die",
                "peasant_revenge_peasants_start_grievance_received",
-               "peasant_revenge_peasants_finish_criminal_killed",
+               "peasant_revenge_peasants_finish_criminal_killed_pl_options_start",
                "{=PRev0015}{CRIMINAL.NAME} will die.", null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_the_criminal), 100, null, null);
             campaignGameStarter.AddPlayerLine(
@@ -1987,34 +1987,25 @@ namespace PeasantRevenge
                 "{=PRev0024}How dare you! You'll die!",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
                 null, 90, null, null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_peasants_messenger_start_grievance_received_nodecision",
+              "peasant_revenge_peasants_messenger_start_grievance_received",
+              "peasant_revenge_peasants_messenger_finish_nodecision",
+              "{=PRev0098}I cannot make the decision...",
+              null,
+              () => peasant_revenge_hero_cannot_make_decision_consequence(Hero.MainHero),
+              90, null, null);
 
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_peasants_messenger_finish_nodecision_end",
+             "peasant_revenge_peasants_messenger_finish_nodecision",
+             "close_window",
+             "{=PRev0101} So be it[ib: closed]", null, () => leave_encounter(), 120, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_messenger_finish_paid_end",
              "peasant_revenge_peasants_messenger_finish_paid",
              "close_window",
              "{=PRev0025}Better than nothing...[ib:closed][if:idle_angry][rf:idle_angry]", null, () => leave_encounter(), 120, null);
-#if false
-            campaignGameStarter.AddDialogLine(
-             "peasant_revenge_peasants_messenger_not_pay_let_save_end",
-             "peasant_revenge_peasants_messenger_not_pay_let_save",
-             "peasant_revenge_peasants_messenger_not_pay_let_save_choose",
-             "{=PRev0048}..., but if he can not pay, I will chop {?CRIMINAL.GENDER}her{?}his{\\?} head off![[ib:aggressive]][if:idle_angry][rf:idle_angry]", null, null, 120, null);
-            campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_peasants_messenger_not_pay_let_save_choose_yes",
-               "peasant_revenge_peasants_messenger_not_pay_let_save_choose",
-               "close_window",
-               "{= PRev0009}Yes!",
-               null,
-               new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_peasant_messengernot_pay_let_save_choose_yes_consequence), 120, null, null);
-            campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_peasants_messenger_not_pay_let_save_choose_ransom",
-               "peasant_revenge_peasants_messenger_not_pay_let_save_choose",
-               "close_window",
-               "{=PRev0017}No, it is not your business, peasant!",
-               null,
-               new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_peasant_messenger_not_kill_hero_consequence), 110, null, null);
-#endif
-
 
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_denied_and_killed_end",
@@ -2410,11 +2401,23 @@ namespace PeasantRevenge
                 PeasantRevengeData revenge = revengeData.Where((x) =>
                 x.executioner != null &&
                 x.executioner.HeroObject == Hero.OneToOneConversationHero &&
-                !x.Can_peasant_revenge_peasant_start &&
-                !x.Can_peasant_revenge_messenger_peasant_start &&
-                !x.Can_peasant_revenge_peasant_finish_start).FirstOrDefault();
+                !(x.Can_peasant_revenge_peasant_start ||
+                x.Can_peasant_revenge_messenger_peasant_start ||
+                x.Can_peasant_revenge_peasant_finish_start)).FirstOrDefault();
 
-                if (revenge != null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
+                PeasantRevengeData revenge_yes = revengeData.Where((x) =>
+               x.executioner != null &&
+               x.executioner.HeroObject == Hero.OneToOneConversationHero &&
+               (x.Can_peasant_revenge_peasant_start ||
+               x.Can_peasant_revenge_messenger_peasant_start ||
+               x.Can_peasant_revenge_peasant_finish_start)).FirstOrDefault();
+
+                if(revenge_yes != null) // peasant can participate in the revenge
+                {
+                    return false;
+                }
+
+                if (revenge == null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
                 {
                     return true;
                 }
