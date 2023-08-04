@@ -106,7 +106,8 @@
     <string id="PRev0100" text="{=PRev0100}I cannot make the decision...[if:convo_thinking][ib:closed]" />
     <string id="PRev0101" text="{=PRev0101}So be it[rf:convo_angry][ib:closed]" />
     <string id="PRev0102" text="{=PRev0102}A good decision..." />
-    <string id="PRev0103" text="{=PRev00103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
-    <string id="PRev0104" text="{=PRev00104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
+    <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
+    <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
+    <string id="PRev0105" text="{=PRev0105}I'll take your remains." />
   </strings>
 </base>

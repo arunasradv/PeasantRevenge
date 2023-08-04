@@ -1922,46 +1922,63 @@ namespace PeasantRevenge
               "close_window",
               "{=PRev0094}I must leave now.",
               null, () => {
-                  peasant_revenge_leave_lord_body_consequence();
                   if (!(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)))
                   {
-                       peasant_revenge_peasant_kill_the_criminal();
+                      if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
+                      {
+                          peasant_revenge_peasant_kill_the_criminal();
+                      }
+                      else
+                      {
+                          peasant_revenge_peasant_messenger_kill_hero_consequence();
+                      }                       
                   }
                   else
                   {
                       peasant_revenge_peasant_messenger_kill_both_consequence();
                   }
+                  peasant_revenge_leave_lord_body_consequence();
                   currentRevenge.Stop();
+                  leave_encounter();
               }, 100, null, null);          
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_player_demand_lost_ransom_take_c_body_ransom",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
              "close_window",
-             "{=PRev0105}I'll take criminal's remains.",
+             "{=PRev0105}I'll take your remains.",
              () => {
                  return (
-                    !(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
+                    (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) ||
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                     );
              }, () => {
-                 peasant_revenge_player_demand_ransom_consequence(); 
-                 peasant_revenge_peasant_kill_the_criminal();
+                 if (!(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
+                    currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)))
+                 {
+                     if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
+                     {
+                         peasant_revenge_peasant_kill_the_criminal();
+                         AddKilledLordsCorpses(currentRevenge);
+                         peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
+                     }
+                     else
+                     {
+                         peasant_revenge_peasant_messenger_kill_hero_consequence();
+                         AddKilledLordsCorpses(currentRevenge);
+                         peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                     }
+                 }
+                 else
+                 {
+                     peasant_revenge_peasant_messenger_kill_both_consequence();
+                     AddKilledLordsCorpses(currentRevenge);
+                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
+                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                 }
                  currentRevenge.Stop();
+                 leave_encounter();
              }, 90, null, null);
-            campaignGameStarter.AddPlayerLine(
-              "peasant_revenge_player_demand_lost_ransom_take_ac_body_ransom",
-              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
-              "close_window",
-              "{=PRev0106}I'll take all criminals remains.",
-                () => { return (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
-                    currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)); }, 
-                () => { 
-                    peasant_revenge_player_demand_ransom_consequence();
-                    peasant_revenge_peasant_messenger_kill_both_consequence();
-                    currentRevenge.Stop();
-                }, 90, null, null);
-
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_denied_end",
                "peasant_revenge_peasants_finish_denied",
@@ -2264,10 +2281,10 @@ namespace PeasantRevenge
             OnLordRemainsAbandoned(Hero.MainHero);
         }
 
-        private void peasant_revenge_player_demand_ransom_consequence()
+        private void peasant_revenge_player_demand_ransom_consequence(Hero criminal)
         {
-            AddKilledLordsCorpses(currentRevenge);
-            Hero criminal = currentRevenge.criminal.HeroObject;
+            //AddKilledLordsCorpses(currentRevenge);
+            //Hero criminal = currentRevenge.criminal.HeroObject;
             float ransomValue= (float)Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(criminal.CharacterObject, null);
 
             List<Hero> ransomers = GetHeroSuportersWhoCouldPayUnpaidRansom(criminal, (int)ransomValue);
