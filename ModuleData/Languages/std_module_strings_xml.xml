@@ -108,6 +108,6 @@
     <string id="PRev0102" text="{=PRev0102}A good decision..." />
     <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
     <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
-    <string id="PRev0105" text="{=PRev0105}I'll take your remains." />
+    <string id="PRev0105" text="{=PRev0105}I'll take the remains." />
   </strings>
 </base>

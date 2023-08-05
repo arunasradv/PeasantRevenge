@@ -1563,15 +1563,17 @@ namespace PeasantRevenge
 
         private bool AIwillMakeNoDecisionDueConflict(Hero hero, PeasantRevengeData revenge)
         {
-          bool traits_and_relations_with_criminal = CheckConditions(hero, revenge.criminal.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
-          
-          bool for_criminal = traits_and_relations_with_criminal;
-          
-          bool traits_and_relations_with_accused = CheckConditions(hero, revenge.accused_hero.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
-         
-          bool for_accused = traits_and_relations_with_accused;
-          
-          return for_accused && for_criminal;
+            bool traits_and_relations_with_criminal = CheckConditions(hero, revenge.criminal.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
+
+            bool for_criminal = traits_and_relations_with_criminal;
+
+            bool traits_and_relations_with_accused = CheckConditions(hero, revenge.accused_hero.HeroObject, _cfg.values.ai.lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict);
+
+            bool for_accused = traits_and_relations_with_accused;
+
+            bool decision = for_accused && for_criminal;
+
+            return decision;
         }
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
@@ -1922,23 +1924,27 @@ namespace PeasantRevenge
               "close_window",
               "{=PRev0094}I must leave now.",
               null, () => {
-                  if (!(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
+                  if ((currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)))
+                  {
+                      peasant_revenge_peasant_messenger_kill_both_consequence();                                         
+                  }
+                  else
                   {
                       if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                       {
                           peasant_revenge_peasant_kill_the_criminal();
                       }
-                      else
+                      else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                       {
                           peasant_revenge_peasant_messenger_kill_hero_consequence();
-                      }                       
+                      }    
                   }
-                  else
+                  if ((currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) ||
+                    currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)))
                   {
-                      peasant_revenge_peasant_messenger_kill_both_consequence();
+                      peasant_revenge_leave_lord_body_consequence();
                   }
-                  peasant_revenge_leave_lord_body_consequence();
                   currentRevenge.Stop();
                   leave_encounter();
               }, 100, null, null);          
@@ -1946,35 +1952,36 @@ namespace PeasantRevenge
              "peasant_revenge_player_demand_lost_ransom_take_c_body_ransom",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
              "close_window",
-             "{=PRev0105}I'll take your remains.",
+             "{=PRev0105}I'll take the remains.",
              () => {
                  return (
                     (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) ||
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                     );
              }, () => {
-                 if (!(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
+                 if ((currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed)))
+                 { 
+                     peasant_revenge_peasant_messenger_kill_both_consequence();
+                     AddKilledLordsCorpses(currentRevenge);
+                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
+                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                     
+                 }
+                 else
                  {
-                     if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
+                    if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                      {
                          peasant_revenge_peasant_kill_the_criminal();
                          AddKilledLordsCorpses(currentRevenge);
                          peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
                      }
-                     else
+                     else if(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                      {
                          peasant_revenge_peasant_messenger_kill_hero_consequence();
                          AddKilledLordsCorpses(currentRevenge);
                          peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
                      }
-                 }
-                 else
-                 {
-                     peasant_revenge_peasant_messenger_kill_both_consequence();
-                     AddKilledLordsCorpses(currentRevenge);
-                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
-                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
                  }
                  currentRevenge.Stop();
                  leave_encounter();
@@ -2414,11 +2421,14 @@ namespace PeasantRevenge
         #endregion
         private bool peasant_revenge_player_config_mod_start_condition()
         {
-            return (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
+            bool start = (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
                 !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&
                 (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
                 Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom ||
-                !Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.IsAtWarWith(Hero.MainHero.Clan.MapFaction));
+                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == null ? 
+                !Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.IsAtWarWith(Hero.MainHero.Clan.MapFaction) : 
+                !Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom.IsAtWarWith(Hero.MainHero.Clan.MapFaction));
+            return start;
         }
 
         private bool peasant_revenge_ask_criminal_start_condition()
@@ -2641,6 +2651,7 @@ namespace PeasantRevenge
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
         {
             TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait), Hero.MainHero);
+            leave_encounter();
         }
         private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
         {
@@ -2652,6 +2663,7 @@ namespace PeasantRevenge
             }
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
+            leave_encounter();
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_condition()

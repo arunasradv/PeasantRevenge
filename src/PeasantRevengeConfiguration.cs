@@ -63,15 +63,9 @@ namespace PeasantRevenge
         public int peasantRevengeMaxPartySize = 5;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
-#if TESTING
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
         public string logColorForOtherFactions = "hA02222A0";
-#else
-        public string logColorForClan = "hFFFFFFFF";
-        public string logColorForKingdom = "hBBBBBBBB";
-        public string logColorForOtherFactions = "hA0A0A0A0";
-#endif
 
         public AIfilters ai;
 
@@ -280,7 +274,7 @@ namespace PeasantRevenge
                 lordWillAbandonTheVictimRemains =
                  new List<RelationsPerTraits>
                  {
-                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
+                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0", relations = "Relations < -50"},
                  };
             }
 
@@ -288,7 +282,8 @@ namespace PeasantRevenge
             {
               lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
-                    new RelationsPerTraits {traits = "Mercy > 0&Valor < 0", relations = "Relations > 0" },
+                    new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 20" },
+                    new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
                   };
             }
         }
