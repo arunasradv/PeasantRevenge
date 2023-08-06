@@ -233,10 +233,6 @@
       <HintPath>F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\CustomBattle\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.CustomBattle.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="TaleWorlds.MountAndBlade.DedicatedCustomServer.ClientHelper">
-      <HintPath>F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\DedicatedCustomServerHelper\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.DedicatedCustomServer.ClientHelper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="TaleWorlds.MountAndBlade.Diamond">
       <HintPath>F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
       <Private>False</Private>
