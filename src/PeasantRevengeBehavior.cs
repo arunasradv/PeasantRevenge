@@ -820,7 +820,7 @@ namespace PeasantRevenge
                             }
                             else if (!sellement_owner_let_due_accusations)
                             {
-                                LogMessage.Add("{=PRev00104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
+                                LogMessage.Add("{=PRev0104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
                             }
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, false);
@@ -861,7 +861,7 @@ namespace PeasantRevenge
                     }
                     else if (!party_let_due_accusations)
                     {
-                        LogMessage.Add("{=PRev00103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
+                        LogMessage.Add("{=PRev0103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations.");
                     }
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, executioner, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, prisoner, -1 * _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, party.Owner.Clan == Hero.MainHero.Clan && _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
@@ -1762,7 +1762,7 @@ namespace PeasantRevenge
                  bool kill_both = CheckConditions(currentRevenge.party.Owner, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord);
                  return !AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge) && !kill_both;
              },
-             new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_hero_consequence_lied), 100, null);
+             new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_kill_victim_consequence_lied), 100, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_2",
              "peasant_revenge_lord_start_grievance_denied_confirm_lie_ai_decision",
@@ -1772,7 +1772,7 @@ namespace PeasantRevenge
                  bool kill_both = CheckConditions(currentRevenge.party.Owner, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lordWillKillBothAccusedHeroAndCriminalLord);
                  return !AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge) && kill_both;
              },
-             ()=> { peasant_revenge_peasant_kill_both_hero_consequence_lied();}, 100, null);
+             ()=> { peasant_revenge_peasant_kill_both_consequence_lied();}, 100, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finishing",
               "peasant_revenge_lord_start_grievance_denied_confirm_lie_no_decision_finish",
@@ -1948,7 +1948,7 @@ namespace PeasantRevenge
                       }
                       else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                       {
-                          peasant_revenge_peasant_messenger_kill_hero_consequence();
+                          peasant_revenge_peasant_messenger_kill_victim_consequence();
                       }    
                   }
                   if ((currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) ||
@@ -1989,7 +1989,7 @@ namespace PeasantRevenge
                      }
                      else if(currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                      {
-                         peasant_revenge_peasant_messenger_kill_hero_consequence();
+                         peasant_revenge_peasant_messenger_kill_victim_consequence();
                          AddKilledLordsCorpses(currentRevenge);
                          peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
                      }
@@ -2033,7 +2033,7 @@ namespace PeasantRevenge
                "close_window",
                "{=PRev0022}I'll not bow to peasant demands! And {HERO.NAME} should too!",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_fill_hero_condition),
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_not_kill_hero_consequence), 110, null, null);
+               ()=> { peasant_revenge_peasant_messenger_not_kill_hero_consequence(); leave_encounter(); }, 110, null, null);
             //will not pay peasant go to criminal hero clan/kingdom to ask reparation
 #if false
             campaignGameStarter.AddPlayerLine(
@@ -2061,7 +2061,7 @@ namespace PeasantRevenge
                    }
                    return true;
                },
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_hero_consequence), 100, null, null);
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_kill_victim_consequence), 100, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_peasants_messenger_start_grievance_received_not_pay_both_kill",
               "peasant_revenge_peasants_messenger_start_grievance_received",
@@ -2094,7 +2094,7 @@ namespace PeasantRevenge
                 "close_window",
                 "{=PRev0027}And I'll send your head to {HERO.NAME}!",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
-                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_messenger_killed_consequence), 90, null, null);
+                ()=> { peasant_revenge_peasant_messenger_killed_consequence(); leave_encounter(); }, 90, null, null);
 
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_not_paid_with_compensation",
@@ -2102,7 +2102,7 @@ namespace PeasantRevenge
                "close_window",
                "{=PRev0028}So, criminal will die.[ib:closed][if:happy]",
                new ConversationSentence.OnConditionDelegate(peasant_revenge_party_need_compensation_for_killed_pow_condition),
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_party_need_compensation_for_killed_pow_consequence), 120, null);
+               ()=>{peasant_revenge_party_need_compensation_for_killed_pow_consequence(); leave_encounter(); }, 120, null);
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_not_paid_no_compensation",
                "peasant_revenge_peasants_messenger_finish_not_paid",
@@ -2797,12 +2797,9 @@ namespace PeasantRevenge
 
         private void peasant_revenge_peasant_messenger_killed_consequence()
         {
-            currentRevenge.Stop();
-
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordKilledMessenger, _cfg.values.relationChangeWhenLordKilledMessenger!=0);    
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));            
-            KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, Hero.MainHero, true, true);            
-            leave_encounter();
+            KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, Hero.MainHero, true, true); 
         }
 
         private bool peasant_revenge_peasant_messenger_killed_condition()
@@ -2843,89 +2840,52 @@ namespace PeasantRevenge
             
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordRefusedToPayReparations, false);
             
-            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} did not executed {currentRevenge.criminal.Name}");            
-            leave_encounter();
+            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} did not executed {currentRevenge.criminal.Name}");  
 	}
 
-        private void peasant_revenge_peasant_messenger_kill_hero_consequence()
+        private void ExecuteHero(Hero victim)
+        {
+            if (_cfg.values.allowPeasantToKillLord)
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
+                log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
+            }
+            else
+            {
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.party.LeaderHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                KillCharacterAction.ApplyByExecution(victim, currentRevenge.party.LeaderHero, true, true);
+                log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.party.LeaderHero.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
+            }
+        }
+
+        private void peasant_revenge_peasant_messenger_kill_victim_consequence()
         {
             Hero victim = currentRevenge.accused_hero == null ? currentRevenge.criminal.HeroObject : currentRevenge.accused_hero.HeroObject;
 
             if (currentRevenge.accused_hero != null && currentRevenge.accused_hero != currentRevenge.criminal)
             {
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.criminal.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.targetHero.HeroObject, currentRevenge.criminal.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
             }
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);
-           
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
-            }
-            
-            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.targetHero.HeroObject, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal!=0);            
+            ExecuteHero(victim);
         }
 
         private void peasant_revenge_peasant_kill_the_criminal()
         {
-            Hero victim = currentRevenge.criminal.HeroObject;
-
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.targetHero.HeroObject, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
-
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
-            }
-
-            leave_encounter();
+            ExecuteHero(currentRevenge.criminal.HeroObject);
         }
-
+       
         private void peasant_revenge_peasant_messenger_kill_both_consequence()
         {
-            Hero victim =  currentRevenge.criminal.HeroObject;
-
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
-
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
-            }
-
-            victim = currentRevenge.accused_hero.HeroObject;
-
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
-                KillCharacterAction.ApplyByExecution(victim, Hero.MainHero, true, true);
-            }
-            log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {currentRevenge.criminal.Name} and {currentRevenge.accused_hero.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
-            leave_encounter();
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, currentRevenge.targetHero.HeroObject , _cfg.values.relationChangeWhenLordExecutedTheCriminal, _cfg.values.relationChangeWhenLordExecutedTheCriminal != 0);
+            ExecuteHero(currentRevenge.criminal.HeroObject); 
+            ExecuteHero(currentRevenge.accused_hero.HeroObject);
         }
 
         private void peasant_revenge_hero_cannot_make_decision_consequence(Hero hero) 
@@ -3054,50 +3014,16 @@ namespace PeasantRevenge
             return false;
         }
 
-        private void peasant_revenge_peasant_kill_hero_consequence_lied()
+        private void peasant_revenge_peasant_kill_victim_consequence_lied()
         {
             currentRevenge.Stop();
-
-            Hero victim = currentRevenge.accused_hero.HeroObject;
-
-            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);
-
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victim.Name}");                
-
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {victim.Name}");
-
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.party.Owner, true, true);
-            }
+            ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenLordExecutedTheCriminal, true, true);            
+            ExecuteHero(currentRevenge.accused_hero.HeroObject);            
         }
-        private void peasant_revenge_peasant_kill_both_hero_consequence_lied()
+        private void peasant_revenge_peasant_kill_both_consequence_lied()
         {
             currentRevenge.Stop();
-
-            Hero victim = currentRevenge.accused_hero.HeroObject;
-
-            if (_cfg.values.allowPeasantToKillLord)
-            {
-                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.executioner.Name} executed {victim.Name}");
-
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
-            }
-            else
-            {
-                log($"{currentRevenge.party.Owner.Name} captured {currentRevenge.criminal.Name} and {currentRevenge.party.Owner.Name} executed {victim.Name}");
-
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, victim, SceneNotificationData.RelevantContextType.Map));
-                KillCharacterAction.ApplyByExecution(victim, currentRevenge.party.Owner, true, true);
-            }
-
+            ExecuteHero(currentRevenge.accused_hero.HeroObject);
             kill_main_hero();
         }
         private void peasant_revenge_peasant_not_kill_hero_consequence()

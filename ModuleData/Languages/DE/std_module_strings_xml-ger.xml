@@ -99,7 +99,15 @@
     <string id="PRev0093" text="Ich werde Dörfer nur gegen meine Feinde verteidigen." />
     <string id="PRev0094" text="Ich muss jetzt gehen." />
     <string id="PRev0095" text="Ich möchte etwas besprechen." />
-    <string id="PRev0096" text="{RANSOMER.LINK} bietet Ihnen {GOLD_AMOUNT}{GOLD_ICON} Lösegeld an, wenn Sie {CAPTIVE_HERO.NAME} Reste geben.“ />"
+    <string id="PRev0096" text="{RANSOMER.LINK} bietet Ihnen {GOLD_AMOUNT}{GOLD_ICON} Lösegeld an, wenn Sie {CAPTIVE_HERO.NAME} Reste geben.“" />
     <string id="PRev0097" text="Niemand will für {CAPTIVE_HERO.NAME} bezahlen bleibt übrig" />
+    <string id="PRev0098" text="Ich kann die Entscheidung nicht treffen..." />
+    <string id="PRev0099" text="Eine gute Entscheidung...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Ich kann die Entscheidung nicht treffen...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="So sei es[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Eine gute Entscheidung..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} aufgrund widersprüchlicher Anschuldigungen nicht hingerichtet." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} hat {PRISONER.NAME} aufgrund widersprüchlicher Anschuldigungen nicht hingerichtet." />
+    <string id="PRev0105" text="Ich nehme die Überreste." />
   </strings>
 </base>

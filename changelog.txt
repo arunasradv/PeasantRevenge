@@ -63,6 +63,10 @@ Feature: Hero can ransom criminal's remains.
 230724 v15.0.0.2
 Fix: Crash when value of file_name is wrong.
 Fix: DependedModules versions.
-230724 v15.0.0.3
+230805 v15.0.0.3
 Feature: Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
 Feature: Player can do not allow the execution due to disagreements (criminal and blamed hero are not executed)
+Feature: Execution are performed by party leader (who captured the prisoner), if allowPeasantToKillLord is false (i.e. when using Diplomacy mod).
+Feature: Executions are be at the end of the dialogs.
+Fix:     When player can attack notable peasant party
+Fix:     When Notable is following player until timeout, when revenge should have ended.
