@@ -63,15 +63,9 @@ namespace PeasantRevenge
         public int peasantRevengeMaxPartySize = 5;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
-#if TESTING
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
         public string logColorForOtherFactions = "hA02222A0";
-#else
-        public string logColorForClan = "hFFFFFFFF";
-        public string logColorForKingdom = "hBBBBBBBB";
-        public string logColorForOtherFactions = "hA0A0A0A0";
-#endif
 
         public AIfilters ai;
 
@@ -116,6 +110,7 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
             public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsDeclined;
+            public List<RelationsPerTraits> lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsAccepted;
             public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
@@ -189,13 +184,23 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
+                  new List<RelationsPerTraits>
+                  {
+                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
+                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
+                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
+                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
+                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
+                  };
                 default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
                 default_lordTraitChangeWhenRansomRemainsDeclined();
                 default_lordTraitChangeWhenRansomRemainsAccepted();
                 default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
                 default_lordWillDeclineRansomTheVictimRemains();
-                default_lordWillAbandonTheVictimRemains();                
+                default_lordWillAbandonTheVictimRemains();
+                default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -212,10 +217,10 @@ namespace PeasantRevenge
                 criminalWillBlameOtherLordForTheCrime =
                  new List<RelationsPerTraits>
                  {
-                   //passive dependent
-                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
-                   //dominant manipalutive
-                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
+                     //passive dependent
+                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
+                     //dominant manipalutive
+                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
                  };
             }
 
@@ -269,8 +274,17 @@ namespace PeasantRevenge
                 lordWillAbandonTheVictimRemains =
                  new List<RelationsPerTraits>
                  {
-                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
+                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0", relations = "Relations < -50"},
                  };
+            }
+
+            public void default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict()
+            {
+              lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
+                  {
+                    new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 20" },
+                    new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
+                  };
             }
         }
 

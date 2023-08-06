@@ -101,5 +101,13 @@
     <string id="PRev0095" text="Il y a quelque chose dont j'aimerais discuter." />
     <string id="PRev0096" text="{RANSOMER.LINK} vous offre {GOLD_AMOUNT}{GOLD_ICON} en rançon si vous donnez les restes de {CAPTIVE_HERO.NAME}." />
     <string id="PRev0097" text="Personne ne veut payer pour {CAPTIVE_HERO.NAME} reste" />
+    <string id="PRev0098" text="Je ne peux pas prendre la décision..." />
+    <string id="PRev0099" text="Une bonne décision...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Je ne peux pas prendre la décision...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="Ainsi soit-il[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Une bonne décision..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, en raison d'accusations contradictoires." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, en raison d'accusations contradictoires." />
+    <string id="PRev0105" text="Je prendrai les restes." />
   </strings>
 </base>
