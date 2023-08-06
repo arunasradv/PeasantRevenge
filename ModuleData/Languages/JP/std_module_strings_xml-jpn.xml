@@ -101,5 +101,13 @@
     <string id="PRev0095" text="話したいことがある." />
     <string id="PRev0096" text="{RANSOMER.LINK} は、{CAPTIVE_HERO.NAME} の遺体を差し出す場合、身代金として {GOLD_AMOUNT}{GOLD_ICON} を提供します。" />
     <string id="PRev0097" text="{CAPTIVE_HERO.NAME} の代金を払いたくない人は誰もいません" />
+    <string id="PRev0098" text="決断できません..." />
+    <string id="PRev0099" text="良い決断でした...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="決断できません...[if:convo_ Thinking][ib:closed]" />
+    <string id="PRev0101" text="それでいい[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="良い決断でした..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0105" text="遺骨は引き取ります。" />
   </strings>
 </base>

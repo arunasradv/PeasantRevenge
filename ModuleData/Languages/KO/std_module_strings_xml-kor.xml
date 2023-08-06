@@ -101,5 +101,13 @@
     <string id="PRev0095" text="토론하고 싶은 것이 있습니다." />
     <string id="PRev0096" text="{RANSOMER.LINK}는 {CAPTIVE_HERO.NAME}의 유해를 제공한다면 {GOLD_AMOUNT}{GOLD_ICON}의 몸값을 제안합니다." />
     <string id="PRev0097" text="아무도 {CAPTIVE_HERO.NAME}의 유골에 대한 대가를 지불하고 싶어하지 않습니다" />
+    <string id="PRev0098" text="결정을 내릴 수 없습니다..." />
+    <string id="PRev0099" text="좋은 결정...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="결정을 내릴 수 없습니다...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="그럼[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="좋은 결정..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME}은(는) 상충되는 혐의 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME}은(는) 상충되는 혐의 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
+    <string id="PRev0105" text="유골은 제가 맡겠습니다." />
   </strings>
 </base>
