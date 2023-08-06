@@ -13,7 +13,7 @@
       - agree with the criminal (the blamed hero will be executed);
       - disagree with the criminal (the criminal will be executed);
       - execute both (the blamed hero and the criminal);
-      - (**not implemented**) do not allow the execution due to disagreements (criminal and blamed hero are not executed)
+      - do not allow the execution due to disagreements (criminal and blamed hero are not executed)
  2. When player is captured as a criminal, the dialogue options are: 
      - asking the hero, what if he will not pay the reparation (depending on AI hero traits and relations, hero will tell if player will be executed or not);
      - (**not implemented**) player try to persuade the hero;
@@ -22,7 +22,7 @@
      - do not agree to pay the reparation (depending on AI hero traits and relations, player will be executed or spared);
      - blame other prisoner for the crime. More options will be available:
        - confirm the blame (blamed hero will be executed);
-	     - (**not implemented**) Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
+	     - Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
 	   - change the mind (dialogue will return to previous options);
  3. When hero (from player clan or kingdom) caught the criminal, who has been raiding player's clan or kingdom village. Notable peasant dialogue options are:
      - agree to pay the reparation to notable peasant (the criminal is not executed);

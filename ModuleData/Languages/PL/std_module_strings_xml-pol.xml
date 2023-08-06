@@ -101,5 +101,13 @@
     <string id="PRev0095" text="Chciałbym o czymś porozmawiać." />
     <string id="PRev0096" text="{RANSOMER.LINK} zaoferuj {GOLD_AMOUNT}{GOLD_ICON} jako okup, jeśli oddasz szczątki {CAPTIVE_HERO.NAME}." />
     <string id="PRev0097" text="Nikt nie chce płacić za szczątki {CAPTIVE_HERO.NAME}" />
+    <string id="PRev0098" text="Nie mogę podjąć decyzji..." />
+    <string id="PRev0099" text="Dobra decyzja...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Nie mogę podjąć decyzji...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="Niech tak będzie[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Dobra decyzja..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} nie wykonał egzekucji {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} nie wykonał egzekucji {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
+    <string id="PRev0105" text="Wezmę szczątki." />
   </strings>
 </base>

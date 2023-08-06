@@ -101,5 +101,13 @@
     <string id="PRev0095" text="Я хотел бы кое-что обсудить." />
     <string id="PRev0096" text="{RANSOMER.LINK} предлагает вам {GOLD_AMOUNT}{GOLD_ICON} в качестве выкупа, если вы отдадите {CAPTIVE_HERO.NAME} останки." />
     <string id="PRev0097" text="Никто не хочет платить за останки {CAPTIVE_HERO.NAME}" />
+    <string id="PRev0098" text="Я не могу принять решение..." />
+    <string id="PRev0099" text="Хорошее решение...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Я не могу принять решение...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="Да будет так[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Хорошее решение..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
+    <string id="PRev0105" text="Я возьму останки." />
   </strings>
 </base>
