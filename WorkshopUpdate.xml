@@ -6,8 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
-Feature: Player can do not allow the execution due to disagreements (criminal and blamed hero are not executed)"/>
+        <ChangeNotes Value="Fix: Rare crash fix, when victim prisoner is not found in the mobile party"/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
