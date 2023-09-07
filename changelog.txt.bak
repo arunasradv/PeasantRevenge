@@ -1,0 +1,90 @@
+﻿230328	v6	
+Added:  Localisation (BR,CNs,CNt,DE,FR,IT,IT,JP,KO,PL,RU,SP,TR). (Google translated. Please report, if any line does not work, or should be changed)
+Change: Configuration variable name lordWillRansomMoneyIfHasTraits to lordWillAskRansomMoneyIfHasTraits (configuration will patch itself.)
+Added:  Configuration variable lordWillOfferRansomMoneyIfHasTraits
+Added:  Configuration variable lordWillOfferRansomMoneyWithProbabilityIfTraitFails
+Feature: AI heroes can offer "lost ransom" to other AI heroe party, when noble peasant kills the criminal heroe.. 
+         (Greedy lords will have probability of ""lordWillOfferRansomMoneyWithProbabilityIfTraitFails" to pay "lost ransom")
+230328	v7
+Added: You can now 
+       bribe (pay (goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal)),
+       teach (if player does not have traits as in peasantRevengerExcludeTrait configuration ), or 
+       execute (other notables will get positive or negative influence due to this action (random probability related to relations with notable)), 
+       notable peasants so they could do revenge.
+Changed: Information messages colors (only messages regarding peasant revenge and player clan related will be white)
+Added: More AI parameters. Relations for AI heroes are important now. 0 No good relations and 0 money means death... (parameters will be added in configuration file during game load)
+Feature: AI heroes can refuse to participate in peasant revenge (defined by parameters in partyLordLetNotableStartRevenge). Player clan members will participate
+Changed: Parameter ReparationsScaleToSettlementHearts will be reset to 20, if it was more than 30. (this value will be updated in configuration file during game load) 
+         It asures 2 AI executions due peasant revenge per year.
+Changed: Increased lordWillDemandRansomMoneyIfHasLessGoldThan to 2000 (will change if configuration file is deleted)
+230404 v8
+Feature: Player and AI now play by the same rules (almost). Player can be killed if was caught after raid and "peasantRevengeTimeoutInDays" (5 days default) has not passed.  
+         Player must be relative or friend or have high relations with party lord, and avoid heroes with some dangerous traits.
+         Player can ask other clan or kingdom hero for reparation money (same rules as AI).
+Added:   Configuration variable relationLordAndCriminalChangeWhenLordSavedTheCriminal
+230405 v9
+Fix: Compatibility with Diplomacy mod
+230407 v10
+Fix: Gold transfer action fix, when player pressed "criminal will pay".
+Fix: String {=PRev0021} fix, no "cought".
+230417 v11
+Feature: v1.1.3 support
+Feature: AI can now blame other AI for the village looting crime (AI and player can choose to kill them both)
+Feature: AI blame other AI, when player captures the criminal.
+Fix:     Various language fixes.
+230420 v12
+Fix: Null exception when party, where criminal hero was disappeared.
+230427 v13
+Feature: Revenger parties. 
+Feature: Revenger parties can be dissabled or enabled via dialog with notable peasant (see in configuration file: enableRevengerMobileParty).
+Added: Changeable time duration before peasant can create party for revenge (see in configuration file: peasantRevengeSartTimeInDays).
+Feature: Menu for defending neutral village against neutral party (see in configuration file: enableHelpNeutralVillageAndDeclareWarToAttackerMenu).
+230505 v14
+Fix: Code function renaming.
+Feature: Loaded modules auto check. (Auto fix for Bannerlord.Diplomacy mod. Please load the Diplomacy mod before this mod).
+Feature: Saving configuration only if loaded configuration version is lesser than currently supported, during game load.
+230505 v14.0.0.1
+Fix: Saving configuration only if loaded configuration version is lesser than currently supported or file does not exists, during game load.
+230508 v14.0.1.0
+Fix: Peasant revenge start, when player captured the criminal.
+Feature: The tip for dialog options, when enabling or disabling notable peasant parties.
+Feature: Dialog option for enablin/disabling "help neutral village" menu option.
+230511 v14.0.1.1
+Fix: Neutral village attack menu fix.
+230523 v14.0.3.0
+Feature: Version 1.1.4 support.
+230630 v14.0.4.0
+Feature: Version 1.1.5 support.
+230703 v15.0.0.0
+Fix: heroes will always get relation penalty if they refuse peasant revenge, because of relations between criminal and hero.
+Feature: changed relationChangeWhenLordRefusedToSupportPeasantRevenge to -1
+230705 v15.0.0.1
+Feature: Hero can ransom criminal's remains.
+230724 v15.0.0.2
+Fix: Crash when value of file_name is wrong.
+<<<<<<< HEAD
+Fix: DependedModules versions.
+=======
+Fix: DependedModules versions.
+230805 v15.0.0.3
+Feature: Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
+Feature: Player can do not allow the execution due to disagreements (criminal and blamed hero are not executed)
+Feature: Execution are performed by party leader (who captured the prisoner), if allowPeasantToKillLord is false (i.e. when using Diplomacy mod).
+Feature: Executions are be at the end of the dialogs.
+Feature: When canceling the barter, will return to player options.  
+Fix:     When player can attack notable peasant party
+Fix:     When Notable is following player until timeout, when revenge should have ended.
+Fix:     When Ai decides not to kill player.
+230907 v15.0.0.4
+Fix: Rare crash fix, when victim prisoner is not found in the mobile party 
+Feature: (**not implemented**) hero let the other lord (AI will search other hero, who could save the criminal) to decide criminal's fate.
+Feature: (**not implemented**) player try to persuade the hero;
+Feature: (**not implemented**) When player encounter revenger party before revenger could meet the hero, who has the criminal as a prisoner.
+Feature: (**not implemented**) bribing effect should be temporary and depend on traits and relations.
+Feature: (**not implemented**) persuade notable peasant not to initiate the peasant revenge.
+Feature: (**not implemented**) Discussion with party hero, who refused to kill criminal.
+Feature: (**not implemented**) AI may try to encourage notable peasant to initiate the peasant revenge, if visited village does not have potential revengers and hero traits are appropriate.
+Feature: (**not implemented**) Player relations penalties can be set in the configuration file (see relationChangeForPlayerWhenNotableExecutedTheCriminal)
+Feature: (**not implemented**) peasantRevengeAiIgnorePartyForDays
+Feature: (**not implemented**) relationChangeForPlayerWhenNotableExecutedTheCriminal
+>>>>>>> 8eeb497 (fix)
