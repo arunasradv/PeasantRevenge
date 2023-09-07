@@ -3195,21 +3195,23 @@ namespace PeasantRevenge
         
         private CharacterObject getAllyPrisonerTheEscapeGoat(Hero hero)
         {
-            if (hero.PartyBelongedToAsPrisoner == null) return null;
+            if (hero == null
+                || hero.PartyBelongedToAsPrisoner == null
+                || hero.PartyBelongedToAsPrisoner.PrisonerHeroes == null
+                || hero.PartyBelongedToAsPrisoner.PrisonerHeroes.IsEmpty())
+                return null;
             var prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes.Where((x) =>
-              !x.HeroObject.Clan.IsAtWarWith(hero.Clan) && x.HeroObject != hero &&
+              x != null && 
+              x.HeroObject != null &&
+              x.HeroObject.Clan != null &&
+              !x.HeroObject.Clan.IsAtWarWith(hero.Clan) &&
+              x.HeroObject != hero &&
+              CheckConditions(hero, x.HeroObject, _cfg.values.ai.criminalWillBlameOtherLordForTheCrime) &&
               (x.HeroObject.Clan == hero.Clan || x.HeroObject.Clan.Kingdom == hero.Clan.Kingdom));
 
-            if (!prisoners.IsEmpty())
+            if (prisoners != null && !prisoners.IsEmpty())
             {
-                foreach (CharacterObject prisoner in prisoners)
-                {
-                    if (CheckConditions(hero, prisoner.HeroObject,
-                        _cfg.values.ai.criminalWillBlameOtherLordForTheCrime))
-                    {
-                        return prisoner;
-                    }
-                }
+                return prisoners.First();
             }
             return null;
         }
