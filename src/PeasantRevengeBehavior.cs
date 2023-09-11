@@ -1644,9 +1644,25 @@ namespace PeasantRevenge
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_any_revenger_start",
                "start",
-               "close_window",
+               "peasant_revenge_any_revenger_stop_options",
                "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_fuse_condition), () => leave_encounter(), 200, null);
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_fuse_condition),null, 200, null);
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_any_revenger_stop_option_1",
+             "peasant_revenge_any_revenger_stop_options",
+             "close_window",
+             "{=PRev0107}You should stop the revenge.",
+             null,
+             () => { currentRevenge.Stop(); leave_encounter(); },
+             110, null);
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_any_revenger_stop_option_2",
+             "peasant_revenge_any_revenger_stop_options",
+             "close_window",
+             "{=PRev0108} Peasant! Go back to your village!",
+             () => { return Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.MapFaction == Hero.MainHero.MapFaction; },
+             () => { currentRevenge.Stop(); leave_encounter(); },
+             110, null);
             #endregion
 
             #region When player is captured as criminal
@@ -2535,22 +2551,33 @@ namespace PeasantRevenge
                x.Can_peasant_revenge_messenger_peasant_start ||
                x.Can_peasant_revenge_peasant_finish_start)).FirstOrDefault();
 
-                if(revenge_yes != null) // peasant can participate in the revenge
-                {
-                    return false;
-                }
+                bool retval;
 
-                if (revenge == null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
+                if (revenge_yes != null) // peasant can participate in the revenge
                 {
-                    return true;
+                    retval = false;
                 }
                 else
                 {
-                    revenge = revengeData.Where((x) =>
-                              x.executioner != null &&
-                              x.executioner.HeroObject == Hero.OneToOneConversationHero).FirstOrDefault();
-                    return revenge == null; // hero is in "revenger" party , but do not have revenge data
+                    if (revenge == null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
+                    {
+                        retval = true;
+                    }
+                    else
+                    {
+                        revenge = revengeData.Where((x) =>
+                                  x.executioner != null &&
+                                  x.executioner.HeroObject == Hero.OneToOneConversationHero).FirstOrDefault();
+                        retval = revenge == null; // hero is in "revenger" party , but do not have revenge data
+                    }
                 }
+
+                if(retval)
+                {
+                    currentRevenge = revenge;
+                }
+
+                return retval;
             }
             else
             {
