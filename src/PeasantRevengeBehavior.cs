@@ -1645,13 +1645,13 @@ namespace PeasantRevenge
                "peasant_revenge_any_revenger_start",
                "start",
                "peasant_revenge_any_revenger_stop_options",
-               "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]",
+               "{=PRev0078}Nobody can stop my revenge against {PRISONER}![rf:idle_angry][if:idle_angry]",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_fuse_condition),null, 200, null);
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_stop_option_1",
              "peasant_revenge_any_revenger_stop_options",
              "close_window",
-             "{=PRev0107}You should stop the revenge.",
+             "{=PRev0107}You should drop your revenge, or else...",
              null,
              () => { currentRevenge.Stop(); leave_encounter(); },
              110, null);
@@ -1659,10 +1659,32 @@ namespace PeasantRevenge
              "peasant_revenge_any_revenger_stop_option_2",
              "peasant_revenge_any_revenger_stop_options",
              "close_window",
-             "{=PRev0108} Peasant! Go back to your village!",
-             () => { return Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.MapFaction == Hero.MainHero.MapFaction; },
+             "{=PRev0094}I must leave now.",
+             null,
+             () => { leave_encounter(); },
+             100, null);
+
+            campaignGameStarter.AddDialogLine(
+              "peasant_revenge_any_revenger_or_else",
+              "peasant_revenge_any_revenger_stop_option_or_else",
+              "peasant_revenge_any_revenger_stop_options_or_else",
+              "{=PRev0110}What else?[rf:idle_angry][ib:closed][if:idle_angry]",null, null, 200, null);            
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_any_revenger_or_else_0",
+             "peasant_revenge_any_revenger_stop_options_or_else",
+             "close_window",
+             "{=PRev0111}I will chop your head off!",
+             null,
              () => { currentRevenge.Stop(); leave_encounter(); },
-             110, null);
+             100, null);
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_any_revenger_or_else_1",
+             "peasant_revenge_any_revenger_stop_options_or_else",
+             "close_window",
+             "{=PRev0112}Nevermind, you can go.",
+             null,
+             () => { leave_encounter(); },
+             100, null);
             #endregion
 
             #region When player is captured as criminal
@@ -2575,6 +2597,7 @@ namespace PeasantRevenge
                 if(retval)
                 {
                     currentRevenge = revenge;
+                    StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal);
                 }
 
                 return retval;
