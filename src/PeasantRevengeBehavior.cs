@@ -396,14 +396,14 @@ namespace PeasantRevenge
                             if (Hero.MainHero.PartyBelongedTo != null && revenge.party != null && revenge.party == Hero.MainHero.PartyBelongedTo.Party)
                             {
                                 revenge.Start();
-                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
+                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > _cfg.values.peasantRevengePartyTalkToLordDistance)
                                 {
                                     revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
                                 }
                             }
                             else
                             {
-                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > 5f)
+                                if (revenge.xParty.Position2D.Distance(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D) > _cfg.values.peasantRevengePartyTalkToLordDistance)
                                 {
                                     revenge.xParty.Ai.SetMoveGoToPoint(revenge.targetHero.HeroObject.PartyBelongedTo.Position2D);
                                 }
@@ -1636,25 +1636,49 @@ namespace PeasantRevenge
              "peasant_revenge_player_config_mod_options_set",
              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_angry][ib:closed]",             
              () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
-          
-            #endregion 
+
+            #endregion
 
             #region Revenger who cannot start yet or finished the quest
             //This line makes sure player do not attack revenger party (if enabled - crash, because it does not have leader hero)
+
+            campaignGameStarter.AddDialogLine(
+           "peasant_revenge_any_revenger_start_ended_revenge",
+           "start",
+           "peasant_revenge_any_revenger_stop_options",
+           "{COMMENT_REVENGE_END}",
+           new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_ended_fuse_condition), 
+           () => { leave_encounter(); }, 200, null);
+
+
+
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_any_revenger_start",
                "start",
                "peasant_revenge_any_revenger_stop_options",
-               "{=PRev0078}Nobody can stop my revenge against {PRISONER}![rf:idle_angry][if:idle_angry]",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_fuse_condition),null, 200, null);
+               "{COMMENT_REVENGE_START}",
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_fuse_condition),
+               null,
+               200, null);
+
             campaignGameStarter.AddPlayerLine(
-             "peasant_revenge_any_revenger_stop_option_1",
+             "peasant_revenge_any_revenger_stop_option_1a",
              "peasant_revenge_any_revenger_stop_options",
-             "close_window",
+             "peasant_revenge_any_revenger_stop_option_or_else",
              "{=PRev0107}You should drop your revenge, or else...",
+             () => { return currentRevenge.state == PeasantRevengeData.quest_state.begin; },
              null,
-             () => { currentRevenge.Stop(); leave_encounter(); },
              110, null);
+
+            campaignGameStarter.AddPlayerLine(
+            "peasant_revenge_any_revenger_stop_option_1b",
+            "peasant_revenge_any_revenger_stop_options",
+            "peasant_revenge_any_revenger_stop_option_or_else",
+            "{=*}I have something else to tell you...",
+            () => { return currentRevenge.state > PeasantRevengeData.quest_state.start; },
+            null,
+            110, null);
+
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_stop_option_2",
              "peasant_revenge_any_revenger_stop_options",
@@ -2551,6 +2575,7 @@ namespace PeasantRevenge
             return retval;
         }
 
+        //This function must be tested cases, when removed revenger parties or mod itself
         private bool peasant_revenge_revenger_start_fuse_condition()
         {
             if (Hero.OneToOneConversationHero == null) return false;
@@ -2559,45 +2584,31 @@ namespace PeasantRevenge
                      Hero.OneToOneConversationHero.PartyBelongedTo != null &&
                      Hero.OneToOneConversationHero.PartyBelongedTo.StringId.StartsWith(revengerPartyNameStart))
             {
+                //Here we have only revenger party
+                //Find, if revenger target is not player and peasant cannot start other dialogs ( status == begin )
                 PeasantRevengeData revenge = revengeData.Where((x) =>
                 x.executioner != null &&
                 x.executioner.HeroObject == Hero.OneToOneConversationHero &&
-                !(x.Can_peasant_revenge_peasant_start ||
-                x.Can_peasant_revenge_messenger_peasant_start ||
-                x.Can_peasant_revenge_peasant_finish_start)).FirstOrDefault();
+               // x.targetHero != Hero.MainHero.CharacterObject &&
+                x.state == PeasantRevengeData.quest_state.begin).FirstOrDefault();
 
-                PeasantRevengeData revenge_yes = revengeData.Where((x) =>
-               x.executioner != null &&
-               x.executioner.HeroObject == Hero.OneToOneConversationHero &&
-               (x.Can_peasant_revenge_peasant_start ||
-               x.Can_peasant_revenge_messenger_peasant_start ||
-               x.Can_peasant_revenge_peasant_finish_start)).FirstOrDefault();
+                bool retval = false;
 
-                bool retval;
 
-                if (revenge_yes != null) // peasant can participate in the revenge
+                if (revenge != null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
                 {
-                    retval = false;
-                }
-                else
-                {
-                    if (revenge == null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
-                    {
-                        retval = true;
-                    }
-                    else
-                    {
-                        revenge = revengeData.Where((x) =>
-                                  x.executioner != null &&
-                                  x.executioner.HeroObject == Hero.OneToOneConversationHero).FirstOrDefault();
-                        retval = revenge == null; // hero is in "revenger" party , but do not have revenge data
-                    }
+                    retval = true;
                 }
 
-                if(retval)
+                if (retval)
                 {
+                    //setting currentRevenge because dialogue need to know whitch revenge is talking about 
                     currentRevenge = revenge;
-                    StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal);
+                   
+                    string pmessage = "{=*}Nobody can stop my revenge against {PRISONER.NAME}![rf:idle_angry][if:idle_angry]";
+                    TextObject textObject = new TextObject(pmessage, null);
+                    StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal, textObject, false);
+                    MBTextManager.SetTextVariable("COMMENT_REVENGE_START", textObject);
                 }
 
                 return retval;
@@ -2605,7 +2616,50 @@ namespace PeasantRevenge
             else
             {
                 return false;
-            }            
+            }
+        }
+
+        private bool peasant_revenge_revenger_start_ended_fuse_condition()
+        {
+            if (Hero.OneToOneConversationHero == null) return false;
+
+            if ((Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
+                     Hero.OneToOneConversationHero.PartyBelongedTo != null &&
+                     Hero.OneToOneConversationHero.PartyBelongedTo.StringId.StartsWith(revengerPartyNameStart))
+            {
+                //Here we have only revenger party
+                //Find, if revenger target is not player and peasant cannot start other dialogs ( status == begin )
+                PeasantRevengeData revenge = revengeData.Where((x) =>
+                x.executioner != null &&
+                x.executioner.HeroObject == Hero.OneToOneConversationHero &&
+                // x.targetHero != Hero.MainHero.CharacterObject &&
+                x.state > PeasantRevengeData.quest_state.start).FirstOrDefault();
+
+                bool retval = false;
+
+
+                if (revenge != null) // have revenge data with peasant, who cannot start dialog (finished/not started quest)
+                {
+                    retval = true;
+                }
+
+                if (retval)
+                {
+                    //setting currentRevenge because dialogue need to know whitch revenge is talking about 
+                    currentRevenge = revenge;
+#warning add variations!!!
+                    string pmessage = "{=*}{PRISONER.NAME} got what he deserved!";
+                    TextObject textObject = new TextObject(pmessage, null);
+                    StringHelpers.SetCharacterProperties("PRISONER", currentRevenge.criminal, textObject, false);
+                    MBTextManager.SetTextVariable("COMMENT_REVENGE_END", textObject);
+                }
+
+                return retval;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void TeachHeroTraits(Hero hero, string traits, bool direction, params Hero[] teacher)

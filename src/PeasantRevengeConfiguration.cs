@@ -61,6 +61,7 @@ namespace PeasantRevenge
         public float peasantRevengeTimeoutInDays = 5.0f;
         public float peasantRevengeSartTimeInDays = 0.2f;
         public int peasantRevengeMaxPartySize = 5;
+        public float peasantRevengePartyTalkToLordDistance = 2.0f;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
         public string logColorForClan = "hFF0000FF";
