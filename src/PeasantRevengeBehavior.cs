@@ -72,6 +72,8 @@ namespace PeasantRevenge
                 notable_killed,
                 messenger_killed,
                 accused_hero_paid,
+                ransom_paid_to_party,
+                ransom_not_paid_to_party,
             }
 
             public List<quest_result> quest_Results = new List<quest_result>();
@@ -666,11 +668,13 @@ namespace PeasantRevenge
                                                 ransomstring = $" {ransomer.Name} paid to {party.Owner.Name} compensation {ransomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
                                                 saver = ransomer;
                                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, ransomer, _cfg.values.relationChangeAfterLordPartyGotPaid, false);
+                                                revenge.quest_Results.Add(PeasantRevengeData.quest_result.ransom_paid_to_party);
                                             }
                                             else
                                             {
                                                 ransomstring = $" {ransomer.Name} did not paid {party.Owner.Name} compensation {ransomValue}. {ransomer.Name} gold is now {ransomer.Gold}.";
                                                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(party.Owner, ransomer, _cfg.values.relationChangeAfterLordPartyGotNoReward, false);
+                                                revenge.quest_Results.Add(PeasantRevengeData.quest_result.ransom_not_paid_to_party);
                                                 //does not have money for ransom
                                             }
                                         }
@@ -709,12 +713,16 @@ namespace PeasantRevenge
                                 {
                                     message = $"{party.Owner.Name} captured and {executioner.Name} executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, executioner, true, true);
+                                   
                                 }
                                 else
                                 {
                                     message = $"{party.Owner.Name} captured and executed {prisoner.Name} because lack {revenge.reparation - prisoner.Gold} gold. Reparation {revenge.reparation}." + ransomstring;
                                     KillCharacterAction.ApplyByExecution(prisoner, party.Owner, true, true);
                                 }
+                                
+                                revenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_killed);
+
                                 if (ransom_of_prisoner_is_paid == false)
                                 {
                                     message += AIDealWithLordRemains(revenge, party.Owner, prisoner);
@@ -735,6 +743,7 @@ namespace PeasantRevenge
                                             KillCharacterAction.ApplyByExecution(revenge.criminal.HeroObject, party.Owner, true, true);
                                         }
                                         message += AIDealWithLordRemains(revenge, party.Owner, revenge.criminal.HeroObject);
+                                        revenge.quest_Results.Add(PeasantRevengeData.quest_result.accused_hero_killed);
                                     }
                                     else
                                     {
@@ -759,6 +768,7 @@ namespace PeasantRevenge
                                         LogMessage.Add("{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.");
                                         message = $"{party.Owner.Name} did not executed {prisoner.Name}, because {saver.Name} paid {revenge.reparation} gold. Prisoner gold {prisoner.Gold}";
                                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(saver, prisoner, _cfg.values.relationLordAndCriminalChangeWhenLordSavedTheCriminal, false); // because saver have expenses
+                                        revenge.quest_Results.Add(PeasantRevengeData.quest_result.clan_paid);
                                     }
                                     else
                                     {
@@ -774,6 +784,7 @@ namespace PeasantRevenge
                                             message = $"{party.Owner.Name} did not executed {prisoner.Name}, and {saver.Name} refused to pay to {executioner.Name}. Saver gold {saver.Gold}. Prisoner gold {prisoner.Gold}.";
                                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(executioner, saver, _cfg.values.relationChangeWhenCannotPayReparations, false);
                                         }
+                                        revenge.quest_Results.Add(PeasantRevengeData.quest_result.messenger_killed);
                                     }
                                 }
                             }
@@ -792,6 +803,7 @@ namespace PeasantRevenge
 
                                 LogMessage.Add("{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}.");
                                 message = $"{party.Owner.Name} did not executed {prisoner.Name} because paid reparation of {revenge.reparation} gold. Savings left {prisoner.Gold}";
+                                revenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_paid);
                             }
                         }
                     }
@@ -807,7 +819,7 @@ namespace PeasantRevenge
                             if (!sellement_owner_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
                             if (!sellement_owner_let_due_accusations) condition += " sellement_owner_let_due_accusations";
                             message = $"Settlement owner {settlement.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
-
+                            revenge.quest_Results.Add(PeasantRevengeData.quest_result.village_denied);
                             if (sellement_owner_friend_to_criminal_con)
                             {
                                 LogMessage.Add("{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
@@ -848,7 +860,7 @@ namespace PeasantRevenge
                     if (!party_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
                     if (!party_let_due_accusations) condition += " party_let_due_accusations";
                     message = $"Party {party.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
-
+                    revenge.quest_Results.Add(PeasantRevengeData.quest_result.party_denied);
                     if (party_friend_to_criminal_con)
                     {
                         LogMessage.Add("{=PRev0044}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because friends.");
@@ -1642,9 +1654,9 @@ namespace PeasantRevenge
             #endregion
 
             #region Revenger who cannot start yet or finished the quest
-            //This line makes sure player do not attack revenger party (if enabled - crash, because it does not have leader hero)
-            //When revenge is ended or does not exist
-            campaignGameStarter.AddDialogLine(
+           
+           //When revenge is ended or does not exist
+           campaignGameStarter.AddDialogLine(
            "peasant_revenge_any_revenger_start_ended_revenge",
            "start",
            "peasant_revenge_any_revenger_stop_options",
@@ -1693,13 +1705,20 @@ namespace PeasantRevenge
               "peasant_revenge_any_revenger_stop_option_or_else",
               "peasant_revenge_any_revenger_stop_options_or_else",
               "{=PRev0110}What else?[rf:idle_angry][ib:closed][if:idle_angry]", null, null, 200, null);
+           
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_or_else_0",
              "peasant_revenge_any_revenger_stop_options_or_else",
              "close_window",
              "{=PRev0111}I will chop your head off!",
              null,
-             () => { currentRevenge.Stop(); leave_encounter(); },
+             () => {
+                 currentRevenge.Stop(); 
+                 peasant_revenge_peasant_kill_by_hero(Hero.MainHero);
+                 currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_killed);
+                 currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
+                 leave_encounter();
+             },
              100, null);
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_or_else_1",
@@ -1851,6 +1870,7 @@ namespace PeasantRevenge
              () => !(Hero.MainHero.CanDie(KillCharacterAction.KillCharacterActionDetail.Executed) && will_party_leader_kill_the_criminal()),
              () =>
              {
+                 currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_denied);
                  ChangeRelationAction.ApplyPlayerRelation(currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenCriminalRefusedToPayReparations, true, true);
                  ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.OneToOneConversationHero, currentRevenge.executioner.HeroObject, _cfg.values.relationChangeWhenCannotPayReparations, false);
              }, 100, null);
@@ -2533,6 +2553,14 @@ namespace PeasantRevenge
             }
         }
         #endregion
+
+        private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
+        {
+#warning add trait change xp
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));
+            KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, executioner, true, true);
+        }
+
         private bool peasant_revenge_player_config_mod_start_condition()
         {
             bool start = (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
@@ -2623,7 +2651,7 @@ namespace PeasantRevenge
         private void create_peasant_comment_at_revenge_start(PeasantRevengeData revenge)
         {
             string msg = "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]";
-
+#warning get traits from cfg
             int honor = GetHeroTraitValue(revenge.executioner.HeroObject, "Honor");
             int generosity = GetHeroTraitValue(revenge.executioner.HeroObject, "Generosity");
 
@@ -2703,7 +2731,10 @@ namespace PeasantRevenge
             }
 
             TextObject textObject = new TextObject(msg, null);
-            StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, textObject, false);
+            if (currentRevenge.accused_hero != null)
+            {
+                StringHelpers.SetCharacterProperties("CVICTIM", currentRevenge.accused_hero, textObject, false);
+            }
             StringHelpers.SetCharacterProperties("CRIMINAL", revenge.criminal, textObject, false);
             MBTextManager.SetTextVariable("COMMENT_REVENGE_END", textObject);
         }
