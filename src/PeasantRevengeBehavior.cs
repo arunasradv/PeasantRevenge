@@ -1712,19 +1712,30 @@ namespace PeasantRevenge
               "peasant_revenge_any_revenger_or_else",
               "peasant_revenge_any_revenger_stop_option_or_else",
               "peasant_revenge_any_revenger_stop_options_or_else",
-              "{=PRev0110}What else?[rf:idle_angry][ib:closed][if:idle_angry]", null, null, 200, null);
+              "{=PRev0108}What else?[rf:idle_angry][ib:closed][if:idle_angry]", null, null, 200, null);
            
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_or_else_0",
              "peasant_revenge_any_revenger_stop_options_or_else",
              "close_window",
-             "{=PRev0111}I will chop your head off!",
+             "{=PRev0109}I will chop your head off!",
              null,
              () => {
                  currentRevenge.Stop(); 
                  peasant_revenge_peasant_kill_by_hero(Hero.MainHero);
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_killed);
                  currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
+             },
+             100, null);
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_any_revenger_or_else_2",
+             "peasant_revenge_any_revenger_stop_options_or_else",
+             "close_window",
+             "{=PRev0110}Go back to your village!",
+             null,
+             () => {
+                 currentRevenge.Stop();
+                 currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_interrupted);
                  leave_encounter();
              },
              100, null);
@@ -1732,7 +1743,7 @@ namespace PeasantRevenge
              "peasant_revenge_any_revenger_or_else_1",
              "peasant_revenge_any_revenger_stop_options_or_else",
              "close_window",
-             "{=PRev0112}Nevermind, you can go.",
+             "{=PRev0083}Nevermind.",
              null,
              () => { leave_encounter(); },
              100, null);
