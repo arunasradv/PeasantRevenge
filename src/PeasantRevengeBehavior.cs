@@ -551,7 +551,7 @@ namespace PeasantRevenge
                 }
             }
 
-            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
+            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear))); // remove here, because other events may interrupt this event 
 
         }
        
@@ -1694,7 +1694,7 @@ namespace PeasantRevenge
             "peasant_revenge_any_revenger_stop_option_1b",
             "peasant_revenge_any_revenger_stop_options",
             "peasant_revenge_any_revenger_stop_option_or_else",
-            "{=*}I have something else to tell you...",
+            "{=PRev0095}There is something I'd like to discuss.",
             () => { return currentRevenge.state > PeasantRevengeData.quest_state.start; },
             null,
             110, null);
@@ -1726,19 +1726,24 @@ namespace PeasantRevenge
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_killed);
                  currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
              },
-             100, null);
+             100,
+             new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_intimidation_clickable_condition));
+
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_or_else_2",
              "peasant_revenge_any_revenger_stop_options_or_else",
              "close_window",
              "{=PRev0110}Go back to your village!",
-             null,
+             () => { return currentRevenge.state == PeasantRevengeData.quest_state.begin; },
              () => {
+                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentRevenge.executioner.HeroObject, Hero.MainHero, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge, _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge != 0);
                  currentRevenge.Stop();
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_interrupted);
                  leave_encounter();
+
              },
-             100, null);
+             100, 
+             new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_intimidation_clickable_condition));
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_any_revenger_or_else_1",
              "peasant_revenge_any_revenger_stop_options_or_else",
@@ -2675,16 +2680,16 @@ namespace PeasantRevenge
 
             if (honor > 0)
             {
-                msg = "{=*}Nobody can stop my revenge on {CRIMINAL.NAME}![rf:idle_angry][if:convo_furious][ib:angry]";
+                msg = "{=PRev0114}Nobody can stop my revenge on {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]";
             }
             else if (honor < 0)
             {
-                msg = "{=PRev0015}{CRIMINAL.NAME} will die![if:convo_furious][ib:angry]";
+                msg = "{=PRev0015}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]";
             }
 
             if (generosity < 0)
             {
-                msg = "{=*}{CRIMINAL.NAME} will pay {GOLD_ICON} or die![rf:idle_angry][ib:angry]";
+                msg = "{=PRev0113}{CRIMINAL.LINK} will pay {GOLD_ICON} or die![rf:idle_angry][ib:angry]";
             }
 
             TextObject textObject = new TextObject(msg, null);
@@ -2733,17 +2738,17 @@ namespace PeasantRevenge
             if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed) &&
             currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
             {
-                msg = "{=*}{CRIMINAL.NAME} and {CVICTIM.NAME} are dead! My revenge is completed![if:happy]";
+                msg = "{=PRev0111}{CRIMINAL.NAME} and {CVICTIM.LINK} are dead! My revenge is completed![if:happy]";
             }
             else
             {
                 if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                 {
-                    msg = "{=*}I finished the revenge on {CVICTIM.NAME}![if:happy]";
+                    msg = "{=PRev0112}I finished the revenge on {CVICTIM.LINK}![if:happy]";
                 }
                 else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                 {
-                    msg = "{=*}I finished the revenge on  {CRIMINAL.NAME}![if:happy]";
+                    msg = "{=PRev0112}I finished the revenge on  {CRIMINAL.LINK}![if:happy]";
                 }
             }
 
@@ -2754,6 +2759,21 @@ namespace PeasantRevenge
             }
             StringHelpers.SetCharacterProperties("CRIMINAL", revenge.criminal, textObject, false);
             MBTextManager.SetTextVariable("COMMENT_REVENGE_END", textObject);
+        }
+
+        private bool peasant_revenge_enable_intimidation_clickable_condition(out TextObject textObject)
+        {
+            if (Hero.MainHero.PartyBelongedTo.Party.TotalStrength  > currentRevenge.xParty.Party.TotalStrength * _cfg.values.peasantRevengerIntimidationPowerScale)
+            {
+                textObject = new TextObject("");
+            }
+            else
+            {
+                textObject = new TextObject("{=PRev0115}Your party is too small");
+                return false;
+            }
+
+            return true;
         }
 
         private void TeachHeroTraits(Hero hero, string traits, bool direction, params Hero[] teacher)

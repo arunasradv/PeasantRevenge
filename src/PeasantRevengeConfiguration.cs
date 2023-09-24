@@ -67,7 +67,7 @@ namespace PeasantRevenge
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
         public string logColorForOtherFactions = "hA02222A0";
-
+        public float peasantRevengerIntimidationPowerScale = 0.5f;
         public AIfilters ai;
 
         public static string default_file_name()
