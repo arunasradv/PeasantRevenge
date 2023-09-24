@@ -172,7 +172,7 @@ namespace PeasantRevenge
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoadedEvent);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreatedEvent);
             CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, VillageBeingRaided);
-            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, DailyTickPartyEvent);
+            //CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, DailyTickPartyEvent);
             CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, HourlyTickEvent);
             // CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickPartyEvent);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, HeroKilledEvent);
@@ -278,9 +278,12 @@ namespace PeasantRevenge
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (x.xParty == party));
-            foreach (PeasantRevengeData revenge in currentData)
+            if (currentData != null && !currentData.IsEmpty())
             {
-                revenge.Clear();
+                foreach (PeasantRevengeData revenge in currentData)
+                {
+                    revenge.Clear();
+                }
             }
         }
 
@@ -370,6 +373,7 @@ namespace PeasantRevenge
 
         private void HourlyTickEvent()
         {
+
             if (revengerPartiesCleanUp) // clean spawned parties after load (because we do not save revenge data - revenger party is unusable)
             {
                 revengerPartiesCleanUp = false;
@@ -546,12 +550,15 @@ namespace PeasantRevenge
                     }
                 }
             }
+
+            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
+
         }
 
-        private void DailyTickPartyEvent(MobileParty party)
-        {
-            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
-        }
+        //private void DailyTickPartyEvent(MobileParty party)
+        //{
+        //    revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
+        //}
         /// <summary>
         /// When AI caught the criminal non player. Peasant revenge evets should follow sequence: 
         /// raiding->hero captured the criminal->
