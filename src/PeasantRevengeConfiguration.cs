@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 15;
+        public int CfgVersion = 17;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -116,7 +116,7 @@ namespace PeasantRevenge
             public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
             public List<RelationsPerTraits> lordWillAbandonTheVictimRemains;
-
+            public List<TraitAndValue> lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest;
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -202,6 +202,7 @@ namespace PeasantRevenge
                 default_lordWillDeclineRansomTheVictimRemains();
                 default_lordWillAbandonTheVictimRemains();
                 default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
+                default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -261,6 +262,16 @@ namespace PeasantRevenge
                     };
             }
 
+            
+            public void default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest()
+            {
+                lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = -2},
+                        new TraitAndValue { trait = "Honor", value = -3}
+                    };
+            }
             public void default_lordWillDeclineRansomTheVictimRemains()
             {
                 lordWillDeclineRansomTheVictimRemains =

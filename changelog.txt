@@ -77,5 +77,6 @@ Fix: Rare crash fix, when victim prisoner is not found in the mobile party
 230918 v15.0.0.5
 Feature: version 1.1.6
 230923 v15.0.1.0
+Fix: incorrect trait selection, when player is dealing with remains
 Feature: (**not implemented fully yet**)Dialogues, when player encounter revenger party, before and after revenger met the hero, who has the criminal as a prisoner. 
 Feature: (**not implemented**) persuade notable peasant not to initiate the peasant revenge.

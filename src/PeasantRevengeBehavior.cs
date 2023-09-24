@@ -554,11 +554,7 @@ namespace PeasantRevenge
             revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
 
         }
-
-        //private void DailyTickPartyEvent(MobileParty party)
-        //{
-        //    revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear)));
-        //}
+       
         /// <summary>
         /// When AI caught the criminal non player. Peasant revenge evets should follow sequence: 
         /// raiding->hero captured the criminal->
@@ -1244,6 +1240,11 @@ namespace PeasantRevenge
                     if (_cfg.values.CfgVersion < 16)
                     {
                         _cfg.values.ai.default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
+                    }
+
+                    if (_cfg.values.CfgVersion < 17)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                     }
                 }
             }
@@ -2049,7 +2050,6 @@ namespace PeasantRevenge
                    peasant_revenge_hero_cannot_make_decision_consequence(Hero.MainHero);
                },
                90, null, null);
-#warning add more variations here
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_finish_criminal_killed_end",
              "peasant_revenge_peasants_finish_criminal_comment",
@@ -2529,8 +2529,8 @@ namespace PeasantRevenge
             {
                 affectedTraits[i] = Tuple.Create(
                     TraitObject.All.Where((x) => x.StringId.ToString() ==
-                    _cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined[i].trait).First(),
-                    _cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined[i].value);
+                    traitsAndValues[i].trait).First(),
+                    traitsAndValues[i].value);
             }
 
             return affectedTraits;
@@ -2563,7 +2563,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
         {
-#warning add trait change xp
+            OnChangeTraits(executioner, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest));
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, executioner, true, true);
         }
@@ -2658,22 +2658,22 @@ namespace PeasantRevenge
         private void create_peasant_comment_at_revenge_start(PeasantRevengeData revenge)
         {
             string msg = "{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]";
-#warning get traits from cfg
+
             int honor = GetHeroTraitValue(revenge.executioner.HeroObject, "Honor");
             int generosity = GetHeroTraitValue(revenge.executioner.HeroObject, "Generosity");
 
             if (honor > 0)
             {
-                msg = "{=*}Nobody can stop my revenge on {CRIMINAL.NAME}![rf:idle_angry][if:convo_furious]";
+                msg = "{=*}Nobody can stop my revenge on {CRIMINAL.NAME}![rf:idle_angry][if:convo_furious][ib:angry]";
             }
             else if (honor < 0)
             {
-                msg = "{=PRev0015}{CRIMINAL.NAME} will die![if:convo_furious]";
+                msg = "{=PRev0015}{CRIMINAL.NAME} will die![if:convo_furious][ib:angry]";
             }
 
             if (generosity < 0)
             {
-                msg = "{=*}{CRIMINAL.NAME} will pay {GOLD_ICON} or die![rf:idle_angry]";
+                msg = "{=*}{CRIMINAL.NAME} will pay {GOLD_ICON} or die![rf:idle_angry][ib:angry]";
             }
 
             TextObject textObject = new TextObject(msg, null);
@@ -2704,7 +2704,6 @@ namespace PeasantRevenge
                     retval = true;
                     //setting currentRevenge because dialogue need to know whitch revenge is talking about 
                     currentRevenge = revenge;
-#warning add variations!!!
                     create_peasant_comment_at_revenge_end(currentRevenge);
                 }
 
