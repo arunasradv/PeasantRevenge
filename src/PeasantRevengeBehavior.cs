@@ -310,12 +310,15 @@ namespace PeasantRevenge
 
             if (currentData.IsEmpty())
             {
-                revengeData.Add(new PeasantRevengeData
+                lock (revengeData)
                 {
-                    village = village,
-                    criminal = village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject,
-                    dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)
-                });
+                    revengeData.Add(new PeasantRevengeData
+                    {
+                        village = village,
+                        criminal = village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject,
+                        dueTime = CampaignTime.DaysFromNow(_cfg.values.peasantRevengeTimeoutInDays)
+                    });
+                }
             }
         }
 
@@ -550,8 +553,10 @@ namespace PeasantRevenge
                     }
                 }
             }
-
-            revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear))); // remove here, because other events may interrupt this event 
+            lock (revengeData)
+            {
+                revengeData.RemoveAll((x) => ((x.state == PeasantRevengeData.quest_state.clear))); // remove here, because other events may interrupt this event 
+            }
 
         }
        
