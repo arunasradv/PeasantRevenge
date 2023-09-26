@@ -392,8 +392,15 @@ namespace PeasantRevenge
                         revengeData[i].Begin();
                         if (_cfg.values.enableRevengerMobileParty)
                         {
-                            revengeData[i].xParty = CreateNotableParty(revengeData[i]);
-                            revengeData[i].xParty.Ai.SetMoveEscortParty(revengeData[i].party.MobileParty);
+                            if (revengeData[i].party != null && revengeData[i].party.MobileParty != null)
+                            {
+                                revengeData[i].xParty = CreateNotableParty(revengeData[i]);
+                                revengeData[i].xParty.Ai.SetMoveEscortParty(revengeData[i].party.MobileParty);
+                            }
+                            else
+                            {
+                                revengeData[i].Stop();
+                            }
                         }
                     }
                 }
