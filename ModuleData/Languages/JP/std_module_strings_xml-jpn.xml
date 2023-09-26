@@ -109,5 +109,16 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
     <string id="PRev0105" text="遺骨は引き取ります。" />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="復讐をやめるべきか、そうでなければ..." />
+    <string id="PRev0108" text="他には何がありますか?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="あなたの首を切り落とします!" />
+    <string id="PRev0110" text="村に帰りましょう!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} と {CVICTIM.LINK} は死んだ! 私の復讐は完了した![if:happy]" />
+    <string id="PRev0112" text="{CVICTIM.LINK} への復讐を終えました![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} は {GOLD_ICON} を支払うか、それとも死ぬことになります![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="{CRIMINAL.LINK} への私の復讐は誰も止められません![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="あなたのパーティーは小さすぎます" />
+    
   </strings>
 </base>
