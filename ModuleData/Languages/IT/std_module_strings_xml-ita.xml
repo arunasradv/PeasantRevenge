@@ -109,5 +109,15 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} non ha giustiziato {PRISONER.NAME}, a causa di accuse contrastanti." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} non ha giustiziato {PRISONER.NAME}, a causa di accuse contrastanti." />
     <string id="PRev0105" text="Prenderò i resti." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="Dovresti rinunciare alla tua vendetta, altrimenti..." />
+    <string id="PRev0108" text="Cos'altro?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="Ti taglierò la testa!" />
+    <string id="PRev0110" text="Torna al tuo villaggio!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} e {CVICTIM.LINK} sono morti! La mia vendetta è completa![if:happy]" />
+    <string id="PRev0112" text="Ho terminato la vendetta su {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} pagherà {GOLD_ICON} o morirà![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="Nessuno può fermare la mia vendetta su {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Il tuo gruppo è troppo piccolo" />
   </strings>
 </base>

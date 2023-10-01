@@ -6,7 +6,13 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: version 1.1.6"/>
+        <ChangeNotes Value="Fix: incorrect trait selection, when player is dealing with remains (was using lordTraitChangeWhenRansomRemainsDeclined only)
+Fix: possible rare crash, when heroes party is null
+Fix: possible rare crash, when revenge data collection is updated in events
+Feature: Dialogues, when player encounter revenger party, before and after revenger met the hero, who has the criminal as a prisoner.
+        Iintimidation dialogs are enabled if player's party strength is higher than revenger's party (see configuration variable peasantRevengerIntimidationPowerScale)
+        Player traits will change according to lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest, when notable is executed.
+Feature: added peasantRevengePartyTalkToLordDistance so you can change distance from where notable will start talking to hero. "/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->

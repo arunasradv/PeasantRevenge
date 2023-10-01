@@ -109,5 +109,15 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, en raison d'accusations contradictoires." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} n'a pas exécuté {PRISONER.NAME}, en raison d'accusations contradictoires." />
     <string id="PRev0105" text="Je prendrai les restes." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="Tu devrais abandonner ta vengeance, sinon..." />
+    <string id="PRev0108" text="Quoi d'autre ?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="Je vais te couper la tête !" />
+    <string id="PRev0110" text="Retournez dans votre village !" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} et {CVICTIM.LINK} sont morts ! Ma vengeance est terminée ![if:happy]" />
+    <string id="PRev0112" text="J'ai terminé la vengeance sur {CVICTIM.LINK} ![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} paiera {GOLD_ICON} ou mourra ![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="Personne ne peut arrêter ma vengeance sur {CRIMINAL.LINK} ![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Votre groupe est trop petit" />
   </strings>
 </base>

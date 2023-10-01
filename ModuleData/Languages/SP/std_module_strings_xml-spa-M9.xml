@@ -109,5 +109,15 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} no ejecutó a {PRISONER.NAME} debido a acusaciones contradictorias." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} no ejecutó a {PRISONER.NAME} debido a acusaciones contradictorias." />
     <string id="PRev0105" text="Me llevaré los restos." />
+    <cadena id="PRev0106" texto="..." />
+    <string id="PRev0107" text="Deberías abandonar tu venganza, o si no..." />
+    <string id="PRev0108" text="¿Qué más?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="¡Te cortaré la cabeza!" />
+    <string id="PRev0110" text="¡Vuelve a tu aldea!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} y {CVICTIM.LINK} están muertos. ¡Mi venganza está completa![if:happy]" />
+    <string id="PRev0112" text="¡Terminé la venganza contra {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} pagará {GOLD_ICON} o morirá.[rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="¡Nadie puede detener mi venganza contra {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Tu grupo es demasiado pequeño" />
   </strings>
 </base>
