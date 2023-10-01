@@ -109,5 +109,15 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} nie wykonał egzekucji {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} nie wykonał egzekucji {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
     <string id="PRev0105" text="Wezmę szczątki." />
+    <string id="PRev0106" tekst="..." />
+    <string id="PRev0107" tekst="Powinieneś porzucić zemstę, bo inaczej..." />
+    <string id="PRev0108" tekst="Co jeszcze?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" tekst="Odetnę ci głowę!" />
+    <string id="PRev0110" tekst="Wracaj do swojej wioski!" />
+    <string id="PRev0111" tekst="{CRIMINAL.NAME} i {CVICTIM.LINK} nie żyją! Moja zemsta dobiegła końca![if:happy]" />
+    <string id="PRev0112" tekst="Zakończyłem zemstę na {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0113" tekst="{CRIMINAL.LINK} zapłaci {GOLD_ICON} albo umrze![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" tekst="Nikt nie może powstrzymać mojej zemsty na {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" tekst="Twoja grupa jest za mała" />
   </strings>
 </base>
