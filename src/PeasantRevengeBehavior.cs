@@ -1733,11 +1733,12 @@ namespace PeasantRevenge
              "{=PRev0109}I will chop your head off!",
              null,
              () =>
-             {
+             {                
                  currentRevenge.Stop();
                  peasant_revenge_peasant_kill_by_hero(Hero.MainHero);
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_killed);
-                 currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
+                 leave_encounter();
+                 //currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash). removing pary sometimes causes crashes
              },
              100,
              new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_intimidation_clickable_condition));
@@ -1754,7 +1755,6 @@ namespace PeasantRevenge
                  currentRevenge.Stop();
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_interrupted);
                  leave_encounter();
-
              },
              100,
              new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_intimidation_clickable_condition));
