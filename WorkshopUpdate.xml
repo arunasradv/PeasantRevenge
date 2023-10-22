@@ -6,14 +6,9 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
-Feature: Player can do not allow the execution due to disagreements (criminal and blamed hero are not executed)
-Feature: Execution are performed by party leader (who captured the prisoner), if allowPeasantToKillLord is false (i.e. when using Diplomacy mod).
-Feature: Executions are be at the end of the dialogs.
-Feature: When canceling the barter, will return to player options.  
-Fix:     When player can attack notable peasant party
-Fix:     When Notable is following player until timeout, when revenge should have ended.
-Fix:     When Ai decides not to kill player."/>
+        <ChangeNotes Value="Fix: Notable dialogue strings
+Fix: Crash after selecting Polish language
+Feature: Do not removing notable party after notable execution"/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
@@ -23,7 +18,7 @@ Fix:     When Ai decides not to kill player."/>
             <!-- Compatible Version: e1.9.0, v1.0.0,... The currently available versions can be found at the Steam Workshop "Browse by Tag" section -->
 			<Tag Value="Native" />
             <Tag Value="Singleplayer" />
-            <Tag Value="v1.1.4" />
+            <Tag Value="v1.1.6" />
         </Tags>
     </UpdateItem>
 </Tasks>

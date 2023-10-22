@@ -35,7 +35,7 @@
    - disagree to pay "lost ransom";
    - agree to pay "lost ransom";
    - kill the soldier, who asked for "lost ransom";
- 4. (**not implemented**) When player encounter revenger party before revenger could meet the hero, who has the criminal as a prisoner. Notable peasant dialogue options are:
+ 4. When player encounter revenger party before revenger could meet the hero, who has the criminal as a prisoner. Notable peasant dialogue options are:
      - kill notable peasant (revenge is aborted);
      - disband notable peasant mobile party (revenge is aborted, notable peasant will go back to his village);
      - leave notable peasant (notable peasant will continue his revenge);
@@ -141,6 +141,8 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
   - logColorForClan - peasant revenge log colour for player's clan.
   - logColorForKingdom - peasant revenge log colour for other kingdom clans.
   - logColorForOtherFactions - peasant revenge log colour for other factions.
+  - peasantRevengerIntimidationPowerScale - notable peasant party power is multiplied by this constant and compared to party player party's power.
+  - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest - 
   - ai - AI parameters, what can have several values (the lists); 
 	  - partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet -
 	  - settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet - 

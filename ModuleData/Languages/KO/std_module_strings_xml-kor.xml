@@ -17,7 +17,7 @@
      <string id="PRev0011" text="범죄에 대한 대가를 치르십시오.[rf:idle_angry][if:convo_bored]" />
      <string id="PRev0012" text="좋습니다.[ib:happy]" />
      <string id="PRev0013" text="안타깝네요.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-     <string id="PRev0014" text="당신의 수감자 {CRIMINAL.LINK}이(가) 우리 마을을 약탈했습니다. 우리는 범인의 머리를 스파이크에 요구합니다! 당신은 뭐라고 하시겠습니까?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0014" text="당신의 수감자 {CRIMINAL.LINK}이(가) 우리 마을을 약탈했습니다. 우리는 범인의 머리를 스파이크에 요구합니다! 당신은 뭐라고 하시겠습니까?[if:convo_furious][ib:aggressive]" />
      <string id="PRev0015" text="{CRIMINAL.NAME}님은 죽을 것입니다." />
      <string id="PRev0016" text="{CRIMINAL.NAME}님이 {REPARATION}{GOLD_ICON}을(를) 지불할 것입니다." />
      <string id="PRev0017" text="아니요, 당신의 일이 아닙니다, 농부님!" />
@@ -109,5 +109,16 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME}은(는) 상충되는 혐의 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME}은(는) 상충되는 혐의 때문에 {PRISONER.NAME}님을 처형하지 않았습니다." />
     <string id="PRev0105" text="유골은 제가 맡겠습니다." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="복수를 중단해야 합니다. 그렇지 않으면..." />
+    <string id="PRev0108" text="또 무슨 일이 있나요?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="네 머리를 잘라버리겠다!" />
+    <string id="PRev0110" text="마을로 돌아가세요!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME}님과 {CVICTIM.LINK}님이 죽었습니다! 내 복수가 완료되었습니다![if:happy]" />
+    <string id="PRev0112" text="{CVICTIM.LINK}에 대한 복수를 마쳤습니다![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK}이(가) {GOLD_ICON}을(를) 지불하지 않으면 죽을 것입니다![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="아무도 {CRIMINAL.LINK}에 대한 나의 복수를 막을 수 없습니다![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="파티 규모가 너무 작습니다." />
+    <string id="PRev0116" text="{CRIMINAL.LINK}님이 죽습니다![if:convo_furious][ib:angry]" />
   </strings>
 </base>
