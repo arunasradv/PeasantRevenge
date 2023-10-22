@@ -84,3 +84,5 @@ Feature: Dialogues, when player encounter revenger party, before and after reven
 Feature: added peasantRevengePartyTalkToLordDistance so you can change distance from where notable will start talking to hero.
 231020 v15.1.1.1
 Fix: Crash after notable execution and party removal
+231020 v15.1.1.2
+Fix: Notable dialogue string for translations

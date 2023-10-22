@@ -119,5 +119,6 @@
     <string id="PRev0113" tekst="{CRIMINAL.LINK} zapłaci {GOLD_ICON} albo umrze![rf:idle_angry][ib:angry]" />
     <string id="PRev0114" tekst="Nikt nie może powstrzymać mojej zemsty na {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" tekst="Twoja grupa jest za mała" />
+    <string id="PRev0116" tekst="{CRIMINAL.LINK} umrze![if:convo_furious][ib:angry]" />
   </strings>
 </base>

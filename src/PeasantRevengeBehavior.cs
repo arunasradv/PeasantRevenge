@@ -2707,7 +2707,7 @@ namespace PeasantRevenge
             }
             else if (honor < 0)
             {
-                msg = "{=PRev0015}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]";
+                msg = "{=PRev0116}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]";
             }
 
             if (generosity < 0)
