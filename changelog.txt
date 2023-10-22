@@ -83,4 +83,10 @@ Fix: possible rare crash, when revenge data collection is updated in events
 Feature: Dialogues, when player encounter revenger party, before and after revenger met the hero, who has the criminal as a prisoner.
         Iintimidation dialogs are enabled if player's party strength is higher than revenger's party (see configuration variable peasantRevengerIntimidationPowerScale)
         Player traits will change according to lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest, when notable is executed.
-Feature: added peasantRevengePartyTalkToLordDistance so you can change distance from where notable will start talking to hero. 
+Feature: added peasantRevengePartyTalkToLordDistance so you can change distance from where notable will start talking to hero.
+231022 v15.1.1.2
+Fix: Notable dialogue string for translations
+231022 v15.1.1.3
+Fix: Notable dialogue strings
+Fix: Crash after selecting Polish language
+Feature: Do not removing notable party after notable execution

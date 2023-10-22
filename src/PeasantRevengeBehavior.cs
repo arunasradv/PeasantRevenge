@@ -1737,7 +1737,8 @@ namespace PeasantRevenge
                  currentRevenge.Stop();
                  peasant_revenge_peasant_kill_by_hero(Hero.MainHero);
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.notable_killed);
-                 currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
+                 leave_encounter();
+                 //currentRevenge.xParty.RemoveParty(); // if not removed , party will be left, and can be attacked (no crash)
              },
              100,
              new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_intimidation_clickable_condition));
@@ -2000,7 +2001,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_start_grievance",
                "start",
                "peasant_revenge_peasants_start_grievance_received",
-               "{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand criminal's head on spike! What will you say?[if:convo_furious][ib:agressive]",
+               "{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand criminal's head on spike! What will you say?[if:convo_furious][ib:aggressive]",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_start_condition), null, 120, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_die",
@@ -2698,7 +2699,7 @@ namespace PeasantRevenge
             }
             else if (honor < 0)
             {
-                msg = "{=PRev0015}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]";
+                msg = "{=PRev0116}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]";
             }
 
             if (generosity < 0)
