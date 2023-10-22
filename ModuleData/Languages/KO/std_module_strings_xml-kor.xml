@@ -17,7 +17,7 @@
      <string id="PRev0011" text="범죄에 대한 대가를 치르십시오.[rf:idle_angry][if:convo_bored]" />
      <string id="PRev0012" text="좋습니다.[ib:happy]" />
      <string id="PRev0013" text="안타깝네요.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-     <string id="PRev0014" text="당신의 수감자 {CRIMINAL.LINK}이(가) 우리 마을을 약탈했습니다. 우리는 범인의 머리를 스파이크에 요구합니다! 당신은 뭐라고 하시겠습니까?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0014" text="당신의 수감자 {CRIMINAL.LINK}이(가) 우리 마을을 약탈했습니다. 우리는 범인의 머리를 스파이크에 요구합니다! 당신은 뭐라고 하시겠습니까?[if:convo_furious][ib:aggressive]" />
      <string id="PRev0015" text="{CRIMINAL.NAME}님은 죽을 것입니다." />
      <string id="PRev0016" text="{CRIMINAL.NAME}님이 {REPARATION}{GOLD_ICON}을(를) 지불할 것입니다." />
      <string id="PRev0017" text="아니요, 당신의 일이 아닙니다, 농부님!" />

@@ -82,7 +82,9 @@ Feature: Dialogues, when player encounter revenger party, before and after reven
         Iintimidation dialogs are enabled if player's party strength is higher than revenger's party (see configuration variable peasantRevengerIntimidationPowerScale)
         Player traits will change according to lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest, when notable is executed.
 Feature: added peasantRevengePartyTalkToLordDistance so you can change distance from where notable will start talking to hero.
-231020 v15.1.1.1
-Fix: Crash after notable execution and party removal
-231020 v15.1.1.2
+231022 v15.1.1.2
 Fix: Notable dialogue string for translations
+231022 v15.1.1.3
+Fix: Notable dialogue strings
+Fix: Crash after selecting Polish language
+Feature: Do not removing notable party after notable execution

@@ -17,7 +17,7 @@
     <string id="PRev0011" text="{=PRev0011}Pay for your crime.[rf:idle_angry][if:convo_bored]" />
     <string id="PRev0012" text="{=PRev0012}Well I'm happy with that.[ib:happy]" />
     <string id="PRev0013" text="{=PRev0013}Well, that is unfortunate.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-    <string id="PRev0014" text="{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand criminal's head on spike! What will you say?[if:convo_furious][ib:agressive]" />
+    <string id="PRev0014" text="{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand criminal's head on spike! What will you say?[if:convo_furious][ib:aggressive]" />
     <string id="PRev0015" text="{=PRev0015}{CRIMINAL.NAME} will die." />
     <string id="PRev0016" text="{=PRev0016}{CRIMINAL.NAME} will pay {REPARATION}{GOLD_ICON}." />
     <string id="PRev0017" text="{=PRev0017}No, it is not your business, peasant!" />
