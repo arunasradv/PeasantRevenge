@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 15;
+        public int CfgVersion = 17;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -61,12 +61,13 @@ namespace PeasantRevenge
         public float peasantRevengeTimeoutInDays = 5.0f;
         public float peasantRevengeSartTimeInDays = 0.2f;
         public int peasantRevengeMaxPartySize = 5;
+        public float peasantRevengePartyTalkToLordDistance = 2.0f;
         public bool allowLordToKillMessenger = true;
         public bool allowPeasantToKillLord = true;
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
         public string logColorForOtherFactions = "hA02222A0";
-
+        public float peasantRevengerIntimidationPowerScale = 0.5f;
         public AIfilters ai;
 
         public static string default_file_name()
@@ -115,7 +116,7 @@ namespace PeasantRevenge
             public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
             public List<RelationsPerTraits> lordWillAbandonTheVictimRemains;
-
+            public List<TraitAndValue> lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest;
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -201,6 +202,7 @@ namespace PeasantRevenge
                 default_lordWillDeclineRansomTheVictimRemains();
                 default_lordWillAbandonTheVictimRemains();
                 default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
+                default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -260,6 +262,16 @@ namespace PeasantRevenge
                     };
             }
 
+            
+            public void default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest()
+            {
+                lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = -2},
+                        new TraitAndValue { trait = "Honor", value = -3}
+                    };
+            }
             public void default_lordWillDeclineRansomTheVictimRemains()
             {
                 lordWillDeclineRansomTheVictimRemains =

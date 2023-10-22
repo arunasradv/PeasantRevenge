@@ -17,7 +17,7 @@
      <string id="PRev0011" text="Заплатите за свое преступление.[rf:idle_angry][if:convo_bored]" />
      <string id="PRev0012" text="Ну, я доволен этим.[ib:happy]" />
      <string id="PRev0013" text="Ну, это прискорбно.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-     <string id="PRev0014" text="Ваш заключенный {CRIMINAL.LINK} разграбил нашу деревню. Мы требуем голову преступника на пике! Что вы скажете?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0014" text="Ваш заключенный {CRIMINAL.LINK} разграбил нашу деревню. Мы требуем голову преступника на пике! Что вы скажете?[if:convo_furious][ib:aggressive]" />
      <string id="PRev0015" text="{CRIMINAL.NAME} умрет." />
      <string id="PRev0016" text="{CRIMINAL.NAME} выплатит {REPARATION}{GOLD_ICON}" />
      <string id="PRev0017" text="Нет, это не твое дело, крестьянин!" />
@@ -109,5 +109,16 @@
     <string id="PRev0103" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
     <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
     <string id="PRev0105" text="Я возьму останки." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="Тебе следует отказаться от мести, иначе..." />
+    <string id="PRev0108" text="Что еще?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="Я отрублю тебе голову!" />
+    <string id="PRev0110" text="Возвращайтесь в свою деревню!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} и {CVICTIM.LINK} мертвы! Моя месть завершена![if:happy]" />
+    <string id="PRev0112" text="Я завершил месть {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} заплатит {GOLD_ICON} или умрет![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="Никто не сможет остановить мою месть {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Ваша группа слишком маленькая" />
+    <string id="PRev0116" text="{CRIMINAL.LINK} умрет![if:convo_furious][ib:angry]" />
   </strings>
 </base>
