@@ -17,7 +17,7 @@
      <string id="PRev0011" text="Paga per il tuo crimine.[rf:idle_angry][if:convo_bored]" />
      <string id="PRev0012" text="Beh, sono contento di questo.[ib:happy]" />
      <string id="PRev0013" text="Beh, è ​​un peccato.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-     <string id="PRev0014" text="Il tuo prigioniero {CRIMINAL.LINK} ha saccheggiato il nostro villaggio. Chiediamo la testa del criminale sulla punta! Cosa dirai?[if:convo_furious][ib:agressive]" />
+     <string id="PRev0014" text="Il tuo prigioniero {CRIMINAL.LINK} ha saccheggiato il nostro villaggio. Chiediamo la testa del criminale sulla punta! Cosa dirai?[if:convo_furious][ib:aggressive]" />
      <string id="PRev0015" text="{CRIMINAL.NAME} morirà." />
      <string id="PRev0016" text="{CRIMINAL.NAME} pagherà {REPARATION}{GOLD_ICON}." />
      <string id="PRev0017" text="No, non sono affari tuoi, paesano!" />
@@ -119,5 +119,6 @@
     <string id="PRev0113" text="{CRIMINAL.LINK} pagherà {GOLD_ICON} o morirà![rf:idle_angry][ib:angry]" />
     <string id="PRev0114" text="Nessuno può fermare la mia vendetta su {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="Il tuo gruppo è troppo piccolo" />
+    <string id="PRev0116" text="{CRIMINAL.LINK} は死ぬでしょう![if:convo_furious][ib:angry]" />
   </strings>
 </base>
