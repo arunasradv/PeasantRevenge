@@ -57,7 +57,7 @@
     <string id="PRev0051" text="{=PRev0051}I can try to teach you by my example..." />
     <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!" />
     <string id="PRev0053" text="{=PRev0053}Thank you very much![if:convo_astonished]" />
-    <string id="PRev0054" text="{=PRev0054}I just cannot.[if:convo_grave]" />
+    <string id="PRev0054" text="{=PRev0054}Noble people will do what they want. It is not my business to interfere.[if:convo_grave]" />
     <string id="PRev0055" text="{=PRev0055}Do not have needed traits" />
     <string id="PRev0056" text="{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations." />
     <string id="PRev0057" text="{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
