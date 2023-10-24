@@ -1258,6 +1258,11 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                     }
+                    if (_cfg.values.CfgVersion < 18)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
+                    }                      
                 }
             }
             else
@@ -1310,7 +1315,7 @@ namespace PeasantRevenge
 
             AddDialogs(campaignGameStarter);
             AddRaidingParties();
-            //Test();
+            Test();
         }
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
@@ -2437,7 +2442,7 @@ namespace PeasantRevenge
             "peasant_revenge_player_not_happy_with_peasant_learned",
             "peasant_revenge_player_not_happy_with_peasant_post_learned",
             "close_window",
-            "{=PRev0053}Thank you very much![if:convo_astonished]",
+            "{=PRev0028}So, criminal will die.[ib:closed][if:happy]",
              () => notable_can_do_revenge(),
              () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
             //TODO: fix correct relation change
@@ -2447,15 +2452,17 @@ namespace PeasantRevenge
               "close_window",
               "{=PRev0054}Noble people will do what they want. It is not my business to interfere.[if:convo_grave]",
               () => !notable_can_do_revenge(),
-              () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, -_cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
+              () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
             #endregion
             #endregion
 
         }
-#region peasant revenge persuede
+        #region peasant revenge persuede
+#warning make bribe barterable or persuede amount of money?
         private void peasant_revenge_player_not_happy_with_peasant_bribe_consequence()
         {
-            int bribe = Hero.OneToOneConversationHero.Gold * _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal / 100;
+            int bribe_percents = _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal;
+            int bribe = Hero.OneToOneConversationHero.Gold * bribe_percents / 100;
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, bribe);
             TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, notable_can_do_revenge());
         }
@@ -2494,13 +2501,75 @@ namespace PeasantRevenge
 
             TextObject textObject = new TextObject(msg, null);
             MBTextManager.SetTextVariable("PAYER_COMMENT_REVENGE_TEACH", textObject);
-            return false;
+            return true;
         }
 
-        
         private bool notable_can_do_revenge()
         {
             return !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait);
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_start_teach_condition(out TextObject text)
+        {
+            bool start = Hero.OneToOneConversationHero != null &&
+                (notable_can_do_revenge() ?
+                hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait) : // notable can do the revenge, and hero has exclude traits
+                !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait));// notable cannot do the revenge, and hero has no exclude traits
+#warning do probability - no hard no. Should be persuation...fun part. Bribing should make notable be dependant on bribe . If he is not bribed again he should be angry...
+            text = TextObject.Empty;
+
+            if (!start)
+            {
+                text = new TextObject("{=PRev0055}Do not have needed traits");
+            }
+            // return start;
+            return true;
+        }
+
+        private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
+        {
+            bool teach_purpose = notable_can_do_revenge(); // true if notable can do the revenge, but hero want to prohibit            
+            if (teach_purpose)
+            {
+                OnLordPersuedeNotableNotToRevenge(Hero.MainHero);
+            }
+            else
+            {
+                OnLordPersuedeNotableToRevenge(Hero.MainHero);
+            }
+            TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, teach_purpose, Hero.MainHero);
+            leave_encounter();
+        }
+        private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
+        {
+            bool chop_purpose = notable_can_do_revenge(); // true if notable can do the revenge, but hero want to prohibit            
+
+            foreach (Hero hero in Hero.OneToOneConversationHero.HomeSettlement.Notables)
+            {
+                int nobles_relations = hero.GetRelation(Hero.OneToOneConversationHero);// smaller the relation - bigger chance to get positive result towards player
+                int player_noble_relation = hero.GetRelation(Hero.MainHero); // bigger the relation - bigger chance to get positive result towards player 
+                int relation_change = (player_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, hero, relation_change, true);
+                if (_cfg.values.enableOtherNobleTraitsChangeAfterNobleExecution)
+                {
+
+                    bool direction = MBRandom.RandomInt(-100, 100) < player_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
+                    TeachHeroTraits(hero, _cfg.values.peasantRevengerExcludeTrait, chop_purpose ? direction : !direction);
+                }
+            }
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
+            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
+            leave_encounter();
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_start_condition()
+        {
+            bool start = Hero.OneToOneConversationHero != null &&
+                (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
+                /* hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&*/
+                Hero.OneToOneConversationHero.Issue == null /*&& (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
+                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom)*/;
+            return start;
         }
         #endregion
 
@@ -2598,6 +2667,15 @@ namespace PeasantRevenge
         #endregion
 
         #region trait developement
+        public void OnLordPersuedeNotableToRevenge(Hero hero)
+        {
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge));
+        }
+        public void OnLordPersuedeNotableNotToRevenge(Hero hero)
+        {
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));
+        }
+
         public void OnLordRemainsAbandoned(Hero hero)
         {
             OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned));
@@ -2969,47 +3047,8 @@ namespace PeasantRevenge
 
             return true;
         }
-        private bool peasant_revenge_player_not_happy_with_peasant_start_teach_condition(out TextObject text)
-        {
-            bool start = Hero.OneToOneConversationHero != null &&
-                !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
 
-            text = TextObject.Empty;
-
-            if (!start)
-            {
-                text = new TextObject("{=PRev0055}Do not have needed traits");
-            }
-            return start;
-        }
-
-        private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
-        {
-            TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait), Hero.MainHero);
-            leave_encounter();
-        }
-        private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
-        {
-            foreach (Hero hero in Hero.OneToOneConversationHero.HomeSettlement.Notables)
-            {
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, hero, -_cfg.values.relationChangeWhenLordTeachPeasant, true);
-                bool direction = MBRandom.RandomInt(-100, 100) > (hero.GetRelation(Hero.OneToOneConversationHero));
-                TeachHeroTraits(hero, _cfg.values.peasantRevengerExcludeTrait, direction);
-            }
-            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
-            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
-            leave_encounter();
-        }
-
-        private bool peasant_revenge_player_not_happy_with_peasant_start_condition()
-        {
-            bool start = Hero.OneToOneConversationHero != null &&
-                (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
-               /* hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&*/
-                Hero.OneToOneConversationHero.Issue == null /*&& (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
-                Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom)*/;
-            return start;
-        }
+        
 
 
 

@@ -88,3 +88,11 @@ Fix: Notable dialogue string for translations
 Fix: Notable dialogue strings
 Fix: Crash after selecting Polish language
 Feature: Do not removing notable party after notable execution
+231024 v15.1.1.4
+Feature: Player can persuade the notable peasants not to initiate the revenges
+Feature: Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
+         If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
+Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
+         Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
+         Purpose of the persuasion will influence your hero traits accordingly.
+

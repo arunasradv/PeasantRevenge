@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 17;
+        public int CfgVersion = 18;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -38,7 +38,8 @@ namespace PeasantRevenge
         public bool showPeasantRevengeLogMessagesForKingdom = true;
         public bool peasantRevengerIsRandom = false;
         public bool playerCanPayAnyKingdomClanReparations = true;
-        public string peasantRevengerExcludeTrait = "Mercy > 0|Valor < 0";
+        public string peasantRevengerExcludeTrait = "Mercy > 0|Valor =< 0";
+        //public string peasantRevengerExcludeTrait = "Mercy > 0";
         public string lordNotExecuteMessengerTrait = "Mercy > -1&Calculating > -1|Honor >= 1&Calculating > 0&Generosity > 0";
 #if TESTING
         public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
@@ -68,6 +69,7 @@ namespace PeasantRevenge
         public string logColorForKingdom = "hBB1111BB";
         public string logColorForOtherFactions = "hA02222A0";
         public float peasantRevengerIntimidationPowerScale = 0.5f;
+        public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
         public AIfilters ai;
 
         public static string default_file_name()
@@ -117,6 +119,8 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
             public List<RelationsPerTraits> lordWillAbandonTheVictimRemains;
             public List<TraitAndValue> lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest;
+            public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableNotToRevenge;
+            public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableToRevenge;
             public void Default()
             {
               partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
@@ -204,6 +208,8 @@ namespace PeasantRevenge
                 default_lordWillAbandonTheVictimRemains();
                 default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
                 default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
+                default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
+                default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -299,6 +305,25 @@ namespace PeasantRevenge
                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
                   };
             }
+            public void default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge()
+            {
+                lordTraitChangeWhenRemainsOfLordAreAbandoned =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = 5},
+                        new TraitAndValue { trait = "Valor", value = -5},
+                    };
+            }
+            public void default_lordTraitChangeWhenLordPersuedeNotableToRevenge()
+            {
+                lordTraitChangeWhenRemainsOfLordAreAbandoned =
+                    new List<TraitAndValue>
+                    {
+                        new TraitAndValue { trait = "Mercy", value = -5},
+                        new TraitAndValue { trait = "Valor", value = 5},
+                    };
+            }
+
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
