@@ -95,4 +95,5 @@ Feature: Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExe
 Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
          Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
          Purpose of the persuasion will influence your hero traits accordingly.
+Feature: Added dialogue option to return from notable peasant persuasion options into main hero options.
 

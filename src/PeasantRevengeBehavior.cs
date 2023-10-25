@@ -39,6 +39,14 @@ namespace PeasantRevenge
         List<PeasantRevengeData> revengeData = new List<PeasantRevengeData>();
 
         PeasantRevengeData currentRevenge = new PeasantRevengeData();
+        public  class PersuadedHeroData
+        {
+           
+            public string Id = ""; // hero id
+            public uint persuade_try_count = 0; 
+        }
+
+       public List<PersuadedHeroData> persuadedHeroData = new List<PersuadedHeroData>();
 
         internal class PeasantRevengeData
         {
@@ -77,7 +85,6 @@ namespace PeasantRevenge
             }
 
             public List<quest_result> quest_Results = new List<quest_result>();
-
             public Village village;
             public CharacterObject criminal;
             public CharacterObject accused_hero; // it is hero who was blamed for the crime by criminal
@@ -2436,31 +2443,93 @@ namespace PeasantRevenge
                "{PAYER_COMMENT_REVENGE_BRIBE}",
                new ConversationSentence.OnConditionDelegate(peasant_revenge_player_not_happy_with_peasant_bribe_condition),
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_bribe_consequence), 120, null);
+            //Leave
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_not_happy_with_peasant_start_give_leave",
+               "peasant_revenge_player_not_happy_with_peasant_start_options",
+               "close_window",
+               "{= PRev0083}Nevermind.",
+               null,
+               () => leave_encounter(), 80, null);
             #endregion
+#warning make dialog strings and relation change if fail. Make it possible to fail the bribe/persuation! Bribing could result in "give money all day doesnt matter..." 
             #region ending
             campaignGameStarter.AddDialogLine(
-            "peasant_revenge_player_not_happy_with_peasant_learned",
+            "peasant_revenge_player_not_happy_with_peasant_learned_1",
             "peasant_revenge_player_not_happy_with_peasant_post_learned",
             "close_window",
             "{=PRev0028}So, criminal will die.[ib:closed][if:happy]",
-             () => notable_can_do_revenge(),
-             () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
-            //TODO: fix correct relation change
+             () => peasant_revenge_player_not_happy_with_peasant_post_learned_1_on_condition(),
+             () => leave_encounter(),
+             100, null);
             campaignGameStarter.AddDialogLine(
-              "peasant_revenge_player_not_happy_with_peasant_learned",
+              "peasant_revenge_player_not_happy_with_peasant_learned_2",
               "peasant_revenge_player_not_happy_with_peasant_post_learned",
               "close_window",
               "{=PRev0054}Noble people will do what they want. It is not my business to interfere.[if:convo_grave]",
-              () => !notable_can_do_revenge(),
-              () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
+              () => peasant_revenge_player_not_happy_with_peasant_post_learned_2_on_condition(),
+              () => leave_encounter(),
+              100, null);
+            campaignGameStarter.AddDialogLine(
+              "peasant_revenge_player_not_happy_with_peasant_learned_3",
+              "peasant_revenge_player_not_happy_with_peasant_post_learned",
+              "close_window",
+              "{=PRev0117}Enough, I will not change my intentions![ib:closed][if:convo_bared_teeth][if:idle_angry]",
+              () => peasant_revenge_player_not_happy_with_peasant_post_learned_3_on_condition(),
+              () => leave_encounter(),// this change must be then persuation fail or success //() => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); },
+              100, null);
             #endregion
             #endregion
 
         }
         #region peasant revenge persuede
+
+        private bool peasant_revenge_player_not_happy_with_peasant_post_learned_1_on_condition()
+        {
+            return notable_can_do_revenge() && get_notable_persuaded_count() <= 2;
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_post_learned_2_on_condition()
+        {
+            return !notable_can_do_revenge() && get_notable_persuaded_count() <=2;
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_post_learned_3_on_condition()
+        {
+            return get_notable_persuaded_count() > 2;
+        }
+
+        private void add_notable_persuaded_count()
+        {
+            if (Hero.OneToOneConversationHero == null) return;
+
+            var pdata = persuadedHeroData.Where((x) => x.Id.Equals(Hero.OneToOneConversationHero.StringId)).FirstOrDefault();
+
+            if (pdata != null)
+            {
+                pdata.persuade_try_count++;
+            }
+            else
+            {
+                persuadedHeroData.Add(new PersuadedHeroData { Id = Hero.OneToOneConversationHero.StringId, persuade_try_count = 1 });
+            }
+        }
+
+        private uint get_notable_persuaded_count()
+        {
+            if (Hero.OneToOneConversationHero == null) return 0;
+
+            var pdata = persuadedHeroData.Where((x) => x.Id.Equals(Hero.OneToOneConversationHero.StringId)).FirstOrDefault();
+
+            return pdata != null ? pdata.persuade_try_count : 0;
+        }
+
 #warning make bribe barterable or persuede amount of money?
         private void peasant_revenge_player_not_happy_with_peasant_bribe_consequence()
         {
+            add_notable_persuaded_count();
+            if (get_notable_persuaded_count() > 2) return;
+
             int bribe_percents = _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal;
             int bribe = Hero.OneToOneConversationHero.Gold * bribe_percents / 100;
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, bribe);
@@ -2528,6 +2597,9 @@ namespace PeasantRevenge
 
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
         {
+            add_notable_persuaded_count();
+            if (get_notable_persuaded_count() > 2) return;
+
             bool teach_purpose = notable_can_do_revenge(); // true if notable can do the revenge, but hero want to prohibit            
             if (teach_purpose)
             {
@@ -2538,7 +2610,6 @@ namespace PeasantRevenge
                 OnLordPersuedeNotableToRevenge(Hero.MainHero);
             }
             TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, teach_purpose, Hero.MainHero);
-            leave_encounter();
         }
         private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
         {
