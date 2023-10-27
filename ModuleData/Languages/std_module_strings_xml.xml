@@ -120,5 +120,8 @@
     <string id="PRev0114" text="{=PRev0114}Nobody can stop my revenge on {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="{=PRev0115}Your party is too small" />
     <string id="PRev0116" text="{=PRev0116}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="{=PRev0117}Enough, I will not change my intentions![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." />
+    <string id="PRev0119" text="{=PRev0119}Not now." />
   </strings>
 </base>
