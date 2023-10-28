@@ -39,14 +39,14 @@ namespace PeasantRevenge
         List<PeasantRevengeData> revengeData = new List<PeasantRevengeData>();
 
         PeasantRevengeData currentRevenge = new PeasantRevengeData();
-        public  class PersuadedHeroData
+        public class PersuadedHeroData
         {
-           
+
             public string Id = ""; // hero id
-            public uint persuade_try_count = 0; 
+            public uint persuade_try_count = 0;
         }
 
-       public List<PersuadedHeroData> persuadedHeroData = new List<PersuadedHeroData>();
+        public List<PersuadedHeroData> persuadedHeroData = new List<PersuadedHeroData>();
 
         internal class PeasantRevengeData
         {
@@ -142,28 +142,40 @@ namespace PeasantRevenge
             public bool Can_peasant_revenge_peasant_finish_start { get => can_peasant_revenge_peasant_finish_start; set => can_peasant_revenge_peasant_finish_start = value; }
 
             public void Stop()
-            {
-                state = quest_state.stop;
+            { 
+                if (state != quest_state.clear)
+                {
+                    state = quest_state.stop;
+                }
             }
 
             public void Ready()
             {
-                state = quest_state.ready;
+                if (state == quest_state.none)
+                {
+                    state = quest_state.ready;
+                }
             }
 
             public void Start()
             {
-                state = quest_state.start;
+                if (state == quest_state.begin)
+                {
+                    state = quest_state.start;
+                }
             }
 
             public void Begin()
             {
-                state = quest_state.begin;
+                if (state == quest_state.ready)
+                {
+                    state = quest_state.begin;
+                }
             }
 
             public void Clear()
             {
-                state = quest_state.clear;
+                state = quest_state.clear; // make sure to set clear only when is impossible to continue the quest             
             }
         }
 
@@ -179,11 +191,10 @@ namespace PeasantRevenge
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoadedEvent);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnNewGameCreatedEvent);
             CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, VillageBeingRaided);
-            //CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, DailyTickPartyEvent);
             CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, HourlyTickEvent);
-            // CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickPartyEvent);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, HeroKilledEvent);
             CampaignEvents.OnPartyDisbandedEvent.AddNonSerializedListener(this, OnPartyDisbandedEvent);
+            CampaignEvents.OnPartyRemovedEvent.AddNonSerializedListener(this, OnPartyRemovedEvent);
         }
 
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
@@ -284,7 +295,36 @@ namespace PeasantRevenge
         #endregion
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
         {
-            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (x.xParty == party));
+            OnAnyRevengePartyIsRemoved(party.Party);
+            OnAnyCapturerPartyIsRemoved(party.Party);
+        }
+
+        private void OnPartyRemovedEvent(PartyBase party)
+        {
+            OnAnyRevengePartyIsRemoved(party);
+            OnAnyCapturerPartyIsRemoved(party);
+        }
+
+        private void OnAnyRevengePartyIsRemoved(PartyBase party)
+        {
+            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
+            x.xParty != null &&
+            ((x.xParty.Party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+
+            if (currentData != null && !currentData.IsEmpty())
+            {
+                foreach (PeasantRevengeData revenge in currentData)
+                {
+                    revenge.Clear();
+                }
+            }
+        }
+
+        private void OnAnyCapturerPartyIsRemoved(PartyBase party)
+        {
+            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
+            ((x.party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+
             if (currentData != null && !currentData.IsEmpty())
             {
                 foreach (PeasantRevengeData revenge in currentData)
@@ -301,9 +341,13 @@ namespace PeasantRevenge
              x.targetHero == victim.CharacterObject ||
              x.executioner == victim.CharacterObject
             ));
-            foreach (PeasantRevengeData revenge in currentData)
+
+            if (currentData != null && !currentData.IsEmpty())
             {
-                revenge.Stop();
+                foreach (PeasantRevengeData revenge in currentData)
+                {
+                    revenge.Stop();
+                }
             }
         }
 
@@ -335,7 +379,7 @@ namespace PeasantRevenge
             if (party.LeaderHero == null) return;
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (x.criminal == prisoner.CharacterObject));
 
-            if (!currentData.IsEmpty())
+            if (currentData != null && !currentData.IsEmpty())
             {
                 foreach (PeasantRevengeData revenge in currentData)
                 {
@@ -361,9 +405,9 @@ namespace PeasantRevenge
                 }
             }
 
-            currentData = revengeData.Where((x) => (x.targetHero == prisoner.CharacterObject));
+            currentData = revengeData.Where((x) => ((x.targetHero == prisoner.CharacterObject)));
 
-            if (!currentData.IsEmpty())
+            if (currentData != null && !currentData.IsEmpty())
             {
                 foreach (PeasantRevengeData revenge in currentData)
                 {
@@ -374,10 +418,15 @@ namespace PeasantRevenge
 
         private void HeroPrisonerReleased(Hero criminal, PartyBase party, IFaction faction, EndCaptivityDetail detail)
         {
-            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (x.criminal == criminal.CharacterObject && x.party == party));
-            foreach (PeasantRevengeData revenge in currentData)
+            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => 
+            (x.criminal == criminal.CharacterObject && (x.party?.Id.ToString().Equals(party.Id.ToString()) ?? false)));
+            
+            if (currentData != null && !currentData.IsEmpty())
             {
-                revenge.Stop();
+                foreach (PeasantRevengeData revenge in currentData)
+                {
+                    revenge.Stop();
+                }
             }
         }
 
@@ -531,7 +580,10 @@ namespace PeasantRevenge
                         if (revengeData[i].xParty != null && revengeData[i].targetHero.HeroObject.PartyBelongedTo != null &&
                            (revengeData[i].Can_peasant_revenge_messenger_peasant_start || revengeData[i].Can_peasant_revenge_peasant_start))
                         {
-                            revengeData[i].xParty.Ai.SetMoveGoToPoint(revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D);
+                            Vec2 pposition= revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D;
+                            Vec2 rvec2 = new Vec2(_cfg.values.peasantRevengePartyWaitLordDistance >= 0.0f ? _cfg.values.peasantRevengePartyWaitLordDistance: 1.0f, 0f);
+                            rvec2.RotateCCW(MBRandom.RandomFloatRanged(6.28f));                            
+                            revengeData[i].xParty.Ai.SetMoveGoToPoint(pposition + rvec2);
                         }
                         else
                         {
@@ -553,12 +605,26 @@ namespace PeasantRevenge
                         {
                             if (!revengeData[i].executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
-                                DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement);
+                                try
+                                {
+                                    DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement); // will set clear flag in events
+                                }
+                                catch(Exception ex)
+                                {
+                                    InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB"))); // because sometimes xParty is actually removed already
+                                }
                             }
                         }
                         else
                         {
-                            revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
+                            try
+                            {
+                                revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
+                            }
+                            catch (Exception ex)
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB")));// because sometimes xParty is actually removed already
+                            }
                         }
                     }
                     else
@@ -1053,6 +1119,11 @@ namespace PeasantRevenge
         {
             int k = -1;
 
+            if(settlement.Notables.Count <= 1) // do not allow to take all notables from village, because will get crash at line 208 in  TaleWorlds.CampaignSystem.GameComponents.GetRelationIncreaseFactor() after any other criminal raid party is defeated nearby
+            {
+                return null;
+            }
+
             if (_cfg.values.peasantRevengerIsRandom)
             {
                 k = MBRandom.RandomInt(0, settlement.Notables.Count - 1);
@@ -1269,7 +1340,7 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
                         _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
-                    }                      
+                    }
                 }
             }
             else
@@ -2036,6 +2107,14 @@ namespace PeasantRevenge
                "{=PRev0017}No, it is not your business, peasant!", null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_peasant_not_kill_hero_consequence), 90, null, null);
             campaignGameStarter.AddPlayerLine(
+                "peasant_revenge_peasants_start_grievance_requested_not_now",
+                "peasant_revenge_peasants_start_grievance_received",
+                "close_window",
+                "{=PRev0118}Not now.",
+                ()=> { return currentRevenge.xParty != null; },
+                () => { leave_encounter(); },
+                70, null);
+            campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_ask_criminal",
                "peasant_revenge_peasants_start_grievance_received",
                "close_window",
@@ -2263,6 +2342,14 @@ namespace PeasantRevenge
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
                 null, 90, null, null);
 
+            campaignGameStarter.AddPlayerLine(
+                "peasant_revenge_peasants_messenger_grievance_requested_not_now",
+                "peasant_revenge_peasants_messenger_start_grievance_received",
+                "close_window",
+                "{=PRev0118}Not now.",
+                () => { return currentRevenge.xParty != null; },
+                () => { leave_encounter(); },
+                70, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_messenger_finish_paid_end",
              "peasant_revenge_peasants_messenger_finish_paid",
@@ -2403,13 +2490,13 @@ namespace PeasantRevenge
                "{=PRev0048}Do you deal with criminals in this village?",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_condition),
                null/*() => { SetHeroTraitValue(Hero.MainHero, "Valor", -2); SetHeroTraitValue(Hero.MainHero, "Mercy", 2); }*/
-               , 100, null);     
+               , 100, null);
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_player_not_happy_with_peasant_start_peasant",
                "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
                "peasant_revenge_player_not_happy_with_peasant_start_options",
                "{=PRev0049}Yes? Why do you ask?[ib:closed][rf:convo_thinking]",
-               () => { return notable_can_do_revenge(); }, null, 100, null);         
+               () => { return notable_can_do_revenge(); }, null, 100, null);
             campaignGameStarter.AddDialogLine(
                 "peasant_revenge_player_not_happy_with_peasant_start_peasant",
                 "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
@@ -2491,7 +2578,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_2_on_condition()
         {
-            return !notable_can_do_revenge() && get_notable_persuaded_count() <=2;
+            return !notable_can_do_revenge() && get_notable_persuaded_count() <= 2;
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_3_on_condition()
@@ -2539,12 +2626,12 @@ namespace PeasantRevenge
         // TODO: make persuation here
         private bool peasant_revenge_player_not_happy_with_peasant_bribe_condition()
         {
-           // string msg = (notable_can_do_revenge() ? "{=PRev0117}Here take {BRIBEVALUE}{GOLD_ICON}. Close your eyes at crimes of the noble people." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!");
-           string msg = (notable_can_do_revenge() ? "{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!");
+            // string msg = (notable_can_do_revenge() ? "{=PRev0117}Here take {BRIBEVALUE}{GOLD_ICON}. Close your eyes at crimes of the noble people." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!");
+            string msg = (notable_can_do_revenge() ? "{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!");
 
             // TODO: make bribe value vary (look at skills, relations...)
             TextObject textObject = new TextObject(msg, null);
-            
+
             int bribe = Hero.OneToOneConversationHero.Gold * _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal / 100;
 
             textObject.SetTextVariable("BRIBEVALUE", bribe);
@@ -2704,10 +2791,10 @@ namespace PeasantRevenge
             if (items.GetItemNumber(lord_body) < 1) return;
 
             ItemRosterElement item = items.Where((x) => x.EquipmentElement.Item.Name.ToString().Equals("pr_wrapped_body")).FirstOrDefault();
-           
+
             OnRansomRemainsOfferAccepted(hero);
             GiveItemAction.ApplyForHeroes(hero, ransomer, item);
-            GiveGoldAction.ApplyBetweenCharacters(ransomer, hero, ransomValue, false);            
+            GiveGoldAction.ApplyBetweenCharacters(ransomer, hero, ransomValue, false);
         }
 
         private void DeclineRansomOffer(Hero hero, Hero ransomer)
@@ -3119,7 +3206,7 @@ namespace PeasantRevenge
             return true;
         }
 
-        
+
 
 
 
