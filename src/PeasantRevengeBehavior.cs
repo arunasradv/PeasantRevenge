@@ -580,7 +580,10 @@ namespace PeasantRevenge
                         if (revengeData[i].xParty != null && revengeData[i].targetHero.HeroObject.PartyBelongedTo != null &&
                            (revengeData[i].Can_peasant_revenge_messenger_peasant_start || revengeData[i].Can_peasant_revenge_peasant_start))
                         {
-                            revengeData[i].xParty.Ai.SetMoveGoToPoint(revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D);
+                            Vec2 pposition= revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D;
+                            Vec2 rvec2 = new Vec2(_cfg.values.peasantRevengePartyWaitLordDistance >= 0.0f ? _cfg.values.peasantRevengePartyWaitLordDistance: 1.0f, 0f);
+                            rvec2.RotateCCW(MBRandom.RandomFloatRanged(6.28f));                            
+                            revengeData[i].xParty.Ai.SetMoveGoToPoint(pposition + rvec2);
                         }
                         else
                         {
