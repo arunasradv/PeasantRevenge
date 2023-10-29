@@ -96,5 +96,7 @@ Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNot
          Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
          Purpose of the persuasion will influence your hero traits accordingly.
 Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
-Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+Feature: Added configuration parameter peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certaincerain traits and relations with hero .
+
 

@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 18;
+        public int CfgVersion = 19;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -28,6 +28,7 @@ namespace PeasantRevenge
         public int relationChangeWhenLordKilledMessenger = -3;
         public int relationChangeWhenLordRefusedToSupportPeasantRevenge = -2;
         public int relationChangeWhenLordTeachPeasant = 2;
+        public int relationChangeWhenLordBribePeasant = 2;
         public int relationChangeLordAndCriminalWhenLordExecutedTheAccusedCriminal = 1;
         public int relationChangeWhenLordDeclinedRansomOfferForCriminalLordRemains = -10;
         public int goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal = 20;
@@ -39,7 +40,6 @@ namespace PeasantRevenge
         public bool peasantRevengerIsRandom = false;
         public bool playerCanPayAnyKingdomClanReparations = true;
         public string peasantRevengerExcludeTrait = "Mercy > 0|Valor =< 0";
-        //public string peasantRevengerExcludeTrait = "Mercy > 0";
         public string lordNotExecuteMessengerTrait = "Mercy > -1&Calculating > -1|Honor >= 1&Calculating > 0&Generosity > 0";
 #if TESTING
         public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
@@ -122,84 +122,18 @@ namespace PeasantRevenge
             public List<TraitAndValue> lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest;
             public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableNotToRevenge;
             public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableToRevenge;
+            public List<RelationsPerTraits> notableWillAcceptTheBribe;
             public void Default()
             {
-              partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
-              {
-                    new RelationsPerTraits { traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
-              };
-
-                settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
-              {
-                    new RelationsPerTraits {traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
-              };
-
-                lordWillAffordPartOfHisSavingsToPayForFavor =
-                new List<MoneyPerTraits>
-                {
-                new MoneyPerTraits {traits = "Generosity < -1", percent = 10 },
-                new MoneyPerTraits {traits = "Generosity == -1", percent = 20 },
-                new MoneyPerTraits {traits = "Generosity == 0", percent = 30 },
-                new MoneyPerTraits {traits = "Generosity == 1", percent = 40 },
-                new MoneyPerTraits {traits = "Generosity > 1", percent = 50 },
-                }; 
-                
-                lordWillAffordToHelpTheCriminalEnemy =
-                  new List<RelationsPerTraits>
-                  {
-                    new RelationsPerTraits {traits = "Mercy < -1&Honor < 1&Generosity < 1", relations = "Relations > 80" },
-                    new RelationsPerTraits {traits = "Mercy == -1&Honor < 1&Generosity < 0", relations = "Relations > 70" },
-                    new RelationsPerTraits {traits = "Mercy == 0&Honor < 1&Generosity < 0", relations = "Relations > 50" },
-                    new RelationsPerTraits {traits = "Mercy == 1&Honor < 1&Generosity < 0", relations = "Relations > 25" },
-                    new RelationsPerTraits {traits = "Mercy > 1&Honor < 0&Generosity < 0&Valor > 0", relations = "Relations > 10" },
-                  };
-                lordWillAffordToHelpTheCriminalAlly =
-                  new List<RelationsPerTraits>
-                  {
-                    new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 60" },
-                    new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 40" },
-                    new RelationsPerTraits {traits = "Mercy == 0&Honor > -1", relations = "Relations > 20" },
-                    new RelationsPerTraits {traits = "Mercy == 1&Honor > -1&Generosity > -1", relations = "Relations > 0" },
-                    new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -10" },
-                  };
-                lordWillAffordToHelpPayLostRansom =
-                  new List<RelationsPerTraits>
-                  {
-                    new RelationsPerTraits {traits = "Mercy < -1|Generosity < -1", relations = "Relations > 20" },
-                    new RelationsPerTraits {traits = "Mercy == -1|Generosity == -1", relations = "Relations > 10" },
-                    new RelationsPerTraits {traits = "Mercy == 0|Generosity == 0", relations = "Relations > 0" },
-                    new RelationsPerTraits {traits = "Mercy == 1|Generosity == 1&Honor > 0", relations = "Relations > -10" },
-                    new RelationsPerTraits {traits = "Mercy > 1|Generosity > 1&Honor > 0", relations = "Relations > -20" },
-                  };
-
-                lordIfFriendsWillHelpTheCriminal =
-                 new List<RelationsPerTraits>
-                 {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 30" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -20"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -30"},
-                 };
-                lordIfRelativesWillHelpTheCriminal =
-                  new List<RelationsPerTraits>
-                  {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
-                  };
-                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
-                  new List<RelationsPerTraits>
-                  {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
-                  };
-
+                default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
+                default_settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
+                default_lordWillAffordPartOfHisSavingsToPayForFavor();
+                default_lordWillAffordToHelpTheCriminalEnemy();
+                default_lordWillAffordToHelpTheCriminalAlly();
+                default_lordWillAffordToHelpPayLostRansom();
+                default_lordIfFriendsWillHelpTheCriminal();
+                default_lordIfRelativesWillHelpTheCriminal();
+                default_notableWillAcceptTheBribe();
                 default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
                 default_lordTraitChangeWhenRansomRemainsDeclined();
@@ -213,6 +147,90 @@ namespace PeasantRevenge
                 default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
             }
 
+            public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
+            {
+                partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
+              {
+                    new RelationsPerTraits { traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
+              };
+            }
+            public void default_settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
+            {
+             settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
+              {
+                    new RelationsPerTraits {traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
+              };
+            }
+            public void default_lordWillAffordPartOfHisSavingsToPayForFavor()
+            {
+                lordWillAffordPartOfHisSavingsToPayForFavor =
+                new List<MoneyPerTraits>
+                {
+                new MoneyPerTraits {traits = "Generosity < -1", percent = 10 },
+                new MoneyPerTraits {traits = "Generosity == -1", percent = 20 },
+                new MoneyPerTraits {traits = "Generosity == 0", percent = 30 },
+                new MoneyPerTraits {traits = "Generosity == 1", percent = 40 },
+                new MoneyPerTraits {traits = "Generosity > 1", percent = 50 },
+                };
+            }
+            public void default_lordWillAffordToHelpTheCriminalEnemy()
+            {
+                lordWillAffordToHelpTheCriminalEnemy =
+                  new List<RelationsPerTraits>
+                  {
+                    new RelationsPerTraits {traits = "Mercy < -1&Honor < 1&Generosity < 1", relations = "Relations > 80" },
+                    new RelationsPerTraits {traits = "Mercy == -1&Honor < 1&Generosity < 0", relations = "Relations > 70" },
+                    new RelationsPerTraits {traits = "Mercy == 0&Honor < 1&Generosity < 0", relations = "Relations > 50" },
+                    new RelationsPerTraits {traits = "Mercy == 1&Honor < 1&Generosity < 0", relations = "Relations > 25" },
+                    new RelationsPerTraits {traits = "Mercy > 1&Honor < 0&Generosity < 0&Valor > 0", relations = "Relations > 10" },
+                  };
+            }
+            public void default_lordWillAffordToHelpTheCriminalAlly()
+            {
+                lordWillAffordToHelpTheCriminalAlly =
+                  new List<RelationsPerTraits>
+                  {
+                    new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 60" },
+                    new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 40" },
+                    new RelationsPerTraits {traits = "Mercy == 0&Honor > -1", relations = "Relations > 20" },
+                    new RelationsPerTraits {traits = "Mercy == 1&Honor > -1&Generosity > -1", relations = "Relations > 0" },
+                    new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -10" },
+                  };
+            }
+            public void default_lordWillAffordToHelpPayLostRansom()
+            {
+                 lordWillAffordToHelpPayLostRansom =
+                  new List<RelationsPerTraits>
+                  {
+                    new RelationsPerTraits {traits = "Mercy < -1|Generosity < -1", relations = "Relations > 20" },
+                    new RelationsPerTraits {traits = "Mercy == -1|Generosity == -1", relations = "Relations > 10" },
+                    new RelationsPerTraits {traits = "Mercy == 0|Generosity == 0", relations = "Relations > 0" },
+                    new RelationsPerTraits {traits = "Mercy == 1|Generosity == 1&Honor > 0", relations = "Relations > -10" },
+                    new RelationsPerTraits {traits = "Mercy > 1|Generosity > 1&Honor > 0", relations = "Relations > -20" },
+                  };
+            }
+            public void default_lordIfFriendsWillHelpTheCriminal() { 
+                lordIfFriendsWillHelpTheCriminal =
+                 new List<RelationsPerTraits>
+                 {
+                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 30" },
+                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 20" },
+                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
+                new RelationsPerTraits { traits = "Mercy == 1&Honor > 0", relations = "Relations > -20" },
+                new RelationsPerTraits { traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -30" },
+                 };}
+            public void default_lordIfRelativesWillHelpTheCriminal()
+            {
+                lordIfRelativesWillHelpTheCriminal =
+                  new List<RelationsPerTraits>
+                  {
+                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
+                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
+                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
+                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
+                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
+                  };
+            }
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
             {
                 lordWillKillBothAccusedHeroAndCriminalLord =
@@ -221,7 +239,6 @@ namespace PeasantRevenge
                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" },
                  };
             }
-
             public void default_criminalWillBlameOtherLordForTheCrime()
             {
                 criminalWillBlameOtherLordForTheCrime =
@@ -233,7 +250,6 @@ namespace PeasantRevenge
                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
                  };
             }
-
             public void default_lordTraitChangeWhenRansomRemainsDeclined()
             {
                 lordTraitChangeWhenRansomRemainsDeclined =
@@ -245,7 +261,6 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = 1},
                     };
             }
-
             public void default_lordTraitChangeWhenRansomRemainsAccepted()
             {
                 lordTraitChangeWhenRansomRemainsAccepted =
@@ -257,7 +272,6 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = 1},
                     };
             }
-
             public void default_lordTraitChangeWhenRemainsOfLordAreAbandoned()
             {
                 lordTraitChangeWhenRemainsOfLordAreAbandoned =
@@ -269,8 +283,6 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = -1},
                     };
             }
-
-            
             public void default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest()
             {
                 lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest =
@@ -288,7 +300,6 @@ namespace PeasantRevenge
                     new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor > 0", relations = "Relations < -50"}
                  };
             }
-
             public void default_lordWillAbandonTheVictimRemains()
             {
                 lordWillAbandonTheVictimRemains =
@@ -297,10 +308,9 @@ namespace PeasantRevenge
                     new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
                  };
             }
-
             public void default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict()
             {
-              lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
+                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
                     new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 20" },
                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
@@ -317,14 +327,23 @@ namespace PeasantRevenge
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableToRevenge()
             {
-                lordTraitChangeWhenRemainsOfLordAreAbandoned =
+                lordTraitChangeWhenLordPersuedeNotableToRevenge =
                     new List<TraitAndValue>
                     {
                         new TraitAndValue { trait = "Mercy", value = -5},
                         new TraitAndValue { trait = "Valor", value = 5},
                     };
             }
-
+            public void default_notableWillAcceptTheBribe()
+            {
+                notableWillAcceptTheBribe =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor < 0&Generosity > 0", relations = "Relations >= -10" },
+                     new RelationsPerTraits {traits = "Honor == 0&Generosity > 0", relations = "Relations >= 10" },
+                     new RelationsPerTraits {traits = "Honor > 0&Generosity > 0", relations = "Relations >= 20" },
+                };
+            }
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
