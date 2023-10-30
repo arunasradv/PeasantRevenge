@@ -120,6 +120,6 @@
      <string id="PRev0114" text="{=PRev0114}Nikt nie może powstrzymać mojej zemsty na {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
      <string id="PRev0115" text="{=PRev0115}Twoja grupa jest za mała" />
      <string id="PRev0116" text="{=PRev0116}{CRIMINAL.LINK} umrze![if:convo_furious][ib:angry]" />
-     <string id="PRev0119" tekst="Nie teraz." />
+     <string id="PRev0119" text="Nie teraz." />
   </strings>
 </base>
