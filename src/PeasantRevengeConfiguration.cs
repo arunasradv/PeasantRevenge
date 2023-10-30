@@ -63,6 +63,7 @@ namespace PeasantRevenge
         public int peasantRevengeMaxPartySize = 5;
         public float peasantRevengePartyTalkToLordDistance = 2.0f;
         public bool allowLordToKillMessenger = true;
+        public float peasantRevengePartyWaitLordDistance = 0.5f;
         public bool allowPeasantToKillLord = true;
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
@@ -194,6 +195,7 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
+
                 default_lordWillKillBothAccusedHeroAndCriminalLord();
                 default_criminalWillBlameOtherLordForTheCrime();
                 default_lordTraitChangeWhenRansomRemainsDeclined();
@@ -219,10 +221,10 @@ namespace PeasantRevenge
                 criminalWillBlameOtherLordForTheCrime =
                  new List<RelationsPerTraits>
                  {
-                     //passive dependent
-                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
-                     //dominant manipalutive
-                      new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
+                   //passive dependent
+                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating < 0&Valor <= 0", relations = "Relations < 10"},
+                   //dominant manipalutive
+                    new RelationsPerTraits {traits = "Mercy < 0&Honor < 1&Generosity < 1&Calculating > 0&Valor >= 0", relations =  "Relations < 10"},
                  };
             }
 

@@ -106,8 +106,8 @@
      <string id="PRev0100" text="{=PRev0100}Nie mogę podjąć decyzji...[if:convo_thinking][ib:closed]" />
      <string id="PRev0101" text="{=PRev0101}Niech tak będzie[rf:convo_angry][ib:closed]" />
      <string id="PRev0102" text="{=PRev0102}Dobra decyzja..." />
-     <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} nie wykonał egzekucji na więźniu.NAME} z powodu sprzecznych oskarżeń." />
-     <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} nie wykonał egzekucji na więźniu.NAME} z powodu sprzecznych oskarżeń." />
+     <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} nie wykonał egzekucji na {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
+     <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} nie wykonał egzekucji na {PRISONER.NAME} z powodu sprzecznych oskarżeń." />
      <string id="PRev0105" text="{=PRev0105}Wezmę resztki." />
      <string id="PRev0106" text="{=PRev0106}..." />
      <string id="PRev0107" text="{=PRev0107}Powinieneś porzucić zemstę, bo inaczej..." />
@@ -120,5 +120,6 @@
      <string id="PRev0114" text="{=PRev0114}Nikt nie może powstrzymać mojej zemsty na {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
      <string id="PRev0115" text="{=PRev0115}Twoja grupa jest za mała" />
      <string id="PRev0116" text="{=PRev0116}{CRIMINAL.LINK} umrze![if:convo_furious][ib:angry]" />
+     <string id="PRev0119" text="Nie teraz." />
   </strings>
 </base>
