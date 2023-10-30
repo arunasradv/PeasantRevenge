@@ -1469,7 +1469,7 @@ namespace PeasantRevenge
                             }
                         }
                     }
-                    log($" {s.Name}  {s.Gold} {s.Clan.Name} {(victims > 0 ? "blame: " + victims.ToString() : "")} {(both > 0 ? "both: " + both.ToString() : "")}");
+                    log($" {s.Name}  {s.Gold} {s.Clan?.Name} {(victims > 0 ? "blame: " + victims.ToString() : "")} {(both > 0 ? "both: " + both.ToString() : "")}");
                 }
             }
         }
@@ -2524,6 +2524,7 @@ namespace PeasantRevenge
                 () => { return !notable_can_do_revenge(); }, null, 100, null);
             #endregion
             #region options
+#warning Add crime rating increase if executed noble
             //EXECUTE
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_not_happy_with_peasant_start_fast",
