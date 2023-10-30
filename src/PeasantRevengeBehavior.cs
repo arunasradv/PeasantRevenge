@@ -397,8 +397,8 @@ namespace PeasantRevenge
                     }
                 }
             }
-
-            currentData = revengeData.Where((x) => ((x.targetHero == prisoner.CharacterObject)));
+            
+            currentData = revengeData.Where((x) => ((x.targetHero == prisoner.CharacterObject) || (x.executioner == prisoner.CharacterObject)));
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -573,7 +573,10 @@ namespace PeasantRevenge
                         if (revengeData[i].xParty != null && revengeData[i].targetHero.HeroObject.PartyBelongedTo != null &&
                            (revengeData[i].Can_peasant_revenge_messenger_peasant_start || revengeData[i].Can_peasant_revenge_peasant_start))
                         {
-                            revengeData[i].xParty.Ai.SetMoveGoToPoint(revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D);
+                            Vec2 pposition = revengeData[i].targetHero.HeroObject.PartyBelongedTo.Position2D;
+                            Vec2 rvec2 = new Vec2(_cfg.values.peasantRevengePartyWaitLordDistance >= 0.0f ? _cfg.values.peasantRevengePartyWaitLordDistance : 1.0f, 0f);
+                            rvec2.RotateCCW(MBRandom.RandomFloatRanged(6.28f));
+                            revengeData[i].xParty.Ai.SetMoveGoToPoint(pposition + rvec2);
                         }
                         else
                         {
@@ -601,7 +604,7 @@ namespace PeasantRevenge
                                 }
                                 catch(Exception ex)
                                 {
-                                    InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB"))); // because sometimes xParty is actually removed already
+                                    //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB"))); // because sometimes xParty is actually removed already
                                 }
                             }
                         }
@@ -613,7 +616,7 @@ namespace PeasantRevenge
                             }
                             catch (Exception ex)
                             {
-                                InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB")));// because sometimes xParty is actually removed already
+                                //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB")));// because sometimes xParty is actually removed already
                             }
                         }
                     }
@@ -2098,6 +2101,14 @@ namespace PeasantRevenge
                "{=PRev0071}What does the criminal say about it?",
                new ConversationSentence.OnConditionDelegate(have_accused_hero),
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_criminal_blaming_consequence), 80, null, null);
+            campaignGameStarter.AddPlayerLine(
+                "peasant_revenge_peasants_start_grievance_requested_not_now",
+                "peasant_revenge_peasants_start_grievance_received",
+                "close_window",
+                "{=PRev0119}Not now.",
+                () => { return currentRevenge.xParty != null; },
+                () => { leave_encounter(); },
+                70, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_peasants_ask_criminal_start_explain",
               "start",
@@ -2318,7 +2329,14 @@ namespace PeasantRevenge
                 "{=PRev0024}How dare you! You'll die!",
                 new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_killed_condition),
                 null, 90, null, null);
-
+            campaignGameStarter.AddPlayerLine(
+                "peasant_revenge_peasants_messenger_grievance_requested_not_now",
+                "peasant_revenge_peasants_messenger_start_grievance_received",
+                "close_window",
+                "{=PRev0119}Not now.",
+                () => { return currentRevenge.xParty != null; },
+                () => { leave_encounter(); },
+                70, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_messenger_finish_paid_end",
              "peasant_revenge_peasants_messenger_finish_paid",
@@ -2504,6 +2522,14 @@ namespace PeasantRevenge
                    GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, bribe);
                    TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, false);
                }, 120, null);
+            //Leave
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_not_happy_with_peasant_start_give_leave",
+               "peasant_revenge_player_not_happy_with_peasant_start_options",
+               "close_window",
+               "{= PRev0083}Nevermind.",
+               null,
+               () => leave_encounter(), 80, null);
             campaignGameStarter.AddDialogLine(
             "peasant_revenge_player_not_happy_with_peasant_learned",
             "peasant_revenge_player_not_happy_with_peasant_post_learned",
