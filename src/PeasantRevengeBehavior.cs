@@ -144,7 +144,10 @@ namespace PeasantRevenge
 
             public void Ready()
             {
-                state = quest_state.ready;
+                if (state == quest_state.none)
+                {
+                    state = quest_state.ready;
+                }
             }
 
             public void Start()
@@ -595,26 +598,12 @@ namespace PeasantRevenge
                         {
                             if (!revengeData[i].executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
-                                try
-                                {
-                                    DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement); // will set clear flag in events
-                                }
-                                catch(Exception ex)
-                                {
-                                    //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB"))); // because sometimes xParty is actually removed already
-                                }
+                                DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement); // will set clear flag in events
                             }
                         }
                         else
                         {
-                            try
-                            {
-                                revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
-                            }
-                            catch (Exception ex)
-                            {
-                                //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB")));// because sometimes xParty is actually removed already
-                            }
+                            revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
                         }
                     }
                     else
