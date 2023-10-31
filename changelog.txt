@@ -88,7 +88,16 @@ Fix: Notable dialogue string for translations
 Fix: Notable dialogue strings
 Fix: Crash after selecting Polish language
 Feature: Do not removing notable party after notable execution
-231024 v15.1.1.4
+231022 v15.1.1.4
+Fix: Not safe quest state setting. And crashes related to it.
+Fix: Key not found exception, when revenger party is already removed. 
+Fix: Null exception, when all notables have left the village to for the revenge. If village has one notable, he will not initiate the revenge from now.
+Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
+Feature: Added dialogue option to delay interaction with revenger.
+231031 v15.1.1.5
+Fix: Null exception, when prisoner is released and party is null
+231024 v15.1.1.6
 Feature: Player can persuade the notable peasants not to initiate the revenges
 Feature: Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
          If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
@@ -96,7 +105,6 @@ Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNot
          Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
          Purpose of the persuasion will influence your hero traits accordingly.
 Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
-Feature: Added configuration parameter peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+Feature: Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
 Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certaincerain traits and relations with hero .
-
 
