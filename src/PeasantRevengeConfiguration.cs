@@ -111,8 +111,8 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordIfRelativesWillHelpTheCriminal;
             public List<RelationsPerTraits> criminalWillBlameOtherLordForTheCrime;
             public List<RelationsPerTraits> lordWillKillBothAccusedHeroAndCriminalLord;
-            public List<RelationsPerTraits> lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsDeclined;
+            public List<RelationsPerTraits> lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict;
             public List<TraitAndValue> lordTraitChangeWhenRansomRemainsAccepted;
             public List<TraitAndValue> lordTraitChangeWhenRemainsOfLordAreAbandoned;
             public List<RelationsPerTraits> lordWillDeclineRansomTheVictimRemains;
@@ -288,7 +288,7 @@ namespace PeasantRevenge
                 lordWillAbandonTheVictimRemains =
                  new List<RelationsPerTraits>
                  {
-                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0&Valor < 0", relations = "Relations < -50"},
+                    new RelationsPerTraits {traits = "Honor < 0&Calculating < 0", relations = "Relations < -50"},
                  };
             }
 

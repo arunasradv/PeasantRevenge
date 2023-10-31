@@ -95,3 +95,5 @@ Fix: Null exception, when all notables have left the village to for the revenge.
 Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
 Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
 Feature: Added dialogue option to delay interaction with revenger.
+231031 v15.0.1.5
+Fix: Null exception, when prisoner is released and party is null

@@ -135,7 +135,7 @@ namespace PeasantRevenge
             public bool Can_peasant_revenge_peasant_finish_start { get => can_peasant_revenge_peasant_finish_start; set => can_peasant_revenge_peasant_finish_start = value; }
 
             public void Stop()
-            { 
+            {
                 if (state != quest_state.clear)
                 {
                     state = quest_state.stop;
@@ -302,7 +302,7 @@ namespace PeasantRevenge
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
             x.xParty != null &&
-            ((x.xParty.Party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+            ((x.xParty.Party?.Id.ToString().Equals(party?.Id.ToString())) ?? false)));
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -316,7 +316,7 @@ namespace PeasantRevenge
         private void OnAnyCapturerPartyIsRemoved(PartyBase party)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
-            ((x.party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+            ((x.party?.Id.ToString().Equals(party?.Id.ToString())) ?? false)));
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -412,7 +412,7 @@ namespace PeasantRevenge
         private void HeroPrisonerReleased(Hero criminal, PartyBase party, IFaction faction, EndCaptivityDetail detail)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => 
-            (x.criminal == criminal.CharacterObject && (x.party?.Id.ToString().Equals(party.Id.ToString()) ?? false)));
+            (x.criminal == criminal.CharacterObject));
             
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -598,26 +598,12 @@ namespace PeasantRevenge
                         {
                             if (!revengeData[i].executioner.HeroObject.HomeSettlement.IsUnderRaid)
                             {
-                                try
-                                {
-                                    DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement); // will set clear flag in events
-                                }
-                                catch(Exception ex)
-                                {
-                                    //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB"))); // because sometimes xParty is actually removed already
-                                }
+                                DestroyPartyAction.ApplyForDisbanding(revengeData[i].xParty, revengeData[i].executioner.HeroObject.HomeSettlement); // will set clear flag in events
                             }
                         }
                         else
                         {
-                            try
-                            {
-                                revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
-                            }
-                            catch (Exception ex)
-                            {
-                                //InformationManager.DisplayMessage(new InformationMessage(ex.ToString(), Color.ConvertStringToColor("hBB1111BB")));// because sometimes xParty is actually removed already
-                            }
+                            revengeData[i].xParty.Ai.SetMoveGoToSettlement(revengeData[i].executioner.HeroObject.HomeSettlement);
                         }
                     }
                     else
@@ -2485,9 +2471,9 @@ namespace PeasantRevenge
                null/*() => { SetHeroTraitValue(Hero.MainHero, "Valor", -2); SetHeroTraitValue(Hero.MainHero, "Mercy", 2); }*/
                , 100, null);
             campaignGameStarter.AddDialogLine(
-               "peasant_revenge_player_not_happy_with_peasant_start_peasant",
-               "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
-               "peasant_revenge_player_not_happy_with_peasant_start_options",
+                "peasant_revenge_player_not_happy_with_peasant_start_peasant",
+                "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
+                "peasant_revenge_player_not_happy_with_peasant_start_options",
                 "{=PRev0049}Yes, but how can forgiving cowards deter them? With sticks?[ib:closed][if:convo_grave]", null, null, 100, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_not_happy_with_peasant_start_fast",
@@ -2539,8 +2525,8 @@ namespace PeasantRevenge
              () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
             campaignGameStarter.AddDialogLine(
           "peasant_revenge_player_not_happy_with_peasant_learned",
-              "peasant_revenge_player_not_happy_with_peasant_post_learned",
-              "close_window",
+          "peasant_revenge_player_not_happy_with_peasant_post_learned",
+          "close_window",
           "{=PRev0054}I just cannot.[if:convo_grave]",
           new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_condition),
           () => { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, Hero.OneToOneConversationHero, -_cfg.values.relationChangeWhenLordTeachPeasant, true); }, 100, null);
