@@ -120,5 +120,6 @@
     <string id="PRev0114" text="아무도 {CRIMINAL.LINK}에 대한 나의 복수를 막을 수 없습니다![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="파티 규모가 너무 작습니다." />
     <string id="PRev0116" text="{CRIMINAL.LINK}님이 죽습니다![if:convo_furious][ib:angry]" />
+    <string id="PRev0119" text="지금은 아닙니다." />
   </strings>
 </base>
