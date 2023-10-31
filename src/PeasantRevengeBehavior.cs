@@ -302,7 +302,7 @@ namespace PeasantRevenge
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
             x.xParty != null &&
-            ((x.xParty.Party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+            ((x.xParty.Party?.Id.ToString().Equals(party?.Id.ToString())) ?? false)));
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -316,7 +316,7 @@ namespace PeasantRevenge
         private void OnAnyCapturerPartyIsRemoved(PartyBase party)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => (
-            ((x.party?.Id.ToString().Equals(party.Id.ToString())) ?? false)));
+            ((x.party?.Id.ToString().Equals(party?.Id.ToString())) ?? false)));
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -412,7 +412,7 @@ namespace PeasantRevenge
         private void HeroPrisonerReleased(Hero criminal, PartyBase party, IFaction faction, EndCaptivityDetail detail)
         {
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => 
-            (x.criminal == criminal.CharacterObject && (x.party?.Id.ToString().Equals(party.Id.ToString()) ?? false)));
+            (x.criminal == criminal.CharacterObject));
             
             if (currentData != null && !currentData.IsEmpty())
             {
