@@ -120,5 +120,6 @@
     <string id="PRev0114" text="Никто не сможет остановить мою месть {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="Ваша группа слишком маленькая" />
     <string id="PRev0116" text="{CRIMINAL.LINK} умрет![if:convo_furious][ib:angry]" />
+    <string id="PRev0119" text="Не сейчас." />
   </strings>
 </base>
