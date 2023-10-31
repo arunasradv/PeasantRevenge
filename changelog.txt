@@ -98,4 +98,4 @@ Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. No
 Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
 Feature: Added dialogue option to delay interaction with revenger.
 231031 v15.0.1.5
-Fix: Null exception, when prisoner is releaseda and party is null
+Fix: Null exception, when prisoner is released and party is null
