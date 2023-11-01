@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.BarterSystem;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Conversation.Persuasion;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.MapEvents;
@@ -2591,8 +2592,46 @@ namespace PeasantRevenge
         #region peasant revenge persuede
 
         #region persuation task
+        private void AddPersuasionDialogs(DialogFlow dialog)
+        {
+            dialog.AddDialogLine("peasant_revenge_player_not_happy_with_peasant_learn_accepted",
+                "start_peasant_revenger_persuasion",
+                "lesser_party_persuasion_start_reservation",
+                "{=FwtFtpwp}How?", 
+                null, 
+                new ConversationSentence.OnConsequenceDelegate(this.persuasion_start_with_lesser_party_on_consequence),
+                this, 100, null, null, null);
 
+            dialog.AddDialogLine("lesser_party_persuasion_attempt",
+                "peasant_revenge_persuasion_start_reservation",
+                "peasant_revenge_persuasion_select_option",
+                "{=wM77S68a}What's there to discuss?",
+                null,
+                null, this, 100, null, null, null);
+        }
 
+        private void persuasion_start_with_lesser_party_on_consequence()
+        {
+            ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.MediumHard);
+        }
+      
+        private PersuasionTask GetPersuasionTask()
+        {
+            PersuasionTask persuasionTask = new PersuasionTask(0);
+            persuasionTask.FinalFailLine = new TextObject("{=PRev0121}I can't make any promises, but I'll see what I can do..[if:convo_furious][ib:aggressive]", null);
+            persuasionTask.TryLaterLine = new TextObject("{=PRev0117}Enough, I will not change my intentions![ib:closed][if:convo_bared_teeth][if:idle_angry]", null);
+            persuasionTask.SpokenLine = new TextObject("{=6P1ruzsC}Maybe...", null);
+            PersuasionOptionArgs option = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                false, new TextObject("{=*}I'm not afraid of these criminals.", null), null, false, false, false);
+            persuasionTask.AddOptionToTask(option);
+            PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
+                false, new TextObject("{=*}Someone must be held accountable for destruction of our villages.", null), null, false, false, false);
+            persuasionTask.AddOptionToTask(option2);
+            PersuasionOptionArgs option3 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
+                false, new TextObject("{=*}Give justice into hands of nobles. You are not so important.", null), null, false, false, false);
+            persuasionTask.AddOptionToTask(option3);
+            return persuasionTask;
+        }
 
         #endregion
 
@@ -2735,7 +2774,11 @@ namespace PeasantRevenge
                 msg = "{=PRev0117}Great question! Let me show my example...";
             }
 
+            PersuasionOptionArgs option = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+               false, new TextObject("{=*}I'm not afraid of these criminals.", null), null, false, false, false);
+            
             TextObject textObject = new TextObject(msg, null);
+            textObject.SetTextVariable("SUCCESS_CHANCE", PersuasionHelper.ShowSuccess(option, true));
             MBTextManager.SetTextVariable("PAYER_COMMENT_REVENGE_TEACH", textObject);
             return true;
         }
