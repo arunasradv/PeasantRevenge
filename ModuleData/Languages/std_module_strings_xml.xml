@@ -124,7 +124,8 @@
     <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." />
     <string id="PRev0119" text="{=PRev0119}Not now." />
     <string id="PRev0120" text="{=PRev0120}They are breaking the law and they will face consequences for their crimes.[ib:closed][if:angry]" />
-    <string id="PRev0121" text="{=PRev0121}I cannot make any promises, but I will see what I can do..[ib:closed]" />
-    <string id="PRev0122" text="{=PRev0122}Cannot bribe." />
+    <string id="PRev0121" text="{=PRev0121}I cannot make any promises..[ib:closed]" />
+    <string id="PRev0122" text="{=PRev0122}Bribe will not work yet." />
+    <string id="PRev0123" text="{=PRev0123}Cannot bribe. Peasant's traits not allow." />
   </strings>
 </base>

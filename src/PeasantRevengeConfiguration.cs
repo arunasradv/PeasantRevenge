@@ -370,8 +370,8 @@ namespace PeasantRevenge
                 new List<RelationsPerTraits>
                 {
                      new RelationsPerTraits {traits = "Honor < 0&Generosity > 0", relations = "Relations >= -10" },
-                     new RelationsPerTraits {traits = "Honor == 0&Generosity > 0", relations = "Relations >= 10" },
-                     new RelationsPerTraits {traits = "Honor > 0&Generosity > 0", relations = "Relations >= 20" },
+                     new RelationsPerTraits {traits = "Honor == 0&Generosity >= 0", relations = "Relations >= 10" },
+                     new RelationsPerTraits {traits = "Honor > 0&Generosity >= 0", relations = "Relations >= 20" },
                 };
             }
         }

@@ -1526,7 +1526,13 @@ namespace PeasantRevenge
             }
             return true;
         }
-
+        /// <summary>
+        /// Checking hero (hero) traits and relations with another hero (target)
+        /// </summary>
+        /// <param name="hero">hero who has traits and relations with target hero</param>
+        /// <param name="target">hero who relation is checked with hero</param>
+        /// <param name="traits"></param>
+        /// <returns></returns>
         private bool CheckConditions(Hero hero, Hero target, List<PeasantRevengeConfiguration.RelationsPerTraits> traits)
         {
             if (traits.IsEmpty()) return true;
@@ -1540,6 +1546,20 @@ namespace PeasantRevenge
                         return true;
                     }
                 }
+            }
+            return false;
+        }
+
+        private bool CheckOnlyTraitsConditions(Hero hero, Hero target, List<PeasantRevengeConfiguration.RelationsPerTraits> traits)
+        {
+            if (traits.IsEmpty()) return true;
+
+            foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
+            {
+                    if (hero_trait_list_condition(hero, rpt.traits, target))
+                    {
+                        return true;
+                    }                
             }
             return false;
         }
@@ -2544,7 +2564,6 @@ namespace PeasantRevenge
                null,
                () => leave_encounter(), 80, null);
             #endregion
-#warning make dialog strings and relation change if fail. Make it possible to fail the bribe/persuation! Bribing could result in "give money all day doesnt matter..." 
             #region ending
             // CAN REVENGE SUCCESS
             campaignGameStarter.AddDialogLine(
@@ -2578,7 +2597,7 @@ namespace PeasantRevenge
               "peasant_revenge_player_not_happy_with_peasant_learned_4",
               "peasant_revenge_player_not_happy_with_peasant_post_learned",
               "close_window",
-              "{=PRev0121}I can't make any promises, but I'll see what I can do..[ib:closed]",
+              "{=PRev0121}I can't make any promises..[ib:closed]",
               () => peasant_revenge_player_not_happy_with_peasant_post_learned_fail_on_condition(),
               () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence(); leave_encounter(); },
               100, null);
@@ -2717,7 +2736,7 @@ namespace PeasantRevenge
             PersuasionTask persuasionTask = new PersuasionTask(task_index);
 
             persuasionTask.FinalFailLine = new TextObject("{=*}I think...[ib:thinking]", null);
-            persuasionTask.TryLaterLine = new TextObject("{=PRev0121}I can't make any promises, but I'll see what I can do..[if:convo_furious][ib:aggressive]", null);
+            persuasionTask.TryLaterLine = new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null);
             persuasionTask.SpokenLine = new TextObject("{=6P1ruzsC}Maybe...", null);
 
             if (task_index == 0)
@@ -2791,7 +2810,11 @@ namespace PeasantRevenge
         private bool persuasion_selected_option_response_on_condition()
         {
             PersuasionOptionResult item = ConversationManager.GetPersuasionChosenOptions().Last<Tuple<PersuasionOptionArgs, PersuasionOptionResult>>().Item2;
-            MBTextManager.SetTextVariable("PERSUASION_REACTION", PersuasionHelper.GetDefaultPersuasionOptionReaction(item), false);
+            MBTextManager.SetTextVariable("PERSUASION_REACTION", PersuasionHelper.GetDefaultPersuasionOptionReaction(item), false);           
+            if (item == PersuasionOptionResult.CriticalFailure)
+            {
+                this._task.BlockAllOptions();
+            }
             return true;
         }
         private void persuasion_selected_option_response_on_consequence()
@@ -2838,8 +2861,7 @@ namespace PeasantRevenge
             if (this._task.Options.All((PersuasionOptionArgs x) => x.IsBlocked) && !ConversationManager.GetPersuasionProgressSatisfied())
             {
                 MBTextManager.SetTextVariable("FAILED_PERSUASION_LINE", this._task.FinalFailLine, false);
-                if (get_notable_persuaded_count() <= 2)
-                    return true;
+                return true;
             }
             return false;
         }
@@ -2879,8 +2901,8 @@ namespace PeasantRevenge
 
             if (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.bribe_success)
             {
-                int relation_change = persuade_status == persuade_type.bribe_fail ?
-              -_cfg.values.relationChangeWhenLordBribePeasant :
+                //TODO: make notable traits depended negative outcome
+                int relation_change = //persuade_status == persuade_type.bribe_fail ? -_cfg.values.relationChangeWhenLordBribePeasant :
                _cfg.values.relationChangeWhenLordBribePeasant;
 
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.OneToOneConversationHero, Hero.MainHero,
@@ -2970,7 +2992,7 @@ namespace PeasantRevenge
             }
 
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount());
-            if (CheckConditions(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.ai.notableWillAcceptTheBribe))
+            if (CheckConditions(Hero.OneToOneConversationHero,Hero.MainHero,  _cfg.values.ai.notableWillAcceptTheBribe))
             {
                 persuade_status = persuade_type.bribe_success;
                 TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, notable_can_do_revenge());
@@ -3020,16 +3042,24 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_bribe_clickable(out TextObject text)
         {
-            bool will_accept_bribe = CheckConditions(Hero.MainHero, Hero.OneToOneConversationHero, _cfg.values.ai.notableWillAcceptTheBribe);
+            bool will_accept_bribe = CheckConditions( Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
+            bool traits_block = CheckOnlyTraitsConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
             bool have_gold = Hero.MainHero.Gold >= get_notable_bribe_amount();
             bool can_bribe = will_accept_bribe && have_gold;
             text = TextObject.Empty;
 
-            if (!can_bribe)
+            if (!will_accept_bribe)
             {
-                text = new TextObject("{=PRev0122}Cannot bribe.");
+                if (traits_block)
+                { 
+                    text = new TextObject("{=PRev0123}Cannot bribe. Peasant's traits not allow.");                   
+                }
+                else
+                {
+                    text = new TextObject("{=PRev0122}Bribe will not work yet.");
+                }                
             }
-            return can_bribe;
+            return have_gold && !traits_block;
         }
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_clickable(out TextObject text)
         {
