@@ -39,7 +39,7 @@ namespace PeasantRevenge
         public bool showPeasantRevengeLogMessagesForKingdom = true;
         public bool peasantRevengerIsRandom = false;
         public bool playerCanPayAnyKingdomClanReparations = true;
-        public string peasantRevengerExcludeTrait = "Mercy > 0|Valor =< 0";
+        public string peasantRevengerExcludeTrait = "Mercy >= 0|Valor =< 0";
         public string lordNotExecuteMessengerTrait = "Mercy > -1&Calculating > -1|Honor >= 1&Calculating > 0&Generosity > 0";
 #if TESTING
         public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
@@ -348,7 +348,7 @@ namespace PeasantRevenge
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge()
             {
-                lordTraitChangeWhenRemainsOfLordAreAbandoned =
+                    lordTraitChangeWhenLordPersuedeNotableNotToRevenge =
                     new List<TraitAndValue>
                     {
                         new TraitAndValue { trait = "Mercy", value = 5},
@@ -369,7 +369,7 @@ namespace PeasantRevenge
                 notableWillAcceptTheBribe =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Honor < 0&Generosity > 0", relations = "Relations >= -10" },
+                     new RelationsPerTraits {traits = "Honor < 0&Generosity >= 0", relations = "Relations >= -10" },
                      new RelationsPerTraits {traits = "Honor == 0&Generosity >= 0", relations = "Relations >= 10" },
                      new RelationsPerTraits {traits = "Honor > 0&Generosity >= 0", relations = "Relations >= 20" },
                 };

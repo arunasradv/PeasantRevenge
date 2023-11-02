@@ -53,7 +53,7 @@
     <string id="PRev0047" text="{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends" />
     <string id="PRev0048" text="{=PRev0048}Do you deal with criminals in this village?" />
     <string id="PRev0049" text="{=PRev0049}No, I do not care.[ib:closed]" />
-    <string id="PRev0050" text="{=PRev0050}The problem is in your head!" />
+    <string id="PRev0050" text="{=PRev0050}Your criminal intentions are well known to me." />
     <string id="PRev0051" text="{=PRev0051}I can try to teach you by my example..." />
     <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!" />
     <string id="PRev0053" text="{=PRev0053}Thank you very much![if:convo_astonished]" />

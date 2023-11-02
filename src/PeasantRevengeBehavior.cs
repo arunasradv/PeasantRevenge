@@ -53,6 +53,9 @@ namespace PeasantRevenge
             show_example_fail,
             bribe_success,
             bribe_fail,
+            accusation,
+            accusation_fail,
+            accusation_success
         }
 
         persuade_type persuade_status = persuade_type.none;
@@ -1336,13 +1339,10 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                     }
-                    if (_cfg.values.CfgVersion < 18)
-                    {
-                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
-                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
-                    }
                     if (_cfg.values.CfgVersion < 19)
                     {
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();                    
                         _cfg.values.ai.default_notableWillAcceptTheBribe();
                     }
                 }
@@ -2533,10 +2533,12 @@ namespace PeasantRevenge
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_not_happy_with_peasant_start_fast",
                "peasant_revenge_player_not_happy_with_peasant_start_options",
-                "close_window",
-               "{=PRev0050}The problem is in your head!", null,
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_chop_consequence)
-               , 100, null);
+                "peasant_revenge_player_not_happy_with_peasant_start_persuasion",
+               "{=PRev0050}Your criminal intentions are well known to me.", null,
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_accuse_consequence)
+               // new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_chop_consequence)
+               , 100,
+               new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_execute_clickable));
             //TEACH
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_not_happy_with_peasant_start_teach",
@@ -2583,7 +2585,7 @@ namespace PeasantRevenge
               () => peasant_revenge_player_not_happy_with_peasant_post_learned_not_revenge_on_condition(),
               () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence(); leave_encounter(); },
               100, null);
-            // BOTH NOT SUCCESS
+            //BOTH NOT SUCCESS
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_player_not_happy_with_peasant_learned_3",
               "peasant_revenge_player_not_happy_with_peasant_post_learned",
@@ -2597,10 +2599,28 @@ namespace PeasantRevenge
               "peasant_revenge_player_not_happy_with_peasant_learned_4",
               "peasant_revenge_player_not_happy_with_peasant_post_learned",
               "close_window",
-              "{=PRev0121}I can't make any promises..[ib:closed]",
+              "{FAIL_PERSUADE_LINE}",
               () => peasant_revenge_player_not_happy_with_peasant_post_learned_fail_on_condition(),
               () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence(); leave_encounter(); },
               100, null);
+            //ACCUSATION SUCCESS
+            campaignGameStarter.AddDialogLine(
+               "peasant_revenge_player_not_happy_with_peasant_learned_5",
+               "peasant_revenge_player_not_happy_with_peasant_post_learned",
+               "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
+               "{=*}I admit.[if:convo_thinking][if:convo_grave]",
+               () => peasant_revenge_player_not_happy_with_peasant_post_accusation_success_on_condition(),
+               null, 100, null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation",
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
+               "close_window",
+              "{=PRev0109}I will chop your head off!",
+              null,
+              () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter();}
+              , 100,
+              null);
+            //TEACH
             #endregion
             #endregion
 
@@ -2620,18 +2640,32 @@ namespace PeasantRevenge
                 "peasant_revenge_player_not_happy_with_peasant_learn_started",
                 "peasant_revenge_player_not_happy_with_peasant_start_persuasion",
                 "peasant_revenge_persuasion_start_reservation",
-                "{=*}Do not expect me to change my ways.",
-                null,
+                "{PEASANT_COMMENT_LINE}",
+                new ConversationSentence.OnConditionDelegate(this.persuasion_start_with_notable_on_condition),
                 new ConversationSentence.OnConsequenceDelegate(this.persuasion_start_with_notable_on_consequence),
                 this, 100, null, null, null);
 
             dialog.AddDialogLine(
-                "peasant_revenge_persuasion_rejected",
+               "peasant_revenge_persuasion_rejected",
+               "peasant_revenge_persuasion_start_reservation",
+               "close_window",
+               "{=!}{TRY_LATER_PERSUASION_LINE}",
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_rejected_on_condition),
+               ()=> { 
+                   this.peasant_revenge_persuasion_rejected_on_consequence();
+                   leave_encounter();
+               },
+               this, 100, null,
+               new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+               new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+
+            dialog.AddDialogLine(
+                "peasant_revenge_persuasion_failed",
                 "peasant_revenge_persuasion_start_reservation",
                 "peasant_revenge_player_not_happy_with_peasant_post_learned",
                 "{=!}{FAILED_PERSUASION_LINE}",
-                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_rejected_on_condition),
-                new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_persuasion_rejected_on_consequence),
+                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_failed_on_condition),
+                new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_persuasion_failed_on_consequence),
                 this, 100, null,
                 new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
                 new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
@@ -2705,9 +2739,84 @@ namespace PeasantRevenge
             return dialog;
         }
 
+        private PersuasionTask GetPersuasionTask(int task_index)
+        {
+            PersuasionTask persuasionTask = new PersuasionTask(0);
+
+            persuasionTask.FinalFailLine = new TextObject("{=*}I think...[ib:thinking]", null);
+            persuasionTask.TryLaterLine = new TextObject("{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]", null);
+            persuasionTask.SpokenLine = new TextObject("{=6P1ruzsC}Maybe...", null);
+
+            if (task_index == 0)
+            {
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
+                    false, new TextObject("{=*}No one should be afraid of these criminals.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option0);
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                    false, new TextObject("{=*}Someone must be held accountable for destruction of our villages.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option1);
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative, PersuasionArgumentStrength.VeryHard,
+                    false, new TextObject("{=*}Keep justice into your own hands.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option2);
+            }
+            else if (task_index == 1)
+            {
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
+                    false, new TextObject("{=*}These criminals are too dangerous.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option0);
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
+                    false, new TextObject("{=*}It is all your fault that our villages are being destroyed.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option1);
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
+                    false, new TextObject("{=*}Give justice into hands of nobles. You are not so important.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option2);
+            }
+            else if (task_index == 2)
+            {
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                    false, new TextObject("{=*}Everyone has heard your hostile speeches against noble people.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option0);
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                    false, new TextObject("{=*}Your kindness to the enemy is criminal one.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option1);
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                    false, new TextObject("{=*}Everyone knows I'm telling the truth.", null), null, false, false, false);
+                persuasionTask.AddOptionToTask(option2);
+            }
+
+            return persuasionTask;
+        }
+
+        private bool persuasion_start_with_notable_on_condition()
+        {
+            if (this._task.Options.Count > 0)
+            {
+                TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
+
+                if (persuade_status == persuade_type.accusation)
+                {
+                    textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Your accusation is baseless.[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]", null));
+                }
+                else
+                {
+                    textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Do not expect me to change my ways.", null));
+                }
+
+                MBTextManager.SetTextVariable("PEASANT_COMMENT_LINE", textObject, false);
+                return true;
+            }
+            return false;
+        }
         private void persuasion_start_with_notable_on_consequence()
         {
-            ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Hard);
+            if (persuade_status == persuade_type.accusation)
+            {
+                ConversationManager.StartPersuasion(1f, 1f, 0f, 1f, 1f, 0f, PersuasionDifficulty.Medium);
+            }
+            else
+            {
+                ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Medium);
+            }
         }
 
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
@@ -2731,42 +2840,12 @@ namespace PeasantRevenge
             add_notable_persuaded_count();
         }
 
-        private PersuasionTask GetPersuasionTask(int task_index)
+        private void peasant_revenge_player_not_happy_with_peasant_accuse_consequence()
         {
-            PersuasionTask persuasionTask = new PersuasionTask(task_index);
-
-            persuasionTask.FinalFailLine = new TextObject("{=*}I think...[ib:thinking]", null);
-            persuasionTask.TryLaterLine = new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null);
-            persuasionTask.SpokenLine = new TextObject("{=6P1ruzsC}Maybe...", null);
-
-            if (task_index == 0)
-            {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}No one should be afraid of these criminals.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}Someone must be held accountable for destruction of our villages.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}Keep justice into your own hands.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option2);
-            }
-            else
-            {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}These criminals are too dangerous.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}It is all your fault that our village is being destroyed.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
-                    false, new TextObject("{=*}Give justice into hands of nobles. You are not so important.", null), null, false, false, false);
-                persuasionTask.AddOptionToTask(option2);
-            }
-
-            return persuasionTask;
+            persuade_status = persuade_type.accusation;
+            _task = GetPersuasionTask(2);
+            _task.UnblockAllOptions();
         }
-
         #region the same for all options
         private bool persuasion_select_option_i_on_condition(int option_index)
         {
@@ -2787,7 +2866,14 @@ namespace PeasantRevenge
         {
             if (this._task.Options.Count > 0)
             {
-                this._task.Options[option_index].BlockTheOption(true);
+                if (persuade_status == persuade_type.accusation)
+                {
+                    this._task.BlockAllOptions();
+                }
+                else
+                {
+                    this._task.Options[option_index].BlockTheOption(true);
+                }                
             }
         }
 
@@ -2841,10 +2927,10 @@ namespace PeasantRevenge
 
         private bool persuade_not_failed_on_condition()
         {
-            return !persuade_failed_on_condition() && !ConversationManager.GetPersuasionProgressSatisfied();
+            return !peasant_revenge_persuasion_failed_on_condition() && !ConversationManager.GetPersuasionProgressSatisfied();
         }
 
-        private bool persuade_failed_on_condition()
+        private bool peasant_revenge_persuasion_failed_on_condition()
         {
             if (_task.Options.All((PersuasionOptionArgs x) => x.IsBlocked) && !ConversationManager.GetPersuasionProgressSatisfied())
             {
@@ -2858,9 +2944,9 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_persuasion_rejected_on_condition()
         {
-            if (this._task.Options.All((PersuasionOptionArgs x) => x.IsBlocked) && !ConversationManager.GetPersuasionProgressSatisfied())
+            if (peasant_revenge_player_not_happy_with_peasant_post_learned_refuse_on_condition())
             {
-                MBTextManager.SetTextVariable("FAILED_PERSUASION_LINE", this._task.FinalFailLine, false);
+                MBTextManager.SetTextVariable("TRY_LATER_PERSUASION_LINE", this._task.TryLaterLine, false);
                 return true;
             }
             return false;
@@ -2869,13 +2955,40 @@ namespace PeasantRevenge
         private void peasant_revenge_persuasion_rejected_on_consequence()
         {
             ConversationManager.EndPersuasion();
-            persuade_status = persuade_type.show_example_fail;
+            if (persuade_status == persuade_type.accusation)
+            {
+                persuade_status = persuade_type.accusation_fail;
+            }
+            else
+            {
+                persuade_status = persuade_type.show_example_fail;
+            }
+        }
+
+        private void peasant_revenge_persuasion_failed_on_consequence()
+        {
+            ConversationManager.EndPersuasion();
+            if (persuade_status == persuade_type.accusation)
+            {
+                persuade_status = persuade_type.accusation_fail;
+            }
+            else
+            {
+                persuade_status = persuade_type.show_example_fail;
+            }            
         }
 
         private void peasant_revenge_persuasion_success_on_consequence()
         {
             ConversationManager.EndPersuasion();
-            persuade_status = persuade_type.show_example_success;
+            if (persuade_status == persuade_type.accusation)
+            {
+                persuade_status = persuade_type.accusation_success;
+            }
+            else
+            {
+                persuade_status = persuade_type.show_example_success;
+            }
         }
 
         #endregion
@@ -2913,7 +3026,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_can_revenge_on_condition()
         {
-            if (!previous_can_revenge && get_notable_persuaded_count() <= 2 &&
+            if (!previous_can_revenge &&
             (persuade_status == persuade_type.bribe_success || persuade_status == persuade_type.show_example_success))
             {
                 return true;
@@ -2923,8 +3036,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_not_revenge_on_condition()
         {
-            if (previous_can_revenge && get_notable_persuaded_count() <= 2 &&
-            (persuade_status == persuade_type.bribe_success || persuade_status == persuade_type.show_example_success))
+            if (previous_can_revenge && (persuade_status == persuade_type.bribe_success || persuade_status == persuade_type.show_example_success))
             {
                 return true;
             }
@@ -2933,19 +3045,33 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_refuse_on_condition()
         {
-
             return get_notable_persuaded_count() > 2;
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_fail_on_condition()
         {
-            if (get_notable_persuaded_count() <= 2 &&
-            (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.show_example_fail))
-            {
+            if (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.show_example_fail)
+            { 
+                TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
+                textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null));  
+                MBTextManager.SetTextVariable("FAIL_PERSUADE_LINE", textObject, false); 
+                return true;
+            } 
+            
+            if (persuade_status == persuade_type.accusation_fail)
+            { 
+                TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
+                textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Let's say it was a misunderstanding.", null));
+                MBTextManager.SetTextVariable("FAIL_PERSUADE_LINE", textObject, false);
                 return true;
             }
 
             return false;
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_post_accusation_success_on_condition()
+        { 
+            return persuade_status == persuade_type.accusation_success;
         }
 
         private void add_notable_persuaded_count()
@@ -2985,11 +3111,6 @@ namespace PeasantRevenge
         private void peasant_revenge_player_not_happy_with_peasant_bribe_consequence()
         {
             add_notable_persuaded_count();
-            if (get_notable_persuaded_count() > 2)
-            {
-                persuade_status = persuade_type.bribe_fail;
-                return;
-            }
 
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount());
             if (CheckConditions(Hero.OneToOneConversationHero,Hero.MainHero,  _cfg.values.ai.notableWillAcceptTheBribe))
@@ -3043,23 +3164,23 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_start_bribe_clickable(out TextObject text)
         {
             bool will_accept_bribe = CheckConditions( Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
-            bool traits_block = CheckOnlyTraitsConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
+            bool traits_allow = CheckOnlyTraitsConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
             bool have_gold = Hero.MainHero.Gold >= get_notable_bribe_amount();
             bool can_bribe = will_accept_bribe && have_gold;
             text = TextObject.Empty;
 
             if (!will_accept_bribe)
             {
-                if (traits_block)
-                { 
-                    text = new TextObject("{=PRev0123}Cannot bribe. Peasant's traits not allow.");                   
+                if (traits_allow)
+                {
+                    text = new TextObject("{=PRev0122}Bribe will not work yet.");
                 }
                 else
                 {
-                    text = new TextObject("{=PRev0122}Bribe will not work yet.");
-                }                
+                    text = new TextObject("{=PRev0123}Cannot bribe. Peasant's traits not allow.");
+                }
             }
-            return have_gold && !traits_block;
+            return have_gold && traits_allow && get_notable_persuaded_count() <= 2;
         }
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_clickable(out TextObject text)
         {
@@ -3067,7 +3188,7 @@ namespace PeasantRevenge
             bool can_revenge_have_no_ex_traits = notable_can_do_revenge() && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
             bool cannot_revenge_have_ex_traits = !notable_can_do_revenge() && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
 
-            bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_no_ex_traits || cannot_revenge_have_ex_traits);
+            bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_no_ex_traits || cannot_revenge_have_ex_traits) && get_notable_persuaded_count() <= 2;
 
             text = TextObject.Empty;
 
@@ -3076,6 +3197,14 @@ namespace PeasantRevenge
                 text = new TextObject("{=PRev0055}Do not have needed traits");
             }
 
+            return true;
+        }
+
+
+        private bool peasant_revenge_player_not_happy_with_peasant_execute_clickable(out TextObject text)
+        {
+            text = TextObject.Empty;
+            text = new TextObject("{=*}Execute the peasant");
             return true;
         }
 
@@ -3097,8 +3226,7 @@ namespace PeasantRevenge
                 }
             }
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
-            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
-            leave_encounter();
+            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);            
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_condition()
