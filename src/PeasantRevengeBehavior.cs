@@ -1342,7 +1342,7 @@ namespace PeasantRevenge
                     if (_cfg.values.CfgVersion < 19)
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
-                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();                    
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
                         _cfg.values.ai.default_notableWillAcceptTheBribe();
                     }
                 }
@@ -1556,10 +1556,10 @@ namespace PeasantRevenge
 
             foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
             {
-                    if (hero_trait_list_condition(hero, rpt.traits, target))
-                    {
-                        return true;
-                    }                
+                if (hero_trait_list_condition(hero, rpt.traits, target))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -2519,13 +2519,13 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
                "peasant_revenge_player_not_happy_with_peasant_start_options",
                "{=PRev0049}Yes. Why do you ask?[ib:closed][rf:convo_thinking]",
-               () => { return notable_can_do_revenge(); }, null, 100, null);
+               () => { return notable_can_do_revenge(Hero.OneToOneConversationHero); }, null, 100, null);
             campaignGameStarter.AddDialogLine(
                 "peasant_revenge_player_not_happy_with_peasant_start_peasant",
                 "peasant_revenge_player_not_happy_with_peasant_start_options_eset",
                 "peasant_revenge_player_not_happy_with_peasant_start_options",
                 "{=PRev0049}No, I do not care.[ib:closed]",
-                () => { return !notable_can_do_revenge(); }, null, 100, null);
+                () => { return !notable_can_do_revenge(Hero.OneToOneConversationHero); }, null, 100, null);
             #endregion
             #region options
 #warning Add crime rating increase if executed noble
@@ -2617,7 +2617,16 @@ namespace PeasantRevenge
                "close_window",
               "{=PRev0109}I will chop your head off!",
               null,
-              () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter();}
+              () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter(); }
+              , 100,
+              null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation_companion",
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
+               "close_window",
+              "{=*}{EXECUTIONER.LINK} will chop your head off!",
+              () => { return peasant_revenge_get_executioner_companion_condition(); },
+              () => { peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(get_first_companion()); leave_encounter(); }
               , 100,
               null);
             //TEACH
@@ -2651,7 +2660,7 @@ namespace PeasantRevenge
                "close_window",
                "{=!}{TRY_LATER_PERSUASION_LINE}",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_rejected_on_condition),
-               ()=> { 
+               () => {
                    this.peasant_revenge_persuasion_rejected_on_consequence();
                    leave_encounter();
                },
@@ -2821,7 +2830,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
         {
-            bool can_revenge = notable_can_do_revenge();
+            bool can_revenge = notable_can_do_revenge(Hero.OneToOneConversationHero);
             int task_index = 0;
 
             if (can_revenge)
@@ -2873,7 +2882,7 @@ namespace PeasantRevenge
                 else
                 {
                     this._task.Options[option_index].BlockTheOption(true);
-                }                
+                }
             }
         }
 
@@ -2896,7 +2905,7 @@ namespace PeasantRevenge
         private bool persuasion_selected_option_response_on_condition()
         {
             PersuasionOptionResult item = ConversationManager.GetPersuasionChosenOptions().Last<Tuple<PersuasionOptionArgs, PersuasionOptionResult>>().Item2;
-            MBTextManager.SetTextVariable("PERSUASION_REACTION", PersuasionHelper.GetDefaultPersuasionOptionReaction(item), false);           
+            MBTextManager.SetTextVariable("PERSUASION_REACTION", PersuasionHelper.GetDefaultPersuasionOptionReaction(item), false);
             if (item == PersuasionOptionResult.CriticalFailure)
             {
                 this._task.BlockAllOptions();
@@ -2975,7 +2984,7 @@ namespace PeasantRevenge
             else
             {
                 persuade_status = persuade_type.show_example_fail;
-            }            
+            }
         }
 
         private void peasant_revenge_persuasion_success_on_consequence()
@@ -3051,15 +3060,15 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_fail_on_condition()
         {
             if (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.show_example_fail)
-            { 
+            {
                 TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
-                textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null));  
-                MBTextManager.SetTextVariable("FAIL_PERSUADE_LINE", textObject, false); 
+                textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null));
+                MBTextManager.SetTextVariable("FAIL_PERSUADE_LINE", textObject, false);
                 return true;
-            } 
-            
+            }
+
             if (persuade_status == persuade_type.accusation_fail)
-            { 
+            {
                 TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
                 textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Let's say it was a misunderstanding.", null));
                 MBTextManager.SetTextVariable("FAIL_PERSUADE_LINE", textObject, false);
@@ -3070,7 +3079,7 @@ namespace PeasantRevenge
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_accusation_success_on_condition()
-        { 
+        {
             return persuade_status == persuade_type.accusation_success;
         }
 
@@ -3113,10 +3122,10 @@ namespace PeasantRevenge
             add_notable_persuaded_count();
 
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount());
-            if (CheckConditions(Hero.OneToOneConversationHero,Hero.MainHero,  _cfg.values.ai.notableWillAcceptTheBribe))
+            if (CheckConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe))
             {
                 persuade_status = persuade_type.bribe_success;
-                TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, notable_can_do_revenge());
+                TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, notable_can_do_revenge(Hero.OneToOneConversationHero));
             }
             else
             {
@@ -3126,7 +3135,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_bribe_condition()
         {
-            string msg = notable_can_do_revenge() ? "{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!";
+            string msg = notable_can_do_revenge(Hero.OneToOneConversationHero) ? "{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." : "{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!";
 
             TextObject textObject = new TextObject(msg, null);
 
@@ -3146,7 +3155,7 @@ namespace PeasantRevenge
             //int honor = GetHeroTraitValue(Hero.OneToOneConversationHero, "Honor");
             //int generosity = GetHeroTraitValue(Hero.OneToOneConversationHero, "Generosity");
 
-            if (notable_can_do_revenge())
+            if (notable_can_do_revenge(Hero.OneToOneConversationHero))
             {
                 msg = "{=PRev0117}Great question! Let me show my example...";
             }
@@ -3156,14 +3165,14 @@ namespace PeasantRevenge
             return true;
         }
 
-        private bool notable_can_do_revenge()
+        private bool notable_can_do_revenge(Hero hero)
         {
-            return !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait);
+            return !hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait);
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_bribe_clickable(out TextObject text)
         {
-            bool will_accept_bribe = CheckConditions( Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
+            bool will_accept_bribe = CheckConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
             bool traits_allow = CheckOnlyTraitsConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
             bool have_gold = Hero.MainHero.Gold >= get_notable_bribe_amount();
             bool can_bribe = will_accept_bribe && have_gold;
@@ -3185,8 +3194,8 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_clickable(out TextObject text)
         {
 
-            bool can_revenge_have_no_ex_traits = notable_can_do_revenge() && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
-            bool cannot_revenge_have_ex_traits = !notable_can_do_revenge() && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
+            bool can_revenge_have_no_ex_traits = notable_can_do_revenge(Hero.OneToOneConversationHero) && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
+            bool cannot_revenge_have_ex_traits = !notable_can_do_revenge(Hero.OneToOneConversationHero) && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
 
             bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_no_ex_traits || cannot_revenge_have_ex_traits) && get_notable_persuaded_count() <= 2;
 
@@ -3208,25 +3217,61 @@ namespace PeasantRevenge
             return true;
         }
 
-        private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
+        private void peasant_revenge_hero_not_happy_with_peasant_chop_consequence(Hero executioner_hero, Hero victim)
         {
-            bool chop_purpose = notable_can_do_revenge(); // true if notable can do the revenge, but hero want to prohibit            
+            bool chop_purpose = notable_can_do_revenge(victim); // true if notable can do the revenge, but hero want to prohibit            
 
-            foreach (Hero hero in Hero.OneToOneConversationHero.HomeSettlement.Notables)
+            foreach (Hero hero in victim.HomeSettlement.Notables)
             {
-                int nobles_relations = hero.GetRelation(Hero.OneToOneConversationHero);// smaller the relation - bigger chance to get positive result towards player
-                int player_noble_relation = hero.GetRelation(Hero.MainHero); // bigger the relation - bigger chance to get positive result towards player 
-                int relation_change = (player_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, hero, relation_change, true);
+                int nobles_relations = hero.GetRelation(victim);// smaller the relation - bigger chance to get positive result towards player
+                int hero_noble_relation = hero.GetRelation(executioner_hero); // bigger the relation - bigger chance to get positive result towards player 
+                int relation_change = (hero_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(executioner_hero, hero, relation_change, true);
                 if (_cfg.values.enableOtherNobleTraitsChangeAfterNobleExecution)
                 {
 
-                    bool direction = MBRandom.RandomInt(-100, 100) < player_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
+                    bool direction = MBRandom.RandomInt(-100, 100) < hero_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
                     TeachHeroTraits(hero, _cfg.values.peasantRevengerExcludeTrait, chop_purpose ? direction : !direction);
                 }
             }
+        }
+
+        private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
+        {
+            peasant_revenge_hero_not_happy_with_peasant_chop_consequence(Hero.MainHero, Hero.OneToOneConversationHero);
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
-            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);            
+            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
+        }
+
+        private void peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(Hero hero)
+        {
+            peasant_revenge_hero_not_happy_with_peasant_chop_consequence(hero, Hero.OneToOneConversationHero);
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
+            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
+        }
+
+        private Hero get_first_companion() {
+            TroopRoster troopsLordParty = MobileParty.MainParty.MemberRoster;
+            for (int j = 0; j < troopsLordParty.Count; j++)
+            {
+                CharacterObject troop = troopsLordParty.GetCharacterAtIndex(j);
+                if (troop.IsHero && !troop.IsPlayerCharacter)
+                {
+                    return troop.HeroObject;
+                }
+            }
+            return null;
+        }
+
+        private bool peasant_revenge_get_executioner_companion_condition()
+        {
+            Hero companion = get_first_companion();
+            if (companion != null)
+            {
+                StringHelpers.SetCharacterProperties("EXECUTIONER", companion.CharacterObject);
+                return true;
+            }
+            return false;
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_condition()
@@ -3236,7 +3281,7 @@ namespace PeasantRevenge
                 Hero.OneToOneConversationHero.Issue == null;
             if (start)
             {
-                previous_can_revenge = notable_can_do_revenge(); // true if notable can do the revenge, but hero want to prohibit
+                previous_can_revenge = notable_can_do_revenge(Hero.OneToOneConversationHero); // true if notable can do the revenge, but hero want to prohibit
             }
             return start;
         }
