@@ -3245,9 +3245,12 @@ namespace PeasantRevenge
 
         private void peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(Hero hero)
         {
-            peasant_revenge_hero_not_happy_with_peasant_chop_consequence(hero, Hero.OneToOneConversationHero);
-            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
-            KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
+            if (hero != null)
+            {
+                peasant_revenge_hero_not_happy_with_peasant_chop_consequence(hero, Hero.OneToOneConversationHero);
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
+                KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
+            }
         }
 
         private Hero get_first_companion() {
