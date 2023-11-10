@@ -1719,67 +1719,6 @@ namespace PeasantRevenge
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
         {
-            #region Peasant revenge configuration via dialog
-            campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_player_config_mod_start",
-               "hero_main_options",
-               "peasant_revenge_player_config_mod_options_set",
-               "{=PRev0095}There is something I'd like to discuss.",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_config_mod_start_condition), null, 100, null);
-            campaignGameStarter.AddDialogLine(
-              "peasant_revenge_player_config_mod_npc_options",
-              "peasant_revenge_player_config_mod_options_set",
-              "peasant_revenge_player_config_mod_options_set",
-              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:convo_thinking]", null, null, 200, null);
-            campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_player_config_mod_option_mp_dis",
-               "peasant_revenge_player_config_mod_options_set",
-               "peasant_revenge_player_config_mod_end_dis",
-               "{=PRev0081}You should not immediately interrupt me with any your matter.",
-                () => { return !_cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(true); }, 100,
-                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
-            campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_player_config_mod_option_mp_en",
-               "peasant_revenge_player_config_mod_options_set",
-               "peasant_revenge_player_config_mod_end_en",
-               "{=PRev0082}You should immediately interrupt me with any your matter.",
-                () => { return _cfg.values.enableRevengerMobileParty; }, () => { SetEnableRevengerMobileParty(false); }, 100,
-                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
-            campaignGameStarter.AddPlayerLine(
-              "peasant_revenge_player_config_mod_option_np_en",
-              "peasant_revenge_player_config_mod_options_set",
-              "peasant_revenge_player_config_mod_end_dis",
-              "{=PRev0092}I'll defend villages against any looters.",
-               () => { return !_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; }, () => { SetEnableHelpNeutralVillage(true); }, 100,
-               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));
-            campaignGameStarter.AddPlayerLine(
-              "peasant_revenge_player_config_mod_option_np_dis",
-              "peasant_revenge_player_config_mod_options_set",
-              "peasant_revenge_player_config_mod_end_en",
-              "{=PRev0093}I will defend villages against my enemies only.",
-               () => { return _cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; }, () => { SetEnableHelpNeutralVillage(false); }, 100,
-               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));
-            campaignGameStarter.AddPlayerLine(
-             "peasant_revenge_player_config_mod_option_exit",
-             "peasant_revenge_player_config_mod_options_set",
-             "close_window",
-             "{=PRev0094}I must leave now.", null, () => leave_encounter(), 0, null);
-
-            campaignGameStarter.AddDialogLine(
-             "peasant_revenge_player_config_mod_npc_end_dis",
-             "peasant_revenge_player_config_mod_end_dis",
-             "peasant_revenge_player_config_mod_options_set",
-             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]",
-             () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
-            campaignGameStarter.AddDialogLine(
-             "peasant_revenge_player_config_mod_npc_end_en",
-             "peasant_revenge_player_config_mod_end_en",
-             "peasant_revenge_player_config_mod_options_set",
-             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_angry][ib:closed]",
-             () => { StringHelpers.SetCharacterProperties("MAINHERO", Hero.MainHero.CharacterObject); return true; }, null, 200, null);
-
-            #endregion
-
             #region Revenger who cannot start yet or finished the quest
 
             //When revenge is ended or does not exist
@@ -2503,7 +2442,65 @@ namespace PeasantRevenge
 
             #endregion
 
-            //Dialogs for mod configuration in game
+            #region Peasant revenge configuration via dialog
+
+#warning imprisonment result in crash (only when all? )
+            //campaignGameStarter.AddPlayerLine(
+            //   "peasant_revenge_player_config_mod_start",
+            //   "peasant_revenge_player_not_happy_with_peasant_start_options",//"hero_main_options",
+            //   "peasant_revenge_player_config_mod_options_set",
+            //   "{=PRev0095}There is something I'd like to discuss.",
+            //   new ConversationSentence.OnConditionDelegate(this.peasant_revenge_player_config_mod_start_condition),null,100,null);
+            campaignGameStarter.AddDialogLine(
+              "peasant_revenge_player_config_mod_npc_options",
+              "peasant_revenge_player_config_mod_options_set",
+              "peasant_revenge_player_config_mod_options_set",
+              "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:convo_thinking]",null,null,200,null);
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_config_mod_option_mp_dis",
+               "peasant_revenge_player_not_happy_with_peasant_start_options",
+               "peasant_revenge_player_config_mod_end_dis",
+               "{=PRev0081}You should not immediately interrupt me with any your matter.",
+                () => { return !_cfg.values.enableRevengerMobileParty; },() => { SetEnableRevengerMobileParty(true); },
+                110,
+                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
+            campaignGameStarter.AddPlayerLine(
+               "peasant_revenge_player_config_mod_option_mp_en",
+               "peasant_revenge_player_not_happy_with_peasant_start_options",
+               "peasant_revenge_player_config_mod_end_en",
+               "{=PRev0082}You should immediately interrupt me with any your matter.",
+                () => { return _cfg.values.enableRevengerMobileParty; },() => { SetEnableRevengerMobileParty(false); },
+                110,
+                new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_party_clickable_condition));
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_config_mod_option_np_en",
+              "peasant_revenge_player_not_happy_with_peasant_start_options",
+              "peasant_revenge_player_config_mod_end_dis",
+              "{=PRev0092}I'll defend villages against any looters.",
+               () => { return !_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; },() => { SetEnableHelpNeutralVillage(true); },100,
+               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_config_mod_option_np_dis",
+              "peasant_revenge_player_not_happy_with_peasant_start_options",
+              "peasant_revenge_player_config_mod_end_en",
+              "{=PRev0093}I will defend villages against my enemies only.",
+               () => { return _cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu; },() => { SetEnableHelpNeutralVillage(false); },100,
+               new ConversationSentence.OnClickableConditionDelegate(peasant_revenge_enable_neutral_village_attack_clickable_condition));           
+
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_player_config_mod_npc_end_dis",
+             "peasant_revenge_player_config_mod_end_dis",
+             "peasant_revenge_player_not_happy_with_peasant_start_options",
+             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]",
+             () => { StringHelpers.SetCharacterProperties("MAINHERO",Hero.MainHero.CharacterObject); return true; },null,200,null);
+            campaignGameStarter.AddDialogLine(
+             "peasant_revenge_player_config_mod_npc_end_en",
+             "peasant_revenge_player_config_mod_end_en",
+             "peasant_revenge_player_not_happy_with_peasant_start_options",
+             "{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_angry][ib:closed]",
+             () => { StringHelpers.SetCharacterProperties("MAINHERO",Hero.MainHero.CharacterObject); return true; },null,200,null);
+
+            #endregion
             #region Peasants has no traits to resist
             #region start
             campaignGameStarter.AddPlayerLine(
@@ -2536,8 +2533,7 @@ namespace PeasantRevenge
                 "peasant_revenge_player_not_happy_with_peasant_start_persuasion",
                "{=PRev0050}Your criminal intentions are well known to me.", null,
                new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_accuse_consequence)
-               // new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_chop_consequence)
-               , 100,
+               , 120,
                new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_execute_clickable));
             //TEACH
             campaignGameStarter.AddPlayerLine(
@@ -2546,7 +2542,8 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_persuasion",
                "{PAYER_COMMENT_REVENGE_TEACH}",
                new ConversationSentence.OnConditionDelegate(peasant_revenge_player_not_happy_with_peasant_teach_condition),
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_teach_consequence), 110,
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_teach_consequence),
+               125,
                new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_teach_clickable));
             //BRIBE
             campaignGameStarter.AddPlayerLine(
@@ -2555,7 +2552,8 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_post_learned",
                "{PAYER_COMMENT_REVENGE_BRIBE}",
                new ConversationSentence.OnConditionDelegate(peasant_revenge_player_not_happy_with_peasant_bribe_condition),
-               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_bribe_consequence), 120,
+               new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_not_happy_with_peasant_bribe_consequence),
+               130,
                new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_start_bribe_clickable));
             //Leave
             campaignGameStarter.AddPlayerLine(
@@ -2604,6 +2602,7 @@ namespace PeasantRevenge
               () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence(); leave_encounter(); },
               100, null);
             //ACCUSATION SUCCESS
+            //TODO; Here could be an option to spare the peasant (but it is already over extended)
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_player_not_happy_with_peasant_learned_5",
                "peasant_revenge_player_not_happy_with_peasant_post_learned",
@@ -2611,6 +2610,7 @@ namespace PeasantRevenge
                "{=*}I admit.[if:convo_thinking][if:convo_grave]",
                () => peasant_revenge_player_not_happy_with_peasant_post_accusation_success_on_condition(),
                null, 100, null);
+            //TODO; After execution, could be an angry letter from peasant owner (but it is already over extended)
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_not_happy_with_peasant_end_accusation",
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
@@ -2618,7 +2618,7 @@ namespace PeasantRevenge
               "{=PRev0109}I will chop your head off!",
               null,
               () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter(); }
-              , 100,
+              , 90,
               null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_companion",
@@ -2629,6 +2629,22 @@ namespace PeasantRevenge
               () => { peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(get_first_companion()); leave_encounter(); }
               , 100,
               null);
+            campaignGameStarter.AddPlayerLine(
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation_spare",
+              "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
+               "close_window",
+              "{=*}Justice demands you pay for your crimes.",
+#warning place here notable count > 1
+              () => { return true; },
+              () => { peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_consequence(); leave_encounter(); }
+              ,110,
+              new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_clickable));
+            campaignGameStarter.AddPlayerLine(
+             "peasant_revenge_player_not_happy_with_peasant_end_accusation_exit",
+             "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
+             "close_window",
+             "{=PRev0094}I must leave now.",null,() => leave_encounter(),
+             0,null);
             //TEACH
             #endregion
             #endregion
@@ -2804,7 +2820,7 @@ namespace PeasantRevenge
 
                 if (persuade_status == persuade_type.accusation)
                 {
-                    textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Your accusation is baseless.[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]", null));
+                    textObject.SetTextVariable("COMMENT_LINE", new TextObject("{= *}Your accusation is baseless.[ib:nervous][if:convo_astonished]", null));
                 }
                 else
                 {
@@ -3108,8 +3124,6 @@ namespace PeasantRevenge
             return pdata != null ? pdata.persuade_try_count : 0;
         }
 
-#warning  TODO: Make barterable. Make bribe dependent on relation, traits... Bribing should make notable be dependant on bribe . If he is not bribed again he should be angry...
-
         private int get_notable_bribe_amount()
         {
             int bribe_percents = _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal;
@@ -3205,7 +3219,17 @@ namespace PeasantRevenge
             {
                 text = new TextObject("{=PRev0055}Do not have needed traits");
             }
+            else
+            {
+                text=new TextObject("{=*}To try persuade the peasant");
+            }
 
+            return true;
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_clickable(out TextObject text)
+        {
+            text=new TextObject("{=*}Compromise the peasant");
             return true;
         }
 
@@ -3213,7 +3237,7 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_execute_clickable(out TextObject text)
         {
             text = TextObject.Empty;
-            text = new TextObject("{=*}Execute the peasant");
+            text = new TextObject("{=*}Compromise or execute the peasant");
             return true;
         }
 
@@ -3251,6 +3275,11 @@ namespace PeasantRevenge
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
                 KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
             }
+        }
+
+       private void peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_consequence()
+        {
+            KillCharacterAction.ApplyByRemove(Hero.OneToOneConversationHero,true,true);
         }
 
         private Hero get_first_companion() {
