@@ -2619,7 +2619,7 @@ namespace PeasantRevenge
               null,
               () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter(); }
               , 90,
-              null);
+             new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_end_accusation_clickable));
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_companion",
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
@@ -2628,13 +2628,12 @@ namespace PeasantRevenge
               () => { return peasant_revenge_get_executioner_companion_condition(); },
               () => { peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(get_first_companion()); leave_encounter(); }
               , 100,
-              null);
+              new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_end_accusation_companion_clickable));
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_spare",
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
                "close_window",
               "{=*}Justice demands you pay for your crimes.",
-#warning place here notable count > 1
               () => { return true; },
               () => { peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_consequence(); leave_encounter(); }
               ,110,
@@ -2650,6 +2649,25 @@ namespace PeasantRevenge
             #endregion
 
             Campaign.Current.ConversationManager.AddDialogFlow(this.GetNotablePersuasionDialogFlow(), this);
+        }
+
+        private bool peasant_revenge_player_not_happy_with_peasant_end_accusation_companion_clickable(out TextObject explanation)
+        {
+            explanation=null;
+            return can_remove_notable_from_village();
+        }
+        private bool peasant_revenge_player_not_happy_with_peasant_end_accusation_clickable(out TextObject explanation)
+        {
+            explanation=null;
+            return can_remove_notable_from_village();
+        }
+
+        private bool can_remove_notable_from_village()
+        {
+            return (Hero.OneToOneConversationHero!=null
+                && Hero.OneToOneConversationHero.HomeSettlement!= null &&
+                Hero.OneToOneConversationHero.HomeSettlement.Notables != null &&
+                Hero.OneToOneConversationHero.HomeSettlement.Notables.Count>1);
         }
         #region peasant revenge persuede
 
@@ -2777,7 +2795,7 @@ namespace PeasantRevenge
                 PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
                     false, new TextObject("{=*}No one should be afraid of these criminals.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
                     false, new TextObject("{=*}Someone must be held accountable for destruction of our villages.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
                 PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative, PersuasionArgumentStrength.VeryHard,
@@ -2798,13 +2816,13 @@ namespace PeasantRevenge
             }
             else if (task_index == 2)
             {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
                     false, new TextObject("{=*}Everyone has heard your hostile speeches against noble people.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
                     false, new TextObject("{=*}Your kindness to the enemy is criminal one.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.Easy,
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
                     false, new TextObject("{=*}Everyone knows I'm telling the truth.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
@@ -3230,7 +3248,7 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_clickable(out TextObject text)
         {
             text=new TextObject("{=*}Compromise the peasant");
-            return true;
+            return can_remove_notable_from_village();
         }
 
 

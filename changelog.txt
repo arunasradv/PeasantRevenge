@@ -97,14 +97,17 @@ Feature: Added dialogue option to return from revenger peasant persuasion option
 Feature: Added dialogue option to delay interaction with revenger.
 231031 v15.1.1.5
 Fix: Null exception, when prisoner is released and party is null
-231024 v15.1.1.6
-Feature: Player can persuade the notable peasants not to initiate the revenges
+231125 v15.1.2.6
+Feature: v1.2.5 support.
+Feature: Changed notable exclude from revenge traits, so now only 60% (was 10%) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
+Feature: Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
 Feature: Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
          If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
 Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
          Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
          Purpose of the persuasion will influence your hero traits accordingly.
-Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
+Feature: Moved mod notable configuration and persuation starting point to "Do you deal with criminals in this village?"
+Feature: Added dialogue option to return from revenger peasant persuasion options.
 Feature: Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
-Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certaincerain traits and relations with hero .
+Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
 
