@@ -52,12 +52,12 @@
     <string id="PRev0046" text="{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}." />
     <string id="PRev0047" text="{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends" />
     <string id="PRev0048" text="{=PRev0048}Do you deal with criminals in this village?" />
-    <string id="PRev0049" text="{=PRev0049}Yes, but how can forgiving cowards deter them? With sticks?[ib:closed][if:convo_grave]" />
-    <string id="PRev0050" text="{=PRev0050}The problem is in your head!" />
+    <string id="PRev0049" text="{=PRev0049}No, I do not care.[ib:closed]" />
+    <string id="PRev0050" text="{=PRev0050}Your criminal intentions are well known to me." />
     <string id="PRev0051" text="{=PRev0051}I can try to teach you by my example..." />
     <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!" />
     <string id="PRev0053" text="{=PRev0053}Thank you very much![if:convo_astonished]" />
-    <string id="PRev0054" text="{=PRev0054}I just cannot.[if:convo_grave]" />
+    <string id="PRev0054" text="{=PRev0054}They will do what they want. It is not my business to interfere.[if:convo_angry]" />
     <string id="PRev0055" text="{=PRev0055}Do not have needed traits" />
     <string id="PRev0056" text="{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations." />
     <string id="PRev0057" text="{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
@@ -120,6 +120,12 @@
     <string id="PRev0114" text="{=PRev0114}Nobody can stop my revenge on {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="{=PRev0115}Your party is too small" />
     <string id="PRev0116" text="{=PRev0116}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="{=PRev0117}Enough, I will not change my intentions![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." />
     <string id="PRev0119" text="{=PRev0119}Not now." />
+    <string id="PRev0120" text="{=PRev0120}They are breaking the law and they will face consequences for their crimes.[ib:closed][if:angry]" />
+    <string id="PRev0121" text="{=PRev0121}I cannot make any promises..[ib:closed]" />
+    <string id="PRev0122" text="{=PRev0122}Bribe will not work yet." />
+    <string id="PRev0123" text="{=PRev0123}Cannot bribe. Peasant's traits not allow." />
   </strings>
 </base>

@@ -47,7 +47,7 @@
      - teach the notable peasant (use player's traits to change notable peasant's traits);
      - bribe the notable peasant (use money to change notable peasant's traits);
 	   - (**not implemented**) bribing effect should be temporary and depend on traits and relations.
- 4. (**not implemented**) persuade notable peasant not to initiate the peasant revenge. Notable peasant dialogue options are:
+ 4. Persuade notable peasant not to initiate the peasant revenge. Notable peasant dialogue options are:
      - execute the notable peasant (game will replace the notable peasant with a new one, criminal rating increase);
      - teach the notable peasant (use player's traits to change notable peasant's traits);
      - bribe the notable peasant (use money to change notable peasant's traits);
@@ -142,6 +142,7 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
   - logColorForKingdom - peasant revenge log colour for other kingdom clans.
   - logColorForOtherFactions - peasant revenge log colour for other factions.
   - peasantRevengerIntimidationPowerScale - notable peasant party power is multiplied by this constant and compared to party player party's power.
+  - enableOtherNobleTraitsChangeAfterNobleExecution - If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
   - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest - 
   - ai - AI parameters, what can have several values (the lists); 
 	  - partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet -
