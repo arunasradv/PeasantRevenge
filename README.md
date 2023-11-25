@@ -143,7 +143,8 @@ Please load the Diplomacy mod before this mod (The mod will automatically set al
   - logColorForOtherFactions - peasant revenge log colour for other factions.
   - peasantRevengerIntimidationPowerScale - notable peasant party power is multiplied by this constant and compared to party player party's power.
   - enableOtherNobleTraitsChangeAfterNobleExecution - If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
-  - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest - 
+  - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest -
+  - lordCanTryAsManyTimesToPersuadeTheNotable - when player try to persuade peasant to revenge or not , he can try it only limited times. (reset after game reload) 
   - ai - AI parameters, what can have several values (the lists); 
 	  - partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet -
 	  - settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet - 

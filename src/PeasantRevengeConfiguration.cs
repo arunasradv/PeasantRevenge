@@ -71,6 +71,7 @@ namespace PeasantRevenge
         public string logColorForOtherFactions = "hA02222A0";
         public float peasantRevengerIntimidationPowerScale = 0.5f;
         public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
+        public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
         public AIfilters ai;
 
         public static string default_file_name()

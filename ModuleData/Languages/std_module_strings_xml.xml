@@ -57,7 +57,7 @@
     <string id="PRev0051" text="{=PRev0051}I can try to teach you by my example..." />
     <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!" />
     <string id="PRev0053" text="{=PRev0053}Thank you very much![if:convo_astonished]" />
-    <string id="PRev0054" text="{=PRev0054}They will do what they want. It is not my business to interfere.[if:convo_angry]" />
+    <string id="PRev0054" text="{=PRev0054}They will do what they want. It is not my business to interfere.[ib:closed][if:angry]" />
     <string id="PRev0055" text="{=PRev0055}Do not have needed traits" />
     <string id="PRev0056" text="{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations." />
     <string id="PRev0057" text="{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
@@ -124,8 +124,32 @@
     <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." />
     <string id="PRev0119" text="{=PRev0119}Not now." />
     <string id="PRev0120" text="{=PRev0120}They are breaking the law and they will face consequences for their crimes.[ib:closed][if:angry]" />
-    <string id="PRev0121" text="{=PRev0121}I cannot make any promises..[ib:closed]" />
+    <string id="PRev0121" text="{=PRev0121}I can't make any promises..[ib:closed]" />
     <string id="PRev0122" text="{=PRev0122}Bribe will not work yet." />
     <string id="PRev0123" text="{=PRev0123}Cannot bribe. Peasant's traits not allow." />
+    <string id="PRev0124" text="{=PRev0124}Yes. Why do you ask?[ib:closed][rf:convo_thinking]" />
+    <string id="PRev0125" text="{=PRev0125}I admit.[if:convo_thinking][if:convo_grave]" />
+    <string id="PRev0126" text="{=PRev0126}{EXECUTIONER.LINK} will chop your head off!" />
+    <string id="PRev0127" text="{=PRev0127}Justice demands you pay for your crimes." />
+    <string id="PRev0128" text="{=PRev0128}You're right." />
+    <string id="PRev0129" text="{=PRev0129}What's there to discuss?" />
+    <string id="PRev0130" text="{=PRev0130}Maybe..." />
+    <string id="PRev0131" text="{=PRev0131}I think...[ib:thinking]" />
+    <string id="PRev0132" text="{=PRev0132}No one should be afraid of these criminals." />
+    <string id="PRev0133" text="{=PRev0133}Someone must be held accountable for destruction of our villages." />
+    <string id="PRev0134" text="{=PRev0134}Keep justice into your own hands." />
+    <string id="PRev0135" text="{=PRev0135}These criminals are too dangerous." />
+    <string id="PRev0136" text="{=PRev0136}To pity an enemy is to find a friend." />
+    <string id="PRev0137" text="{=PRev0137}Give justice into hands of nobles. You are not so important." />
+    <string id="PRev0138" text="{=PRev0138}Everyone has heard your hostile speeches against noble people." />
+    <string id="PRev0139" text="{=PRev0139}Your kindness to the enemy is criminal one." />
+    <string id="PRev0140" text="{=PRev0140}Everyone knows I'm telling the truth." />
+    <string id="PRev0141" text="{=PRev0141}Your accusation is baseless.[ib:nervous][if:convo_astonished]"/>
+    <string id="PRev0142" text="{=PRev0142}Do not expect me to change my ways." />
+    <string id="PRev0143" text="{=PRev0143}Let's say it was a misunderstanding." />
+    <string id="PRev0144" text="{=PRev0144}Great question! Let me show my example..." />
+    <string id="PRev0145" text="{=PRev0145}To try persuade the peasant" />
+    <string id="PRev0146" text="{=PRev0146}Expell the peasant" />
+    <string id="PRev0147" text="{=PRev0147}Expell or execute the peasant" />
   </strings>
 </base>
