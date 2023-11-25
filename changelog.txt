@@ -97,3 +97,5 @@ Feature: Added dialogue option to return from revenger peasant persuasion option
 Feature: Added dialogue option to delay interaction with revenger.
 231031 v15.1.1.5
 Fix: Null exception, when prisoner is released and party is null
+231031 v15.1.2.5
+Feature: v1.2.5 support
