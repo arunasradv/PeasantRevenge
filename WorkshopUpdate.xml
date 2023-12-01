@@ -7,13 +7,16 @@
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
         <ChangeNotes Value="
-Fix: Not safe quest state setting. And crashes related to it.
-Fix: Key not found exception, when revenger party is already removed. 
-Fix: Null exception, when all notables have left the village to for the revenge. If village has one notable, he will not initiate the revenge from now.
-Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
-Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
-Feature: Added dialogue option to delay interaction with revenger.
-Fix: Null exception, when prisoner is released and party is null"/>
+ - Changed notable exclude from revenge traits, so now only 60% (10% previous value) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
+ - Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
+ - Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
+ - Added configuration parameter lordCanTryAsManyTimesToPersuadeTheNotable.If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
+ - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
+ - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevengePurpose of the persuasion will influence your hero traits accordingly.
+ - Moved mod notable configuration and persuation starting point to - Do you deal with criminals in this village?
+ - Added dialogue option to return from revenger peasant persuasion options.
+ - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+ - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
