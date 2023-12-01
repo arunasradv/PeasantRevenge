@@ -112,4 +112,5 @@ Feature: Moved mod notable configuration and persuation starting point to "Do yo
 Feature: Added dialogue option to return from revenger peasant persuasion options.
 Feature: Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
 Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
-
+231125 v15.1.2.7
+Feature: v1.2.6 support
