@@ -72,11 +72,9 @@ Feature: When canceling the barter, will return to player options.
 Fix:     When player can attack notable peasant party
 Fix:     When Notable is following player until timeout, when revenge should have ended.
 Fix:     When Ai decides not to kill player.
-230907 v15.0.0.4
+230923 v15.1.1.0
+Feature: For version v1.2.4 
 Fix: Rare crash fix, when victim prisoner is not found in the mobile party
-230918 v15.0.0.5
-Feature: version 1.1.6
-230923 v15.0.1.0
 Fix: incorrect trait selection, when player is dealing with remains (was using lordTraitChangeWhenRansomRemainsDeclined only)
 Fix: possible rare crash, when heroes party is null
 Fix: possible rare crash, when revenge data collection is updated in events
@@ -90,12 +88,24 @@ Fix: Notable dialogue string for translations
 Fix: Notable dialogue strings
 Fix: Crash after selecting Polish language
 Feature: Do not removing notable party after notable execution
-231022 v15.0.1.4
+231022 v15.1.1.4
 Fix: Not safe quest state setting. And crashes related to it.
 Fix: Key not found exception, when revenger party is already removed. 
 Fix: Null exception, when all notables have left the village to for the revenge. If village has one notable, he will not initiate the revenge from now.
 Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
 Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
 Feature: Added dialogue option to delay interaction with revenger.
-231031 v15.0.1.5
+231031 v15.1.1.5
 Fix: Null exception, when prisoner is released and party is null
+231201 v15.0.1.7
+ - Changed notable exclude from revenge traits, so now only 60% (was 10%) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
+ - Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
+ - Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
+ - Added configuration parameter lordCanTryAsManyTimesToPersuadeTheNotable.If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
+ - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
+ - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevengePurpose of the persuasion will influence your hero traits accordingly.
+ - Moved mod notable configuration and persuation starting point to "Do you deal with criminals in this village?"
+ - Added dialogue option to return from revenger peasant persuasion options.
+ - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+ - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
+
