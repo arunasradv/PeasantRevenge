@@ -2560,7 +2560,7 @@ namespace PeasantRevenge
                "peasant_revenge_player_not_happy_with_peasant_start_give_leave",
                "peasant_revenge_player_not_happy_with_peasant_start_options",
                "close_window",
-               "{= PRev0083}Nevermind.",
+               "{=PRev0083}Nevermind.",
                null,
                () => leave_encounter(), 80, null);
             #endregion

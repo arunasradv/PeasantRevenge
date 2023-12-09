@@ -110,4 +110,5 @@ Fix: Null exception, when prisoner is released and party is null
  - Added dialogue option to return from revenger peasant persuasion options.
  - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
  - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
-
+ 231209 v15.0.1.8
+ Fix: dialog option "Nevermind" for other languages

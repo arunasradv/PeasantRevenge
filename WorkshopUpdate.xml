@@ -6,17 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="
- - Changed notable exclude from revenge traits, so now only 60% (10% previous value) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
- - Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
- - Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
- - Added configuration parameter lordCanTryAsManyTimesToPersuadeTheNotable.If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
- - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
- - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevengePurpose of the persuasion will influence your hero traits accordingly.
- - Moved mod notable configuration and persuation starting point to - Do you deal with criminals in this village?
- - Added dialogue option to return from revenger peasant persuasion options.
- - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
- - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero."/>
+        <ChangeNotes Value=" Fix: dialog option (Nevermind) for other languages"/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
