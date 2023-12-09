@@ -114,3 +114,5 @@ Feature: Added configuration parameter  peasantRevengePartyWaitLordDistance. Not
 Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
 231125 v15.1.2.7
 Feature: v1.2.6 support
+231209 v15.1.2.8
+Fix: dialog option "Nevermind" for other languages
