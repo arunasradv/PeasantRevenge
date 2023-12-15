@@ -1113,7 +1113,7 @@ namespace PeasantRevenge
             mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"), size);
             //mobileParty.IgnoreForHours(_cfg.values.peasantRevengeTimeoutInDays*24f*10f); //if not ignored, ai can kill them and notable will respawn in the village
             mobileParty.Ai.SetDoNotMakeNewDecisions(true);
-            mobileParty.Party.Visuals.SetMapIconAsDirty();
+            mobileParty.Party.SetVisualAsDirty();
             mobileParty.Aggressiveness = 0f;
             return mobileParty;
         }
@@ -2894,7 +2894,6 @@ namespace PeasantRevenge
         {
             if (this._task.Options.Count > 0)
             {
-#warning check option line id here does not macth in other languages?
                 TextObject textObject = new TextObject("{=*}{OPTION_LINE} {SUCCESS_CHANCE}", null);
                 textObject.SetTextVariable("SUCCESS_CHANCE", PersuasionHelper.ShowSuccess(this._task.Options.ElementAt(option_index), false));
                 textObject.SetTextVariable("OPTION_LINE", this._task.Options.ElementAt(option_index).Line);
