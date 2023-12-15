@@ -52,12 +52,12 @@
      <string id="PRev0046" text="{HERO.NAME} pagou {REPARATION}{GOLD_ICON} para {EXECUTIONER.NAME}." />
      <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} não executou {PRISONER.NAME}, porque amigos" />
     <string id="PRev0048" text="Você lida com criminosos nesta aldeia?" />
-    <string id="PRev0049" text="Sim, mas como os covardes perdoadores podem detê-los? Com paus?[ib:closed][if:convo_grave]" />
-    <string id="PRev0050" text="O problema está na sua cabeça!" />
+    <string id="PRev0049" text="Não, não me importo.[ib:closed]" />
+    <string id="PRev0050" text="Suas intenções criminosas são bem conhecidas por mim." />
     <string id="PRev0051" text="Posso tentar ensiná-lo com meu exemplo..." />
     <string id="PRev0052" text="Tome {BRIBEVALUE}{GOLD_ICON}. Faça os criminosos pagarem por seus crimes!" />
     <string id="PRev0053" text="Muito obrigado![if:convo_astonished]" />
-    <string id="PRev0054" text="Não consigo.[if:convo_grave]" />
+    <string id="PRev0054" text="Eles farão o que quiserem. Não é da minha conta interferir.[ib:closed][if:angry]" />
     <string id="PRev0055" text="Não possui características necessárias" />
     <string id="PRev0056" text="{SETTLEMENTOWNER.NAME} não executou {PRISONER.NAME}, pois possui boas relações." />
     <string id="PRev0057" text="{SETTLEMENTOWNER.NAME} não executou {PRISONER.NAME}, pois são parentes." />
@@ -120,6 +120,36 @@
     <string id="PRev0114" text="Ninguém pode impedir minha vingança contra {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="Seu grupo é muito pequeno" />
     <string id="PRev0116" text="{CRIMINAL.LINK} morrerá![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="Chega, não vou mudar minhas intenções![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="Aqui, pegue {BRIBEVALUE}{GOLD_ICON}. Pessoas nobres não são os criminosos para você." />
     <string id="PRev0119" text="Agora não." />
+    <string id="PRev0120" text="Eles estão infringindo a lei e enfrentarão consequências por seus crimes.[ib:closed][if:angry]" />
+    <string id="PRev0121" text="Não posso fazer nenhuma promessa..[ib:closed]" />
+    <string id="PRev0122" text="O suborno ainda não funcionará." />
+    <string id="PRev0123" text="Não é possível subornar. As características do camponês não permitem." />
+    <string id="PRev0124" text="Sim. Por que você pergunta?[ib:closed][rf:convo_thinking]" />
+    <string id="PRev0125" text="Eu admito.[if:convo_thinking][if:convo_grave]" />
+    <string id="PRev0126" text="{EXECUTIONER.LINK} vai cortar sua cabeça!" />
+    <string id="PRev0127" text="A justiça exige que você pague pelos seus crimes." />
+    <string id="PRev0128" text="Você está certo." />
+    <string id="PRev0129" text="O que há para discutir?" />
+    <string id="PRev0130" text="Talvez..." />
+    <string id="PRev0131" text="Eu acho...[ib:thinking]" />
+    <string id="PRev0132" text="Ninguém deveria ter medo desses criminosos." />
+    <string id="PRev0133" text="Alguém deve ser responsabilizado pela destruição de nossas aldeias." />
+    <string id="PRev0134" text="Faça justiça com suas próprias mãos." />
+    <string id="PRev0135" text="Esses criminosos são muito perigosos." />
+    <string id="PRev0136" text="Ter pena de um inimigo é encontrar um amigo." />
+    <string id="PRev0137" text="Entregue a justiça nas mãos dos nobres. Você não é tão importante." />
+    <string id="PRev0138" text="Todo mundo já ouviu seus discursos hostis contra pessoas nobres." />
+    <string id="PRev0139" text="Sua bondade para com o inimigo é criminosa." />
+    <string id="PRev0140" text="Todo mundo sabe que estou falando a verdade." />
+    <string id="PRev0141" text="Sua acusação é infundada.[ib:nervous][if:convo_astonished]"/>
+    <string id="PRev0142" text="Não espere que eu mude meus hábitos." />
+    <string id="PRev0143" text="Digamos que foi um mal-entendido." />
+    <string id="PRev0144" text="Ótima pergunta! Deixe-me mostrar meu exemplo..." />
+    <string id="PRev0145" text="Para tentar persuadir o camponês" />
+    <string id="PRev0146" text="Expulsar o camponês" />
+    <string id="PRev0147" text="Expulsar ou executar o camponês" />
   </strings>
 </base>
