@@ -220,6 +220,31 @@ namespace PeasantRevenge
             AddGameMenus(campaignGameStarter);
         }
 
+        private bool IsModuleVersionOlder(ApplicationVersion module_version, ApplicationVersion compare)
+        {
+            bool is_older = true;
+
+            if(module_version.Major>compare.Major)
+            {
+                is_older=false;
+            }
+            else if(module_version.Major==compare.Major)
+            {
+                if(module_version.Minor>compare.Minor)
+                {
+                    is_older=false;
+                }
+                else if(module_version.Minor==compare.Minor)
+                {
+                    if(module_version.Revision>=compare.Revision)
+                    {
+                        is_older=false;
+                    }
+                }
+            }
+            return is_older;
+        }
+
         public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
         {
             string[] moduleNames = Utilities.GetModulesNames();
@@ -228,9 +253,16 @@ namespace PeasantRevenge
             {
                 if (modulesId.Contains("Bannerlord.Diplomacy")) // Diplomacy mod patch
                 {
-                    cfg_source.allowLordToKillMessenger = false;
-                    cfg_source.allowPeasantToKillLord = false;
-                    break;
+                    bool need_patch = IsModuleVersionOlder(
+                         TaleWorlds.ModuleManager.ModuleHelper.GetModuleInfo(modulesId).Version,
+                         new ApplicationVersion(ApplicationVersionType.Release,1,2,8,0));
+
+                    if(need_patch)
+                    {
+                        cfg_source.allowLordToKillMessenger=false;
+                        cfg_source.allowPeasantToKillLord=false;                        
+                    }
+                    break; // because there is no more module patches it should end the configuration
                 }
             }
 
