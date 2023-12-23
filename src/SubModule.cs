@@ -26,6 +26,7 @@ namespace PeasantRevenge
                 if (campaignGameStarter != null)
                 {
                     campaignGameStarter.AddBehavior(new PeasantRevengeBehavior());
+                    campaignGameStarter.AddBehavior(new HeroPersuadeNotableBehavior());
                 }
             }
         }
