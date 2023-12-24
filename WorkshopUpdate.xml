@@ -6,7 +6,10 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="v1.2.8 support"/>
+        <ChangeNotes Value="Feature: The mod will allow notable peasant hero to behead the lord when using Diplomacy mod (v1.2.10.0 and newer).
+                     The update will not change already existing PeasantRevengeModCfg.xml values.
+                     If you are using Diplomacy mod already, you should delete PeasantRevengeModCfg.xml or change allowLordToKillMessenger and allowPeasantToKillLord to 'true' by yourself.
+                     Fix: Revenge happening, after notable peasant is persuaded not to revenge, just after criminal hero capture."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
