@@ -220,6 +220,31 @@ namespace PeasantRevenge
             AddGameMenus(campaignGameStarter);
         }
 
+        private bool IsModuleVersionOlder(ApplicationVersion module_version, ApplicationVersion compare)
+        {
+            bool is_older = true;
+
+            if(module_version.Major>compare.Major)
+            {
+                is_older=false;
+            }
+            else if(module_version.Major==compare.Major)
+            {
+                if(module_version.Minor>compare.Minor)
+                {
+                    is_older=false;
+                }
+                else if(module_version.Minor==compare.Minor)
+                {
+                    if(module_version.Revision>=compare.Revision)
+                    {
+                        is_older=false;
+                    }
+                }
+            }
+            return is_older;
+        }
+
         public PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
         {
             string[] moduleNames = Utilities.GetModulesNames();
@@ -228,9 +253,16 @@ namespace PeasantRevenge
             {
                 if (modulesId.Contains("Bannerlord.Diplomacy")) // Diplomacy mod patch
                 {
-                    cfg_source.allowLordToKillMessenger = false;
-                    cfg_source.allowPeasantToKillLord = false;
-                    break;
+                    bool need_patch = IsModuleVersionOlder(
+                         TaleWorlds.ModuleManager.ModuleHelper.GetModuleInfo(modulesId).Version,
+                         new ApplicationVersion(ApplicationVersionType.Release,1,2,10,0));
+
+                    if(need_patch)
+                    {
+                        cfg_source.allowLordToKillMessenger=false;
+                        cfg_source.allowPeasantToKillLord=false;                        
+                    }
+                    break; // because there is no more module patches it should end the configuration
                 }
             }
 
@@ -310,6 +342,25 @@ namespace PeasantRevenge
         }
 
         #endregion
+       
+        private void StopRevengeForNotableIfAny(Hero revenger)
+        {
+            if(revenger!=null)
+            {
+                IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) =>
+                x.executioner==revenger.CharacterObject
+               );
+
+                if(currentData!=null&&!currentData.IsEmpty())
+                {
+                    foreach(PeasantRevengeData revenge in currentData)
+                    {
+                        revenge.Stop();
+                    }
+                }
+            }
+        }
+        
         private void OnPartyDisbandedEvent(MobileParty party, Settlement settlement)
         {
             OnAnyRevengePartyIsRemoved(party.Party);
@@ -907,8 +958,8 @@ namespace PeasantRevenge
                             if (sellement_owner_friend_to_criminal_con) condition += " friend";
                             if (sellement_owner_help_criminal_con) condition += " lordWillAffordToHelpTheCriminal";
                             if (sellement_owner_relatives_with_criminal_condition) condition += " lordIfRelativesWillHelpTheCriminal";
-                            if (!sellement_owner_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
-                            if (!sellement_owner_let_due_accusations) condition += " sellement_owner_let_due_accusations";
+                            if (!sellement_owner_overide_con) condition +="was not over rided by settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
+                            if (!sellement_owner_let_due_accusations) condition +="was not over rided by sellement_owner_let_due_accusations";
                             message = $"Settlement owner {settlement.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
                             revenge.quest_Results.Add(PeasantRevengeData.quest_result.village_denied);
                             if (sellement_owner_friend_to_criminal_con)
@@ -948,8 +999,8 @@ namespace PeasantRevenge
                     if (party_friend_to_criminal_con) condition += " friend";
                     if (party_help_criminal_con) condition += " lordWillAffordToHelpTheCriminal";
                     if (party_relatives_with_criminal_condition) condition += " lordIfRelativesWillHelpTheCriminal";
-                    if (!party_overide_con) condition += " settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
-                    if (!party_let_due_accusations) condition += " party_let_due_accusations";
+                    if (!party_overide_con) condition += "was not over rided by partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet";
+                    if (!party_let_due_accusations) condition +="was not over rided by  party_let_due_accusations";
                     message = $"Party {party.Owner.Name} refused to support {executioner.Name}'s revenge against {prisoner.Name}. ({condition})";
                     revenge.quest_Results.Add(PeasantRevengeData.quest_result.party_denied);
                     if (party_friend_to_criminal_con)
@@ -2581,7 +2632,9 @@ namespace PeasantRevenge
               "close_window",
               "{=PRev0054}They will do what they want. It is not my business to interfere.[ib:closed][if:angry]",
               () => peasant_revenge_player_not_happy_with_peasant_post_learned_not_revenge_on_condition(),
-              () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence(); leave_encounter(); },
+              () => { peasant_revenge_player_not_happy_with_peasant_teaching_consequence();
+                      StopRevengeForNotableIfAny(Hero.OneToOneConversationHero);
+                      leave_encounter(); },
               100, null);
             //BOTH NOT SUCCESS
             campaignGameStarter.AddDialogLine(
@@ -3438,7 +3491,7 @@ namespace PeasantRevenge
         }
         public void OnLordPersuedeNotableNotToRevenge(Hero hero)
         {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));
+            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));           
         }
 
         public void OnLordRemainsAbandoned(Hero hero)
