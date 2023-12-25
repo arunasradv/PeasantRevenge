@@ -445,7 +445,9 @@ namespace PeasantRevenge
         {
             if (party.Owner == null) return;
             if (party.LeaderHero == null) return;
-            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) => x.criminal == prisoner.CharacterObject);
+            IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) =>
+            x.criminal == prisoner.CharacterObject &&
+            x.state == PeasantRevengeData.quest_state.none); // in case of other state it should not overwrite
 
             if (currentData != null && !currentData.IsEmpty())
             {
@@ -453,7 +455,7 @@ namespace PeasantRevenge
                 {
                     if (revenge.criminal.HeroObject == prisoner && revenge.executioner == null)
                     {
-                        CharacterObject executioner = GetRevengeNotable(revenge.village.Settlement);
+                        CharacterObject executioner = GetRevengeNotable(revenge.village.Settlement); // same revenger can be added to many revenges
 
                         if (executioner != null)
                         {
@@ -513,18 +515,38 @@ namespace PeasantRevenge
                 {
                     if (revengeData[i].startTime.IsPast)
                     {
-                        revengeData[i].Begin();
-                        if (_cfg.values.enableRevengerMobileParty)
+
+                        if(_cfg.values.enableRevengerMobileParty)
                         {
-                            if (revengeData[i].party != null && revengeData[i].party.MobileParty != null)
+                            if(revengeData [i].party!=null&&revengeData [i].party.MobileParty!=null)
                             {
-                                revengeData[i].xParty = CreateNotableParty(revengeData[i]);
-                                revengeData[i].xParty.Ai.SetMoveEscortParty(revengeData[i].party.MobileParty);
+                                // making sure not to create parties with the same executioner
+                                bool with_party = false;
+                                for(int k = 0;k<revengeData.Count;k++)
+                                {
+                                    if(i!=k)
+                                    {
+                                        with_party = revengeData [k].xParty != null;
+                                        if(with_party) 
+                                            break;
+                                    }
+                                }
+
+                                if(with_party == false)
+                                {
+                                    revengeData [i].Begin();
+                                    revengeData [i].xParty=CreateNotableParty(revengeData [i]);
+                                    revengeData [i].xParty.Ai.SetMoveEscortParty(revengeData [i].party.MobileParty);
+                                }
                             }
                             else
                             {
-                                revengeData[i].Stop();
+                                revengeData [i].Stop();
                             }
+                        }
+                        else
+                        {
+                            revengeData [i].Begin();
                         }
                     }
                 }
