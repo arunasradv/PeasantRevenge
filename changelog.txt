@@ -123,3 +123,7 @@ Feature: v1.2.8 support
 231224 v15.1.3.2
 Feature: The mod will allow notable peasant hero to behead the lord (and reverse too), when playing with Diplomacy mod (v1.2.10.0 and newer).
 Fix: Revenge happening, after notable peasant is persuaded not to revenge, just after criminal hero capture.
+231225 v15.1.3.3
+Fix: Dublicated revenger parties.
+Fix: Quest data overwrite in case of not ended revenge.
+Fix: Possible quest state stuck.
