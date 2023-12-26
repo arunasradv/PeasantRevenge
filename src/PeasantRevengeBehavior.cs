@@ -506,7 +506,7 @@ namespace PeasantRevenge
             if (revengerPartiesCleanUp) // clean spawned parties after load (because we do not save revenge data - revenger party is unusable)
             {
                 revengerPartiesCleanUp = false;
-                DisbandAllRevengeParties();
+                DisbandInvalidRevengeParties();
             }
 
             for (int i = 0; i < revengeData.Count; i++) //Do not remove revengeData elsewhere (only should add in other threads or events)
@@ -729,9 +729,22 @@ namespace PeasantRevenge
             }
             lock (revengeData)
             {
-                revengeData.RemoveAll((x) => x.state == PeasantRevengeData.quest_state.clear); // remove here, because other events may interrupt this event 
+                // remove here, because other events may interrupt this event 
+                for(int i = 0; i<revengeData.Count; i++)
+                {
+                    if(revengeData[i].state ==PeasantRevengeData.quest_state.clear)
+                    {
+                        if(revengeData [i].xParty == null)
+                        {
+                            revengeData.RemoveAt(i);
+                        }
+                        else if(revengeData [i].xParty.MapEvent == null) // crash during update map event, if not checked
+                        {
+                            revengeData.RemoveAt(i);
+                        }
+                    }
+                }
             }
-
         }
 
         /// <summary>
@@ -1581,20 +1594,37 @@ namespace PeasantRevenge
             }
         }
 
-        void DisbandAllRevengeParties()
+        void DisbandInvalidRevengeParties()
         {
             IEnumerable<MobileParty> parties = MobileParty.AllPartiesWithoutPartyComponent.Where((x) =>
             x.IsCurrentlyUsedByAQuest && x.StringId.StartsWith(revengerPartyNameStart));
             for (int i = 0; i < parties.Count(); i++)
             {
-                TroopRoster troopsLordParty = parties.ElementAt(i).MemberRoster;
-                for (int j = 0; j < troopsLordParty.Count; j++)
+                if (parties.ElementAt(i).MapEvent == null) // if not checked will make crash
                 {
-                    CharacterObject troop = troopsLordParty.GetCharacterAtIndex(j);
-                    if (troop.IsHero)
+                    TroopRoster troopsLordParty = parties.ElementAt(i).MemberRoster;
+                    for(int j = 0;j<troopsLordParty.Count;j++)
                     {
-                        DestroyPartyAction.ApplyForDisbanding(parties.ElementAt(i), troop.HeroObject.HomeSettlement);
-                        break;
+                        CharacterObject troop = troopsLordParty.GetCharacterAtIndex(j);
+                        if(troop.IsHero)
+                        {
+                            if(revengeData!=null)
+                            {
+                                PeasantRevengeData revenge = revengeData.FirstOrDefault((x) =>
+                                   x.executioner!=null&&
+                                   x.executioner.HeroObject == troop.HeroObject);
+
+                                if(revenge == null)
+                                {
+                                    DestroyPartyAction.ApplyForDisbanding(parties.ElementAt(i),troop.HeroObject.HomeSettlement);
+                                }
+                            }
+                            else
+                            {
+                                DestroyPartyAction.ApplyForDisbanding(parties.ElementAt(i),troop.HeroObject.HomeSettlement);
+                            }
+                            break;
+                        }
                     }
                 }
             }
@@ -1811,6 +1841,17 @@ namespace PeasantRevenge
 
         private void AddDialogs(CampaignGameStarter campaignGameStarter)
         {
+            #region Revenger party no quest data
+            campaignGameStarter.AddDialogLine(
+           "peasant_revenge_any_revenger_start_ended_revenge",
+           "start",
+           "close_window",
+           "{=PRev0129}What's there to discuss?",
+           //"{=*}I've been looking for somebody, cannot remember...[if:convo_thinking][rf:idle_angry]",
+           new ConversationSentence.OnConditionDelegate(this.peasant_revenge_revenger_start_no_quest_data_condition),
+           () => { revengerPartiesCleanUp = true;},500,null);
+            #endregion
+
             #region Revenger who cannot start yet or finished the quest
 
             //When revenge is ended or does not exist
@@ -3680,6 +3721,27 @@ namespace PeasantRevenge
                 }
 
                 return retval;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool peasant_revenge_revenger_start_no_quest_data_condition()
+        {
+            if(Hero.OneToOneConversationHero==null)
+                return false;
+
+            if((Hero.OneToOneConversationHero.IsHeadman||Hero.OneToOneConversationHero.IsRuralNotable)&&
+                     Hero.OneToOneConversationHero.PartyBelongedTo!=null&&
+                     Hero.OneToOneConversationHero.PartyBelongedTo.StringId.StartsWith(revengerPartyNameStart))
+            {
+                //Here we have only revenger party
+                PeasantRevengeData revenge = revengeData.FirstOrDefault((x) =>
+                x.executioner!=null &&
+                x.executioner.HeroObject==Hero.OneToOneConversationHero);
+                return revenge == null;
             }
             else
             {
