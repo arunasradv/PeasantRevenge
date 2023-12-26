@@ -2993,7 +2993,7 @@ namespace PeasantRevenge
             }
             else
             {
-                ConversationManager.StartPersuasion(3f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Medium); // somehow in v1.1.6 it must be 3...
+                ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Medium);
             }
         }
 
