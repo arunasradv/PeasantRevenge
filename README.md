@@ -80,11 +80,8 @@ Configuration values are in the file PeasantRevengeModCfg xml, which is created 
 If you enabled notable peasant parties, disable them and wait (peasantRevengeTimeoutInDays days) until parties are removed and save game, before you uninstall the mod.
 ## Known Bugs:
 If you enable notable parties, sometimes village will get 1 more notable for a short time, after revenge mobile party is disbanded. This is because other TW module adds/removes them (more a feature than bug.).
-If you enable notable parties, and remove mod later without waiting for revenge parties to disband and If you attack not removed party you will get crash (solution: wait until AI kills them off).
 ## Compatibility:
 - Should be Save file compatible (Can be loaded/unloaded any time. If notable parties are enabled - let AI to kill them off)).
-- Mod Diplomacy: Diplomacy mod does not allow kill heroes, if killer hero is without mobile party.
-Please load the Diplomacy mod before this mod (The mod will automatically set allowLordToKillMessenger and allowPeasantToKillLord values to "false" in the PeasantRevengeModCfg xml file).
 - Mod has item "Remains of a corpse". It is converted to "Trash item" by game design after mod removal.
 
 ## Source code
