@@ -127,3 +127,6 @@ Fix: Revenge happening, after notable peasant is persuaded not to revenge, just 
 Fix: Dublicated revenger parties.
 Fix: Quest data overwrite in case of not ended revenge.
 Fix: Possible quest state stuck.
+231226 v15.1.3.4
+Fix: Crash at MapEvent. Update after notable party is attacked and mod tries to end the revenge quest and clean quest data.
+Fix: Crash when Revenger's party has no revenge quest data after saved game load.
