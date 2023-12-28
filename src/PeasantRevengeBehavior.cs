@@ -1410,22 +1410,22 @@ namespace PeasantRevenge
             {
                 _cfg.Load(_cfg.values.file_name, typeof(PeasantRevengeConfiguration));
 
-                if (_cfg.values.ai == null)
+                if(_cfg.values.ai==null)
                 {
-                    _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
+                    _cfg.values.ai=new PeasantRevengeConfiguration.AIfilters();
                     _cfg.values.ai.Default();
                 }
                 else
                 {
                     // configuration patch for new added configuration variables
 
-                    if (_cfg.values.CfgVersion < 14)
+                    if(_cfg.values.CfgVersion<14)
                     {
                         _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime();
                         _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord();
                     }
 
-                    if (_cfg.values.CfgVersion < 15)
+                    if(_cfg.values.CfgVersion<15)
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsDeclined();
                         _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsAccepted();
@@ -1434,20 +1434,33 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lordWillAbandonTheVictimRemains();
                     }
 
-                    if (_cfg.values.CfgVersion < 16)
+                    if(_cfg.values.CfgVersion<16)
                     {
                         _cfg.values.ai.default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
                     }
 
-                    if (_cfg.values.CfgVersion < 17)
+                    if(_cfg.values.CfgVersion<17)
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                     }
-                    if (_cfg.values.CfgVersion < 19)
+                    if(_cfg.values.CfgVersion<19)
                     {
                         _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
                         _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
                         _cfg.values.ai.default_notableWillAcceptTheBribe();
+                    }
+                    if(_cfg.values.CfgVersion<20)
+                    {
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption0();
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption1();
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption2();
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption0();
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption1();
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption2();
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption0();
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption1();
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption2();
+
                     }
                 }
             }
@@ -2917,6 +2930,51 @@ namespace PeasantRevenge
             return dialog;
         }
 
+        private Tuple<TraitObject,int> [] GetTraitCorrelations(int valor = 0,int mercy = 0,int honor = 0,int generosity = 0,int calculating = 0)
+        {
+            return new Tuple<TraitObject,int> []
+            {
+                new Tuple<TraitObject, int>(DefaultTraits.Valor, valor),
+                new Tuple<TraitObject, int>(DefaultTraits.Mercy, mercy),
+                new Tuple<TraitObject, int>(DefaultTraits.Honor, honor),
+                new Tuple<TraitObject, int>(DefaultTraits.Generosity, generosity),
+                new Tuple<TraitObject, int>(DefaultTraits.Calculating, calculating)
+            };
+        }
+
+        private PersuasionArgumentStrength GetPersuationArgumentStrength(CharacterObject target_hero, List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
+        {
+            int valor = 0, mercy = 0, honor = 0, generosity = 0, calculating = 0;
+
+            foreach(PeasantRevengeConfiguration.TraitAndValue tv in traits_and_values )
+            {
+                switch(tv.trait)
+                {
+                    case "Valor":
+                        valor = tv.value;
+                        break;
+                    case "Mercy":
+                        mercy = tv.value;
+                        break;
+                    case "Honor":
+                        honor = tv.value;
+                        break;
+                    case "Generosity":
+                        generosity = tv.value;
+                        break;
+                    case "Calculating":
+                        calculating = tv.value;
+                        break;
+                    default: 
+                        break;
+                }
+            }
+
+            Tuple<TraitObject,int> [] traitCorrelations = this.GetTraitCorrelations(valor,mercy,honor,generosity,calculating);
+
+            return Campaign.Current.Models.PersuasionModel.GetArgumentStrengthBasedOnTargetTraits(target_hero, traitCorrelations); // how much argument trait tuple correlates with npc and player  
+        }
+
         private PersuasionTask GetPersuasionTask(int task_index)
         {
             PersuasionTask persuasionTask = new PersuasionTask(0);
@@ -2927,37 +2985,46 @@ namespace PeasantRevenge
 
             if (task_index == 0)
             {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, 
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption0),
                     false, new TextObject("{=PRev0132}No one should be afraid of these criminals.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption1),
                     false, new TextObject("{=PRev0133}Someone must be held accountable for destruction of our villages.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative, PersuasionArgumentStrength.VeryHard,
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption2),
                     false, new TextObject("{=PRev0134}Keep justice into your own hands.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
             else if (task_index == 1)
             {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption0),
                     false, new TextObject("{=PRev0135}These criminals are too dangerous.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption1),
                     false, new TextObject("{=PRev0136}To pity an enemy is to find a friend.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive,
+                     GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption2),
                     false, new TextObject("{=PRev0137}Give justice into hands of nobles. You are not so important.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
             else if (task_index == 2)
             {
-                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive, PersuasionArgumentStrength.Hard,
+                PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption0),
                     false, new TextObject("{=PRev0138}Everyone has heard your hostile speeches against noble people.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
-                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Positive, PersuasionArgumentStrength.Normal,
+                PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Negative,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption1),
                     false, new TextObject("{=PRev0139}Your kindness to the enemy is criminal one.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
-                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive, PersuasionArgumentStrength.VeryHard,
+                PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive,
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption2),
                     false, new TextObject("{=PRev0140}Everyone knows I'm telling the truth.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
@@ -2985,15 +3052,70 @@ namespace PeasantRevenge
             }
             return false;
         }
+
+        private PersuasionDifficulty GetStartPersuasionDifficulty( Hero hero_initiator, Hero hero_target,PersuasionDifficulty min_difficulty)
+        {
+            PersuasionDifficulty diff = min_difficulty;
+
+            bool can_revenge = notable_can_do_revenge(hero_target);
+            bool main_have_exclude_trait = hero_trait_list_condition(hero_initiator,_cfg.values.peasantRevengerExcludeTrait);
+            bool can_revenge_have_ex_traits = can_revenge && main_have_exclude_trait;
+            bool cannot_revenge_have_no_ex_traits = !can_revenge && !main_have_exclude_trait;           
+            bool have_traits = can_revenge_have_ex_traits||cannot_revenge_have_no_ex_traits;
+
+            if(!have_traits)
+            {
+                diff += 1;
+            }
+
+            if(hero_initiator.MapFaction != hero_target.MapFaction)
+            {
+                diff += 1;
+            }
+
+            if(hero_initiator.MapFaction.IsAtWarWith(hero_target.MapFaction))
+            {
+                diff += 1;
+            }
+            
+            int relation = hero_target.GetRelation(hero_initiator);
+           
+            if(relation < 0)
+            {
+                diff += 1;
+            }
+            else if(relation > 20)
+            {
+                diff -= 1;
+            }
+
+            if(hero_target.IsEnemy(hero_initiator))
+            {
+                diff += 1;
+            }
+            else if(hero_target.IsFriend(hero_initiator))
+            {
+                diff -= 1;
+            }
+
+            if(diff > PersuasionDifficulty.Impossible)
+            {
+                diff=PersuasionDifficulty.Impossible;
+            }
+
+            return diff;
+        }
+
         private void persuasion_start_with_notable_on_consequence()
         {
             if (persuade_status == persuade_type.accusation)
             {
-                ConversationManager.StartPersuasion(1f, 1f, 0f, 1f, 1f, 0f, PersuasionDifficulty.Medium);
+                
+                ConversationManager.StartPersuasion(1f, 1f, 0f, 1f, 1f, 0f, PersuasionDifficulty.Hard);
             }
             else
-            {
-                ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Medium);
+            {                
+                ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Hard);
             }
         }
 
@@ -3362,20 +3484,20 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_clickable(out TextObject text)
         {
 
-            bool can_revenge_have_no_ex_traits = notable_can_do_revenge(Hero.OneToOneConversationHero) && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
-            bool cannot_revenge_have_ex_traits = !notable_can_do_revenge(Hero.OneToOneConversationHero) && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
+            bool can_revenge_have_ex_traits = notable_can_do_revenge(Hero.OneToOneConversationHero) && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
+            bool cannot_revenge_have_no_ex_traits = !notable_can_do_revenge(Hero.OneToOneConversationHero) && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
 
-            bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_no_ex_traits || cannot_revenge_have_ex_traits) && get_notable_persuaded_count() <=_cfg.values.lordCanTryAsManyTimesToPersuadeTheNotable;
+            bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_ex_traits||cannot_revenge_have_no_ex_traits) && get_notable_persuaded_count() <=_cfg.values.lordCanTryAsManyTimesToPersuadeTheNotable;
 
             text = TextObject.Empty;
 
-            if (!start)
+            if (start)
             {
-                text = new TextObject("{=PRev0055}Do not have needed traits");
+                text=new TextObject("{=PRev0145}To try persuade the peasant");                
             }
             else
             {
-                text=new TextObject("{=PRev0145}To try persuade the peasant");
+                text = new TextObject("{=PRev0055}Do not have needed traits");
             }
 
             return true;
