@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 19;
+        public int CfgVersion = 20;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -124,6 +124,16 @@ namespace PeasantRevenge
             public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableNotToRevenge;
             public List<TraitAndValue> lordTraitChangeWhenLordPersuedeNotableToRevenge;
             public List<RelationsPerTraits> notableWillAcceptTheBribe;
+            public List<TraitAndValue> PersuadeNotableToRevengeTraitsForOption0;
+            public List<TraitAndValue> PersuadeNotableToRevengeTraitsForOption1;
+            public List<TraitAndValue> PersuadeNotableToRevengeTraitsForOption2;
+            public List<TraitAndValue> PersuadeNotableNotToRevengeTraitsForOption0;
+            public List<TraitAndValue> PersuadeNotableNotToRevengeTraitsForOption1;
+            public List<TraitAndValue> PersuadeNotableNotToRevengeTraitsForOption2;
+            public List<TraitAndValue> AccuseNotableTraitsForOption0;
+            public List<TraitAndValue> AccuseNotableTraitsForOption1;
+            public List<TraitAndValue> AccuseNotableTraitsForOption2;
+
             public void Default()
             {
                 default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
@@ -146,6 +156,16 @@ namespace PeasantRevenge
                 default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                 default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
                 default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
+                default_PersuadeNotableToRevengeTraitsForOption0();
+                default_PersuadeNotableToRevengeTraitsForOption1();
+                default_PersuadeNotableToRevengeTraitsForOption2();
+                default_PersuadeNotableNotToRevengeTraitsForOption0();
+                default_PersuadeNotableNotToRevengeTraitsForOption1();
+                default_PersuadeNotableNotToRevengeTraitsForOption2();
+                default_AccuseNotableTraitsForOption0();
+                default_AccuseNotableTraitsForOption1();
+                default_AccuseNotableTraitsForOption2();
+
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -252,6 +272,16 @@ namespace PeasantRevenge
                 default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
                 default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
                 default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
+                default_PersuadeNotableToRevengeTraitsForOption0();
+                default_PersuadeNotableToRevengeTraitsForOption1();
+                default_PersuadeNotableToRevengeTraitsForOption2();
+                default_PersuadeNotableNotToRevengeTraitsForOption0();
+                default_PersuadeNotableNotToRevengeTraitsForOption1();
+                default_PersuadeNotableNotToRevengeTraitsForOption2();
+                default_AccuseNotableTraitsForOption0();
+                default_AccuseNotableTraitsForOption1();
+                default_AccuseNotableTraitsForOption2();
+
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -374,6 +404,122 @@ namespace PeasantRevenge
                      new RelationsPerTraits {traits = "Honor == 0&Generosity >= 0", relations = "Relations >= 10" },
                      new RelationsPerTraits {traits = "Honor > 0&Generosity >= 0", relations = "Relations >= 20" },
                 };
+            }
+
+            public void default_PersuadeNotableToRevengeTraitsForOption0()
+            {
+                PersuadeNotableToRevengeTraitsForOption0 =
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = -1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = -1},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Generosity", value = 1}
+                   };
+            }
+
+            public void default_PersuadeNotableToRevengeTraitsForOption1()
+            {
+                PersuadeNotableToRevengeTraitsForOption1=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = -1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = -1},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Generosity", value = 1}
+                   };
+            }
+
+            public void default_PersuadeNotableToRevengeTraitsForOption2()
+            {
+                PersuadeNotableToRevengeTraitsForOption2=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 0},
+                        new TraitAndValue { trait = "Honor", value = -1},
+                        new TraitAndValue { trait = "Calculating", value = -1},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Generosity", value = -1}
+                   };
+            }
+
+            public void default_PersuadeNotableNotToRevengeTraitsForOption0()
+            {
+                PersuadeNotableNotToRevengeTraitsForOption0=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = -1},
+                        new TraitAndValue { trait = "Generosity", value = 0}
+                   };
+            }
+            public void default_PersuadeNotableNotToRevengeTraitsForOption1()
+            {
+                PersuadeNotableNotToRevengeTraitsForOption1=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = -1},
+                        new TraitAndValue { trait = "Generosity", value = -1}
+                   };
+            }
+
+            public void default_PersuadeNotableNotToRevengeTraitsForOption2()
+            {
+                PersuadeNotableNotToRevengeTraitsForOption2=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = -1},
+                        new TraitAndValue { trait = "Generosity", value = 1}
+                   };
+            }
+
+            public void default_AccuseNotableTraitsForOption0()
+            {
+                AccuseNotableTraitsForOption0=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = -1},
+                        new TraitAndValue { trait = "Honor", value = -1},
+                        new TraitAndValue { trait = "Calculating", value = -1},
+                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Generosity", value = -1}
+                   };
+            }
+
+            public void default_AccuseNotableTraitsForOption1()
+            {
+                AccuseNotableTraitsForOption1=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 1},
+                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 0},
+                        new TraitAndValue { trait = "Valor", value = -1},
+                        new TraitAndValue { trait = "Generosity", value = -1}
+                   };
+            }
+
+            public void default_AccuseNotableTraitsForOption2()
+            {
+                AccuseNotableTraitsForOption2=
+                   new List<TraitAndValue>
+                   {
+                        new TraitAndValue { trait = "Mercy", value = 0},
+                        new TraitAndValue { trait = "Honor", value = 1},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = 0},
+                        new TraitAndValue { trait = "Generosity", value = 1}
+                   };
             }
         }
 
