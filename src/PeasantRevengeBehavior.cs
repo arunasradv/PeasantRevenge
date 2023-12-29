@@ -3706,16 +3706,9 @@ namespace PeasantRevenge
         {
             if (hero.PartyBelongedTo == null) return;
 
-            ItemObject lord_body = MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body");
-            var items = hero.PartyBelongedTo.ItemRoster;
-
-            if (items.GetItemNumber(lord_body) < 1) return;
-
-            ItemRosterElement item = items.Where((x) => x.EquipmentElement.Item.Name.ToString().Equals("pr_wrapped_body")).FirstOrDefault();
-
             OnRansomRemainsOfferAccepted(hero);
-            GiveItemAction.ApplyForHeroes(hero, ransomer, item);
-            GiveGoldAction.ApplyBetweenCharacters(ransomer, hero, ransomValue, false);
+            GiveItemAction.ApplyForHeroes(hero,ransomer,MBObjectManager.Instance.GetObject<ItemObject>("pr_wrapped_body"),1);
+            GiveGoldAction.ApplyBetweenCharacters(ransomer,hero,ransomValue,false);
         }
 
         private void DeclineRansomOffer(Hero hero, Hero ransomer)

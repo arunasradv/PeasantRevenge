@@ -160,3 +160,4 @@ Fix: Crash when Revenger's party has no revenge quest data after saved game load
 231229 v15.1.3.6
         Fix: Rare AI executions.
         Fix: Notable party disbanding.
+        Fix: Revert accept ransom for remains
