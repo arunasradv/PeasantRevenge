@@ -6,14 +6,8 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="
-Fix: Not safe quest state setting. And crashes related to it.
-Fix: Key not found exception, when revenger party is already removed. 
-Fix: Null exception, when all notables have left the village to for the revenge. If village has one notable, he will not initiate the revenge from now.
-Feature: Added  configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
-Feature: Added dialogue option to return from revenger peasant persuasion options into main hero options.
-Feature: Added dialogue option to delay interaction with revenger.
-Fix: Null exception, when prisoner is released and party is null"/>
+        <ChangeNotes Value="Fix: Rare AI executions.
+        Fix: Notable party disbanding."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
