@@ -7,19 +7,19 @@
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
         <ChangeNotes Value="
- - Changed notable exclude from revenge traits, so now only 60% (was 10%) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
- - Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
- - Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
- - Added configuration parameter lordCanTryAsManyTimesToPersuadeTheNotable.If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
- - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
- - Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevengePurpose of the persuasion will influence your hero traits accordingly.
- - Moved mod notable configuration and persuation starting point to 'Do you deal with criminals in this village?'
- - Added dialogue option to return from revenger peasant persuasion options.
- - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
- - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
- Fix: dialog option 'Nevermind' for other languages
- Fix: Crash at MapEvent. Update after notable party is attacked and mod tries to end the revenge quest and clean quest data.
- Fix: Crash when Revenger's party has no revenge quest data after saved game load."/>
+         Added parameters for persuasion configuration:
+         PersuadeNotableToRevengeTraitsForOption0
+         PersuadeNotableToRevengeTraitsForOption1
+         PersuadeNotableToRevengeTraitsForOption2
+         PersuadeNotableNotToRevengeTraitsForOption0
+         PersuadeNotableNotToRevengeTraitsForOption1
+         PersuadeNotableNotToRevengeTraitsForOption2
+         AccuseNotableTraitsForOption0
+         AccuseNotableTraitsForOption1
+         AccuseNotableTraitsForOption2
+         Feature: Notable persuation chance depend on traits, relations, situation too.
+         Fix: Crash notable party attacked after game reload.
+         Fix: Notable party disband after  game reload."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
