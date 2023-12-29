@@ -144,3 +144,6 @@ Fix: Crash when Revenger's party has no revenge quest data after saved game load
          Feature: Notable persuation chance depend on traits, relations, situation too.
          Fix: Crash notable party attacked after game reload.
          Fix: Notable party disband after  game reload.
+231229 v15.1.3.6
+        Fix: Rare AI executions.
+        Fix: Notable party disbanding.

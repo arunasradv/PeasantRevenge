@@ -6,20 +6,8 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: Notable peasant persuasion difficulty now depends on player and notable peasant traits too (older versions used skills only).
-         Added parameters for persuasion configuration:
-         PersuadeNotableToRevengeTraitsForOption0
-         PersuadeNotableToRevengeTraitsForOption1
-         PersuadeNotableToRevengeTraitsForOption2
-         PersuadeNotableNotToRevengeTraitsForOption0
-         PersuadeNotableNotToRevengeTraitsForOption1
-         PersuadeNotableNotToRevengeTraitsForOption2
-         AccuseNotableTraitsForOption0
-         AccuseNotableTraitsForOption1
-         AccuseNotableTraitsForOption2
-         Feature: Notable persuation chance depend on traits, relations, situation too.
-         Fix: Crash notable party attacked after game reload.
-         Fix: Notable party disband after  game reload."/>
+        <ChangeNotes Value="Fix: Rare AI executions.
+        Fix: Notable party disbanding."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->

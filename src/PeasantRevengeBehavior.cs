@@ -503,6 +503,11 @@ namespace PeasantRevenge
 
         private void HourlyTickEvent()
         {
+            if(revengerPartiesCleanUp)
+            {
+                revengerPartiesCleanUp = !FindRevengesForRevengeParties();
+            }
+
             for (int i = 0; i < revengeData.Count; i++) //Do not remove revengeData elsewhere (only should add in other threads or events)
             {
                 if (revengeData[i].state == PeasantRevengeData.quest_state.ready)
@@ -799,7 +804,7 @@ namespace PeasantRevenge
                 bool party_friend_to_criminal_con = party.Owner.IsFriend(prisoner);
                 bool party_overide_con = CheckConditions(party.Owner, executioner, _cfg.values.ai.partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet) || party.Owner.IsFriend(executioner);
                 bool party_let_due_accusations = revenge.accused_hero != null ? !AIwillMakeNoDecisionDueConflict(party.Owner, revenge) : true;
-                bool party_let_revenge_con = (!party_help_criminal_con && !party_friend_to_criminal_con && !party_relatives_with_criminal_condition && !party_let_due_accusations) || party_overide_con;
+                bool party_let_revenge_con = (!party_help_criminal_con && !party_friend_to_criminal_con && !party_relatives_with_criminal_condition && party_let_due_accusations) || party_overide_con;
 
                 if (party_let_revenge_con || _cfg.values.alwaysExecuteTheCriminal) //no conflict with party leader and peasant or override
                 {
@@ -809,7 +814,7 @@ namespace PeasantRevenge
                     bool sellement_owner_friend_to_criminal_con = settlement.Owner.IsFriend(prisoner);
                     bool sellement_owner_overide_con = CheckConditions(settlement.Owner, executioner, _cfg.values.ai.settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet);
                     bool sellement_owner_let_due_accusations = revenge.accused_hero != null ? !AIwillMakeNoDecisionDueConflict(settlement.Owner, revenge) : true;
-                    bool sellement_owner_let_revenge_con = (!sellement_owner_help_criminal_con && !sellement_owner_friend_to_criminal_con && !sellement_owner_relatives_with_criminal_condition && !sellement_owner_let_due_accusations) || sellement_owner_overide_con;
+                    bool sellement_owner_let_revenge_con = (!sellement_owner_help_criminal_con && !sellement_owner_friend_to_criminal_con && !sellement_owner_relatives_with_criminal_condition && sellement_owner_let_due_accusations) || sellement_owner_overide_con;
 
                     if (sellement_owner_let_revenge_con || _cfg.values.alwaysExecuteTheCriminal) //no conflict with settlement leader and peasant or override
                     {
@@ -1650,7 +1655,7 @@ namespace PeasantRevenge
                                             xParty=parties.ElementAt(i)
                                         });
 
-                                        revengeData [revengeData.Count-1].xParty.Ai.SetMoveEscortParty(revengeData [i].party.MobileParty);
+                                        revengeData [revengeData.Count-1].xParty.Ai.SetMoveEscortParty(revengeData [revengeData.Count-1].party.MobileParty);
                                         revengeData [revengeData.Count-1].Ready();
                                         revengeData [revengeData.Count-1].Begin();
                                     }
