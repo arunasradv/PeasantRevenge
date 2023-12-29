@@ -110,8 +110,50 @@ Fix: Null exception, when prisoner is released and party is null
  - Added dialogue option to return from revenger peasant persuasion options.
  - Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
  - Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
- 231209 v15.0.1.8
- Fix: dialog option "Nevermind" for other languages
-231226 v15.0.3.4
+231125 v15.1.2.5
+Feature: v1.2.5 support
+231125 v15.1.2.6
+Feature: Changed notable exclude from revenge traits, so now only 60% (was 10%) of the villages will be able to revenge at the begining of the game (see peasantRevengerExcludeTrait) 
+Feature: Player can persuade the notable peasants not to initiate the revenges (AI heroes cannot yet)
+Feature: Added configuration parameter enableOtherNobleTraitsChangeAfterNobleExecution (default value is true).
+Feature: Added configuration parameter lordCanTryAsManyTimesToPersuadeTheNotable.
+         If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
+Feature: Added configuration parameter lordTraitChangeWhenLordPersuedeNotableNotToRevenge
+         Added configuration parameter lordTraitChangeWhenLordPersuedeNotableToRevenge
+         Purpose of the persuasion will influence your hero traits accordingly.
+Feature: Moved mod notable configuration and persuation starting point to "Do you deal with criminals in this village?"
+Feature: Added dialogue option to return from revenger peasant persuasion options.
+Feature: Added configuration parameter  peasantRevengePartyWaitLordDistance. Notable peasant's party will wait for player to initiate dialogue at this distance.
+Feature: Added configuration parameter notableWillAcceptTheBribe. Notable accept bribe with certain traits and relations with hero.
+231125 v15.1.2.7
+Feature: v1.2.6 support
+231209 v15.1.2.8
+Fix: dialog option "Nevermind" for other languages
+231215 v15.1.3.0
+Feature: v1.2.7 support
+231222 v15.1.3.1
+Feature: v1.2.8 support
+231224 v15.1.3.2
+Feature: The mod will allow notable peasant hero to behead the lord (and reverse too), when playing with Diplomacy mod (v1.2.10.0 and newer).
+Fix: Revenge happening, after notable peasant is persuaded not to revenge, just after criminal hero capture.
+231225 v15.1.3.3
+Fix: Dublicated revenger parties.
+Fix: Quest data overwrite in case of not ended revenge.
+Fix: Possible quest state stuck.
+231226 v15.1.3.4
 Fix: Crash at MapEvent. Update after notable party is attacked and mod tries to end the revenge quest and clean quest data.
 Fix: Crash when Revenger's party has no revenge quest data after saved game load.
+231229 v15.1.3.5
+         Added parameters for persuasion configuration:
+         PersuadeNotableToRevengeTraitsForOption0
+         PersuadeNotableToRevengeTraitsForOption1
+         PersuadeNotableToRevengeTraitsForOption2
+         PersuadeNotableNotToRevengeTraitsForOption0
+         PersuadeNotableNotToRevengeTraitsForOption1
+         PersuadeNotableNotToRevengeTraitsForOption2
+         AccuseNotableTraitsForOption0
+         AccuseNotableTraitsForOption1
+         AccuseNotableTraitsForOption2
+         Feature: Notable persuation chance depend on traits, relations, situation too.
+         Fix: Crash notable party attacked after game reload.
+         Fix: Notable party disband after  game reload.
