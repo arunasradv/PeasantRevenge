@@ -131,7 +131,6 @@ Fix: Possible quest state stuck.
 Fix: Crash at MapEvent. Update after notable party is attacked and mod tries to end the revenge quest and clean quest data.
 Fix: Crash when Revenger's party has no revenge quest data after saved game load.
 231229 v15.1.3.5
-Feature: Notable peasant persuasion difficulty now depends on player and notable peasant traits too (older versions used skills only).
          Added parameters for persuasion configuration:
          PersuadeNotableToRevengeTraitsForOption0
          PersuadeNotableToRevengeTraitsForOption1
