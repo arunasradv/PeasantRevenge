@@ -2389,7 +2389,7 @@ namespace PeasantRevenge
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                  {
                      peasant_revenge_peasant_messenger_kill_both_consequence();
-                     AddKilledLordsCorpses(currentRevenge);
+                     //AddKilledLordsCorpses(currentRevenge);
                      peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
                      peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
 
@@ -2399,13 +2399,13 @@ namespace PeasantRevenge
                      if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
                      {
                          peasant_revenge_peasant_kill_the_criminal();
-                         AddKilledLordsCorpses(currentRevenge);
+                         //AddKilledLordsCorpses(currentRevenge);
                          peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
                      }
                      else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
                      {
                          peasant_revenge_peasant_messenger_kill_victim_consequence();
-                         AddKilledLordsCorpses(currentRevenge);
+                         //AddKilledLordsCorpses(currentRevenge);
                          peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
                      }
                  }
@@ -3690,6 +3690,7 @@ namespace PeasantRevenge
                             this.AcceptRansomRemainsOffer((int)ransomValue, Hero.MainHero, ransomer);
                         }, delegate ()
                         {
+                            AddCorpseToInventory(1,MobileParty.MainParty);// adding here because did not added earlier, because of inventory update async behavior crash.
                             this.DeclineRansomOffer(Hero.MainHero, ransomer);
                         }, "", 0f, null, null, null)
                     , true, true);

@@ -6,9 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: Rare AI executions.
-        Fix: Notable party disbanding.
-        Fix: Revert accept ransom for remains."/>
+        <ChangeNotes Value="Fix: Removal of Hero remains."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
