@@ -6,8 +6,8 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: Crash at MapEvent. Update after notable party is attacked and mod tries to end the revenge quest and clean quest data.
-Fix: Crash when Revenger's party has no revenge quest data after saved game load."/>
+        <ChangeNotes Value="Fix: Rare AI executions.
+        Fix: Notable party disbanding."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
