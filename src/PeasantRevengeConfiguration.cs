@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 20;
+        public int CfgVersion = 21;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -133,7 +133,7 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
-
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelations;
             public void Default()
             {
                 default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
@@ -165,7 +165,8 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-            }
+                default_lordPersuadeNotableExcludeTraitsAndRelations();
+        }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
             {
@@ -497,6 +498,14 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = 0},
                         new TraitAndValue { trait = "Generosity", value = 1}
                    };
+            }
+
+            public void default_lordPersuadeNotableExcludeTraitsAndRelations()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelations=new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Calculating == 0", relations = "Relations < -20" }
+                };
             }
         }
 
