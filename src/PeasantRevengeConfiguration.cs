@@ -165,7 +165,6 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -260,28 +259,6 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
-
-                default_lordWillKillBothAccusedHeroAndCriminalLord();
-                default_criminalWillBlameOtherLordForTheCrime();
-                default_lordTraitChangeWhenRansomRemainsDeclined();
-                default_lordTraitChangeWhenRansomRemainsAccepted();
-                default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
-                default_lordWillDeclineRansomTheVictimRemains();
-                default_lordWillAbandonTheVictimRemains();
-                default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
-                default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
-                default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
-                default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
-                default_PersuadeNotableToRevengeTraitsForOption0();
-                default_PersuadeNotableToRevengeTraitsForOption1();
-                default_PersuadeNotableToRevengeTraitsForOption2();
-                default_PersuadeNotableNotToRevengeTraitsForOption0();
-                default_PersuadeNotableNotToRevengeTraitsForOption1();
-                default_PersuadeNotableNotToRevengeTraitsForOption2();
-                default_AccuseNotableTraitsForOption0();
-                default_AccuseNotableTraitsForOption1();
-                default_AccuseNotableTraitsForOption2();
-
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
