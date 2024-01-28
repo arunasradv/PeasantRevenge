@@ -239,19 +239,11 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
                 new RelationsPerTraits { traits = "Mercy == 1&Honor > 0", relations = "Relations > -20" },
                 new RelationsPerTraits { traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -30" },
-                 };}
+                 };
+            }
             public void default_lordIfRelativesWillHelpTheCriminal()
             {
                 lordIfRelativesWillHelpTheCriminal =
-                  new List<RelationsPerTraits>
-                  {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
-                  };
-                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
                   new List<RelationsPerTraits>
                   {
                 new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
