@@ -133,7 +133,8 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
-            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelations;
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
             public void Default()
             {
                 default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
@@ -165,7 +166,8 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-                default_lordPersuadeNotableExcludeTraitsAndRelations();
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner();
         }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -492,11 +494,20 @@ namespace PeasantRevenge
                    };
             }
 
-            public void default_lordPersuadeNotableExcludeTraitsAndRelations()
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable()
             {
-                lordPersuadeNotableExcludeTraitsAndRelations=new List<RelationsPerTraits>
+                lordPersuadeNotableExcludeTraitsAndRelationsWithNotable=new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Calculating == 0", relations = "Relations < -20" }
+                     new RelationsPerTraits {traits = "Calculating >= 0", relations = "Relations < 0" }
+                };
+            }
+
+            
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner=new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 20" }
                 };
             }
         }

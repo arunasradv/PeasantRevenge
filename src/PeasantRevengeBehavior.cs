@@ -1338,7 +1338,7 @@ namespace PeasantRevenge
 
                     if(_cfg.values.CfgVersion < 21)
                     {
-                        _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelations();
+                        _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
                     }
                 }
             }
