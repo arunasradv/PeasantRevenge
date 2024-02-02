@@ -85,7 +85,7 @@ namespace PeasantRevenge
 
                 }
 
-                will_try= !cannot_due_traits_and_relations_with_noble;
+                will_try= !cannot_due_traits_and_relations_with_noble &&  !cannot_due_traits_and_relations_with_settlement_owner;
                
                 if(will_try)
                 {

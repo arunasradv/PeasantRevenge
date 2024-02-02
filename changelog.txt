@@ -150,4 +150,5 @@ Fix: Crash when Revenger's party has no revenge quest data after saved game load
 240201 v15.1.3.8
 Feature: 1.2.9 support.
 240202 v15.1.3.9
-Added: lordPersuadeNotableExcludeTraitsAndRelations
+Added: lordPersuadeNotableExcludeTraitsAndRelationsWithNotable
+Added: lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner
