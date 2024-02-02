@@ -7,6 +7,7 @@
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
         <ChangeNotes Value="Added: lordPersuadeNotableExcludeTraitsAndRelations"/>
+        <ChangeNotes Value="1.2.9 support."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
@@ -16,7 +17,7 @@
             <!-- Compatible Version: e1.9.0, v1.0.0,... The currently available versions can be found at the Steam Workshop "Browse by Tag" section -->
 			<Tag Value="Native" />
             <Tag Value="Singleplayer" />
-            <Tag Value="v1.2.8" />
+            <Tag Value="v1.2.9" />
         </Tags>
     </UpdateItem>
 </Tasks>
