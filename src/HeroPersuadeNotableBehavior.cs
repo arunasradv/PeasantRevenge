@@ -16,6 +16,17 @@ namespace PeasantRevenge
         {
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this,SettlementEntered);
         }
+        
+        /// <summary>
+        /// Checks 
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="settlement"></param>
+        /// <returns>true, if hero cannot do revenge and persuasion direction should be 'to revenge'</returns>
+        private bool GetPersuadeDirection(Hero hero,Settlement settlement)
+        {
+            return hero_trait_list_condition(hero,_cfg.values.peasantRevengerExcludeTrait);
+        }
 
         private void SettlementEntered(MobileParty party,Settlement settlement,Hero hero)
         {
@@ -48,10 +59,7 @@ namespace PeasantRevenge
             }
         }
 
-        private bool GetPersuadeDirection(Hero hero,Settlement settlement)
-        {
-            return hero_trait_list_condition(hero,_cfg.values.peasantRevengerExcludeTrait);
-        }
+
 
         private bool HeroWillTryToPersuadeTheNotable(Hero hero, Settlement settlement,bool direction_to_revenge, out Hero notable)
         {
