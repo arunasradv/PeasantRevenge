@@ -1,5 +1,5 @@
-# Peasant Revenge
- Peasant Revenge is a Mount&Blade II mod what aims to implement peasant revenge after village has been raided. 
+# Peasant Revenge Quests
+ Quests for notable peasants after village has been raided.
  Player and AI heroes, who captured the criminal, can now allow notable peasant to behead the criminal.   
 ## Features
 ### Dialogues for notable peasants and AI lords: 
