@@ -149,3 +149,5 @@ Fix: Crash when Revenger's party has no revenge quest data after saved game load
         Fix: Notable party disbanding.
 240201 v15.1.3.8
 Feature: 1.2.9 support.
+240324 v16.1.3.8
+Feature: Peasant's revenge quests
