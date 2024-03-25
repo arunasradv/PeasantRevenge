@@ -1,10 +1,13 @@
 ﻿using Helpers;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -25,20 +28,20 @@ namespace PeasantRevenge
 
         private bool ConditionsHold(Hero issueGiver)
         {
-            return issueGiver.CurrentSettlement!=null&&
+            if( issueGiver.CurrentSettlement != null&&
                 issueGiver.CurrentSettlement.IsVillage&&
-                issueGiver.CurrentSettlement.IsUnderRaid&&
+                (issueGiver.CurrentSettlement.IsUnderRaid || issueGiver.CurrentSettlement.LastAttackerParty != null) &&
                 issueGiver.IsRuralNotable&&
                 issueGiver.GetTraitLevel(DefaultTraits.Mercy)<=0&&issueGiver.GetTraitLevel(DefaultTraits.Valor)>=0&&
-                issueGiver.CurrentSettlement.Village.Bound.Town.Security<=99f&&
-                issueGiver.CurrentSettlement.Village.Bound.BoundVillages.Any(delegate (Village x)
+                issueGiver.CurrentSettlement.Village.Bound.Town.Security<=99f)
             {
-                if(x.Settlement!=issueGiver.CurrentSettlement&&!x.Settlement.IsUnderRaid)
-                {
-                    return x.Settlement.Notables.Any((Hero notable) => notable.IsHeadman&&notable.CanHaveQuestsOrIssues());
-                }
-                return false;
-            });
+
+                Debug.WriteLine($"ConditionsHold for {issueGiver.Name.ToString()} of {issueGiver.CurrentSettlement.Name.ToString()}");
+
+                Village village = issueGiver.CurrentSettlement.Village;
+                return village!=null;
+            }
+            return false;
         }
 
         private void OnCheckForIssue(Hero hero)
@@ -58,7 +61,7 @@ namespace PeasantRevenge
 
         private IssueBase OnSelected(in PotentialIssueData pid,Hero issueOwner)
         {
-            return new NotableWantRevengeIssue(issueOwner,CampaignTime.DaysFromNow(20f));
+            return new NotableWantRevengeIssue(issueOwner,CampaignTime.Days(20f));
         }
 
         public class NotableWantRevengeIssue : IssueBase
@@ -82,7 +85,8 @@ namespace PeasantRevenge
 
             public NotableWantRevengeIssue(Hero issueOwner,CampaignTime issueDuration) : base(issueOwner,issueDuration)
             {
-                _issueDuration=(float)issueDuration.ToDays;
+                _issueDuration=(float)issueDuration.ToSeconds;
+                _questDuration=(float)issueDuration.ToSeconds;
             }
 
             protected override void AfterIssueCreation()
@@ -136,7 +140,7 @@ namespace PeasantRevenge
                             }
                             else
                             {
-                                textObject=new TextObject("{=*}My {?PLAYER.GENDER}Lady{?}Lord{\\?} please find someone, who raided our village. "+
+                                textObject=new TextObject("{=*}My {?PLAYER.GENDER}Lady{?}Lord{\\?} please find, who raided our village. "+
                                                         "[if:convo_angry][ib:confident3]I'm asking you for fair justice.",null);
                             }
                         }
@@ -198,17 +202,14 @@ namespace PeasantRevenge
             }
             public override IssueFrequency GetFrequency()
             {
-                return IssueBase.IssueFrequency.Common;
+                return IssueBase.IssueFrequency.VeryCommon;
             }
 
             public override bool IssueStayAliveConditions()
             {
-                //if(!base.IssueOwner.CurrentSettlement.IsRaided)
+                if(base.IssueOwner.IsAlive)
                 {
-                    if(this._targetSettlement.Notables.Any((Hero x) => x.IsHeadman || x.IsNotable))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 return false;
             }
@@ -286,7 +287,7 @@ namespace PeasantRevenge
                 this._questDuration=(float)duration.ToDays;
                 base.AddTrackedObject(base.QuestGiver);
                 this.SetDialogs();
-                base.InitializeQuestOnCreation();
+                base.InitializeQuestOnCreation();             
             }
 
             public override TextObject Title
@@ -316,6 +317,22 @@ namespace PeasantRevenge
                 this.SetDialogs();
             }
 
+            protected override void RegisterEvents()
+            {
+                CampaignEvents.HeroPrisonerTaken.AddNonSerializedListener(this,HeroPrisonerTaken);
+                CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this,HeroPrisonerReleased);
+            }
+
+            private void HeroPrisonerReleased(Hero prisoner,PartyBase party,IFaction faction,EndCaptivityDetail detail)
+            {
+                UpdateJournalProgress(prisoner,0);
+            }
+
+            private void HeroPrisonerTaken(PartyBase party,Hero prisoner)
+            {
+                UpdateJournalProgress(prisoner,1);
+            }
+
             //TODO: Finish setting dialogs
             private bool NotableDialogCondition()
             {
@@ -325,19 +342,88 @@ namespace PeasantRevenge
             private void QuestAcceptedConsequences()
             {
                 base.StartQuest();
-                TextObject PlayerStartsQuestLogText = 
-                    new TextObject("{=*}{QUEST_GIVER.LINK} want to give justice to the raiders." +
-                    " You have accepted to support peasant's demands.",null);                
-                StringHelpers.SetCharacterProperties("QUEST_GIVER",base.QuestGiver.CharacterObject,PlayerStartsQuestLogText,false);                            
-                this._startQuestLog = base.AddLog(PlayerStartsQuestLogText);
 
-                //AddHeroToQuestLog(i);
+                TextObject textObject;
+                //TODO: add variations what are dependant on village damage level, notable traits, relations with player, kingdom...
+                if(this._targetRaider!=null)
+                {
+                    if(Hero.MainHero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(this._targetRaider.CharacterObject)??false) /*PLAYER HAS RAIDER AS PRISONER*/
+                    {
+                        textObject=new TextObject("{=*}You have captured {TARGET_HERO.NAME}, who has been raiding {TARGET_SETTLEMENT} village.",null);
+                    }
+                    else
+                    {
+                        if(this._targetRaider.CharacterObject.IsPlayerCharacter) /*PLAYER IS THE RAIDER*/
+                        {
+                            textObject=new TextObject("{=*}{QUEST_GIVER.LINK} said {?QUEST_GIVER.GENDER}she{?}he{\\?} will get revenge on you someday!",null);
+                        }
+                        else  /*PLAYER DOES NOT HAVE THE RAIDER AS PRISONER*/
+                        {
+                            textObject=new TextObject("{=*}{QUEST_GIVER.LINK} asked you to capture {TARGET_HERO.NAME}, who has been raiding the {TARGET_SETTLEMENT} village recently.",null);
+                        }
+                    }
+                }
+                else /*RAIDER IS NOT KNOWN*/
+                {
+                    textObject = new TextObject("{=*}{QUEST_GIVER.LINK} want to give justice to the raiders, who are raiding the {TARGET_SETTLEMENT} village.",null);
+                }
+                textObject.SetTextVariable("TARGET_SETTLEMENT",this._targetSettlement.Name);
+                StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetRaider.CharacterObject,textObject,false);
+                StringHelpers.SetCharacterProperties("QUEST_GIVER",base.QuestGiver.CharacterObject,textObject,false);          
+                StringHelpers.SetCharacterProperties("PLAYER",Hero.MainHero.CharacterObject,textObject,false);
+                
+                this._startQuestLog = base.AddLog(textObject);
+                
+                AddHeroToQuestLog(this._targetRaider);
+
+                if(this._targetRaider!=this._targetAccused)
+                {
+                    AddHeroToQuestLog(this._targetAccused);
+                }
 
                 //this._checkForMissionEnd=true; //TODO: check if I need to use it.
             }
 
+            private void AddHeroToQuestLog(Hero hero)
+            {
+                if(hero==null)
+                    return;
+
+                string text = "{=*}{TARGET_HERO.LINK} of {CLAN}";
+                TextObject textObject = new TextObject(text,null);
+                StringHelpers.SetCharacterProperties("TARGET_HERO",hero.CharacterObject,textObject,false);
+                textObject.SetTextVariable("CLAN",hero.Clan?.EncyclopediaLinkWithName);
+                string taskText = "{=*}{NAME}";
+                TextObject taskTextObject = new TextObject(taskText,null);
+                StringHelpers.SetCharacterProperties("NAME",hero.CharacterObject,taskTextObject,false);
+
+                this._startQuestLog=base.AddDiscreteLog(textObject,taskTextObject,0,1,null,false);
+
+                //if(this._targetRaider.CharacterObject.IsPlayerCharacter)
+                //{
+                //    UpdateJournalProgress(hero.CharacterObject.Name.ToString(),1);
+                //}
+            }
+
+            private void UpdateJournalProgress(string taskName, int status)
+            { 
+                int journalLogIndex = base.JournalEntries.FindIndex((x) => (x.TaskName!=null ? x.TaskName.ToString()==taskName.ToString() : false));
+                if(journalLogIndex >=0 && journalLogIndex < base.JournalEntries.Count)
+                {
+                    base.JournalEntries [journalLogIndex].UpdateCurrentProgress(status);
+                }
+            }
+
+            private void UpdateJournalProgress(Hero hero,int status)
+            {
+                if(hero==this._targetRaider||hero==this._targetAccused)
+                {
+                    UpdateJournalProgress(hero.Name.ToString(),status);
+                }
+            }
+
             // Conversation with Raider
-           
+
             protected override void SetDialogs()
             {
                 //Campaign.Current.ConversationManager.AddDialogFlow(this.FirstDialogFlow(),this);
@@ -350,14 +436,22 @@ namespace PeasantRevenge
                     Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
                 
                 this.DiscussDialogFlow=DialogFlow.CreateDialogFlow("quest_discuss",100).
-                    NpcLine(new TextObject("{=*}How is my problem going?[if:convo_delighted][ib:hip]",null),null,null).
+                    NpcLine(new TextObject("{=*}How are you dealing with my problem?[if:convo_delighted][ib:hip]",null),null,null).
                     Condition(new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition)).Consequence(delegate
                 {
                     Campaign.Current.ConversationManager.ConversationEndOneShot+=MapEventHelper.OnConversationEnd; // just ending conversation here
-                }).BeginPlayerOptions().PlayerOption(new TextObject("{=*}Yes, it is in a progress.",null),null).
-                NpcLine(new TextObject("{=QsL6qcDb}That's very good to hear! Thank you.[if:convo_merry]",null),null,null).
-                CloseDialog().PlayerOption(new TextObject("{=*}I need to check the evidence now actually.",null),null).
-                NpcLine(new TextObject("{=*}Do not give {?TARGET_HERO.GENDER}her{?}him{\\?} some chance. I'm sure {?TARGET_HERO.GENDER}she{?}he{\\?} is guilty of this.",null),null,null).
+                }).BeginPlayerOptions().
+                PlayerOption(new TextObject("{=*}It is in a progress.",null),null).
+                NpcLine(new TextObject("{=*}That's very good to hear![if:convo_merry]",null),null,null).
+                CloseDialog().
+                PlayerOption(new TextObject("{=*}Let's discuss the reparation.",null),null).
+                NpcLine(new TextObject("{=*}I aggree.[if:convo_happy]",null),null,null).
+                CloseDialog().
+                PlayerOption(new TextObject("{=*}Let's discuss the fate of the raiders.",null),null).
+                NpcLine(new TextObject("{=*}I aggree.[if:convo_happy]",null),null,null).
+                CloseDialog().
+                PlayerOption(new TextObject("{=*}I need to check something actually.",null),null).
+                NpcLine(new TextObject("{=*}Came back, when you have something.",null),null,null).
                 CloseDialog().EndPlayerOptions().CloseDialog();
             }
         }
