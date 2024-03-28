@@ -8,10 +8,13 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 
 namespace PeasantRevenge
@@ -29,17 +32,17 @@ namespace PeasantRevenge
 
         private bool ConditionsHold(Hero issueGiver)
         {
-            if(issueGiver.CurrentSettlement!=null&&
-                issueGiver.CurrentSettlement.IsVillage&&
-                (/*issueGiver.CurrentSettlement.IsUnderRaid ||*/ issueGiver.CurrentSettlement.LastAttackerParty!=null)&&
+            if(issueGiver.HomeSettlement!=null&&
+                issueGiver.HomeSettlement.IsVillage&&
+                (/*issueGiver.HomeSettlement.IsUnderRaid ||*/ issueGiver.HomeSettlement.LastAttackerParty!=null)&&
                 issueGiver.IsRuralNotable&&
                 issueGiver.GetTraitLevel(DefaultTraits.Mercy)<=0&&issueGiver.GetTraitLevel(DefaultTraits.Valor)>=0&&
-                issueGiver.CurrentSettlement.Village.Bound.Town.Security<=99f)
+                issueGiver.HomeSettlement.Village.Bound.Town.Security<=99f)
             {
 
-                Debug.WriteLine($"ConditionsHold for {issueGiver.Name.ToString()} of {issueGiver.CurrentSettlement.Name.ToString()}");
+                System.Diagnostics.Debug.WriteLine($"ConditionsHold for {issueGiver.Name.ToString()} of {issueGiver.HomeSettlement.Name.ToString()}");
 
-                Village village = issueGiver.CurrentSettlement.Village;
+                Village village = issueGiver.HomeSettlement.Village;
                 return village!=null;
             }
             return false;
@@ -94,7 +97,7 @@ namespace PeasantRevenge
 
             protected override void AfterIssueCreation()
             {
-                Village village = base.IssueOwner.CurrentSettlement.Village;
+                Village village = base.IssueOwner.HomeSettlement.Village;
                 this._targetSettlement=(village!=null) ? village.Settlement : null;
                 this._targetRaider=this._targetSettlement.LastAttackerParty?.LeaderHero;
                 this._targetAccused=this._targetSettlement.LastAttackerParty?.LeaderHero;
@@ -232,13 +235,19 @@ namespace PeasantRevenge
 
             protected override void CompleteIssueWithTimedOutConsequences()
             {
-
+                if(base.IssueOwner.PartyBelongedTo!=null)
+                {
+                    if(base.IssueOwner.PartyBelongedTo.MapEvent==null) // crash during battle update map event, if not checked
+                    {
+                        DestroyPartyAction.ApplyForDisbanding(base.IssueOwner.PartyBelongedTo,base.IssueOwner.HomeSettlement); // will set clear flag in events
+                    }
+                }
             }
 
             protected override QuestBase GenerateIssueQuest(string questId)
             {
                 return new NotableWantRevengeIssueBehavior.NotableWantRevengeIssueQuest(questId,base.IssueOwner,
-                    CampaignTime.DaysFromNow(5f),this.RewardGold,this._targetSettlement,this._targetRaider,this._targetAccused);
+                    CampaignTime.DaysFromNow(10f),this.RewardGold,this._targetSettlement,this._targetRaider,this._targetAccused);
             }
 
             protected override void HourlyTick()
@@ -267,7 +276,9 @@ namespace PeasantRevenge
             [SaveableField(13)]
             private JournalLog _startQuestLog;
 
-            private string _complete_task_name = "{=*}Complete revenge";
+            [SaveableField(14)]
+            private CampaignTime _questGiverTravelStart;
+
 
             public NotableWantRevengeIssueQuest(string questId,Hero questGiver,CampaignTime duration,int rewardGold,
                 Settlement targetSettlement,Hero targetRaider,Hero targetAccused) : base(questId,questGiver,duration,rewardGold)
@@ -299,7 +310,7 @@ namespace PeasantRevenge
             }
             protected override void HourlyTick()
             {
-
+                RevengerTravelProgress();
             }
 
             protected override void InitializeQuestOnGameLoad()
@@ -332,12 +343,119 @@ namespace PeasantRevenge
 
             private void HeroPrisonerReleased(Hero prisoner,PartyBase party,IFaction faction,EndCaptivityDetail detail)
             {
-                UpdateJournalProgress(prisoner,0); //TODO: Can we remove _complete_task_name task here?
+                UpdateJournalProgress(prisoner,0);
+                RevengerStopTraveling();
             }
 
             private void HeroPrisonerTaken(PartyBase party,Hero prisoner)
             {
-                UpdateJournalProgress(prisoner,1);
+                if(UpdateJournalProgress(prisoner,1))
+                {
+                    RevengerTravelStartCounter();
+                }
+            }
+
+            protected TextObject IssueOwnerTravelStartLogText
+            {
+                get
+                {
+                    return new TextObject("{=*}Revenger will learn about raiders capture soon.",null);
+                }
+            }
+            protected TextObject IssueOwnerTravelingLogText
+            {
+                get
+                {
+                    return new TextObject("{=*}Revenger is traveling.",null);
+                }
+            }
+
+            private void RevengerTravelStartCounter()
+            {
+                _questGiverTravelStart=CampaignTime.HoursFromNow(10f); // TODO: Make travel start day dependant on how far raider has been captured from settlement.                
+                base.AddLog(IssueOwnerTravelStartLogText);
+            }
+
+            private void RevengerStopTraveling()
+            {
+                if(base.QuestGiver.PartyBelongedTo!=null)
+                {
+                    base.QuestGiver.PartyBelongedTo.Ai.SetMoveGoToSettlement(_targetSettlement);
+                }
+            }
+
+            private void RevengerTravelProgress()
+            {
+                if(_questGiverTravelStart.IsPast)
+                {
+                    if(base.QuestGiver.PartyBelongedTo == null &&
+                        ((this._targetRaider != null && this._targetRaider.IsPrisoner) ||
+                        (this._targetAccused!=null&&this._targetAccused.IsPrisoner)))
+                    {
+                        CreateNotableParty();
+
+                        if(this._targetRaider!=null&&this._targetRaider.PartyBelongedToAsPrisoner!=null)
+                        {
+                            base.QuestGiver.PartyBelongedTo.Ai.SetMoveEscortParty(this._targetRaider.PartyBelongedToAsPrisoner.MobileParty);
+                        }
+                        else if(this._targetAccused!=null&&this._targetAccused.PartyBelongedToAsPrisoner!=null)
+                        {
+                            base.QuestGiver.PartyBelongedTo.Ai.SetMoveEscortParty(this._targetAccused.PartyBelongedToAsPrisoner.MobileParty);
+                        }
+                        base.AddLog(IssueOwnerTravelingLogText);
+                    }
+                    else if(base.QuestGiver.PartyBelongedTo!=null)
+                    {
+                        if(this._targetRaider!=null&&this._targetRaider.PartyBelongedToAsPrisoner!=null)
+                        {
+                            RevengerPartyMoveNearTarget(this._targetRaider.PartyBelongedToAsPrisoner.MobileParty);
+                        }
+                        else if(this._targetAccused!=null&&this._targetAccused.PartyBelongedToAsPrisoner!=null)
+                        {
+                            RevengerPartyMoveNearTarget(this._targetAccused.PartyBelongedToAsPrisoner.MobileParty);
+                        }
+                    }
+                }
+            }
+
+            private void RevengerPartyMoveNearTarget(MobileParty mobileParty)
+            {
+                if(mobileParty!=null &&base.QuestGiver.PartyBelongedTo!=null)
+                {
+                    float peasantRevengePartyWaitLordDistance = 1f;
+                    Vec2 pposition = mobileParty.Position2D;
+                    Vec2 rvec2 = new Vec2(peasantRevengePartyWaitLordDistance>=0.0f ? peasantRevengePartyWaitLordDistance : 1.0f,0f);
+                    rvec2.RotateCCW(MBRandom.RandomFloatRanged(6.28f));
+                    base.QuestGiver.PartyBelongedTo.Ai.SetMoveGoToPoint(pposition+rvec2);
+                }
+            }
+
+            private MobileParty CreateNotableParty()
+            {
+                string revengerPartyNameStart = "Revenger_";
+                int peasantRevengeMaxPartySize = 20;
+                float _ignoreForHours = 6f;
+                int size = (int)base.QuestGiver.HomeSettlement.Village.Hearth>=peasantRevengeMaxPartySize-1 ? peasantRevengeMaxPartySize-1 : (int)base.QuestGiver.HomeSettlement.Village.Hearth;
+                MobileParty mobileParty = MobileParty.CreateParty($"{revengerPartyNameStart}{base.QuestGiver.Name}".Replace(' ','_'),null,null);
+                CharacterObject villager = base.QuestGiver.CharacterObject.Culture.Villager;
+                TroopRoster troopRoster = new TroopRoster(mobileParty.Party);
+                TextObject textObject = new TextObject("{=PRev0085}Revenger",null);
+                troopRoster.AddToCounts(base.QuestGiver.CharacterObject,1,true,0,0,true,-1);
+                troopRoster.AddToCounts(villager,size,false,0,0,true,-1);
+                mobileParty.InitializeMobilePartyAtPosition(troopRoster,new TroopRoster(mobileParty.Party),base.QuestGiver.HomeSettlement.Position2D);
+                mobileParty.InitializePartyTrade(200);
+                mobileParty.SetCustomName(textObject);
+                mobileParty.SetCustomHomeSettlement(base.QuestGiver.HomeSettlement);
+                mobileParty.SetPartyUsedByQuest(true);
+                mobileParty.ShouldJoinPlayerBattles=false;
+                mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"),size);
+                mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("butter"),size);
+                mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"),size);
+                mobileParty.IgnoreForHours(_ignoreForHours);
+                mobileParty.Ai.SetDoNotMakeNewDecisions(true);
+                mobileParty.Party.SetVisualAsDirty();
+                mobileParty.Aggressiveness=0f;
+                return mobileParty;
             }
 
             //TODO: Finish setting dialogs
@@ -413,39 +531,68 @@ namespace PeasantRevenge
                 TextObject taskTextObject = new TextObject(taskText,null);
                 StringHelpers.SetCharacterProperties("NAME",hero.CharacterObject,taskTextObject,false);
 
-                this._startQuestLog=base.AddDiscreteLog(textObject,taskTextObject,0,1,null,false);
-
+                if(base.JournalEntries.Where((x) => (x.TaskName?.ToString().Equals(taskTextObject.ToString())??false)).Count()==0)
+                {
+                    this._startQuestLog=base.AddDiscreteLog(textObject,taskTextObject,0,1,null,false);
+                }
                 //if(this._targetRaider.CharacterObject.IsPlayerCharacter)
                 //{
                 //    UpdateJournalProgress(hero.CharacterObject.Name.ToString(),1);
                 //}
             }
-            //TODO: Fix adding double tasks.
-            private void UpdateJournalProgress(string taskName,int status)
+                        
+            /// <summary>
+            /// Updates hero task status in quest.
+            /// </summary>
+            /// <param name="hero"></param>
+            /// <param name="status"></param>
+            /// <returns>true, if status was updated or created</returns>
+            private bool UpdateJournalProgress(Hero hero,int status)
+            {
+                if(hero==this._targetRaider||hero==this._targetAccused)
+                {
+                    UpdateJournalDirectionsProgress(null,hero.Name.ToString(),status);
+                    return true;
+                }
+                return false;
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="text"></param>
+            /// <param name="taskName"></param>
+            /// <param name="status"></param>
+            private void UpdateJournalDirectionsProgress(string text, string taskName,int status)
+            {
+                if(base.JournalEntries.Where((x) => (x.TaskName?.ToString().Equals(taskName)??false)).Count()==0 && text != null)
+                {
+                    this._startQuestLog=base.AddDiscreteLog(
+                        new TextObject(text),//TODO: When Player is captured text should be like: Revenger will findout about your capture at about 1208 Summer 7; and next: Revenger is comming for you... 
+                        new TextObject(taskName),status,1,null,false);
+                }
+                else
+                {
+                    UpdateTaskProgress(taskName,status); // if in case quest already has this direction task, just update 
+                }                
+            }
+
+            private void UpdateTaskProgress(string taskName,int status)
             {
                 int journalLogIndex = base.JournalEntries.FindIndex((x) => (x.TaskName!=null ? x.TaskName.ToString()==taskName.ToString() : false));
                 if(journalLogIndex>=0&&journalLogIndex<base.JournalEntries.Count)
                 {
                     base.JournalEntries [journalLogIndex].UpdateCurrentProgress(status);
                 }
-            }
-
-            private void UpdateJournalProgress(Hero hero,int status)
-            {
-                if(hero==this._targetRaider||hero==this._targetAccused)
+                else
                 {
-                    UpdateJournalProgress(hero.Name.ToString(),status);
-                    if(status==1)
-                    {
-                        if(base.JournalEntries.Where((x) => (x.TaskName?.ToString().Equals(_complete_task_name)??false)).Count()==0)
-                        {
-                            this._startQuestLog=base.AddDiscreteLog(
-                                new TextObject("{=*}Give the raiders to revenger"),//TODO: When Player is captured text should be like: Revenger will findout about your capture at about 1208 Summer 7; and next: Revenger is comming for you... 
-                                new TextObject(_complete_task_name),0,1,null,false);
-                        }
-                    }
+                    System.Diagnostics.Debug.WriteLine($"Task name: {taskName} was not found and not updated to status {status}.");
                 }
             }
+
+ 
+
+        
 
             // Conversation with Raider
 
@@ -560,8 +707,7 @@ namespace PeasantRevenge
             }
 
             private void CompleteQuestConsequences()
-            {
-                UpdateJournalProgress(_complete_task_name,1);
+            {                
                 base.CompleteQuestWithSuccess();
             }
         }
