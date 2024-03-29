@@ -1,9 +1,12 @@
 ﻿using Helpers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.BarterSystem;
+using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Issues;
@@ -239,7 +242,7 @@ namespace PeasantRevenge
                 {
                     if(base.IssueOwner.PartyBelongedTo.MapEvent==null) // crash during battle update map event, if not checked
                     {
-                        DestroyPartyAction.ApplyForDisbanding(base.IssueOwner.PartyBelongedTo,base.IssueOwner.HomeSettlement); // will set clear flag in events
+                        DestroyPartyAction.ApplyForDisbanding(base.IssueOwner.PartyBelongedTo,base.IssueOwner.HomeSettlement);
                     }
                 }
             }
@@ -370,6 +373,13 @@ namespace PeasantRevenge
                 }
             }
 
+            private int _get_reparation_value()
+            {
+                int ReparationsScaleToSettlementHearts=5;
+
+                return (int)(base.QuestGiver.HomeSettlement.Village.Hearth*ReparationsScaleToSettlementHearts);
+            }
+
             private void RevengerTravelStartCounter()
             {
                 _questGiverTravelStart=CampaignTime.HoursFromNow(10f); // TODO: Make travel start day dependant on how far raider has been captured from settlement.                
@@ -442,6 +452,7 @@ namespace PeasantRevenge
                 TextObject textObject = new TextObject("{=PRev0085}Revenger",null);
                 troopRoster.AddToCounts(base.QuestGiver.CharacterObject,1,true,0,0,true,-1);
                 troopRoster.AddToCounts(villager,size,false,0,0,true,-1);
+                mobileParty.ChangePartyLeader(base.QuestGiver);
                 mobileParty.InitializeMobilePartyAtPosition(troopRoster,new TroopRoster(mobileParty.Party),base.QuestGiver.HomeSettlement.Position2D);
                 mobileParty.InitializePartyTrade(200);
                 mobileParty.SetCustomName(textObject);
@@ -535,10 +546,6 @@ namespace PeasantRevenge
                 {
                     this._startQuestLog=base.AddDiscreteLog(textObject,taskTextObject,0,1,null,false);
                 }
-                //if(this._targetRaider.CharacterObject.IsPlayerCharacter)
-                //{
-                //    UpdateJournalProgress(hero.CharacterObject.Name.ToString(),1);
-                //}
             }
                         
             /// <summary>
@@ -568,7 +575,7 @@ namespace PeasantRevenge
                 if(base.JournalEntries.Where((x) => (x.TaskName?.ToString().Equals(taskName)??false)).Count()==0 && text != null)
                 {
                     this._startQuestLog=base.AddDiscreteLog(
-                        new TextObject(text),//TODO: When Player is captured text should be like: Revenger will findout about your capture at about 1208 Summer 7; and next: Revenger is comming for you... 
+                        new TextObject(text), 
                         new TextObject(taskName),status,1,null,false);
                 }
                 else
@@ -599,7 +606,7 @@ namespace PeasantRevenge
             protected override void SetDialogs()
             {
                 Campaign.Current.ConversationManager.AddDialogFlow(GetNotableDiscussReparationDialogFlow(),this);
-                Campaign.Current.ConversationManager.AddDialogFlow(GetNotableDiscussFateOfRaidersDialogFlow(),this);
+                Campaign.Current.ConversationManager.AddDialogFlow(GetPlayerDecideTheFateOfRaidersDialogFlow(),this);
                 //Campaign.Current.ConversationManager.AddDialogFlow(this.FailedDialogFlow(),this);
 
                 this.OfferDialogFlow=DialogFlow.CreateDialogFlow("issue_classic_quest_start",100).
@@ -617,11 +624,8 @@ namespace PeasantRevenge
                 BeginPlayerOptions().
                 PlayerOption(new TextObject("{=*}It is in a progress.",null),null).
                 NpcLine(new TextObject("{=*}That's very good to hear![if:convo_merry]",null),null,null).
-                CloseDialog().
-                PlayerOption(new TextObject("{=*}Let's discuss the reparation.",null),null).
-                NpcLine(new TextObject("{=*}I aggree.[if:convo_happy]",null),null,null).
-                CloseDialog().GotoDialogState("peasant_revenge_discuss_reparation_start").
-                PlayerOption(new TextObject("{=*}Let's discuss the fate of the raiders.",null),null).
+                CloseDialog().               
+                PlayerOption(new TextObject("{=*}Let's discuss it.",null),null).
                 NpcLine(new TextObject("{=*}I aggree.[if:convo_happy]",null),null,null).
                 CloseDialog().GotoDialogState("peasant_revenge_discuss_fate_start").
                 PlayerOption(new TextObject("{=*}I need to check something actually.",null),null).
@@ -651,7 +655,7 @@ namespace PeasantRevenge
                 return dialog;
             }
 
-            private DialogFlow GetNotableDiscussFateOfRaidersDialogFlow()
+            private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow()
             {
                 DialogFlow dialog = DialogFlow.CreateDialogFlow("peasant_revenge_discuss_fate_start",125);
 
@@ -663,40 +667,148 @@ namespace PeasantRevenge
                     null,
                     this,100,null,null,null);
                 dialog.AddPlayerLine(
-                    "peasant_revenge_discuss_fate_pl_options_0",
+                    "peasant_revenge_discuss_fate_pl_options_raider_kill",
                     "peasant_revenge_discuss_fate_pl_options",
                     "close_window",
                     "{DISCUSS_LET_KILL_RAIDER}",
                     () =>
                     {
-                        if(_targetRaider!=Hero.MainHero)
-                        {
-                            TextObject text = new TextObject("{=*}You can have the raiders head.");
-                            MBTextManager.SetTextVariable("DISCUSS_LET_KILL_RAIDER",text);
-                        }
-                        else
+                        if(this._targetRaider==Hero.MainHero)
                         {
                             TextObject text = new TextObject("{=*}You can have my head.");
                             MBTextManager.SetTextVariable("DISCUSS_LET_KILL_RAIDER",text);
                         }
+                        else
+                        {
+                            TextObject text = new TextObject("{=*}{TARGET_HERO.NAME} should die.");
+                            StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetRaider.CharacterObject,text,false);
+                            MBTextManager.SetTextVariable("DISCUSS_LET_KILL_RAIDER",text);
+                        }
                         return true;
                     },
-                    () => { 
-                        ExecuteHero(base.QuestGiver,this._targetRaider); 
-                        CompleteQuestConsequences(); },this,100,null,null,null);
+                    () =>
+                    {
+                        ExecuteHero(base.QuestGiver,this._targetRaider);
+                        CompleteQuestWithSuccessConsequences();
+                    },this,100,null,null,null);
+
                 dialog.AddPlayerLine(
-                   "peasant_revenge_discuss_fate_pl_options_1",
+                    "peasant_revenge_discuss_fate_pl_options_accused_kill",
+                    "peasant_revenge_discuss_fate_pl_options",
+                    "close_window",
+                    "{DISCUSS_LET_KILL_ACUSSED}",
+                    () =>
+                    {
+                        if(this._targetAccused==null)
+                            return false;
+
+                        TextObject text;
+
+                        if(this._targetAccused==this._targetRaider)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if(this._targetAccused==Hero.MainHero)
+                            {
+                                text=new TextObject("{=*}Let's end this.");
+                            }
+                            else
+                            {
+                                text=new TextObject("{=*}{TARGET_HERO.NAME} should die.");
+                            }
+                            StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetAccused.CharacterObject,text,false);
+                            MBTextManager.SetTextVariable("DISCUSS_LET_KILL_ACUSSED",text);
+                            return true;
+                        }
+
+                    },
+                    () =>
+                    {
+                        ExecuteHero(base.QuestGiver,this._targetAccused);
+                        CompleteQuestWithSuccessConsequences();
+                    },this,100,null,null,null);
+
+                dialog.AddPlayerLine(
+                   "peasant_revenge_discuss_fate_pl_options_raider_pay",
+                   "peasant_revenge_discuss_fate_pl_options",
+                   "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay",
+                   "{DISCUSS_LET_PAY_RAIDER}",
+                   () =>
+                   {
+                       if(_targetRaider==Hero.MainHero)
+                       {
+                           TextObject text = new TextObject("{=*}I'll pay.");
+                           MBTextManager.SetTextVariable("DISCUSS_LET_PAY_RAIDER",text);
+                       }
+                       else
+                       {
+                           TextObject text = new TextObject("{=*}{TARGET_HERO.NAME} will pay.");
+                           StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetRaider.CharacterObject,text,false);
+                           MBTextManager.SetTextVariable("DISCUSS_LET_PAY_RAIDER",text);
+                       }
+                       return true;
+                   },null,this,100,null,null,null);
+
+                dialog.AddPlayerLine(
+                   "peasant_revenge_discuss_fate_pl_options_n",
                    "peasant_revenge_discuss_fate_pl_options",
                    "close_window",
                    "{=*}I changed my mind.",null,null,this,100,null,null,null);
+
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay_success",
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay",
+                 "close_window",
+                 "{=PRev0037}I'm pleased.[if:convo_happy]",
+                 null,
+                 () => {
+                     _pay_reparation(this._targetRaider, base.QuestGiver);
+                     CompleteQuestWithSuccessConsequences();
+                 },this,100,null,null,null);
+
+#if Party_has_leader_hero
+                dialog.AddDialogLine(
+                "peasant_revenge_discuss_fate_pl_options_raider_pay_line",
+                "peasant_revenge_discuss_fate_pl_options_raider_pay_barter_line",
+                "peasant_revenge_discuss_fate_pl_options_raider_pay_received_pay",
+                "{=!}BARTER LINE - Covered by barter interface. Please do not remove these lines!",
+                null,
+                new ConversationSentence.OnConsequenceDelegate(this._player_barter_consequence),this,100,null,null,null);
+
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_received_pay_success",
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_received_pay",
+                 "close_window",
+                 "{=PRev0037}I'm pleased.[if:convo_happy]",
+                 new ConversationSentence.OnConditionDelegate(this.barter_successful_condition),
+                 () => { CompleteQuestWithSuccessConsequences(); },this,100,null,null,null);
+
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_received_pay_fail",
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_received_pay",
+                 "peasant_revenge_discuss_fate_pl_options",
+                 "{=PRev0036}So, what is now?[ib:closed][if:idle_angry]",
+                 () => !this.barter_successful_condition(),
+                 null,this,100,null,null,null);
+#endif
+
                 return dialog;
+
+            }
+
+            private void _pay_reparation(Hero sender,Hero receiver)
+            {
+                GiveGoldAction.ApplyBetweenCharacters(sender,receiver,_get_reparation_value(),false);
             }
 
             private void ExecuteHero(Hero executioner,Hero victim)
             {
                 if(victim != Hero.MainHero)
                 {
-                    MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner,victim,SceneNotificationData.RelevantContextType.Map));
+                    MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(
+                        executioner,victim,SceneNotificationData.RelevantContextType.Map));
                     KillCharacterAction.ApplyByExecution(victim,executioner,true,true);
                 }
                 else
@@ -706,10 +818,51 @@ namespace PeasantRevenge
                
             }
 
-            private void CompleteQuestConsequences()
-            {                
-                base.CompleteQuestWithSuccess();
+
+            private void CompleteQuestWithSuccessConsequences()
+            {
+                base.CompleteQuestWithSuccess();               
             }
+
+            private void CompleteQuestWithFailConsequences()
+            {
+                base.CompleteQuestWithFail();
+            }
+
+            private void CompleteQuestWithCancel()
+            {
+                base.CompleteQuestWithCancel();
+            }
+
+#region REPARATION BARTER
+            private bool barter_successful_condition()
+            {
+                return Campaign.Current.BarterManager.LastBarterIsAccepted;
+            }
+
+            public bool InitializeReparationsBarterableBarterContext(Barterable barterable,BarterData args,object obj)
+            {
+                return barterable.GetType()==typeof(ReparationsBarterable)&&barterable.OriginalOwner==Hero.OneToOneConversationHero;
+            }
+
+            private void _player_barter_consequence()
+            {
+                if(Hero.OneToOneConversationHero.PartyBelongedTo==null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Cannot barter.");
+                    return; //Cannot use, when other party is null.
+                }
+                List<Barterable> barterables = new List<Barterable>();
+                barterables.Add(new ReparationsBarterable(Hero.OneToOneConversationHero,PartyBase.MainParty,null,Hero.MainHero,_get_reparation_value()));
+                BarterManager instance = BarterManager.Instance;
+                instance.StartBarterOffer(
+                    Hero.MainHero,
+                    Hero.OneToOneConversationHero,
+                    PartyBase.MainParty,
+                    Hero.OneToOneConversationHero.PartyBelongedTo.Party,null,
+                    new BarterManager.BarterContextInitializer(InitializeReparationsBarterableBarterContext),0,false,barterables);
+            }
+#endregion
         }
 
         public class NotableWantRevengeIssueTypeDefiner : SaveableTypeDefiner
