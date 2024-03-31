@@ -41,7 +41,7 @@ namespace PeasantRevenge
         {
             //TODO: Add 'start' dialogues for lords
         }
-
+        // TODO: If raider is player, the quest should autostart, but now I do not know how tu run multiple issues
         private bool ConditionsHold(Hero issueGiver)
         {
             if(issueGiver.HomeSettlement!=null&&
@@ -444,23 +444,26 @@ namespace PeasantRevenge
                         if(this._targetHero!=null&&this._targetHero.PartyBelongedToAsPrisoner!=null&&this._targetHero.PartyBelongedToAsPrisoner.MobileParty!=null)
                         {
                             RevengerPartyMoveNearTarget(this._targetHero.PartyBelongedToAsPrisoner.MobileParty);
-                        }
 
+                            if(HeroIsPlayersPrisoner(this._targetHero))
+                            {
+                                //_start_conversation(this._targetRaider,base.QuestGiver);
+                            }
+                            else if(this._targetHero==Hero.MainHero)
+                            {
+                                if(base.JournalEntries.Last().LogText.Equals(IssueOwnerTravelingLogText))
+                                { // Remember to Add new task after dialogue is completed.
+                                    _start_conversation(Hero.MainHero,this._targetHero.PartyBelongedToAsPrisoner.LeaderHero);
+                                }
+                            }
+                            else // criminal is other AI prisoner.
+                            { //TODO: add dialog when player tries to talk to the prisoner, when prisoner is still captured by AI - create "Betray revenger branch"
 
-                        if(HeroIsPlayersPrisoner(this._targetHero))
-                        {
-                            //_start_conversation(this._targetRaider,base.QuestGiver);
-                        }
-                        else if(this._targetHero==Hero.MainHero)
-                        {
-                            if(base.JournalEntries.Last().LogText.Equals(IssueOwnerTravelingLogText))
-                            { // Remember to Add new task after dialogue is completed.
-                                _start_conversation(Hero.MainHero,this._targetHero.PartyBelongedToAsPrisoner.LeaderHero);
                             }
                         }
-                        else // criminal is other AI prisoner.
-                        { //TODO: add dialog when player tries to talk to the prisoner, when prisoner is still captured by AI - create "Betray revenger branch"
-
+                        else
+                        {
+                            //TODO: case where targetHero left prisoner state in mobile party (usualy transfered to the settlement...)
                         }
                     }
                 }
@@ -691,6 +694,17 @@ namespace PeasantRevenge
                 CloseDialog();
             }
 
+            /// <summary>
+            /// discussing the quest progress with quest giver
+            /// - Let kill the raider (player or AI)
+            /// - Pay (raider (player or AI))
+            /// - Pay (in place of raider (AI))
+            /// * Blame other AI (player or AI)
+            /// * Persuade the questGiver to drop the revenge 
+            /// - Abandon the quest
+            /// - Return to previous meniu
+            /// </summary>
+            /// <returns></returns>
             private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow()
             {
                 DialogFlow dialog = DialogFlow.CreateDialogFlow("peasant_revenge_discuss_fate_start",125);
@@ -761,7 +775,7 @@ namespace PeasantRevenge
                    "{DISCUSS_PAY_IN_RAIDER}",
                    () =>
                    {
-                       if(_targetHero!=Hero.MainHero && !HeroIsPlayersPrisoner(this._targetHero))
+                       if(_targetHero!=Hero.MainHero /*&& !HeroIsPlayersPrisoner(this._targetHero)*/)
                        {
                            TextObject text = new TextObject("{=*}I'll pay {REPARATION}{GOLD_ICON} in place of {TARGET_HERO.NAME}.");
                            StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetHero.CharacterObject,text,false);
@@ -776,7 +790,41 @@ namespace PeasantRevenge
                        }
 
                    },null,this,100,null,null,null);
-                
+
+                dialog.AddPlayerLine(
+                   "peasant_revenge_discuss_fate_pl_options_blame",
+                   "peasant_revenge_discuss_fate_pl_options",
+                   "peasant_revenge_discuss_fate_pl_blame",
+                   "{=*}But {TARGET_HERO.NAME} might be not the criminal...",
+                   ()=>{
+                       StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetHero.CharacterObject);
+                       return true;                    
+                   },
+                   null,this,100,(out TextObject hintText) => {
+                       hintText=new TextObject("{=*} Blame other hero for the crime.");
+                       return true;
+                   },null,null);
+
+                dialog.AddDialogLine(
+                   "peasant_revenge_discuss_fate_pl_blame_id",
+                   "peasant_revenge_discuss_fate_pl_blame",
+                   "peasant_revenge_discuss_fate_pl_blame_options",
+                   "{=*}Who is then?[if:convo_furious]",null,
+                   null,
+                   this,100,null,null,null);
+
+                dialog.AddPlayerLine(
+                   "peasant_revenge_discuss_fate_pl_blame_options_0",
+                   "peasant_revenge_discuss_fate_pl_blame_options",
+                   "quest_discuss",
+                   "{=*}I will find out soon.",null,null,this,100,null,null,null);
+               
+                dialog.AddPlayerLine(
+                   "peasant_revenge_discuss_fate_pl_options_drop",
+                   "peasant_revenge_discuss_fate_pl_options",
+                   "quest_discuss",
+                   "{=PRev0107}You should drop your revenge, or else...",null,null,this,100,null,null,null);
+
                 dialog.AddPlayerLine(
                    "peasant_revenge_discuss_fate_pl_options_abandon",
                    "peasant_revenge_discuss_fate_pl_options",
@@ -791,8 +839,8 @@ namespace PeasantRevenge
                 dialog.AddPlayerLine(
                    "peasant_revenge_discuss_fate_pl_options_n",
                    "peasant_revenge_discuss_fate_pl_options",
-                   "close_window",
-                   "{=*}I changed my mind.",null,null,this,100,null,null,null);
+                   "quest_discuss",
+                   "{=*}Nevermind.",null,null,this,100,null,null,null);
 
                 dialog.AddDialogLine(
                  "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay_success",
@@ -809,9 +857,17 @@ namespace PeasantRevenge
 
             }
 
+            /// <summary>
+            /// When player is captured by other AI, and hero start dialogue, because questGiver party arrive to execute the revenge.          
+            /// - Pay
+            /// - Not Pay (AI hero may let player live)
+            /// * Other AI pays the reparation
+            /// * Blame other AI prisoner (persuade the AI hero?)
+            /// * Return to previous meniu (after not confirmed blame, not succesfull barter)
+            /// </summary>
+            /// <returns></returns>
             private DialogFlow GetPlayerDiscussRevengerDemandsDialogFlow()
             {
-
                 DialogFlow dialog = DialogFlow.CreateDialogFlow("start",125).
                     NpcLine(new TextObject("{=PRev0001}You looted nearby village. Peasants demand to cut someone's head off. What will you say?[rf:idle_angry][ib:closed][if:idle_angry]",null),null,null).
                     Condition(new ConversationSentence.OnConditionDelegate(this.CapturerPartyLeaderDialogCondition)).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
@@ -824,8 +880,44 @@ namespace PeasantRevenge
                   "peasant_revenge_discuss_pr_demands_pl_options_not_pay",
                   "peasant_revenge_discuss_pr_demands_pl_options",
                   "peasant_revenge_discuss_pr_demands_pl_not_pay",
-                  "{=*}I'll not pay.",null,null,this,100,(out TextObject hintText) => { return this._hero_will_not_pay_reparation_on_clickable(_get_victim(),Hero.OneToOneConversationHero,out hintText); });
-               
+                  "{=*}I'll not pay.",null,null,this,100,
+                  (out TextObject hintText) => { return this._hero_will_not_pay_reparation_on_clickable(_get_victim(),Hero.OneToOneConversationHero,out hintText); });
+
+                dialog.AddPlayerLine(
+                  "peasant_revenge_discuss_pr_demands_pl_options_friend_pay",
+                  "peasant_revenge_discuss_pr_demands_pl_options",
+                  "peasant_revenge_discuss_pr_demands_friend_pay_received",
+                  "{=PRev0065}I have friends, who will pay the reparation.",
+                  () => { return !GetHeroSuportersWhoCouldPayUnpaidRansom(this._targetHero,_get_reparation_value()).IsEmpty(); },
+                  null,this,110,
+                  new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_criminal_has_suporters_clickable_condition),null);
+
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_pr_demands_friend_pay_received_success",
+                 "peasant_revenge_discuss_pr_demands_friend_pay_received",
+                 "close_window",
+                 "{=*}You have a generous friends.[if:convo_happy]",
+                 null,
+                 () => { CompleteQuestWithSuccessConsequences(); },this,100,null,null,null);
+
+                dialog.AddPlayerLine(
+                 "peasant_revenge_discuss_pr_demands_pl_options_pl_blame",
+                 "peasant_revenge_discuss_pr_demands_pl_options",
+                 "peasant_revenge_discuss_pr_demands_pl_blame_ask_options",
+                 "{=*}I'm not a criminal...",null,null,this,100,null);
+
+                dialog.AddDialogLine(
+                "peasant_revenge_discuss_pr_demands_pl_blame_ask_options_start",
+                "peasant_revenge_discuss_pr_demands_pl_blame_ask_options",
+                "peasant_revenge_discuss_pr_demands_pl_blame_options",
+                "{=*}Who is then?[if:convo_thinking]",
+                null, null,this,100,null,null,null);
+
+                dialog.AddPlayerLine(
+                 "peasant_revenge_discuss_pr_demands_pl_options_pl_blame_0",
+                 "peasant_revenge_discuss_pr_demands_pl_blame_options",
+                 "peasant_revenge_discuss_pr_demands_pl_options",
+                 "{=*}I will find out soon.",null,null,this,100,null); // TODO: finish dialogue with blame options...
 
                 dialog.AddDialogLine(
                     "peasant_revenge_discuss_pr_demands_pl_not_pay_answ",
@@ -852,8 +944,6 @@ namespace PeasantRevenge
                         }
                     },this,100,null);
 
-
-
                 dialog.AddDialogLine(
                 "peasant_revenge_discuss_pr_demands_pl_pay_line",
                 "peasant_revenge_discuss_pr_demands_pl_pay_barter_line",
@@ -870,6 +960,8 @@ namespace PeasantRevenge
                  new ConversationSentence.OnConditionDelegate(this.barter_successful_condition),
                  () => { CompleteQuestWithSuccessConsequences(); },this,100,null,null,null);
 
+
+
                 dialog.AddDialogLine(
                  "peasant_revenge_discuss_pr_demands_pl_pay_received_pay_received_pay_fail",
                  "peasant_revenge_discuss_pr_demands_pl_pay_received_pay",
@@ -879,6 +971,47 @@ namespace PeasantRevenge
                  null,this,100,null,null,null);
 
                 return dialog;
+            }
+
+            private bool peasant_revenge_criminal_has_suporters_clickable_condition(out TextObject textObject)
+            {
+                List<Hero> saver = GetHeroSuportersWhoCouldPayUnpaidRansom(this._targetHero,_get_reparation_value());
+                bool start = !saver.IsEmpty();
+                if(saver.Count()==1)
+                {
+                    textObject=new TextObject("{=PRev0066}{SAVER.NAME} will support you.");
+                    StringHelpers.SetCharacterProperties("SAVER",saver.First().CharacterObject,textObject,false);
+                }
+                else
+                {
+                    textObject=new TextObject("{=PRev0067}{SUPPORTERCOUNT} heroes can support you.");
+                    MBTextManager.SetTextVariable("SUPPORTERCOUNT",(float)saver.Count());
+                }
+
+                return start;
+            }
+
+            private List<Hero> GetHeroSuportersWhoCouldPayUnpaidRansom(Hero hero,int goldNeeded)
+            {
+                List<Hero> list = new List<Hero>();
+
+                float criminalHeroFromClanSuporterMinimumAge = 16f;
+                int criminalHeroFromClanSuporterMinimumRelation = -10;
+
+                if(hero.Clan!=null)
+                {
+                    list.AddRange(hero.Clan.Heroes.Where((x) =>
+                     x!=hero && 
+                     x.Gold >= goldNeeded &&             
+                     x.IsAlive &&
+                     x.Age>= criminalHeroFromClanSuporterMinimumAge && !x.IsEnemy(hero)&&
+                     x.GetRelation(hero)>=criminalHeroFromClanSuporterMinimumRelation&&
+                    (// if not relative, friend or clan leader                 
+                      x.Children.Contains(hero)||hero.Children.Contains(x) || (x.IsFriend(hero))
+                    )).ToList());
+                }
+
+                return list;
             }
 
             private bool _hero_has_enougth_gold_for_reparation_condition()
