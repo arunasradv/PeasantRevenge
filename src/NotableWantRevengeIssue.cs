@@ -339,7 +339,31 @@ namespace PeasantRevenge
                 CampaignEvents.HeroPrisonerTaken.AddNonSerializedListener(this,HeroPrisonerTaken);
                 CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this,HeroPrisonerReleased);
                 CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this,VillageBeingRaided);
+                CampaignEvents.ConversationEnded.AddNonSerializedListener(this,ConversationEnded);
                 //TODO: Add check for player, if player is waitting in settlement, revenger should try to ambush the player... 
+            }
+
+            private void ConversationEnded(IEnumerable<CharacterObject> obj)
+            {
+                if(base.JournalEntries!=null)
+                {
+                    if(base.JournalEntries.Last().LogText.Equals(IssueCancelText))
+                    {
+                        CompleteQuestWithCancelConsequences();
+                    }
+                    else if(base.JournalEntries.Last().LogText.Equals(IssueSuccessText))
+                    {
+                        CompleteQuestWithSuccessConsequences();
+                    }
+                    else if(base.JournalEntries.Last().LogText.Equals(IssueFailText))
+                    {
+                        CompleteQuestWithFailConsequences();
+                    }
+                    else if(base.JournalEntries.Last().LogText.Equals(IssueBetrayText))
+                    {
+                        CompleteQuestWithBetrayConsequences();
+                    }
+                }
             }
 
             private void VillageBeingRaided(Village village)
@@ -400,6 +424,26 @@ namespace PeasantRevenge
                 {
                     return new TextObject("{=*}The criminal has been saved.",null);
                 }
+            }
+
+            protected TextObject IssueCancelText
+            {
+                get { return new TextObject("{=*}You canceled the quest."); }
+            }
+
+            protected TextObject IssueSuccessText
+            {
+                get { return new TextObject("{=*}You successfully completed the quest."); }
+            }
+
+            protected TextObject IssueFailText
+            {
+                get { return new TextObject("{=*}You failed the quest."); }
+            }
+
+            protected TextObject IssueBetrayText
+            {
+                get { return new TextObject("{=*}You betrayed someone and completed the quest."); }
             }
 
             private int _get_reparation_value()
@@ -831,7 +875,7 @@ namespace PeasantRevenge
                    "close_window",
                    "{=*}I do not care about your revenge.",null,() =>
                    {
-                       CompleteQuestWithCancel();
+                       base.AddLog(IssueCancelText);                       
                    },this,100,(out TextObject hintText) => {
                        hintText=new TextObject("{=*} Cancel the quest.");
                        return true;},null,null);
@@ -851,7 +895,7 @@ namespace PeasantRevenge
                  () =>
                  {
                      _pay_reparation(this._targetHero,base.QuestGiver);
-                     CompleteQuestWithSuccessConsequences();
+                     base.AddLog(IssueSuccessText);                     
                  },this,100,null,null,null);
                 return dialog;
 
@@ -898,7 +942,7 @@ namespace PeasantRevenge
                  "close_window",
                  "{=*}You have a generous friends.[if:convo_happy]",
                  null,
-                 () => { CompleteQuestWithSuccessConsequences(); },this,100,null,null,null);
+                 () => { base.AddLog(IssueSuccessText); },this,100,null,null,null);
 
                 dialog.AddPlayerLine(
                  "peasant_revenge_discuss_pr_demands_pl_options_pl_blame",
@@ -935,12 +979,12 @@ namespace PeasantRevenge
                         {
                             ExecuteHero(base.QuestGiver,_get_victim());
                             base.AddLog(IssueOwnerTravelCriminalKilledLogText);
-                            CompleteQuestWithFailConsequences();
+                            base.AddLog(IssueFailText);
                         }
                         else
                         {
                             base.AddLog(IssueOwnerTravelCriminalDodgedTheRevengerLogText);
-                            CompleteQuestWithSuccessConsequences();
+                            base.AddLog(IssueSuccessText);
                         }
                     },this,100,null);
 
@@ -958,7 +1002,7 @@ namespace PeasantRevenge
                  "close_window",
                  "{=PRev0037}I'm pleased.[if:convo_happy]",
                  new ConversationSentence.OnConditionDelegate(this.barter_successful_condition),
-                 () => { CompleteQuestWithSuccessConsequences(); },this,100,null,null,null);
+                 () => { base.AddLog(IssueSuccessText); },this,100,null,null,null);
 
 
 
@@ -1134,10 +1178,16 @@ namespace PeasantRevenge
                 base.CompleteQuestWithFail();
             }
 
-            private void CompleteQuestWithCancel()
+            private void CompleteQuestWithCancelConsequences()
             {
                 _disband_quest_giver_party();
                 base.CompleteQuestWithCancel();
+            }
+
+            private void CompleteQuestWithBetrayConsequences()
+            {
+                _disband_quest_giver_party();
+                base.CompleteQuestWithBetrayal();
             }
 
             #region REPARATION BARTER

@@ -218,7 +218,6 @@ namespace PeasantRevenge
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
-            AddGameMenus(campaignGameStarter);
         }
 
         private bool IsModuleVersionOlder(ApplicationVersion module_version, ApplicationVersion compare)
@@ -269,81 +268,7 @@ namespace PeasantRevenge
 
             return cfg_source;
         }
-
-        #region Help village menu
-
-
-        private void AddGameMenus(CampaignGameStarter campaignGameStarter)
-        {
-            campaignGameStarter.AddGameMenuOption(
-                "join_encounter",
-                "join_encounter_help_defenders_force",
-                "{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}.",
-                new GameMenuOption.OnConditionDelegate(this.game_menu_join_encounter_help_defenders_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(this.game_menu_join_encounter_help_defenders_on_consequence),
-                false, -1, false, null);
-        }
-
-        private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
-        {
-            if (!_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu) return false;
-
-            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
-            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
-            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            //IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
-
-            bool canStartHelpVillageMenu = encounteredBattle.MapEventSettlement != null &&
-                !mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
-                //!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
-                mapFactionAttacker != MobileParty.MainParty.MapFaction && // if removed can attack own party (not for this mod)
-                encounteredBattle.MapEventSettlement.IsVillage &&
-                encounteredBattle.MapEventSettlement.IsUnderRaid;
-
-            if (canStartHelpVillageMenu)
-            {
-                MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());
-                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture)
-                {
-                    args.IsEnabled = false;
-                    args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);
-                }
-            }
-
-            return canStartHelpVillageMenu;
-        }
-        private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
-        {
-            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
-            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
-
-            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
-
-            if (!mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction))
-            {
-                BeHostileAction.ApplyEncounterHostileAction(PartyBase.MainParty, encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker));
-                //if (MobileParty.MainParty.MapFaction == mapFactionAttacker)
-                //{
-                //    ChangeCrimeRatingAction.Apply(MobileParty.MainParty.MapFaction, 61f);
-                //}
-            }
-
-            if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
-            {
-                PlayerEncounter.JoinBattle(BattleSideEnum.Defender);
-                GameMenu.ActivateGameMenu("encounter");
-                if (!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction))
-                {
-                    TextObject menuText = new TextObject("{=PRev0086}You decided to...");
-                    MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
-                }
-                return;
-            }
-        }
-
-        #endregion
-       
+               
         private void StopRevengeForNotableIfAny(Hero revenger)
         {
             if(revenger!=null)
@@ -419,11 +344,11 @@ namespace PeasantRevenge
                 }
             }
         }
-
+#warning REMOVE 428 line!!!!
         private void VillageBeingRaided(Village village)
         {
             if (village.Settlement.LastAttackerParty.Party.LeaderHero == null) return;
-
+            return;
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) =>
             x.criminal == village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject &&
             x.village == village);
@@ -1523,8 +1448,7 @@ namespace PeasantRevenge
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
-            LoadConfiguration(campaignGameStarter);
-            AddGameMenus(campaignGameStarter);
+            LoadConfiguration(campaignGameStarter);          
         }
         #endregion
 
