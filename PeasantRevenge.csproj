@@ -341,6 +341,7 @@
   <ItemGroup>
     <Compile Include="src\GiftBarterable.cs" />
     <Compile Include="src\Helpers\XmlCfg.cs" />
+    <Compile Include="src\HelpNeutralVillageBehavior.cs" />
     <Compile Include="src\HeroPersuadeNotableBehavior.cs" />
     <Compile Include="src\NotableWantRevengeIssue.cs" />
     <Compile Include="src\PeasantRevengeBehavior.cs" />
