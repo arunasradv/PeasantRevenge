@@ -6,7 +6,8 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="1.2.9 support."/>
+        <ChangeNotes Value="Fix: [DeLiXxN] English dialogues.
+        Fix: dialogues when peasant is commenting his revenge."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
