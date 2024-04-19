@@ -36,7 +36,7 @@ namespace PeasantRevenge
             campaignGameStarter.AddGameMenuOption(
                 "join_encounter",
                 "join_encounter_help_defenders_force",
-                "{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}.",
+                "{=PRev0087}Declare war on {KINGDOM} and help {DEFENDER}.",
                 new GameMenuOption.OnConditionDelegate(this.game_menu_join_encounter_help_defenders_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(this.game_menu_join_encounter_help_defenders_on_consequence),
                 false,-1,false,null);
