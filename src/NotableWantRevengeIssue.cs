@@ -1211,11 +1211,11 @@ namespace PeasantRevenge
                     base.AddLog(IssueSuccessText);
                 },
                 this,100,null,null);
-
+                //TODO: FIX ending here - should go back to previous menu , or other option...
                 dialog.AddPlayerLine(
                  "peasant_revenge_discuss_pr_demands_pl_options_pl_blame_n",
                  "peasant_revenge_discuss_pr_demands_pl_blame_options",
-                 "peasant_revenge_discuss_pr_demands_pl_pay_received_pay",
+                 "close_window",
                  "{=*}I will find out soon.",null,null,this,100,null);
 
 
