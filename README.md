@@ -3,7 +3,7 @@
  Player and AI heroes, who captured the criminal, can now allow notable peasant to behead the criminal. 
 
 ## Contributors
-    - [DeLiXxN](https://www.nexusmods.com/mountandblade2bannerlord/users/109248658) English translations (EN)
+   [DeLiXxN](https://www.nexusmods.com/mountandblade2bannerlord/users/109248658) English translations (EN)
     
 ## Features
 ### Dialogues for notable peasants and AI lords: 
