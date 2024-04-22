@@ -1,6 +1,10 @@
 # Peasant Revenge
  Peasant Revenge is a Mount&Blade II mod what aims to implement peasant revenge after village has been raided. 
- Player and AI heroes, who captured the criminal, can now allow notable peasant to behead the criminal.   
+ Player and AI heroes, who captured the criminal, can now allow notable peasant to behead the criminal. 
+
+## Contributors
+    - [DeLiXxN](https://www.nexusmods.com/mountandblade2bannerlord/users/109248658) English translations (EN)
+    
 ## Features
 ### Dialogues for notable peasants and AI lords: 
 #### - Dialogues for notable peasant when AI or player has captured the criminal hero.
