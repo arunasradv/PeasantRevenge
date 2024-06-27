@@ -1,15 +1,15 @@
 ﻿<Module>
   <Name value="PeasantRevenge"/>
   <Id value="PeasantRevenge"/>
-  <Version value="v1.2.9"/>
+  <Version value="v1.2.10"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>
-    <DependedModule Id="Native" DependentVersion="v1.2.9.0"/>
-    <DependedModule Id="SandBoxCore" DependentVersion="v1.2.9.0"/>
-    <DependedModule Id="Sandbox" DependentVersion="v1.2.9.0"/>
-    <DependedModule Id="CustomBattle" DependentVersion="v1.2.9.0"/>
-    <DependedModule Id="StoryMode" DependentVersion="v1.2.9.0"/>
+    <DependedModule Id="Native" DependentVersion="v1.2.10.0"/>
+    <DependedModule Id="SandBoxCore" DependentVersion="v1.2.10.0"/>
+    <DependedModule Id="Sandbox" DependentVersion="v1.2.10.0"/>
+    <DependedModule Id="CustomBattle" DependentVersion="v1.2.10.0"/>
+    <DependedModule Id="StoryMode" DependentVersion="v1.2.10.0"/>
   </DependedModules>
   <SubModules>
     <SubModule>
