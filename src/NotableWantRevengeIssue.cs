@@ -823,7 +823,7 @@ namespace PeasantRevenge
                 dialog.AddPlayerLine(
                    "peasant_revenge_discuss_fate_pl_options_in_raiders_place_pay",
                    "peasant_revenge_discuss_fate_pl_options",
-                   "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay",
+                   "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
                    "{DISCUSS_PAY_IN_RAIDER}",
                    () =>
                    {
@@ -1017,8 +1017,30 @@ namespace PeasantRevenge
                    "peasant_revenge_discuss_fate_stop_or_else_options",
                    "quest_discuss",
                    "{=*}Nevermind.",null,null,this,100,null,null,null);
+                /*PAYING INSTEAD OF CRIMINAL*/
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay_success",
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
+                 "close_window",
+                 "{=PRev0037}I'm pleased.[if:convo_happy]",
+                 () => { return hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver,this._targetHero); },
+                 () =>
+                 {
+                     _pay_reparation(this._targetHero,base.QuestGiver);
+                     base.AddLog(IssueSuccessText);
+                 },this,100,null,null,null);
 
-
+                dialog.AddDialogLine(
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay_fail",
+                 "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
+                 "peasant_revenge_discuss_fate_pl_options",
+                 "{=*}{PL_PAY_INSTEAD_OF_CR}",
+                 () => { return !hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver,this._targetHero); },
+                 () =>
+                 {
+                    /* _pay_reparation(this._targetHero,base.QuestGiver);
+                     base.AddLog(IssueSuccessText);*/
+                 },this,100,null,null,null);
 
                 /*CANCEL QUEST*/
                 dialog.AddPlayerLine(
@@ -1033,13 +1055,13 @@ namespace PeasantRevenge
                        hintText=new TextObject("{=*} Cancel the quest.");
                        return true;
                    },null,null);
-/*GO BACK*/
+                /*GO BACK*/
                 dialog.AddPlayerLine(
                    "peasant_revenge_discuss_fate_pl_options_n",
                    "peasant_revenge_discuss_fate_pl_options",
                    "quest_discuss",
                    "{=*}Nevermind.",null,null,this,100,null,null,null);
-/*SUCCESS*/
+                /*SUCCESS*/
                 dialog.AddDialogLine(
                  "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay_success",
                  "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay",
@@ -1355,6 +1377,36 @@ namespace PeasantRevenge
 
                 StringHelpers.SetCharacterProperties($"SAVER{index}",hero_supporter.CharacterObject);
                 return true;
+            }
+
+            bool hero_would_accept_reparation_from_others_instead_of_criminal(Hero hero, Hero criminal)
+            {
+                bool reparation_is_ccepted =
+                   (hero.GetTraitLevel(DefaultTraits.Honor)<0||hero.IsHumanPlayerCharacter) && hero.GetRelation(criminal) >= -10;
+
+                if(reparation_is_ccepted)
+                {
+                    /*TODO: variations, when accepted the payment*/
+                }
+                else
+                {
+                    if(hero.GetTraitLevel(DefaultTraits.Honor) > 0)
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
+                        new TextObject("{=*}No, I'll not accept your proposal. Criminal must pay the price.[if:convo_furious][ib:warrior]"),false);
+                    }else if(hero.GetTraitLevel(DefaultTraits.Calculating)>0)
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
+                        new TextObject("{=*}No, I must be sure the raiding is stopped.[if:convo_thinking]"),false);
+                    }
+                    else
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
+                       new TextObject("{=*}No, I'll not accept your proposal.[if:idle_angry][ib:convo_closed]"),false);
+                    }
+                }
+
+                return reparation_is_ccepted;
             }
 
             /// <summary>
