@@ -2730,7 +2730,7 @@ namespace PeasantRevenge
                "close_window",
               "{=PRev0109}I will chop your head off!",
               null,
-              () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter(); }
+              () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter_and_mission(); }
               , 90,
              new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_end_accusation_clickable));
             campaignGameStarter.AddPlayerLine(
@@ -2739,7 +2739,7 @@ namespace PeasantRevenge
                "close_window",
               "{=PRev0126}{EXECUTIONER.LINK} will chop your head off!",
               () => { return peasant_revenge_get_executioner_companion_condition(); },
-              () => { peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(get_first_companion()); leave_encounter(); }
+              () => { peasant_revenge_player_not_happy_with_peasant_companion_chop_consequence(get_first_companion()); leave_encounter_and_mission(); }
               , 100,
               new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_end_accusation_companion_clickable));
             campaignGameStarter.AddPlayerLine(
@@ -2748,7 +2748,7 @@ namespace PeasantRevenge
                "close_window",
               "{=PRev0127}Justice demands you pay for your crimes.",
               () => { return true; },
-              () => { peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_consequence(); leave_encounter(); }
+              () => { peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_consequence(); leave_encounter_and_mission(); }
               ,110,
               new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_clickable));
             campaignGameStarter.AddPlayerLine(
@@ -4174,8 +4174,20 @@ namespace PeasantRevenge
         private void leave_encounter()
         {
             if (PlayerEncounter.Current == null) return;
-            PlayerEncounter.LeaveEncounter = true;
+                PlayerEncounter.LeaveEncounter = true;
             if (currentRevenge.xParty != null) currentRevenge.xParty.Ai.SetMoveModeHold();
+        }
+
+        private void leave_encounter_and_mission()
+        {
+            if(PlayerEncounter.Current==null)
+                return;
+            PlayerEncounter.LeaveEncounter=true;
+            if(PlayerEncounter.InsideSettlement)
+                if(CampaignMission.Current != null)
+                    CampaignMission.Current.EndMission();
+            if(currentRevenge.xParty!=null)
+                currentRevenge.xParty.Ai.SetMoveModeHold();
         }
 
         private void peasant_revenge_party_need_compensation_not_payed_consequence()

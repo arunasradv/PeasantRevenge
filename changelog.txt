@@ -152,5 +152,9 @@ Feature: 1.2.9 support.
 240412 v15.1.3.9
         Fix: [DeLiXxN] English dialogues.
         Fix: dialogues when peasant is commenting his revenge.
-240419 v20.0.0.0
+240627 v15.1.3.10
+Feature: v1.2.10 support
+240627 v15.1.3.11
+Fix: crash after decision to kill the notable peasant while visiting the village.
+240628 v20.0.0.0
 Feature: Peasant's revenge quests
