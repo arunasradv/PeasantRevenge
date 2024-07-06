@@ -749,7 +749,7 @@ namespace PeasantRevenge
             /// discussing the quest progress with quest giver
             /// - Let kill the raider (player or AI)
             /// - Pay (raider (player or AI))
-            /// - Pay (in place of raider (AI))
+            /// - Pay (in place of raider (AI)) // TODO: Need persuation
             /// * Blame other AI (player or AI) // TODO: Need persuation
             /// * Persuade the questGiver to drop the revenge  // TODO: Need persuation
             /// - Abandon the quest
@@ -847,7 +847,7 @@ namespace PeasantRevenge
                    "peasant_revenge_discuss_fate_pl_options_blame",
                    "peasant_revenge_discuss_fate_pl_options",
                    "peasant_revenge_discuss_fate_pl_blame",
-                   "{=*}But {TARGET_HERO.NAME} might be not the criminal...",
+                   "{=*}But {TARGET_HERO.NAME} may be not the criminal...",
                    () =>
                    {
                        StringHelpers.SetCharacterProperties("TARGET_HERO",this._targetHero.CharacterObject);
@@ -888,12 +888,12 @@ namespace PeasantRevenge
                    "peasant_revenge_discuss_fate_pl_blame_options_1",
                    "peasant_revenge_discuss_fate_pl_blame_options",
                    "close_window",
-                   "{=*}{ACUSSED0.NAME}",
+                   "{=*}{ACUSSED1.NAME}",
                    () => { return _hero_can_accuse_condition(this._targetHero,1); },
                    () =>
                    {
                        Hero hero_accused = get_prisoner_blamed(this._targetHero,1);
-                       TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
+                       TextObject text = new TextObject("{=*}You blamed {ACUSSED1.LINK} for the crime.");
                        StringHelpers.SetCharacterProperties($"ACUSSED{1}",hero_accused.CharacterObject,text);
                        base.AddLog(text);
                        ExecuteHero(this.QuestGiver,hero_accused);
@@ -905,12 +905,12 @@ namespace PeasantRevenge
                    "peasant_revenge_discuss_fate_pl_blame_options_2",
                    "peasant_revenge_discuss_fate_pl_blame_options",
                    "close_window",
-                   "{=*}{ACUSSED0.NAME}",
+                   "{=*}{ACUSSED2.NAME}",
                    () => { return _hero_can_accuse_condition(this._targetHero,2); },
                    () =>
                    {
                        Hero hero_accused = get_prisoner_blamed(this._targetHero,2);
-                       TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
+                       TextObject text = new TextObject("{=*}You blamed {ACUSSED2.LINK} for the crime.");
                        StringHelpers.SetCharacterProperties($"ACUSSED{2}",hero_accused.CharacterObject,text);
                        base.AddLog(text);
                        ExecuteHero(this.QuestGiver,hero_accused);
@@ -922,25 +922,26 @@ namespace PeasantRevenge
                    "peasant_revenge_discuss_fate_pl_blame_options_3",
                    "peasant_revenge_discuss_fate_pl_blame_options",
                    "close_window",
-                   "{=*}{ACUSSED0.NAME}",
+                   "{=*}{ACUSSED3.NAME}",
                    () => { return _hero_can_accuse_condition(this._targetHero,3); },
                    () =>
                    {
                        Hero hero_accused = get_prisoner_blamed(this._targetHero,3);
-                       TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
+                       TextObject text = new TextObject("{=*}You blamed {ACUSSED3.LINK} for the crime.");
                        StringHelpers.SetCharacterProperties($"ACUSSED{3}",hero_accused.CharacterObject,text);
                        base.AddLog(text);
                        ExecuteHero(this.QuestGiver,hero_accused);
                        base.AddLog(IssueSuccessText);
                    },
                    this,100,null,null);
-
+                /*When method get_prisoner_blamed fails to get the prisoner , we can blame any other prisoner in the target hero party prisoner roster*/
                 dialog.AddPlayerLine(
                   "peasant_revenge_discuss_fate_pl_blame_options_4",
                   "peasant_revenge_discuss_fate_pl_blame_options",
                   "close_window",
                   "{=*}{ACUSSED0.NAME}",
-                  () => { return _hero_can_accuse_prisoner_condition(Hero.MainHero,this._targetHero,0) && !_hero_can_accuse_condition(this._targetHero,0);},
+                  () => { return _hero_can_accuse_prisoner_condition(Hero.MainHero,this._targetHero,0) && 
+                      !_hero_can_accuse_condition(this._targetHero,0);},
                   () =>
                   {
                       Hero hero_accused = get_any_prisoner_to_be_blamed(Hero.MainHero,this._targetHero,0);
@@ -1226,13 +1227,36 @@ namespace PeasantRevenge
                 () => { return _hero_can_accuse_condition(this._targetHero,2); },
                 () => {
                     Hero hero_accused = get_prisoner_blamed(this._targetHero,2);
-                    TextObject text = new TextObject("{=*}You blamed {ACUSSED1.LINK} for the crime.");
+                    TextObject text = new TextObject("{=*}You blamed {ACUSSED2.LINK} for the crime.");
                     StringHelpers.SetCharacterProperties($"ACUSSED{2}",hero_accused.CharacterObject,text);
                     base.AddLog(text);
                     ExecuteHero(this.QuestGiver,hero_accused);
                     base.AddLog(IssueSuccessText);
                 },
                 this,100,null,null);
+/*When cannot find proper prisoner, lets blame anybody*/
+                dialog.AddPlayerLine(
+               "peasant_revenge_discuss_pr_demands_pl_blame_choose_lord_3",
+               "peasant_revenge_discuss_pr_demands_pl_blame_options",
+               "close_window",
+               "{=*}{ACUSSED0.NAME}",
+               () => { return _hero_can_accuse_prisoner_condition(Hero.MainHero,this._targetHero,0) &&
+                   !_hero_can_accuse_condition(this._targetHero,0); },
+               () => {
+                   Hero hero_accused = get_any_prisoner_to_be_blamed(Hero.MainHero,this._targetHero,0);
+                   TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
+                   StringHelpers.SetCharacterProperties($"ACUSSED{0}",hero_accused.CharacterObject,text);
+                   base.AddLog(text);
+                   ExecuteHero(this.QuestGiver,hero_accused);
+                   base.AddLog(IssueSuccessText);
+               },
+               this,100,null,null);
+
+                
+
+
+
+
                 //TODO: FIX ending here - should go back to previous menu , or other option...
                 dialog.AddPlayerLine(
                  "peasant_revenge_discuss_pr_demands_pl_options_pl_blame_n",
