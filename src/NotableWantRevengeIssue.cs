@@ -300,6 +300,8 @@ namespace PeasantRevenge
             [SaveableField(14)]
             private CampaignTime _questGiverTravelStart;
 
+            [SaveableField(15)]
+            private Hero _acussedHeroByTargetHero; // Hero who got acussed of the crime by _targetHero 
 
             public NotableWantRevengeIssueQuest(string questId,Hero questGiver,CampaignTime duration,int rewardGold,
                 Settlement targetSettlement,Hero targetRaider) : base(questId,questGiver,duration,rewardGold)
@@ -1190,65 +1192,80 @@ namespace PeasantRevenge
                 dialog.AddPlayerLine(
                 "peasant_revenge_discuss_pr_demands_pl_blame_choose_lord_0",
                 "peasant_revenge_discuss_pr_demands_pl_blame_options",
-                "close_window",
+                "peasant_revenge_player_acusse_hero_start_persuasion",
                 "{=*}{ACUSSED0.NAME}",
                 () => { return _hero_can_accuse_condition(this._targetHero,0); },
                 () => {
+                    //TODO: No ending here , add the ending after persuation.
+                    //TODO: Add this to other options.
+                    this._acussedHeroByTargetHero = get_prisoner_blamed(this._targetHero,0);
+                    peasant_revenge_player_acusse_hero_consequence();
+#if false
                     Hero hero_accused = get_prisoner_blamed(this._targetHero,0);
                     TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
                     StringHelpers.SetCharacterProperties($"ACUSSED{0}",hero_accused.CharacterObject,text);
                     base.AddLog(text);
                     ExecuteHero(this.QuestGiver,hero_accused);
                     base.AddLog(IssueSuccessText);
+#endif
                 },
                 this,100,null,null);
 
                 dialog.AddPlayerLine(
                 "peasant_revenge_discuss_pr_demands_pl_blame_choose_lord_1",
                 "peasant_revenge_discuss_pr_demands_pl_blame_options",
-                "close_window",
+                "peasant_revenge_player_acusse_hero_start_persuasion",
                 "{=*}{ACUSSED1.NAME}",
                 () => { return _hero_can_accuse_condition(this._targetHero,1); },
                 () => {
+                    this._acussedHeroByTargetHero=get_prisoner_blamed(this._targetHero,1);
+#if false
                     Hero hero_accused = get_prisoner_blamed(this._targetHero,1);
                     TextObject text = new TextObject("{=*}You blamed {ACUSSED1.LINK} for the crime.");
                     StringHelpers.SetCharacterProperties($"ACUSSED{1}",hero_accused.CharacterObject,text);
                     base.AddLog(text);
                     ExecuteHero(this.QuestGiver,hero_accused);
                     base.AddLog(IssueSuccessText);
+#endif
                 },
                 this,100,null,null);
 
                 dialog.AddPlayerLine(
                 "peasant_revenge_discuss_pr_demands_pl_blame_choose_lord_2",
                 "peasant_revenge_discuss_pr_demands_pl_blame_options",
-                "close_window",
+                "peasant_revenge_player_acusse_hero_start_persuasion",
                 "{=*}{ACUSSED2.NAME}",
                 () => { return _hero_can_accuse_condition(this._targetHero,2); },
                 () => {
+                    this._acussedHeroByTargetHero=get_prisoner_blamed(this._targetHero,2);
+#if false
                     Hero hero_accused = get_prisoner_blamed(this._targetHero,2);
                     TextObject text = new TextObject("{=*}You blamed {ACUSSED2.LINK} for the crime.");
                     StringHelpers.SetCharacterProperties($"ACUSSED{2}",hero_accused.CharacterObject,text);
                     base.AddLog(text);
                     ExecuteHero(this.QuestGiver,hero_accused);
                     base.AddLog(IssueSuccessText);
+#endif
                 },
                 this,100,null,null);
 /*When cannot find proper prisoner, lets blame anybody*/
                 dialog.AddPlayerLine(
                "peasant_revenge_discuss_pr_demands_pl_blame_choose_lord_3",
                "peasant_revenge_discuss_pr_demands_pl_blame_options",
-               "close_window",
+               "peasant_revenge_player_acusse_hero_start_persuasion",
                "{=*}{ACUSSED0.NAME}",
                () => { return _hero_can_accuse_prisoner_condition(Hero.MainHero,this._targetHero,0) &&
                    !_hero_can_accuse_condition(this._targetHero,0); },
                () => {
+                   this._acussedHeroByTargetHero=get_any_prisoner_to_be_blamed(Hero.MainHero,this._targetHero,0);
+#if false
                    Hero hero_accused = get_any_prisoner_to_be_blamed(Hero.MainHero,this._targetHero,0);
                    TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
                    StringHelpers.SetCharacterProperties($"ACUSSED{0}",hero_accused.CharacterObject,text);
                    base.AddLog(text);
                    ExecuteHero(this.QuestGiver,hero_accused);
                    base.AddLog(IssueSuccessText);
+#endif
                },
                this,100,null,null);
 
@@ -1268,7 +1285,24 @@ namespace PeasantRevenge
 
 
 
-                /*END*/
+#region END
+
+                dialog.AddDialogLine(
+               "peasant_revenge_player_acusse_persuasion_ended_0",
+               "peasant_revenge_player_acusse_persuasion_ended",
+               "close_window",
+               "{=PRev0037}I'm pleased.[if:convo_happy]",
+              () => { return _hero_can_accuse_condition(this._targetHero,0); },
+                () => {
+                    //TODO: No ending here , add the ending after persuation
+                    Hero hero_accused = get_prisoner_blamed(this._targetHero,0);
+                    TextObject text = new TextObject("{=*}You blamed {ACUSSED0.LINK} for the crime.");
+                    StringHelpers.SetCharacterProperties($"ACUSSED{0}",hero_accused.CharacterObject,text);
+                    base.AddLog(text);
+                    ExecuteHero(this.QuestGiver,hero_accused);
+                    base.AddLog(IssueSuccessText);
+                },this,100,null,null,null);
+
                 dialog.AddDialogLine(
                     "peasant_revenge_discuss_pr_demands_pl_not_pay_answ",
                     "peasant_revenge_discuss_pr_demands_pl_not_pay",
@@ -1313,6 +1347,143 @@ namespace PeasantRevenge
 
                 return dialog;
             }
+            #endregion
+
+#region player acusse hero persuation
+            private DialogFlow GetPlayerAcusseHeroPersuasionDialogFlow()
+            {
+                DialogFlow dialog = DialogFlow.CreateDialogFlow("peasant_revenge_player_acusse_hero_start_persuasion",125);
+
+                dialog.AddDialogLine(
+                    "peasant_revenge_player_acusse_started",
+                    "peasant_revenge_player_acusse_start_persuasion",
+                    "peasant_revenge_player_acusse_persuasion_start_reservation",
+                    "{=!}{PEASANT_COMMENT_LINE}",
+                    new ConversationSentence.OnConditionDelegate(this.persuasion_start_with_notable_on_condition),
+                    new ConversationSentence.OnConsequenceDelegate(this.persuasion_start_with_notable_on_consequence),
+                    this,100,null,null,null);
+
+                dialog.AddDialogLine(
+                   "peasant_revenge_player_acusse_persuasion_rejected",
+                   "peasant_revenge_player_acusse_persuasion_start_reservation",
+                   "close_window",
+                   "{=!}{TRY_LATER_PERSUASION_LINE}",
+                   new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_rejected_on_condition),
+                   () => {
+                       this.peasant_revenge_persuasion_rejected_on_consequence();
+                       leave_encounter();
+                   },
+                   this,100,null,
+                   new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                   new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+
+                dialog.AddDialogLine(
+                    "peasant_revenge_player_acusse_persuasion_failed",
+                    "peasant_revenge_player_acusse_persuasion_start_reservation",
+                    "peasant_revenge_player_acusse_persuasion_ended",
+                    "{=!}{FAILED_PERSUASION_LINE}",
+                    new ConversationSentence.OnConditionDelegate(this.peasant_revenge_persuasion_failed_on_condition),
+                    new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_persuasion_failed_on_consequence),
+                    this,100,null,
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+
+                dialog.AddDialogLine(
+                    "peasant_revenge_player_acusse_persuasion_success",
+                    "peasant_revenge_player_acusse_persuasion_start_reservation",
+                    "peasant_revenge_player_acusse_persuasion_ended",
+                    "{=PRev0128}You're right.",
+                    new ConversationSentence.OnConditionDelegate(ConversationManager.GetPersuasionProgressSatisfied),
+                    new ConversationSentence.OnConsequenceDelegate(this.peasant_revenge_persuasion_success_on_consequence),
+                    this,int.MaxValue,null,
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+
+                dialog.AddDialogLine(
+                    "peasant_revenge_player_acusse_persuasion_attempt",
+                    "peasant_revenge_player_acusse_persuasion_start_reservation",
+                    "peasant_revenge_player_acusse_persuasion_select_option",
+                    "{=PRev0129}What's there to discuss?",
+                    () => { return persuade_not_failed_on_condition(); },
+                    null,this,10,null,null,null);
+
+#region OPTIONS           
+                dialog.AddPlayerLine(
+                        "peasant_revenge_player_acusse_persuasion_select_option_0",
+                        "peasant_revenge_player_acusse_persuasion_select_option",
+                        "peasant_revenge_player_acusse_persuasion_select_option_response",
+                        "{=!}{REVENGER_PERSUADE_OPTION_0}",
+                        () => { return this.persuasion_select_option_i_on_condition(0); },
+                        () => { persuasion_select_option_i_on_consequence(0); },
+                        this,100,
+                        (out TextObject hintText) => { return this.persuasion_clickable_option_i_on_condition(0,out hintText); },
+                        () => { return this.persuasion_setup_option_i(0); },
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+                dialog.AddPlayerLine(
+                        "peasant_revenge_player_acusse_persuasion_select_option_1",
+                        "peasant_revenge_player_acusse_persuasion_select_option",
+                        "peasant_revenge_player_acusse_persuasion_select_option_response",
+                        "{=!}{REVENGER_PERSUADE_OPTION_1}",
+                        () => { return this.persuasion_select_option_i_on_condition(1); },
+                        () => { persuasion_select_option_i_on_consequence(1); },
+                        this,100,
+                        (out TextObject hintText) => { return this.persuasion_clickable_option_i_on_condition(1,out hintText); },
+                        () => { return this.persuasion_setup_option_i(1); },
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+                dialog.AddPlayerLine(
+                        "peasant_revenge_player_acusse_persuasion_select_option_2",
+                        "peasant_revenge_player_acusse_persuasion_select_option",
+                        "peasant_revenge_player_acusse_persuasion_select_option_response",
+                        "{=!}{REVENGER_PERSUADE_OPTION_2}",
+                        () => { return this.persuasion_select_option_i_on_condition(2); },
+                        () => { persuasion_select_option_i_on_consequence(2); },
+                        this,100,
+                        (out TextObject hintText) => { return this.persuasion_clickable_option_i_on_condition(2,out hintText); },
+                        () => { return this.persuasion_setup_option_i(2); },
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
+                        new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+#endregion
+                //RESPONSE
+                dialog.AddDialogLine(
+                    "peasant_revenge_player_acusse_persuasion_select_option_reaction",
+                    "peasant_revenge_player_acusse_persuasion_select_option_response",
+                    "peasant_revenge_player_acusse_persuasion_start_reservation",
+                    "{=*}{PERSUASION_REACTION}",
+                    new ConversationSentence.OnConditionDelegate(this.persuasion_selected_option_response_on_condition),
+                    new ConversationSentence.OnConsequenceDelegate(this.persuasion_selected_option_response_on_consequence),
+                    this,100,null,null,null);
+
+                return dialog;
+            }
+            //TODO: continue to correct the methods...
+            private void peasant_revenge_player_acusse_hero_consequence()
+            {
+                bool can_revenge = notable_can_do_revenge(Hero.OneToOneConversationHero);
+                int task_index = 0;
+
+                if(can_revenge)
+                {
+                    task_index=1;
+                    persuade_status=persuade_type.teach_to_not_revenge;
+                }
+                else
+                {
+                    persuade_status=persuade_type.teach_to_revenge;
+                }
+
+                _task=GetPersuasionTask(task_index);
+                _task.UnblockAllOptions();
+
+                add_notable_persuaded_count();
+            }
+
+            #endregion
+
+
+
+
 
             private Hero get_first_companion()
             {
