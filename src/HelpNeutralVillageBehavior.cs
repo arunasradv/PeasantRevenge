@@ -44,7 +44,10 @@ namespace PeasantRevenge
 
         private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
         {
-            bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true; // TODO: Add this into configuration.
+
+#warning Make enableHelpNeutralVillageAndDeclareWarToAttackerMenu save-able.
+
+            bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true; 
 
             if(!enableHelpNeutralVillageAndDeclareWarToAttackerMenu)
                 return false;

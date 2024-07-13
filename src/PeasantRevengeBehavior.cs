@@ -1188,106 +1188,15 @@ namespace PeasantRevenge
 
         private bool hero_trait_list_condition(Hero hero, string conditions, params Hero[] target)
         {
-            if (string.IsNullOrEmpty(conditions)) return true;
+           bool result = CfgParser.hero_trait_list_condition(hero ,conditions , out string parseerror, target);
 
-            string[] equation;
-
-            conditions.Replace(";", "&"); // compatibility
-
-            equation = conditions.Split('|');
-
-            bool result = false;
-
-            foreach (string equationItem in equation)
+            if(parseerror != "")
             {
-                bool ANDresult = false;
-                if (equationItem.Contains("&"))
-                {
-                    ANDresult = true;
-                    string[] equationAND = equationItem.Split('&');
-                    for (int i = 0; i < equationAND.Length; i++)
-                    {
-                        string[] a = equationAND[i].Split(' ');
-                        if (a.Length == 3)
-                        {
-                            if (a[0] == "Relations")
-                            {
-                                for (int k = 0; k < target.Length; k++)
-                                {
-                                    ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                                }
-                            }
-                            else
-                            {
-                                ANDresult = ANDresult && hero_trait_on_condition(hero, a[0], a[1], a[2]);
-                            }
-                        }
-                        else
-                        {
-                            log("Error in equation: " + equationAND.ToString() + ". Now will be using default cfg. Please fix or Delete cfg file.");
-                            ResetConfiguration();
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    string[] a = equationItem.Split(' ');
-                    if (a.Length == 3)
-                    {
-                        if (a[0] == "Relations")
-                        {
-                            for (int k = 0; k < target.Length; k++)
-                            {
-                                ANDresult = hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                            }
-                        }
-                        else
-                        {
-                            ANDresult = hero_trait_on_condition(hero, a[0], a[1], a[2]);
-                        }
-                    }
-                    else
-                    {
-                        log("Error in equation: " + equationItem.ToString() + ". Now will be using default cfg. Please fix or Delete cfg file.");
-                        ResetConfiguration();
-                        break;
-                    }
-                }
-
-                result = result || ANDresult;
+                log(parseerror);
+                ResetConfiguration();
+                return false;
             }
 
-            return result;
-        }
-
-        private bool hero_relation_on_condition(Hero hero, Hero target, string operation, string weight)
-        {
-            if (hero == null || target == null) return false;
-
-            int value = hero.GetRelation(target);
-
-            bool result = operation == "==" ? value == int.Parse(weight) :
-                          operation == ">=" ? value >= int.Parse(weight) :
-                          operation == "<=" ? value <= int.Parse(weight) :
-                          operation == ">" ? value > int.Parse(weight) :
-                          operation == "<" ? value < int.Parse(weight) :
-                          operation == "!=" ? value != int.Parse(weight) : false;
-            return result;
-        }
-
-        private bool hero_trait_on_condition(Hero hero, string tag, string operation, string weight)
-        {
-            if (hero == null) return false;
-
-            int value = GetHeroTraitValue(hero, tag);
-
-            bool result = operation == "==" ? value == int.Parse(weight) :
-                          operation == ">=" ? value >= int.Parse(weight) :
-                          operation == "<=" ? value <= int.Parse(weight) :
-                          operation == ">" ? value > int.Parse(weight) :
-                          operation == "<" ? value < int.Parse(weight) :
-                          operation == "!=" ? value != int.Parse(weight) : false;
             return result;
         }
 

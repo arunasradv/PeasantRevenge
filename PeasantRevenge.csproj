@@ -340,6 +340,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\GiftBarterable.cs" />
+    <Compile Include="src\Helpers\CfgParser.cs" />
     <Compile Include="src\Helpers\XmlCfg.cs" />
     <Compile Include="src\HelpNeutralVillageBehavior.cs" />
     <Compile Include="src\HeroPersuadeNotableBehavior.cs" />
