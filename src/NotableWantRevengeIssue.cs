@@ -1657,7 +1657,7 @@ namespace PeasantRevenge
                 //TODO: find the major traits and select the string lines.
                 //TODO: selection of lines should depend on player's knowledge about the hero one is accusing. 
 
-                //CharacterTraits traits = hero.GetHeroTraits();
+                CharacterTraits traits = hero.GetHeroTraits();
                 //List<int> trait_list = new List<int>();
                 //trait_list.Add(traits.Calculating);
                 //trait_list.Add(traits.Valor);
@@ -1668,29 +1668,65 @@ namespace PeasantRevenge
 
                 if(trait==DefaultTraits.Honor)
                 {
-                    text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}",null));
+                    if(traits.Honor>0)
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} thinks only how much honor {?ACCUSED_HERO.GENDER}she{?}he{\\?} will get from looting.",null));
+                    }
+                    else
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME}'s disrespect and disobedience is a shame to all.",null));
+                    }
                 }
 
                 if(trait==DefaultTraits.Valor)
                 {
-                    text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{?ACCUSED_HERO.GENDER}Her{?}His{\\?} courage have led us to this tragedy.",null)); /*High Valor*/
-                    //text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{?ACCUSED_HERO.GENDER}She{?}He{\\?} brave only when fighting the peasants.",null)); /*Low Valor*/
+                    if(traits.Valor > 0)
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} courage have led us to this tragedy.",null));
+                    }
+                    else
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} is brave only when fighting the peasants.",null));
+                    }
                 }
 
                 if(trait==DefaultTraits.Mercy)
                 {
-                    text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}",null));
+                    if(traits.Mercy > 0)
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} have not showed kindness to poor peasants.",null));
+                    }
+                    else
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} is a cruel and bloodthirsty bastard.",null));
+                    }
                 }
 
                 if(trait==DefaultTraits.Generosity)
                 {
-                    text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}",null));
+                    if(traits.Generosity>0)
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} plundered the countryside to get charity for {?ACCUSED_HERO.GENDER}her{?}his{\\?} peasants.",null));
+                    }
+                    else
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} is selfish and greedy crook.",null));
+                    }
                 }
 
                 if(trait==DefaultTraits.Calculating)
                 {
-                    text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}",null));
+                    if(traits.Calculating>0)
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME} planed all the looting.",null));
+                    }
+                    else
+                    {
+                        text.SetTextVariable("ACCUSE_LINE_BY_TRAIT",new TextObject("{=*}{ACCUSED_HERO.NAME}'s crazy decisions took many souls.",null));
+                    }
                 }
+
+               text = StringHelpers.SetCharacterProperties("ACCUSED_HERO",hero.CharacterObject,text,false);
 
                 return text;
             }
@@ -1710,7 +1746,6 @@ namespace PeasantRevenge
                     ///         * Target hero blame acussed hero relations with raided notable.
                     ///         * Target hero blame the clan/kingdom decision.
                     ///         * Try sound convincing.
-                    ///         
 
                     List<PeasantRevengeConfiguration.TraitAndValue> testtraits = new List<PeasantRevengeConfiguration.TraitAndValue>();
 
@@ -1719,19 +1754,19 @@ namespace PeasantRevenge
                         false,GetAccuseLineByTrait(Hero.OneToOneConversationHero,DefaultTraits.Valor),null,false,false,false);
                     persuasionTask.AddOptionToTask(option0);
                     
-                    PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering,DefaultTraits.Mercy,TraitEffect.Positive,
+                    PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Charm,DefaultTraits.Mercy,TraitEffect.Positive,
                         GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,testtraits),
-                        false,new TextObject("{=*}Someone must be held accountable for the destruction of our village!",null),null,false,false,false);
+                        false,GetAccuseLineByTrait(Hero.OneToOneConversationHero,DefaultTraits.Mercy),null,false,false,false);
                     persuasionTask.AddOptionToTask(option1);
                     
                     PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm,DefaultTraits.Honor,TraitEffect.Negative,
                         GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,testtraits),
-                        false,new TextObject("{=*}Take justice into your own hands!",null),null,false,false,false);
+                        false,GetAccuseLineByTrait(Hero.OneToOneConversationHero,DefaultTraits.Honor),null,false,false,false);
                     persuasionTask.AddOptionToTask(option2);
                     
-                    PersuasionOptionArgs option3 = new PersuasionOptionArgs(DefaultSkills.Charm,DefaultTraits.Honor,TraitEffect.Positive,
+                    PersuasionOptionArgs option3 = new PersuasionOptionArgs(DefaultSkills.Charm,DefaultTraits.Generosity,TraitEffect.Positive,
                         GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,testtraits),
-                        false,new TextObject("{=PRev0140}Everyone knows I'm telling the truth.",null),null,false,false,false);
+                        false,GetAccuseLineByTrait(Hero.OneToOneConversationHero,DefaultTraits.Generosity),null,false,false,false);
                     persuasionTask.AddOptionToTask(option3);
                 }               
 
