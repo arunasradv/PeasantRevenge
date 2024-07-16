@@ -6,7 +6,9 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: crash after decision to kill the notable peasant while visiting the village."/>
+        <ChangeNotes Value="Fix: crash after decision to kill the notable peasant while visiting the village.
+                            Fix: [DeLiXxN] English dialogues.
+                            Fix: dialogues when peasant is commenting his revenge."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
