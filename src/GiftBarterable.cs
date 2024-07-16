@@ -35,7 +35,7 @@ namespace PeasantRevenge
             get
             {
                 StringHelpers.SetCharacterProperties("PROPOSEDTO", OriginalOwner.CharacterObject, null, false);
-                return new TextObject("{=PRev0060}Gift to {PROPOSEDTO.NAME}", null);
+                return new TextObject("{=PRev0060}Present {PROPOSEDTO.NAME} a gift", null);
             }
         }
 

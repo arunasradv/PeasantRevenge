@@ -4,129 +4,129 @@
     <tag language="English" />
   </tags>
   <strings>
-    <string id="PRev0001" text="{=PRev0001}You looted nearby village. Peasants demand to cut someone's head off. What will you say?[rf:idle_angry][ib:closed][if:idle_angry]" />
-    <string id="PRev0002" text="{=PRev0002}Just curious, the {PEASANTREVENGER.LINK} says that you looted your own village earlier. Peasant want your head off. What will you say?[if:convo_thinking][if:idle_happy]" />
+    <string id="PRev0001" text="{=PRev0001}You looted a nearby village. They now demand to cut someone's head off. How are you going to respond?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0002" text="{=PRev0002}Just curious, the {PEASANTREVENGER.LINK} say that you looted your own village earlier. The peasants want your head off. How are you going to respond?[if:convo_thinking][if:idle_happy]" />
     <string id="PRev0003" text="{=PRev0003}I'll pay {REPARATION}{GOLD_ICON}." />
-    <string id="PRev0004" text="{=PRev0004}I'll not pay." />
-    <string id="PRev0005" text="{=PRev0005}I'll not pay to this rat." />
+    <string id="PRev0004" text="{=PRev0004}I won't pay." />
+    <string id="PRev0005" text="{=PRev0005}I won't compensate a rat!" />
     <string id="PRev0006" text="{=PRev0006}It was all {COMPANION.NAME}'s plan! (lie)" />
     <string id="PRev0007" text="{=PRev0007}Are you sure it was as you say?[if:convo_thinking][ib:closed]" />
     <string id="PRev0008" text="{=PRev0008}No!" />
     <string id="PRev0009" text="{=PRev0009}Yes!" />
-    <string id="PRev0010" text="{=PRev0010}Well, maybe it is not for peasant to decide your fate...[if:convo_thinking]" />
-    <string id="PRev0011" text="{=PRev0011}Pay for your crime.[rf:idle_angry][if:convo_bored]" />
-    <string id="PRev0012" text="{=PRev0012}Well I'm happy with that.[ib:happy]" />
-    <string id="PRev0013" text="{=PRev0013}Well, that is unfortunate.[ib:warrior][if:convo_bored][rf:convo_grave]" />
-    <string id="PRev0014" text="{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand criminal's head on spike! What will you say?[if:convo_furious][ib:aggressive]" />
+    <string id="PRev0010" text="{=PRev0010}Well, maybe it is not for peasants to decide your fate...[if:convo_thinking]" />
+    <string id="PRev0011" text="{=PRev0011}Pay for your crime![rf:idle_angry][if:convo_bored]" />
+    <string id="PRev0012" text="{=PRev0012}Well I am satisfied with that.[ib:happy]" />
+    <string id="PRev0013" text="{=PRev0013}That is quite unfortunate.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+    <string id="PRev0014" text="{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand to impale their head on a spike![if:convo_furious][ib:aggressive]" />
     <string id="PRev0015" text="{=PRev0015}{CRIMINAL.NAME} will die." />
     <string id="PRev0016" text="{=PRev0016}{CRIMINAL.NAME} will pay {REPARATION}{GOLD_ICON}." />
-    <string id="PRev0017" text="{=PRev0017}No, it is not your business, peasant!" />
+    <string id="PRev0017" text="{=PRev0017}No, it is not your business. Peasant!" />
     <string id="PRev0018" text="{=PRev0018}But, but...[ib:closed][if:convo_bared_teeth]" />
     <string id="PRev0019" text="{=PRev0019}Better than nothing...[ib:closed][if:idle_normal]" />
     <string id="PRev0020" text="{=PRev0020}Revenge![if:convo_happy][ib:happy]" />
-    <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand criminal's head on spike, because bastard must pay for the crime! What will you say?[ib:aggressive][if:convo_furious]" />
-    <string id="PRev0022" text="{=PRev0022}I'll not bow to peasant demands! And {HERO.NAME} should too!" />
-    <string id="PRev0023" text="{=PRev0023}I'll not pay! Criminal {CVICTIM.NAME} can die!" />
+    <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand the criminal's head to be impaled on a spike. This bastard must pay for their crime in blood![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0022" text="{=PRev0022}I will not bow to some peasants demands! And {HERO.NAME} shouldn't either!" />
+    <string id="PRev0023" text="{=PRev0023}I won't pay! The criminal {CVICTIM.NAME} will die!" />
     <string id="PRev0024" text="{=PRev0024}How dare you! You'll die!" />
     <string id="PRev0025" text="{=PRev0025}Better than nothing...[ib:closed][if:idle_angry][rf:idle_angry]" />
     <string id="PRev0026" text="{=PRev0026}But, but...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
     <string id="PRev0027" text="{=PRev0027}And I'll send your head to {HERO.NAME}!" />
-    <string id="PRev0028" text="{=PRev0028}So, criminal will die.[ib:closed][if:happy]" />
-    <string id="PRev0029" text="{=PRev0029}Criminal lord is dead![ib:closed][if:happy]" />
-    <string id="PRev0030" text="{=PRev0030}Look, the peasant killed our prisoner![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
-    <string id="PRev0031" text="{=PRev0031}{?GIFT_RECEIVER.GENDER}Lady{?}Lord{\\?} {GIFT_RECEIVER.LINK} is asking you for ransom gold {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
-    <string id="PRev0032" text="{=PRev0032}I'll not pay anything." />
-    <string id="PRev0033" text="{=PRev0033}Please, take this gift to {?GIFT_RECEIVER.GENDER}Lady{?}Lord{\\?} {GIFT_RECEIVER.NAME}." />
-    <string id="PRev0034" text="{=PRev0034}Your ransom is dead and now you will die too!" />
+    <string id="PRev0028" text="{=PRev0028}At last! The criminal will die for their sins.[ib:closed][if:happy]" />
+    <string id="PRev0029" text="{=PRev0029}The criminal lord is dead! Huzza![ib:closed][if:happy]" />
+    <string id="PRev0030" text="{=PRev0030}See that? Our prisoner was just killed by a peasant![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+    <string id="PRev0031" text="{=PRev0031}{?GIFT_RECEIVER.GENDER}Lady{?}Lord{\\?} {GIFT_RECEIVER.LINK} is demanding a ransom of {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
+    <string id="PRev0032" text="{=PRev0032}You won't get a thing out of me!" />
+    <string id="PRev0033" text="{=PRev0033}Please deliver this gift to {?GIFT_RECEIVER.GENDER}Lady{?}Lord{\\?} {GIFT_RECEIVER.NAME}." />
+    <string id="PRev0034" text="{=PRev0034}The captive is dead! About time you join them." />
     <string id="PRev0035" text="{=PRev0035}A gift?[if:convo_thinking]" />
     <string id="PRev0036" text="{=PRev0036}So you cannot pay...[ib:closed][if:idle_angry]" />
     <string id="PRev0037" text="{=PRev0037}We are pleased.[if:convo_happy]" />
-    <string id="PRev0038" text="{=PRev0038}It is unfair.[ib:closed][if:idle_angry]" />
+    <string id="PRev0038" text="{=PRev0038}This is unfair.[ib:closed][if:idle_angry]" />
     <string id="PRev0039" text="{=PRev0039}But I'm the messenger...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
-    <string id="PRev0040" text="{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}." />
-    <string id="PRev0041" text="{=PRev0041}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {PRISONER.NAME} paid {REPARATION}{GOLD_ICON}" />
-    <string id="PRev0042" text="{=PRev0042}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because different kingdom" />
-    <string id="PRev0043" text="{=PRev0043}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} executed peasant notable {EXECUTIONER.NAME}" />
-    <string id="PRev0044" text="{=PRev0044}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because friends" />
+    <string id="PRev0040" text="{=PRev0040}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {SAVER.NAME} paid {REPARATION}{GOLD_ICON} in reparation." />
+    <string id="PRev0041" text="{=PRev0041}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {PRISONER.NAME} paid {REPARATION}{GOLD_ICON} in reparation" />
+    <string id="PRev0042" text="{=PRev0042}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} to avoid a cross-border incident with another kingdom" />
+    <string id="PRev0043" text="{=PRev0043}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {SAVER.NAME} executed the notable peasant {EXECUTIONER.NAME}" />
+    <string id="PRev0044" text="{=PRev0044}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their friendship" />
     <string id="PRev0045" text="{=PRev0045}{SAVER.NAME} paid {REPARATION}{GOLD_ICON} for {PRISONER.NAME}'s head to {EXECUTIONER.NAME}." />
     <string id="PRev0046" text="{=PRev0046}{HERO.NAME} paid {REPARATION}{GOLD_ICON} to {EXECUTIONER.NAME}." />
-    <string id="PRev0047" text="{=PRev0047}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because friends" />
-    <string id="PRev0048" text="{=PRev0048}Do you deal with criminals in this village?" />
+    <string id="PRev0047" text="{=PRev0047}{SETTLEMENTOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their friendship" />
+    <string id="PRev0048" text="{=PRev0048}Will you deal with the criminals in this village?" />
     <string id="PRev0049" text="{=PRev0049}No, I do not care.[ib:closed]" />
     <string id="PRev0050" text="{=PRev0050}Your criminal intentions are well known to me." />
-    <string id="PRev0051" text="{=PRev0051}I can try to teach you by my example..." />
-    <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make criminals pay for their crimes!" />
+    <string id="PRev0051" text="{=PRev0051}I can try to teach you by example." />
+    <string id="PRev0052" text="{=PRev0052}Here take {BRIBEVALUE}{GOLD_ICON}. Make them pay for their crimes!" />
     <string id="PRev0053" text="{=PRev0053}Thank you very much![if:convo_astonished]" />
-    <string id="PRev0054" text="{=PRev0054}They will do what they want. It is not my business to interfere.[ib:closed][if:angry]" />
-    <string id="PRev0055" text="{=PRev0055}Do not have needed traits" />
-    <string id="PRev0056" text="{=PRev0056}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations." />
-    <string id="PRev0057" text="{=PRev0057}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
-    <string id="PRev0058" text="{=PRev0058}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because have good relations." />
-    <string id="PRev0059" text="{=PRev0059}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because are relatives." />
-    <string id="PRev0060" text="{=PRev0060}Gift to {PROPOSEDTO.NAME}" />
+    <string id="PRev0054" text="{=PRev0054}They can do what they want. It is not my business to interfere.[ib:closed][if:angry]" />
+    <string id="PRev0055" text="{=PRev0055}We are lacking the necessary traits" />
+    <string id="PRev0056" text="{=PRev0056}{SETTLEMENTOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their good relationship" />
+    <string id="PRev0057" text="{=PRev0057}{SETTLEMENTOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their family bonds." />
+    <string id="PRev0058" text="{=PRev0058}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their good relationship" />
+    <string id="PRev0059" text="{=PRev0059}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} in honor of their family bonds" />
+    <string id="PRev0060" text="{=PRev0060}Present {PROPOSEDTO.NAME} a gift" />
     <string id="PRev0061" text="{=PRev0061}{PROPOSING_HERO.NAME} REPARATION " />
-    <string id="PRev0062" text="{=PRev0062}And what if I'll not pay?" />
-    <string id="PRev0063" text="{=PRev0063}Peasant will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0062" text="{=PRev0062}And what if I don't pay?" />
+    <string id="PRev0063" text="{=PRev0063}Peasants will have your head.[if:convo_thinking][rf:convo_grave][ib:closed]" />
     <string id="PRev0064" text="{=PRev0064}You will be fine.[if:convo_happy][if:convo_thinking][ib:closed]" />
-    <string id="PRev0065" text="{=PRev0065}I have friends, who will pay the reparation." />
+    <string id="PRev0065" text="{=PRev0065}I have friends who will pay the reparation." />
     <string id="PRev0066" text="{=PRev0066}{SAVER.NAME} will support you." />
-    <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." /> 
-    <string id="PRev0068" text="{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]" />     
+    <string id="PRev0067" text="{=PRev0067}{SUPPORTERCOUNT} heroes can support you." />
+    <string id="PRev0068" text="{=PRev0068}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village, and {CVICTIM.LINK} has been accused of planning all of it. We demand justice![ib:aggressive][if:convo_furious]" />
     <string id="PRev0069" text="{=PRev0069}{CRIMINAL.NAME} accused the {CRIMINALBLAMED.NAME} for looting the village." />
     <string id="PRev0070" text="{=PRev0070}They are both criminals!" />
     <string id="PRev0071" text="{=PRev0071}What does the criminal say about it?" />
     <string id="PRev0072" text="{=PRev0072}Don't listen to this scumbag.[rf:convo_angry][ib:closed]" />
-    <string id="PRev0073" text="{=PRev0073}I can swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]" />
+    <string id="PRev0073" text="{=PRev0073}I swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]" />
     <string id="PRev0074" text="{=PRev0074}{CVICTIM.LINK} is the criminal.[rf:convo_angry][ib:closed]" />
     <string id="PRev0075" text="{=PRev0075}I believe you." />
     <string id="PRev0076" text="{=PRev0076}You are lying." />
-    <string id="PRev0077" text="{=PRev0077}You both deserve peasant revenge!" />
-    <string id="PRev0078" text="{=PRev0078}I do not have time to talk.[rf:idle_angry][ib:closed][if:idle_angry]" />
-    <string id="PRev0079" text="{=PRev0079}Let me tell you, how you will talk to me about your problems." />
+    <string id="PRev0077" text="{=PRev0077}You both deserve the peasants revenge!" />
+    <string id="PRev0078" text="{=PRev0078}I do not have time to talk right now.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="{=PRev0079}Let me tell you how to talk to me about your problems." />
     <string id="PRev0080" text="{=PRev0080}What problems?[if:convo_thinking]" />
-    <string id="PRev0081" text="{=PRev0081}You should not immediately interrupt me with any your matter." />
-    <string id="PRev0082" text="{=PRev0082}You should immediately interrupt me with any your matter." />
+    <string id="PRev0081" text="{=PRev0081}You should not immediately interrupt me with any of your matters." />
+    <string id="PRev0082" text="{=PRev0082}You should immediately interrupt me with any of your matters." />
     <string id="PRev0083" text="{=PRev0083}Nevermind." />
     <string id="PRev0084" text="{=PRev0084}Yes, my {?MAINHERO.GENDER}Lady{?}Lord{\\?}.[rf:idle_happy]" />
     <string id="PRev0085" text="{=PRev0085}Revenger" />
-    <string id="PRev0086" text="{=PRev0086}You decided to..." />
-    <string id="PRev0087" text="{=PRev0087}Declare war to {KINGDOM}, and help {DEFENDER}." />
-    <string id="PRev0088" text="{=PRev0088}Disable notable peasant mobile party" />
-    <string id="PRev0089" text="{=PRev0089}Enable notable peasant mobile party" />
-    <string id="PRev0090" text="{=PRev0090}Disable the option to defend the village against neutral mobile party" />
-    <string id="PRev0091" text="{=PRev0091}Enable the option to defend the village against neutral mobile party" />
-    <string id="PRev0092" text="{=PRev0092}I'll defend villages against any looters." />
-    <string id="PRev0093" text="{=PRev0093}I will defend villages against my enemies only." />
+    <string id="PRev0086" text="{=PRev0086}You decide to..." />
+    <string id="PRev0087" text="{=PRev0087}Declare war on {KINGDOM} and help {DEFENDER}." />
+    <string id="PRev0088" text="{=PRev0088}Disable the mobile notable peasant party" />
+    <string id="PRev0089" text="{=PRev0089}Enable the mobile notable peasant party" />
+    <string id="PRev0090" text="{=PRev0090}Disable the option to defend the village against neutral mobile parties" />
+    <string id="PRev0091" text="{=PRev0091}Enable the option to defend the village against neutral mobile parties" />
+    <string id="PRev0092" text="{=PRev0092}I will defend villages from any looters." />
+    <string id="PRev0093" text="{=PRev0093}I will defend villages from my enemies only." />
     <string id="PRev0094" text="{=PRev0094}I must leave now." />
     <string id="PRev0095" text="{=PRev0095}There is something I'd like to discuss." />
-    <string id="PRev0096" text="{=PRev0096}{RANSOMER.LINK} offer you {GOLD_AMOUNT}{GOLD_ICON} in ransom if you will give {CAPTIVE_HERO.NAME} remains." />
-    <string id="PRev0097" text="{=PRev0097}Nobody want to pay for {CAPTIVE_HERO.NAME} remains" />
-    <string id="PRev0098" text="{=PRev0098}I cannot make the decision..." />
+    <string id="PRev0096" text="{=PRev0096}{RANSOMER.LINK} offers you {GOLD_AMOUNT}{GOLD_ICON} in ransom for {CAPTIVE_HERO.NAME}." />
+    <string id="PRev0097" text="{=PRev0097}Nobody wants to pay for {CAPTIVE_HERO.NAME}" />
+    <string id="PRev0098" text="{=PRev0098}I cannot decide..." />
     <string id="PRev0099" text="{=PRev0099}A good decision...[ib:happy][if:idle_normal]" />
-    <string id="PRev0100" text="{=PRev0100}I cannot make the decision...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0100" text="{=PRev0100}I cannot decide...[if:convo_thinking][ib:closed]" />
     <string id="PRev0101" text="{=PRev0101}So be it[rf:convo_angry][ib:closed]" />
     <string id="PRev0102" text="{=PRev0102}A good decision..." />
-    <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
-    <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} did not executed {PRISONER.NAME}, because of conflicting accusations." />
+    <string id="PRev0103" text="{=PRev0103}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} due to conflicting accusations." />
+    <string id="PRev0104" text="{=PRev0104}{SETTLEMENTOWNER.NAME} decided not to execute {PRISONER.NAME} due to conflicting accusations." />
     <string id="PRev0105" text="{=PRev0105}I'll take the remains." />
     <string id="PRev0106" text="{=PRev0106}..." />
     <string id="PRev0107" text="{=PRev0107}You should drop your revenge, or else..." />
     <string id="PRev0108" text="{=PRev0108}What else?[rf:idle_angry][ib:closed][if:idle_angry]" />
     <string id="PRev0109" text="{=PRev0109}I will chop your head off!" />
     <string id="PRev0110" text="{=PRev0110}Go back to your village!" />
-    <string id="PRev0111" text="{=PRev0111}{CRIMINAL.NAME} and {CVICTIM.LINK} are dead! My revenge is completed![if:happy]" />
-    <string id="PRev0112" text="{=PRev0112}I finished the revenge on {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0111" text="{=PRev0111}{CRIMINAL.NAME} and {CVICTIM.LINK} are dead! My revenge has been achieved![if:happy]" />
+    <string id="PRev0112" text="{=PRev0112}I got my revenge on {CVICTIM.LINK}![if:happy]" />
     <string id="PRev0113" text="{=PRev0113}{CRIMINAL.LINK} will pay {GOLD_ICON} or die![rf:idle_angry][ib:angry]" />
-    <string id="PRev0114" text="{=PRev0114}Nobody can stop my revenge on {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0114" text="{=PRev0114}Nobody can stop me from taking revenge on {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
     <string id="PRev0115" text="{=PRev0115}Your party is too small" />
     <string id="PRev0116" text="{=PRev0116}{CRIMINAL.LINK} will die![if:convo_furious][ib:angry]" />
-    <string id="PRev0117" text="{=PRev0117}Enough, I will not change my intentions![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
-    <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. Noble people are not the criminals for you." />
+    <string id="PRev0117" text="{=PRev0117}Enough, my decision is final![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="{=PRev0118}Here take {BRIBEVALUE}{GOLD_ICON}. These noble people are not the criminals you are looking for." />
     <string id="PRev0119" text="{=PRev0119}Not now." />
-    <string id="PRev0120" text="{=PRev0120}They are breaking the law and they will face consequences for their crimes.[ib:closed][if:angry]" />
+    <string id="PRev0120" text="{=PRev0120}They are breaking the law and will rightfully face the consequences of their actions.[ib:closed][if:angry]" />
     <string id="PRev0121" text="{=PRev0121}I can't make any promises..[ib:closed]" />
-    <string id="PRev0122" text="{=PRev0122}Bribe will not work yet." />
-    <string id="PRev0123" text="{=PRev0123}Cannot bribe. Peasant's traits not allow." />
+    <string id="PRev0122" text="{=PRev0122}Your bribe will not work. Be more patient." />
+    <string id="PRev0123" text="{=PRev0123}The Peasant's traits do not allow for bribes." />
     <string id="PRev0124" text="{=PRev0124}Yes. Why do you ask?[ib:closed][rf:convo_thinking]" />
     <string id="PRev0125" text="{=PRev0125}I admit.[if:convo_thinking][if:convo_grave]" />
     <string id="PRev0126" text="{=PRev0126}{EXECUTIONER.LINK} will chop your head off!" />
@@ -136,19 +136,19 @@
     <string id="PRev0130" text="{=PRev0130}Maybe..." />
     <string id="PRev0131" text="{=PRev0131}I think...[ib:thinking]" />
     <string id="PRev0132" text="{=PRev0132}No one should be afraid of these criminals." />
-    <string id="PRev0133" text="{=PRev0133}Someone must be held accountable for destruction of our villages." />
-    <string id="PRev0134" text="{=PRev0134}Keep justice into your own hands." />
+    <string id="PRev0133" text="{=PRev0133}Someone must be held accountable for the destruction of our village!" />
+    <string id="PRev0134" text="{=PRev0134}Take justice into your own hands!" />
     <string id="PRev0135" text="{=PRev0135}These criminals are too dangerous." />
-    <string id="PRev0136" text="{=PRev0136}To pity an enemy is to find a friend." />
-    <string id="PRev0137" text="{=PRev0137}Give justice into hands of nobles. You are not so important." />
-    <string id="PRev0138" text="{=PRev0138}Everyone has heard your hostile speeches against noble people." />
-    <string id="PRev0139" text="{=PRev0139}Your kindness to the enemy is criminal one." />
+    <string id="PRev0136" text="{=PRev0136}Pity for your enemy is cruelty onto your ally." />
+    <string id="PRev0137" text="{=PRev0137}Let the nobles take care of the judgement. You are not important enough." />
+    <string id="PRev0138" text="{=PRev0138}Everyone has heard of your hostile speeches against nobles." />
+    <string id="PRev0139" text="{=PRev0139}Your kindness to the enemy is harmful enough to consider it criminal." />
     <string id="PRev0140" text="{=PRev0140}Everyone knows I'm telling the truth." />
     <string id="PRev0141" text="{=PRev0141}Your accusation is baseless.[ib:nervous][if:convo_astonished]"/>
     <string id="PRev0142" text="{=PRev0142}Do not expect me to change my ways." />
     <string id="PRev0143" text="{=PRev0143}Let's say it was a misunderstanding." />
-    <string id="PRev0144" text="{=PRev0144}Great question! Let me show my example..." />
-    <string id="PRev0145" text="{=PRev0145}To try persuade the peasant" />
+    <string id="PRev0144" text="{=PRev0144}Great question! Let me demonstrate with an example..." />
+    <string id="PRev0145" text="{=PRev0145}Try to persuade the peasant" />
     <string id="PRev0146" text="{=PRev0146}Expell the peasant" />
     <string id="PRev0147" text="{=PRev0147}Expell or execute the peasant" />
   </strings>
