@@ -422,7 +422,12 @@ namespace PeasantRevenge
 
         private void VillageBeingRaided(Village village)
         {
-            if (village.Settlement.LastAttackerParty.Party.LeaderHero == null) return;
+            if(village.Settlement.LastAttackerParty == null)
+                return;
+            if(village.Settlement.LastAttackerParty.Party == null)
+                return;
+            if (village.Settlement.LastAttackerParty.Party.LeaderHero == null) 
+                return;
 
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) =>
             x.criminal == village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject &&
@@ -823,7 +828,7 @@ namespace PeasantRevenge
                             //Cannot save criminal because hero clan deals with peasant revenge first 
                             //Must return here if player refuses to deal with criminal!!!
                             if (settlement.OwnerClan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader ||
-                               (prisoner.Clan == Hero.MainHero.Clan)) //if prisoner is player's companion return to player too (not the same rules as AI) // harcore mode do not allow player to save companion - the same rules like AI
+                               (prisoner.Clan == Hero.MainHero.Clan) || prisoner == Hero. MainHero) //if prisoner is player's companion return to player too (not the same rules as AI) // harcore mode do not allow player to save companion - the same rules like AI
                             {
                                 return true;
                             }
@@ -989,7 +994,7 @@ namespace PeasantRevenge
                         else
                         {//Have money, so maybe no kill?
 
-                            if (settlement.OwnerClan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader || (party.Owner.Clan == Hero.MainHero.Clan)) // persuede party to always care of peasants ?
+                            if (settlement.OwnerClan == Hero.MainHero.Clan && _cfg.values.alwwaysReportPeasantRevengeToClanLeader || (party.Owner.Clan == Hero.MainHero.Clan) || prisoner == Hero. MainHero) // persuede party to always care of peasants ?
                             {
                                 return true;
                             }
@@ -1589,7 +1594,7 @@ namespace PeasantRevenge
                 {
                     var settlements = Settlement.All.Where(x =>
                     (x.LastAttackerParty != null ?
-                    (x.LastAttackerParty.Owner == criminal && x.IsUnderRaid && !criminal.IsPrisoner) : false) && x.IsVillage);
+                    (x.LastAttackerParty.Owner != null ? (x.LastAttackerParty.Owner == criminal && x.IsUnderRaid && !criminal.IsPrisoner): false) : false) && x.IsVillage);
 
                     if (settlements != null && !settlements.IsEmpty())
                     {

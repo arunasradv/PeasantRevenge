@@ -6,7 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: crash after decision to kill the notable peasant while visiting the village."/>
+        <ChangeNotes Value="Patch: Additional null checks (patch for Adventurer mod). Adventurer mod is creating raiding party without leader, so it cannot participate in the peasant's revenge."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
