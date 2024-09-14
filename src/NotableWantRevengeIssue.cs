@@ -1299,16 +1299,10 @@ namespace PeasantRevenge
                },
                this,100,null,null);
 
-
-
-
-
-
-                //TODO: FIX ending here - should go back to previous menu , or other option...
                 dialog.AddPlayerLine(
                  "peasant_revenge_discuss_pr_demands_pl_options_pl_blame_n",
                  "peasant_revenge_discuss_pr_demands_pl_blame_options",
-                 "close_window",
+                 "peasant_revenge_discuss_pr_demands_pl_options" ,
                  "{=*}I will find out soon.",null,null,this,100,null);
 
 
