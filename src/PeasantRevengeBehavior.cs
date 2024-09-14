@@ -422,7 +422,12 @@ namespace PeasantRevenge
 
         private void VillageBeingRaided(Village village)
         {
-            if (village.Settlement.LastAttackerParty.Party.LeaderHero == null) return;
+            if(village.Settlement.LastAttackerParty == null)
+                return;
+            if(village.Settlement.LastAttackerParty.Party == null)
+                return;
+            if (village.Settlement.LastAttackerParty.Party.LeaderHero == null) 
+                return;
 
             IEnumerable<PeasantRevengeData> currentData = revengeData.Where((x) =>
             x.criminal == village.Settlement.LastAttackerParty.Party.LeaderHero.CharacterObject &&
@@ -1589,7 +1594,7 @@ namespace PeasantRevenge
                 {
                     var settlements = Settlement.All.Where(x =>
                     (x.LastAttackerParty != null ?
-                    (x.LastAttackerParty.Owner == criminal && x.IsUnderRaid && !criminal.IsPrisoner) : false) && x.IsVillage);
+                    (x.LastAttackerParty.Owner != null ? (x.LastAttackerParty.Owner == criminal && x.IsUnderRaid && !criminal.IsPrisoner): false) : false) && x.IsVillage);
 
                     if (settlements != null && !settlements.IsEmpty())
                     {
