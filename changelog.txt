@@ -159,3 +159,5 @@ Fix: crash after decision to kill the notable peasant while visiting the village
 240829 v15.1.3.12
 Feature: v1.2.11 support
 Fix: Case where player pays reparation without dialogue, when prisoner is player and has money.
+240914 v15.1.3.13
+Patch: Additional null checks (patch for Adventurer mod).
