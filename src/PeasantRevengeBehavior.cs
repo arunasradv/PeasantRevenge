@@ -2102,7 +2102,7 @@ namespace PeasantRevenge
              "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
              "{=PRev0100}I cannot decide...[if:convo_thinking][ib:closed]",
              () => AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
-             () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision); }, 100, null);
+             () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision);} , 100, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_1",
@@ -2175,48 +2175,50 @@ namespace PeasantRevenge
             }, 100, null);
 
             campaignGameStarter.AddPlayerLine(
-            "peasant_revenge_lord_start_grievance_denied_pay_end_comment",
+            "peasant_revenge_lord_start_grievance_denied_pay_end_comment_silent",
             "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
             "close_window",
             "{PLCOMMENT}",
             () =>
             {
-                TextObject text = new TextObject("{=PRev0106}...");
-                if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.party_no_decision))
-                {
-                    text = new TextObject("{=PRev0102}A good decision...");
-                }
-                else
-                {
-                    text = new TextObject("{=PRev0106}...");
-                }
+                TextObject text = new TextObject("{=PRev0106}...");                
                 MBTextManager.SetTextVariable("PLCOMMENT", text);
                 return true;
             },
             () =>
             {
-                if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
-                   currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
-                {
-                    peasant_revenge_peasant_kill_both_consequence_lied();
-                }
-                else
-                {
-                    if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
-                    {
-                        peasant_revenge_cannot_pay_consequence();
-                    }
-                    else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
-                    {
-                        peasant_revenge_peasant_kill_victim_consequence_lied();
-                    }
-                }
-                if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.party_no_decision))
-                {
-                    peasant_revenge_hero_cannot_make_decision_consequence(currentRevenge.party.LeaderHero);
-                }
-                currentRevenge.Stop();
-            }, 100, null, null);
+                peasant_revenge_lord_start_end_consequence ( );
+            } , 100, null, null);
+            /*TODO: peasant_revenge_lord_start_grievance_denied_pay_end_pl_c should be persuation*/
+            campaignGameStarter.AddPlayerLine (
+          "peasant_revenge_lord_start_grievance_denied_pay_end_comment_last_w" ,
+          "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c" ,
+          "close_window" ,
+          "{PLCOMMENTLAST}" ,()=>{
+
+              TextObject text = new TextObject("{=PRev0129}What's there to discuss?");
+              if(!currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.party_no_decision))
+              {
+                  text = new TextObject ("{=PRev0102}A good decision...");
+              }
+              else if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.criminal_killed))
+              {
+                  /*TODO:by traits should select lines*/
+                  text = new TextObject ("{=*}You will regret it!");
+              }
+              else if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.accused_hero_killed))
+              {
+                  text = new TextObject ("{=PRev0135}These criminals are too dangerous.");
+              }
+              
+              MBTextManager.SetTextVariable ("PLCOMMENTLAST" ,text ,false);
+              return true;
+          } ,
+          () =>
+          {
+              peasant_revenge_lord_start_end_consequence ( );
+          } ,
+          100 ,new ConversationSentence.OnClickableConditionDelegate (this.peasant_revenge_player_last_words_clickable));
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_grievance_barter_reaction_line",
@@ -2246,7 +2248,7 @@ namespace PeasantRevenge
               "{=PRev0013}That is quite unfortunate.[ib:warrior][if:convo_bored][rf:convo_grave]", () => !this.barter_successful_condition(),
               null, 100, null);
 
-            #endregion
+#endregion
 
             #region When player captured the criminal
             campaignGameStarter.AddDialogLine(
@@ -2857,6 +2859,37 @@ namespace PeasantRevenge
             #endregion
 
             Campaign.Current.ConversationManager.AddDialogFlow(this.GetNotablePersuasionDialogFlow(), this);
+        }
+
+        private void peasant_revenge_lord_start_end_consequence ()
+        {
+            if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.accused_hero_killed) &&
+                               currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.criminal_killed))
+            {
+                peasant_revenge_peasant_kill_both_consequence_lied ( );
+            }
+            else
+            {
+                if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.criminal_killed))
+                {
+                    peasant_revenge_cannot_pay_consequence ( );
+                }
+                else if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.accused_hero_killed))
+                {
+                    peasant_revenge_peasant_kill_victim_consequence_lied ( );
+                }
+            }
+            if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.party_no_decision))
+            {
+                peasant_revenge_hero_cannot_make_decision_consequence (currentRevenge.party.LeaderHero);
+            }
+            currentRevenge.Stop ( );
+        }
+
+        private bool peasant_revenge_player_last_words_clickable (out TextObject explanation)
+        {
+            explanation = new TextObject ("{=*}A stupid comment you make." ,null);
+            return true;
         }
 
         private bool peasant_revenge_player_not_happy_with_peasant_end_accusation_companion_clickable(out TextObject explanation)
