@@ -164,3 +164,4 @@ Patch: Additional null checks (patch for Adventurer mod).
 240921 v15.1.3.14
 Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.
 Feature: (not implemented) Last words before beheading.
+Fix: (not implemented) Notable party does not have your gold after you pay them the reparation.

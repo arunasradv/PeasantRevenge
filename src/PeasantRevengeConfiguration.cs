@@ -133,6 +133,13 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
+            
+            public List<RelationsPerTraits> lastWordsIdPRev0149;
+            public List<RelationsPerTraits> lastWordsIdPRev0150;
+            public List<RelationsPerTraits> lastWordsIdPRev0151;
+            public List<RelationsPerTraits> lastWordsIdPRev0152;
+            public List<RelationsPerTraits> lastWordsIdPRev0153;
+            public List<RelationsPerTraits> lastWordsIdPRev0154;
 
             public void Default()
             {
@@ -520,6 +527,41 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = 0},
                         new TraitAndValue { trait = "Generosity", value = 1}
                    };
+            }
+
+            public void default_lastWordsIdPRev0149 ()
+            {
+                lastWordsIdPRev0149 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                };
+            }
+            public void default_lastWordsIdPRev0150 ()
+            {
+                lastWordsIdPRev0150 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0151 ()
+            {
+                lastWordsIdPRev0151 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0152 ()
+            {
+                lastWordsIdPRev0152 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
             }
         }
 
