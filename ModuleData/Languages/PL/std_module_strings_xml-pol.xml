@@ -151,5 +151,6 @@
      <string id="PRev0145" text="Aby spróbować przekonać chłopa" />
      <string id="PRev0146" text="Wypędź chłopa" />
      <string id="PRev0147" text="Wypędź lub rozstrzelaj chłopa" />
+     <string id="PRev0148" text="Chłopi ukarzą ciebie i twoich wspólników {ACCUSEDHERO.LINK}." />
   </strings>
 </base>
