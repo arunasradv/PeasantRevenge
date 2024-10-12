@@ -6,8 +6,8 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Feature: v1.2.11 support. 
-                     Fix: Case where player pays reparation without dialogue, when prisoner is player and has money."/>
+        <ChangeNotes Value="Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.
+                     Fix: Option where supportive hero pays reparation in place of player."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
