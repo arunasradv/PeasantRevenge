@@ -2102,7 +2102,7 @@ namespace PeasantRevenge
              "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
              "{=PRev0100}I cannot decide...[if:convo_thinking][ib:closed]",
              () => AIwillMakeNoDecisionDueConflict(Hero.MainHero, currentRevenge),
-             () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision);} , 100, null);
+             () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision); }, 100, null);
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_start_grievance_denied_confirm_a_lie_option_1",
@@ -2235,7 +2235,7 @@ namespace PeasantRevenge
              "peasant_revenge_lord_grievance_received_pay",
              "close_window",
              "{=PRev0012}Well I am satisfied with that.[ib:happy]",
-             new ConversationSentence.OnConditionDelegate(this.barter_successful_condition),
+            ()=>{ return this.barter_successful_condition ( ) || currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.kingdom_paid); } ,
              new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_payed_consecuence), 100, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_lord_start_grievance_not_received_pay",
@@ -4243,6 +4243,8 @@ namespace PeasantRevenge
             List<Hero> savers = GetHeroSuportersWhoCouldPayUnpaidRansom(currentRevenge.criminal.HeroObject, currentRevenge.reparation);
             if (!savers.IsEmpty())
             {
+                currentRevenge.quest_Results.Clear ( );
+                currentRevenge.quest_Results.Add (PeasantRevengeData.quest_result.kingdom_paid);
                 Hero saver = savers.GetRandomElementInefficiently();
                 GiveGoldAction.ApplyBetweenCharacters(saver, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, false);
                 string LogMessage = "{=PRev0040}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {SAVER.NAME} paid {REPARATION}{GOLD_ICON} in reparation.";
