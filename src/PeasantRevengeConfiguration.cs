@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 20;
+        public int CfgVersion = 21;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -140,6 +140,8 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lastWordsIdPRev0152;
             public List<RelationsPerTraits> lastWordsIdPRev0153;
             public List<RelationsPerTraits> lastWordsIdPRev0154;
+            public List<RelationsPerTraits> lastWordsIdPRev0155;
+            public List<RelationsPerTraits> lastWordsIdPRev0156;
 
             public void Default()
             {
@@ -172,7 +174,14 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-
+                default_lastWordsIdPRev0149();
+                default_lastWordsIdPRev0150();
+                default_lastWordsIdPRev0151();
+                default_lastWordsIdPRev0152();
+                default_lastWordsIdPRev0153();
+                default_lastWordsIdPRev0154();
+                default_lastWordsIdPRev0155();
+                default_lastWordsIdPRev0156();
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -558,6 +567,42 @@ namespace PeasantRevenge
             public void default_lastWordsIdPRev0152 ()
             {
                 lastWordsIdPRev0152 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0153 ()
+            {
+                lastWordsIdPRev0153 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0154 ()
+            {
+                lastWordsIdPRev0154 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Generosity < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0155 ()
+            {
+                lastWordsIdPRev0155 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0156 ()
+            {
+                lastWordsIdPRev0156 =
                 new List<RelationsPerTraits>
                 {
                      new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }

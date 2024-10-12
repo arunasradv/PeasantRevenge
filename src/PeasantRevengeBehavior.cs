@@ -2136,7 +2136,7 @@ namespace PeasantRevenge
             "peasant_revenge_lord_start_grievance_denied_accusation_fail_maybe" ,
             "{=PRev0130}Maybe..." ,
             () => { return currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accusation_fail_both_blamed); } ,
-            null ,100 ,null);
+            null ,101 ,null);
 
             campaignGameStarter.AddDialogLine (
           "peasant_revenge_lord_start_grievance_denied_accusation_fail_ai_c" ,
@@ -2185,17 +2185,36 @@ namespace PeasantRevenge
                 MBTextManager.SetTextVariable("PLCOMMENT", text);
                 return true;
             },
-           new ConversationSentence.OnConsequenceDelegate (peasant_revenge_lord_start_end_consequence) ,100 , null, null);
+           new ConversationSentence.OnConsequenceDelegate (peasant_revenge_lord_start_end_consequence) ,102 , null, null);
             
             /*TODO: peasant_revenge_lord_start_grievance_denied_pay_end_pl_c should be persuation*/
             
             campaignGameStarter.AddPlayerLine (
           "peasant_revenge_lord_start_grievance_denied_pay_end_comment_last_w" ,
           "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c" ,
-          "close_window" ,/*TODO: create ai reaction to this comment*/
+          "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction" ,/*TODO: create ai reaction to this comment*/
           "{PLCOMMENTLAST}" ,new ConversationSentence.OnConditionDelegate(peasant_revenge_player_last_words_condition) ,
-         new ConversationSentence.OnConsequenceDelegate(peasant_revenge_lord_start_end_consequence),
+         null,
           100 ,new ConversationSentence.OnClickableConditionDelegate (this.peasant_revenge_player_last_words_clickable));
+
+            campaignGameStarter.AddDialogLine (
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_op0" ,
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction" ,
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction_plo" ,
+            "{=PRev0011}Pay for your crime![rf:idle_angry][if:convo_bored]" ,
+             null ,
+             null ,100 ,null);
+
+            
+
+            campaignGameStarter.AddPlayerLine (
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction_plo0" ,
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction_plo" ,
+            "close_window" ,
+            "{=PRev0106}..." ,
+            null,
+            new ConversationSentence.OnConsequenceDelegate (peasant_revenge_lord_start_end_consequence) ,101 ,null);
+
 
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_lord_grievance_barter_reaction_line",
@@ -2838,7 +2857,7 @@ namespace PeasantRevenge
             Campaign.Current.ConversationManager.AddDialogFlow(this.GetNotablePersuasionDialogFlow(), this);
         }
 
-        private bool peasant_revenge_player_last_words_condition ()
+        private bool peasant_revenge_player_last_words_condition()
         {
             TextObject text = new TextObject("{=PRev0129}What's there to discuss?");
 
@@ -2848,6 +2867,8 @@ namespace PeasantRevenge
             bool PRev0152 = false;
             bool PRev0153 = false;
             bool PRev0154 = false;
+            bool PRev0155 = false;
+            bool PRev0156 = false;
 
             if(currentRevenge.accused_hero != null)
             {
@@ -2858,6 +2879,8 @@ namespace PeasantRevenge
                 PRev0152 = CheckConditions (Hero.MainHero ,currentRevenge.accused_hero.HeroObject ,_cfg.values.ai.lastWordsIdPRev0152);
                 PRev0153 = CheckConditions (Hero.MainHero ,currentRevenge.accused_hero.HeroObject ,_cfg.values.ai.lastWordsIdPRev0153);
                 PRev0154 = CheckConditions (Hero.MainHero ,currentRevenge.accused_hero.HeroObject ,_cfg.values.ai.lastWordsIdPRev0154);
+                PRev0155 = CheckConditions (Hero.MainHero ,currentRevenge.accused_hero.HeroObject ,_cfg.values.ai.lastWordsIdPRev0155);
+                PRev0156 = CheckConditions (Hero.MainHero ,currentRevenge.accused_hero.HeroObject ,_cfg.values.ai.lastWordsIdPRev0156);
             }
 
             if(!currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.party_no_decision))
@@ -2884,6 +2907,23 @@ namespace PeasantRevenge
             else if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.criminal_killed))
             {
                 text = new TextObject ("{=*}You will regret it!");
+
+                if(PRev0153)
+                {
+                    text = new TextObject ("{=PRev0153}Death by a peasant's axe is not honorable to me.");
+                }
+                else if(PRev0154)
+                {
+                    text = new TextObject ("{=PRev0154}I have got nothing from that village looting.");
+                }
+                else if(PRev0155)
+                {
+                    text = new TextObject ("{=PRev0155}This bastard should have died.");
+                }
+                else if(PRev0156)
+                {
+                    text = new TextObject ("{=PRev0156}I do not deserve such a fate.");
+                }
             }
             else if(currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.accused_hero_killed))
             {
@@ -2892,7 +2932,6 @@ namespace PeasantRevenge
 
             MBTextManager.SetTextVariable ("PLCOMMENTLAST" ,text ,false);
             return true;
-
         }
 
         private void peasant_revenge_lord_start_end_consequence ()
