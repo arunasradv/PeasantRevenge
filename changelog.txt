@@ -162,4 +162,5 @@ Fix: Case where player pays reparation without dialogue, when prisoner is player
 240914 v15.1.3.13
 Patch: Additional null checks (patch for Adventurer mod).
 240921 v15.1.3.14
+Fix: Option where supportive hero pays reparation in place of player.
 Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.

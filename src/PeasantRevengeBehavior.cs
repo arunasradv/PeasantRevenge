@@ -2237,7 +2237,7 @@ namespace PeasantRevenge
              "peasant_revenge_lord_grievance_received_pay",
              "close_window",
              "{=PRev0012}Well I am satisfied with that.[ib:happy]",
-             new ConversationSentence.OnConditionDelegate(this.barter_successful_condition),
+            ()=>{ return this.barter_successful_condition ( ) || currentRevenge.quest_Results.Contains (PeasantRevengeData.quest_result.kingdom_paid); } ,
              new ConversationSentence.OnConsequenceDelegate(peasant_revenge_player_payed_consecuence), 100, null);
             campaignGameStarter.AddDialogLine(
               "peasant_revenge_lord_start_grievance_not_received_pay",
@@ -2245,6 +2245,8 @@ namespace PeasantRevenge
               "peasant_revenge_lord_start_grievance_received",
               "{=PRev0013}That is quite unfortunate.[ib:warrior][if:convo_bored][rf:convo_grave]", () => !this.barter_successful_condition(),
               null, 100, null);
+
+          
 
             #endregion
 
@@ -4137,6 +4139,8 @@ namespace PeasantRevenge
             List<Hero> savers = GetHeroSuportersWhoCouldPayUnpaidRansom(currentRevenge.criminal.HeroObject, currentRevenge.reparation);
             if (!savers.IsEmpty())
             {
+                currentRevenge.quest_Results.Clear ( );
+                currentRevenge.quest_Results.Add (PeasantRevengeData.quest_result.kingdom_paid);
                 Hero saver = savers.GetRandomElementInefficiently();
                 GiveGoldAction.ApplyBetweenCharacters(saver, currentRevenge.executioner.HeroObject, (int)currentRevenge.reparation, false);
                 string LogMessage = "{=PRev0040}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {SAVER.NAME} paid {REPARATION}{GOLD_ICON} in reparation.";
