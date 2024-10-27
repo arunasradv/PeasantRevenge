@@ -1,14 +1,13 @@
 <Tasks>
     <GetItem>
-        <ItemId Value="2953346157"/>
+        <ItemId Value="2949132830"/>
         <!-- Can be found in the URL of your workshop item -->
     </GetItem>
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->   
-        <ChangeNotes Value="Fix: crash after decision to kill the notable peasant while visiting the village.
-                            Fix: [DeLiXxN] English dialogues.
-                            Fix: dialogues when peasant is commenting his revenge."/>
+        <ChangeNotes Value="Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.
+                     Fix: Option where supportive hero pays reparation in place of player."/>
         <!-- Insert patch notes -->
         <Tags> 
             <!-- You can use the following tags: -->
