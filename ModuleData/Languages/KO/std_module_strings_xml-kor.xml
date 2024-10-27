@@ -151,5 +151,7 @@
     <string id="PRev0145" text="농민을 설득하려고" />
     <string id="PRev0146" text="농민 추방" />
     <string id="PRev0147" text="농민을 추방하거나 처형하세요" />
+    <string id="PRev0148" text="농민들은 당신과 당신의 동료를 처벌할 것입니다 {ACCUSEDHERO.LINK}." />
+
   </strings>
 </base>

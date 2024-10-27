@@ -151,5 +151,7 @@
     <string id="PRev0145" text="農民を説得するために" />
     <string id="PRev0146" text="農民を追放する" />
     <string id="PRev0147" text="農民を追放するか処刑する" />
+    <string id="PRev0148" text="農民はあなたとあなたの仲間を罰するだろう {ACCUSEDHERO.LINK}." />
+
   </strings>
 </base>

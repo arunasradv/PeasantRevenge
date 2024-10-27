@@ -151,5 +151,6 @@
     <string id="PRev0145" text="Чтобы убедить крестьянина" />
     <string id="PRev0146" text="Изгнать мужика" />
     <string id="PRev0147" text="Изгнать или казнить крестьянина" />
+    <string id="PRev0148" text="Крестьяне накажут тебя и твоего сообщника {ACCUSEDHERO.LINK}." />
   </strings>
 </base>
