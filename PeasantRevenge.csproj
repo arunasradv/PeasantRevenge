@@ -281,6 +281,8 @@
     <Compile Include="src\HelpNeutralVillageBehavior.cs" />
     <Compile Include="src\HeroPersuadeNotableBehavior.cs" />
     <Compile Include="src\NotableWantRevengeIssue.cs" />
+    <Compile Include="src\NotableWantRevengeIssueBehavior.cs" />
+    <Compile Include="src\NotableWantRevengeIssueQuest.cs" />
     <Compile Include="src\PeasantRevengeBehavior.cs" />
     <Compile Include="src\PeasantRevengeConfiguration.cs" />
     <Compile Include="src\PeasantRevengeModCfg.cs" />
