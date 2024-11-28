@@ -523,7 +523,7 @@ namespace PeasantRevenge
 
             //NpcLine(new TextObject("{=*}What? Who the hell are you?[rf:idle_angry][ib:closed][if:idle_angry]",null),null,null).
             // Condition(new ConversationSentence.OnConditionDelegate(this.CapturerPartyLeaderDialogCondition)).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
-           
+
             //dialog.AddDialogLine (
             //   "peasant_revenge_talk_to_captured_start_id" ,
             //   "peasant_revenge_talk_to_captured_start" ,
@@ -543,20 +543,21 @@ namespace PeasantRevenge
                     if(this._targetHero.CharacterObject.IsPlayerCharacter == false &&
                     HeroIsPlayersPrisoner (this._targetHero) == false &&
                     Hero.OneToOneConversationHero == this._targetHero)
-                    { 
+                    {
                         TextObject text = new TextObject("{=*}It is time for {QUEST_GIVER.NAME}'s revenge!");/*For identifying the unknown cases*/
 
                         text.SetCharacterProperties ("QUEST_GIVER" ,QuestGiver.CharacterObject);
 
                         if(this._targetHero.PartyBelongedTo != null && this._targetHero.PartyBelongedToAsPrisoner == null) /*hero is with party and not prisoner*/
                         {
-                            text = new TextObject ("{=*}I have complaints from a village you have raided.");
+                            text = new TextObject ("{=*}I have complaints from the village {RAIDEDVILLAGE} you recently attacked.");
+                            text = text.SetTextVariable ("RAIDEDVILLAGE" ,this._targetSettlement.Name);
                         }
                         else if(this._targetHero.PartyBelongedToAsPrisoner != null) /*Target hero is prisoner*/
                         {
-                            text = new TextObject ("{=*}You are in big trouble."); 
+                            text = new TextObject ("{=*}You are in big trouble.");
                         }
-                        
+
                         MBTextManager.SetTextVariable ("TALK_TO_CAPTURED_RAIDER_START" ,text);
                         return true;
                     }
@@ -564,8 +565,8 @@ namespace PeasantRevenge
                     {
                         return false;
                     }
-                } ,null,this ,120 ,null ,null ,null);
-           
+                } ,null ,this ,120 ,null ,null ,null);
+
             dialog.AddDialogLine (
               "peasant_revenge_talk_to_captured_hero_reaction_0_id" ,
               "peasant_revenge_talk_to_captured_hero_reaction_0" ,
@@ -575,24 +576,81 @@ namespace PeasantRevenge
               this ,100 ,null ,null ,null);
 
             /*TODO: Talk with target hero how hero could pay reparation...*/
+            dialog.AddPlayerLine (
+               "peasant_revenge_talk_to_captured_hero_reaction_pl_options_0" ,
+               "peasant_revenge_talk_to_captured_hero_reaction_pl_options" ,
+               "close_window" ,
+               "{=*}Nothing important..." ,
+               () =>
+               {                  
+                   return true;
+               } ,
+               ()=>{ leave_encounter_and_mission ( ); } ,this ,100 ,(out TextObject hintText) =>
+               {
+                   hintText = new TextObject ("{=*} Leave conversation.");
+                   return true;
+               } ,null ,null);
+            /*TODO: change to persuasion*/
+            dialog.AddPlayerLine (
+                  "peasant_revenge_talk_to_captured_hero_reaction_pl_options_1" ,
+                  "peasant_revenge_talk_to_captured_hero_reaction_pl_options" ,
+                  "peasant_revenge_talk_to_captured_hero_answer_options" ,
+                  "{=*}It is very serious mater." ,
+                  () =>
+                  {
+                      return true;
+                  } ,
+                  () => { /*TODO: should change player's trait exp on used option here.*/ } ,
+                  this ,100 ,(out TextObject hintText) =>
+                  {
+                      hintText = new TextObject ("{=*} +Calculating");
+                      return true;
+                  } ,null ,null);
+
+            /*TODO: make answer dependant on persuation - traits, relations, status*/
+            dialog.AddDialogLine (
+             "peasant_revenge_talk_to_captured_hero_answer_options_agree_0" ,
+             "peasant_revenge_talk_to_captured_hero_answer_options" ,
+             "hero_main_options" ,
+             "{=*}I agree, my peasants must be happy [if:convo_thinking]" ,
+              () =>
+              {
+                  bool same_settlement_clan = this._targetHero.Clan == this._targetSettlement.OwnerClan;
+                  return same_settlement_clan;
+              } ,
+             null ,
+             this ,100 ,null ,null ,null);
+
+            dialog.AddDialogLine (
+            "peasant_revenge_talk_to_captured_hero_answer_options_disagree_1" ,
+            "peasant_revenge_talk_to_captured_hero_answer_options" ,
+            "hero_main_options" ,
+            "{=*}This peasant is not my subject, so I do not care.[if:convo_angry]" ,
+             () =>
+             {
+                 bool same_settlement_clan = this._targetHero.Clan == this._targetSettlement.OwnerClan;
+                 return !same_settlement_clan;
+             } ,
+            null ,
+            this ,100 ,null ,null ,null);
 
 
             return dialog;
         }
 
-            /// <summary>
-            /// discussing the quest progress with quest giver
-            /// - Let kill the raider (player or AI)
-            /// - Pay (raider (player or AI))
-            /// - Pay (in place of raider (AI)) // TODO: Need persuation
-            /// * Blame other AI (player or AI) // TODO: Need persuation
-            /// * Persuade the questGiver to drop the revenge  // TODO: Need persuation
-            /// - Abandon the quest
-            /// - Return to previous meniu
-            /// </summary>
-            /// TODO: fix crash when encountered quest pary whitch is now enemy and map event is deciding if party should join battle.
-            /// <returns></returns>
-            private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow ()
+        /// <summary>
+        /// discussing the quest progress with quest giver
+        /// - Let kill the raider (player or AI)
+        /// - Pay (raider (player or AI))
+        /// - Pay (in place of raider (AI)) // TODO: Need persuation
+        /// * Blame other AI (player or AI) // TODO: Need persuation
+        /// * Persuade the questGiver to drop the revenge  // TODO: Need persuation
+        /// - Abandon the quest
+        /// - Return to previous meniu
+        /// </summary>
+        /// TODO: fix crash when encountered quest pary whitch is now enemy and map event is deciding if party should join battle.
+        /// <returns></returns>
+        private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow ()
         {
             DialogFlow dialog = DialogFlow.CreateDialogFlow("peasant_revenge_discuss_fate_start",125);
 
@@ -776,7 +834,8 @@ namespace PeasantRevenge
               "peasant_revenge_discuss_fate_pl_blame_options" ,
               "close_window" ,
               "{=*}{accuseD0.NAME}" ,
-              () => {
+              () =>
+              {
                   return _hero_can_accuse_prisoner_condition (Hero.MainHero ,this._targetHero ,0) &&
                   !_hero_can_accuse_condition (this._targetHero ,0);
               } ,
@@ -831,7 +890,8 @@ namespace PeasantRevenge
                "close_window" ,
               "{=*}{EXECUTIONER.LINK} will chop your head off!" ,
               () => { return peasant_revenge_get_executioner_companion_condition ( ); } ,
-              () => {
+              () =>
+              {
                   TextObject text = new TextObject("{=*}{EXECUTIONER.LINK} beheaded the {QUESTGIVER.LINK}.");
                   StringHelpers.SetCharacterProperties ($"QUESTGIVER" ,QuestGiver.CharacterObject ,text);
                   base.AddLog (text);
@@ -1041,7 +1101,8 @@ namespace PeasantRevenge
             "peasant_revenge_player_accuse_start_persuasion" ,
             "{=*}{accuseD0.NAME}" ,
             () => { return _hero_can_accuse_condition (this._targetHero ,0); } ,
-            () => {
+            () =>
+            {
                 //TODO: No ending here , add the ending after persuation.
                 //TODO: Add this to other options.
                 this._accusedHeroByTargetHero = get_prisoner_blamed (this._targetHero ,0);
@@ -1063,7 +1124,8 @@ namespace PeasantRevenge
             "peasant_revenge_player_accuse_start_persuasion" ,
             "{=*}{accuseD1.NAME}" ,
             () => { return _hero_can_accuse_condition (this._targetHero ,1); } ,
-            () => {
+            () =>
+            {
                 this._accusedHeroByTargetHero = get_prisoner_blamed (this._targetHero ,1);
                 peasant_revenge_player_accuse_hero_consequence ( );
 #if false
@@ -1083,7 +1145,8 @@ namespace PeasantRevenge
             "peasant_revenge_player_accuse_start_persuasion" ,
             "{=*}{accuseD2.NAME}" ,
             () => { return _hero_can_accuse_condition (this._targetHero ,2); } ,
-            () => {
+            () =>
+            {
                 this._accusedHeroByTargetHero = get_prisoner_blamed (this._targetHero ,2);
                 peasant_revenge_player_accuse_hero_consequence ( );
 #if false
@@ -1102,11 +1165,13 @@ namespace PeasantRevenge
            "peasant_revenge_discuss_pr_demands_pl_blame_options" ,
            "peasant_revenge_player_accuse_start_persuasion" ,
            "{=*}{accuseD0.NAME}" ,
-           () => {
+           () =>
+           {
                return _hero_can_accuse_prisoner_condition (Hero.MainHero ,this._targetHero ,0) &&
                !_hero_can_accuse_condition (this._targetHero ,0);
            } ,
-           () => {
+           () =>
+           {
                this._accusedHeroByTargetHero = get_any_prisoner_to_be_blamed (Hero.MainHero ,this._targetHero ,0);
                peasant_revenge_player_accuse_hero_consequence ( );
 #if false
@@ -1138,7 +1203,8 @@ namespace PeasantRevenge
            "close_window" ,
            "{=*}Glad it ended here.[if:convo_happy]" ,
           () => { return _hero_can_accuse_condition (this._targetHero ,0); } ,
-            () => {
+            () =>
+            {
                 Hero hero_accused = (pr_event_status==event_status.accusation_success) ? this._accusedHeroByTargetHero : this._targetHero;
                 TextObject text = new TextObject("{=*}You blamed {accuseD0.LINK} for the crime.");
                 StringHelpers.SetCharacterProperties ($"accuseD{0}" ,hero_accused.CharacterObject ,text);
@@ -1224,7 +1290,8 @@ namespace PeasantRevenge
                "close_window" ,
                "{=!}{TRY_LATER_PERSUASION_LINE}" ,
                new ConversationSentence.OnConditionDelegate (this.persuasion_start_captured_player_accuse_persuasion_rejected_on_condition) ,
-               () => {
+               () =>
+               {
                    this.persuasion_rejected_on_consequence ( );
                    leave_encounter_and_mission ( );
                } ,
