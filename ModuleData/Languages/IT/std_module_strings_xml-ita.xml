@@ -151,5 +151,6 @@
     <string id="PRev0145" text="Per cercare di persuadere il contadino" />
     <string id="PRev0146" text="Espellere il contadino" />
     <string id="PRev0147" text="Espellere o giustiziare il contadino" />
+    <string id="PRev0148" text="I contadini puniranno te e i tuoi soci {ACCUSEDHERO.LINK}." />
   </strings>
 </base>

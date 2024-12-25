@@ -15,6 +15,7 @@ The mod only implements things related to peasant revenge. Npc should have the s
 - Better translations.
 > Now it is google translated.
 - Some dialogue lines are shallow and lack variations.
+- Better way to configure the mod.
 
 The mod has almost all main features implemented now. Bigger, not implemented, features are marked as "(not implemented)" in the Readme.md file.
 
@@ -29,9 +30,9 @@ Features what I'm not planing to develop in near future, by myself:
 ### What contributions I'm not looking for.
 Code related features:
 
-- "The code is a mess. Need to rewrite all".
-- Dependency on other mods.
-- Save-able mod module content (quests, classes, parameters...).
+- "The code is a mess. Need to rewrite all". (But I'm thinking to make quests similar how TW did - quest based not a my custom "state machine" someday in the future)
+- Dependency on other mods. (I think many things like mod configuration should be done not in menu , but by in game dialogues, gameplay features (diplomacy, interactions with npc...))
+- Save-able mod module content (quests, classes, parameters... Until main mod features are not fully completed save-able content should not be added).
 
 New events:
 
