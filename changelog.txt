@@ -166,3 +166,5 @@ Fix: Option where supportive hero pays reparation in place of player.
 Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.
 240628 v20.0.0.0
 Feature: Peasant's revenge quests
+Added: lordPersuadeNotableExcludeTraitsAndRelationsWithNotable
+Added: lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner

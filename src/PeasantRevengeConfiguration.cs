@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 20;
+        public int CfgVersion = 21;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -133,7 +133,8 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
-
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
             public void Default()
             {
                 default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
@@ -165,8 +166,9 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-
-            }
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner();
+        }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
             {
@@ -239,7 +241,8 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
                 new RelationsPerTraits { traits = "Mercy == 1&Honor > 0", relations = "Relations > -20" },
                 new RelationsPerTraits { traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -30" },
-                 };}
+                 };
+            }
             public void default_lordIfRelativesWillHelpTheCriminal()
             {
                 lordIfRelativesWillHelpTheCriminal =
@@ -251,37 +254,6 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
-                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
-                  new List<RelationsPerTraits>
-                  {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
-                  };
-
-                default_lordWillKillBothAccusedHeroAndCriminalLord();
-                default_criminalWillBlameOtherLordForTheCrime();
-                default_lordTraitChangeWhenRansomRemainsDeclined();
-                default_lordTraitChangeWhenRansomRemainsAccepted();
-                default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
-                default_lordWillDeclineRansomTheVictimRemains();
-                default_lordWillAbandonTheVictimRemains();
-                default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
-                default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
-                default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
-                default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
-                default_PersuadeNotableToRevengeTraitsForOption0();
-                default_PersuadeNotableToRevengeTraitsForOption1();
-                default_PersuadeNotableToRevengeTraitsForOption2();
-                default_PersuadeNotableNotToRevengeTraitsForOption0();
-                default_PersuadeNotableNotToRevengeTraitsForOption1();
-                default_PersuadeNotableNotToRevengeTraitsForOption2();
-                default_AccuseNotableTraitsForOption0();
-                default_AccuseNotableTraitsForOption1();
-                default_AccuseNotableTraitsForOption2();
-
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -520,6 +492,23 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Valor", value = 0},
                         new TraitAndValue { trait = "Generosity", value = 1}
                    };
+            }
+
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelationsWithNotable=new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Calculating >= 0", relations = "Relations < 0" }
+                };
+            }
+
+            
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner=new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 20" }
+                };
             }
         }
 

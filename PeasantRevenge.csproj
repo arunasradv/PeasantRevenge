@@ -275,6 +275,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Common.cs" />
     <Compile Include="src\GiftBarterable.cs" />
     <Compile Include="src\Helpers\CfgParser.cs" />
     <Compile Include="src\Helpers\XmlCfg.cs" />

@@ -23,6 +23,7 @@ using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using static PeasantRevenge.Common;
 
 namespace PeasantRevenge
 {
@@ -1191,47 +1192,9 @@ namespace PeasantRevenge
                 return null;
             }
         }
-
-        private bool hero_trait_list_condition(Hero hero, string conditions, params Hero[] target)
-        {
-           bool result = CfgParser.hero_trait_list_condition(hero ,conditions , out string parseerror, target);
-
-            if(parseerror != "")
-            {
-                log(parseerror);
-                ResetConfiguration();
-                return false;
-            }
-
-            return result;
-        }
-
-        private static int GetHeroTraitValue(Hero hero, string tag)
-        {
-            CharacterTraits ht = hero.GetHeroTraits();
-            PropertyInfo[] props = ht.GetType().GetProperties();
-            var prop = props.Where((x) => x.Name == tag).FirstOrDefault();
-            if (prop == null)
-            {
-                return 0;
-            }
-
-            int value = (int)prop.GetValue((object)ht);
-
-            return value;
-        }
-
-        private static void SetHeroTraitValue(Hero hero, string tag, int value)
-        {
-            hero.SetTraitLevel(TraitObject.All.Where((x) => x.StringId.ToString() == tag).First(), value);
-        }
+       
         #region Configuration 
-        private void ResetConfiguration()
-        {
-            _cfg = new PeasantRevengeModCfg();
-            _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters();
-            _cfg.values.ai.Default();
-        }
+       
         private void SetEnableRevengerMobileParty(bool value)
         {
             _cfg.values.enableRevengerMobileParty = value;
@@ -1302,7 +1265,11 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_AccuseNotableTraitsForOption0();
                         _cfg.values.ai.default_AccuseNotableTraitsForOption1();
                         _cfg.values.ai.default_AccuseNotableTraitsForOption2();
+                    }
 
+                    if(_cfg.values.CfgVersion < 21)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
                     }
                 }
             }
@@ -1541,43 +1508,8 @@ namespace PeasantRevenge
             }
             return true;
         }
-        /// <summary>
-        /// Checking hero (hero) traits and relations with another hero (target)
-        /// </summary>
-        /// <param name="hero">hero who has traits and relations with target hero</param>
-        /// <param name="target">hero who relation is checked with hero</param>
-        /// <param name="traits"></param>
-        /// <returns></returns>
-        private bool CheckConditions(Hero hero, Hero target, List<PeasantRevengeConfiguration.RelationsPerTraits> traits)
-        {
-            if (traits.IsEmpty()) return true;
+       
 
-            foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
-            {
-                if (hero_trait_list_condition(hero, rpt.relations, target))
-                {
-                    if (hero_trait_list_condition(hero, rpt.traits, target))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private bool CheckOnlyTraitsConditions(Hero hero, Hero target, List<PeasantRevengeConfiguration.RelationsPerTraits> traits)
-        {
-            if (traits.IsEmpty()) return true;
-
-            foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
-            {
-                if (hero_trait_list_condition(hero, rpt.traits, target))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         private List<Hero> GetHeroSuportersWhoCouldSaveVictim(Hero victim, int goldNeeded)
         {
@@ -3364,12 +3296,7 @@ namespace PeasantRevenge
             TextObject textObject = new TextObject(msg, null);
             MBTextManager.SetTextVariable("PAYER_COMMENT_REVENGE_TEACH", textObject);
             return true;
-        }
-
-        private bool notable_can_do_revenge(Hero hero)
-        {
-            return !hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait);
-        }
+        }       
 
         private bool peasant_revenge_player_not_happy_with_peasant_start_bribe_clickable(out TextObject text)
         {
@@ -3911,61 +3838,7 @@ namespace PeasantRevenge
             return true;
         }
 
-        private void TeachHeroTraits(Hero hero, string traits, bool direction, params Hero[] teacher)
-        {
-            if (string.IsNullOrEmpty(traits)) return;
-
-            List<string> traits_con_pool = traits.Split('|').ToList();
-            string[] traits_con = traits_con_pool.ToArray();
-
-            foreach (string trait_or in traits_con)
-            {
-                string[] trait_or_con = trait_or.Split('&');
-
-                foreach (string trait in trait_or_con)
-                {
-                    string[] a = trait.Split(' ');
-                    int value = GetHeroTraitValue(hero, a[0]);
-
-                    if (!teacher.IsEmpty())
-                    {
-                        int target = GetHeroTraitValue(teacher.First(), a[0]);
-
-                        if (a[1].Contains(">"))
-                        {
-                            value = value > target ? direction ? value : target : direction ? target : value;
-                        }
-                        else if (a[1].Contains("<"))
-                        {
-                            value = value < target ? direction ? value : target : direction ? target : value;
-                        }
-                        else if (a[1].Contains("=="))
-                        {
-                            value = value == target ? value : value > target ? direction ? value : target : direction ? target : value;
-                        }
-                    }
-                    else
-                    {
-                        int target = int.Parse(a[2]);
-
-                        if (a[1].Contains(">"))
-                        {
-                            value = direction ? target + 1 : target - 1;
-                        }
-                        else if (a[1].Contains("<"))
-                        {
-                            value = direction ? target - 1 : target + 1;
-                        }
-                        else if (a[1].Contains("=="))
-                        {
-                            value = target;
-                        }
-                    }
-
-                    SetHeroTraitValue(hero, $"{a[0]}", value);
-                }
-            }
-        }
+       
 
         private void peasant_revenge_criminal_has_suporters_consequence()
         {
@@ -4606,13 +4479,7 @@ namespace PeasantRevenge
             return currentRevenge.party.LeaderHero == Hero.OneToOneConversationHero;
         }
 
-        private void log(string text)
-        {
-            if (!string.IsNullOrEmpty(_cfg.values.log_file_name))
-            {
-                File.AppendAllText(_cfg.values.log_file_name, $"{CampaignTime.Now}: {text}\r");
-            }
-        }
+       
 
 
     }
