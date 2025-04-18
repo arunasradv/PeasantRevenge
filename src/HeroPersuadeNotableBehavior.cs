@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using static PeasantRevenge.Common;
@@ -42,16 +43,39 @@ namespace PeasantRevenge
                         {
                             if(notable!=null)
                             {
-                                TeachHeroTraits(notable,_cfg.values.peasantRevengerExcludeTrait,!to_revenge);
-
-                                if(to_revenge)
-                                {
-                                    log($"{hero.Name} persuaded {notable.Name} to revenge");
-                                }
-                                else
+                                bool success = false;
+                                if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner))
                                 { 
-                                    log($"{hero.Name} persuaded {notable.Name} not to revenge");                                   
+                                    TeachHeroTraits (notable,_cfg.values.peasantRevengerExcludeTrait,!to_revenge);
+                                    success = true;
                                 }
+                                else 
+                                {
+                                    if(can_remove_notable_from_village())
+                                    {
+                                        if (CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner))
+                                        {
+                                            success = true;
+                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                        }
+                                        else
+                                        {
+                                            success = true;
+                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                        }
+                                    }
+                                }
+                                if(success)
+                                {
+                                    if(to_revenge)
+                                    {
+                                        log ($"{hero.Name} persuaded {notable.Name} to revenge");
+                                    }
+                                    else
+                                    {
+                                        log ($"{hero.Name} persuaded {notable.Name} not to revenge");
+                                    }
+                                }                               
                             }
                         }
                     }

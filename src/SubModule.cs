@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using static PeasantRevenge.Common;
 
 namespace PeasantRevenge
 {
@@ -25,10 +26,11 @@ namespace PeasantRevenge
 
                 if (campaignGameStarter != null)
                 {
+                    LoadConfiguration(campaignGameStarter);
                     //campaignGameStarter.AddBehavior(new PeasantRevengeBehavior());
                     campaignGameStarter.AddBehavior(new NotableWantRevengeIssueBehavior());
                     campaignGameStarter.AddBehavior(new HelpNeutralVillageBehavior());
-                    //campaignGameStarter.AddBehavior(new HeroPersuadeNotableBehavior());
+                    campaignGameStarter.AddBehavior(new HeroPersuadeNotableBehavior());
                 }
             }
         }

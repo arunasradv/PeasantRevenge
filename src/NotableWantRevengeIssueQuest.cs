@@ -475,7 +475,8 @@ namespace PeasantRevenge
 
         protected override void SetDialogs ()
         {
-
+           
+            /*TODO: revenger party got stuck after player is let free*/
             Campaign.Current.ConversationManager.AddDialogFlow (GetPlayerDecideTheFateOfRaidersDialogFlow ( ) ,this);
             Campaign.Current.ConversationManager.AddDialogFlow (GetPlayerDiscussRevengerDemandsDialogFlow ( ) ,this);
             Campaign.Current.ConversationManager.AddDialogFlow (GetPlayerAccuseHeroPersuasionDialogFlow ( ) ,this);
@@ -648,7 +649,8 @@ namespace PeasantRevenge
         /// - Abandon the quest
         /// - Return to previous meniu
         /// </summary>
-        /// TODO: fix crash when encountered quest pary whitch is now enemy and map event is deciding if party should join battle.
+        /// TODO: fix crash when encountered quest pary whitch is now enemy and map event is deciding if party should join battle.        ///  
+        /// TODO: fix dialog conditions when discussing the quest with notable, so other quest wont dublicate dialog optins
         /// <returns></returns>
         private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow ()
         {

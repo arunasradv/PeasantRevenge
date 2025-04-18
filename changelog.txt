@@ -168,3 +168,6 @@ Feature: Added option for player to pay the reparation, when blaming another her
 Feature: Peasant's revenge quests
 Added: lordPersuadeNotableExcludeTraitsAndRelationsWithNotable
 Added: lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner
+Added: lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
+Added: lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
+Added: lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;

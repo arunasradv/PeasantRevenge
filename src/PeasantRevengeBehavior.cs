@@ -1271,6 +1271,13 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
                     }
+
+                    if(_cfg.values.CfgVersion < 22)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner();
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner();
+                        _cfg.values.ai.default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner();
+                    }
                 }
             }
             else
@@ -2637,13 +2644,6 @@ namespace PeasantRevenge
             return can_remove_notable_from_village();
         }
 
-        private bool can_remove_notable_from_village()
-        {
-            return (Hero.OneToOneConversationHero!=null
-                && Hero.OneToOneConversationHero.HomeSettlement!= null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables != null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables.Count>1);
-        }
         #region peasant revenge persuede
 
         #region persuation task

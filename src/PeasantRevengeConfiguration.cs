@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 21;
+        public int CfgVersion = 22;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -135,6 +135,10 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;
+
             public void Default()
             {
                 default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet();
@@ -168,6 +172,9 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption2();
                 default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
                 default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner();
         }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -498,7 +505,7 @@ namespace PeasantRevenge
             {
                 lordPersuadeNotableExcludeTraitsAndRelationsWithNotable=new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Calculating >= 0", relations = "Relations < 0" }
+                     new RelationsPerTraits {traits = "Calculating >= 0&Honor > 0", relations = "Relations > 30" }
                 };
             }
 
@@ -507,7 +514,31 @@ namespace PeasantRevenge
             {
                 lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner=new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 20" }
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 30" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner ()
+            {
+                lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0&Calculating > 0", relations = "Relations > 20" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner ()
+            {
+                lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 0", relations = "Relations < 20" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner ()
+            {
+                lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor > 0&Generosity > 0", relations = "Relations > 0" }
                 };
             }
         }

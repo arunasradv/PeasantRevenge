@@ -8,13 +8,184 @@ using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 
 namespace PeasantRevenge
 {
     public static class Common
     {
-        public static PeasantRevengeModCfg _cfg = new PeasantRevengeModCfg();
+        public static PeasantRevengeModCfg _cfg;
+       
+        private static bool IsModuleVersionOlder (ApplicationVersion module_version ,ApplicationVersion compare)
+        {
+            bool is_older = true;
+
+            if(module_version.Major > compare.Major)
+            {
+                is_older = false;
+            }
+            else if(module_version.Major == compare.Major)
+            {
+                if(module_version.Minor > compare.Minor)
+                {
+                    is_older = false;
+                }
+                else if(module_version.Minor == compare.Minor)
+                {
+                    if(module_version.Revision >= compare.Revision)
+                    {
+                        is_older = false;
+                    }
+                }
+            }
+            return is_older;
+        }
+        public static PeasantRevengeConfiguration CheckModules (PeasantRevengeConfiguration cfg_source)
+        {
+            string[] moduleNames = Utilities.GetModulesNames();
+
+            foreach(string modulesId in moduleNames)
+            {
+                if(modulesId.Contains ("Bannerlord.Diplomacy")) // Diplomacy mod patch
+                {
+                    bool need_patch = IsModuleVersionOlder(
+                         TaleWorlds.ModuleManager.ModuleHelper.GetModuleInfo(modulesId).Version,
+                         new ApplicationVersion(ApplicationVersionType.Release,1,2,10,0));
+
+                    if(need_patch)
+                    {
+                        cfg_source.allowLordToKillMessenger = false;
+                        cfg_source.allowPeasantToKillLord = false;
+                    }
+                    break; // because there is no more module patches it should end the configuration
+                }
+            }
+
+            return cfg_source;
+        }
+        public static void LoadConfiguration (CampaignGameStarter campaignGameStarter)
+        {
+            _cfg = new PeasantRevengeModCfg ( );
+            int defaultVersion = new PeasantRevengeConfiguration().CfgVersion;
+
+            if(File.Exists (_cfg.values.file_name))
+            {
+                _cfg.Load (_cfg.values.file_name ,typeof (PeasantRevengeConfiguration));
+
+                if(_cfg.values.ai == null)
+                {
+                    _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters ( );
+                    _cfg.values.ai.Default ( );
+                }
+                else
+                {
+                    // configuration patch for new added configuration variables
+
+                    if(_cfg.values.CfgVersion < 14)
+                    {
+                        _cfg.values.ai.default_criminalWillBlameOtherLordForTheCrime ( );
+                        _cfg.values.ai.default_lordWillKillBothAccusedHeroAndCriminalLord ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 15)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsDeclined ( );
+                        _cfg.values.ai.default_lordTraitChangeWhenRansomRemainsAccepted ( );
+                        _cfg.values.ai.default_lordTraitChangeWhenRemainsOfLordAreAbandoned ( );
+                        _cfg.values.ai.default_lordWillDeclineRansomTheVictimRemains ( );
+                        _cfg.values.ai.default_lordWillAbandonTheVictimRemains ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 16)
+                    {
+                        _cfg.values.ai.default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 17)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest ( );
+                    }
+                    if(_cfg.values.CfgVersion < 19)
+                    {
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge ( );
+                        _cfg.values.ai.default_lordTraitChangeWhenLordPersuedeNotableToRevenge ( );
+                        _cfg.values.ai.default_notableWillAcceptTheBribe ( );
+                    }
+                    if(_cfg.values.CfgVersion < 20)
+                    {
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption0 ( );
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption1 ( );
+                        _cfg.values.ai.default_PersuadeNotableToRevengeTraitsForOption2 ( );
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption0 ( );
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption1 ( );
+                        _cfg.values.ai.default_PersuadeNotableNotToRevengeTraitsForOption2 ( );
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption0 ( );
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption1 ( );
+                        _cfg.values.ai.default_AccuseNotableTraitsForOption2 ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 21)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 22)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner ( );
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner ( );
+                        _cfg.values.ai.default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner ( );
+                    }
+                }
+            }
+            else
+            {
+                if(_cfg.values.ai == null)
+                {
+                    _cfg.values.ai = new PeasantRevengeConfiguration.AIfilters ( );
+                    _cfg.values.ai.Default ( );
+                }
+            }
+
+            _cfg.values = CheckModules (_cfg.values); // leave loaded cfg or change cfg only if needed !
+
+            if(defaultVersion > _cfg.values.CfgVersion || !File.Exists (_cfg.values.file_name))
+            {
+                #region configuration patch
+
+                if(_cfg.values.CfgVersion == 14)
+                {
+                    _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge =
+                        _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge == -2 ? -1 : _cfg.values.relationChangeWhenLordRefusedToSupportPeasantRevenge; //reduced, because lords may lose recruitement village too fast
+                }
+
+                _cfg.values.CfgVersion = defaultVersion;
+                #endregion
+
+                bool can_save = false;
+
+                try
+                {
+                    if(Directory.GetDirectories (_cfg.values.file_name) != null)
+                    {
+                        can_save = true;
+                    }
+                }
+                catch
+                {
+                    //
+                }
+                finally
+                {
+                    if(!can_save)
+                    {
+                        _cfg.values.file_name = PeasantRevengeConfiguration.default_file_name ( );
+                    }
+                }
+
+                _cfg.Save (_cfg.values.file_name ,_cfg.values);
+            }
+        }
 
         public static void ResetConfiguration()
         {
@@ -32,6 +203,14 @@ namespace PeasantRevenge
                 
                 File.AppendAllText(_cfg.values.log_file_name,$"{CampaignTime.Now}: {text}\r");
             }
+        }
+
+        public static bool can_remove_notable_from_village ()
+        {
+            return (Hero.OneToOneConversationHero != null
+                && Hero.OneToOneConversationHero.HomeSettlement != null &&
+                Hero.OneToOneConversationHero.HomeSettlement.Notables != null &&
+                Hero.OneToOneConversationHero.HomeSettlement.Notables.Count > 1);
         }
 
         public static bool notable_can_do_revenge(Hero hero)
