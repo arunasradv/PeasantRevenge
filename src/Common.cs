@@ -196,11 +196,10 @@ namespace PeasantRevenge
 
         public static void log(string text)
         {
+            TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(text,null);
+            InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(),Color.ConvertStringToColor(_cfg.values.logColorForClan)));
             if(!string.IsNullOrEmpty(_cfg.values.log_file_name))
             {
-                TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(text,null);
-                InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(),Color.ConvertStringToColor(_cfg.values.logColorForClan)));
-                
                 File.AppendAllText(_cfg.values.log_file_name,$"{CampaignTime.Now}: {text}\r");
             }
         }

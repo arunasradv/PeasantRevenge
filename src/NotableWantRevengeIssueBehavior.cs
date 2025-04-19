@@ -23,7 +23,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
-
+using static PeasantRevenge.Common;
 
 namespace PeasantRevenge
 {
@@ -51,16 +51,15 @@ namespace PeasantRevenge
         // TODO: If raider is player, the quest should autostart, but now I do not know how to run multiple issues
         private bool ConditionsHold(Hero issueGiver)
         {
-            if(issueGiver.HomeSettlement!=null&&
-                issueGiver.HomeSettlement.IsVillage&&
-                (/*issueGiver.HomeSettlement.IsUnderRaid ||*/ issueGiver.HomeSettlement.LastAttackerParty!=null)&&
-                issueGiver.IsRuralNotable&&
-                issueGiver.GetTraitLevel(DefaultTraits.Mercy)<=0&&issueGiver.GetTraitLevel(DefaultTraits.Valor)>=0&&
+            if(issueGiver.HomeSettlement != null &&
+                issueGiver.HomeSettlement.IsVillage &&
+                (/*issueGiver.HomeSettlement.IsUnderRaid ||*/ issueGiver.HomeSettlement.LastAttackerParty != null) &&
+                issueGiver.IsRuralNotable &&
+                !hero_trait_list_condition (issueGiver , _cfg.values.peasantRevengerExcludeTrait) &&
                 issueGiver.HomeSettlement.Village.Bound.Town.Security<=99f)
             {
 
                 System.Diagnostics.Debug.WriteLine($"ConditionsHold for {issueGiver.Name.ToString()} of {issueGiver.HomeSettlement.Name.ToString()}");
-
                 Village village = issueGiver.HomeSettlement.Village;
                 return village!=null;
             }
