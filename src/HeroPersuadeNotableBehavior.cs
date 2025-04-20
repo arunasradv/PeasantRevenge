@@ -24,7 +24,7 @@ namespace PeasantRevenge
         /// <param name="hero"></param>
         /// <param name="settlement"></param>
         /// <returns>true, if hero cannot do revenge and persuasion direction should be 'to revenge'</returns>
-        private bool GetPersuadeDirection(Hero hero,Settlement settlement)
+        private bool GetPersuadeDirection(Hero hero)
         {
             return hero_trait_list_condition(hero,_cfg.values.peasantRevengerExcludeTrait);
         }
@@ -36,37 +36,32 @@ namespace PeasantRevenge
                 if(settlement.Notables != null && hero != null && !hero.IsHumanPlayerCharacter && hero.IsLord)
                 {
                     if(settlement.Notables.Count > 0)
-                    {
-                        bool to_revenge = GetPersuadeDirection(hero, settlement);
+                    {/*TODO: Add lord persuade notables to rebel quest. 
+                      * If lord has the quest to persuade - random element is not included.*/
+                        bool lordHsNoPersuadeQuest = true;
+                       
+                        if(lordHsNoPersuadeQuest)
+                        {
+                            Random random = new Random((int)hero.Age);
+
+                            if(random.Next (0 ,100) <= (_cfg.values.lordTryPersuadeNotableProbability * 100))
+                            {
+                                return;
+                            }
+
+                        }
+
+                        bool to_revenge = GetPersuadeDirection(hero);                        
 
                         if(HeroWillTryToPersuadeTheNotable(hero,settlement,to_revenge,out Hero notable))
                         {
                             if(notable!=null)
                             {
-                                bool success = false;
+                               
                                 if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner))
                                 { 
                                     TeachHeroTraits (notable,_cfg.values.peasantRevengerExcludeTrait,!to_revenge);
-                                    success = true;
-                                }
-                                else 
-                                {
-                                    if(can_remove_notable_from_village())
-                                    {
-                                        if (CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner))
-                                        {
-                                            success = true;
-                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
-                                        }
-                                        else
-                                        {
-                                            success = true;
-                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
-                                        }
-                                    }
-                                }
-                                if(success)
-                                {
+                                   
                                     if(to_revenge)
                                     {
                                         log ($"{hero.Name} persuaded {notable.Name} to revenge");
@@ -75,7 +70,23 @@ namespace PeasantRevenge
                                     {
                                         log ($"{hero.Name} persuaded {notable.Name} not to revenge");
                                     }
-                                }                               
+                                }
+                                else 
+                                {
+                                    if(can_remove_notable_from_village())
+                                    {
+                                        if (CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner))
+                                        { 
+                                            log ($"{hero.Name} killed {notable.Name}");                                           
+                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                        }
+                                        else if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner))
+                                        {
+                                            log ($"{hero.Name} expeled {notable.Name}");
+                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                        }
+                                    }
+                                }                            
                             }
                         }
                     }
@@ -90,39 +101,36 @@ namespace PeasantRevenge
             bool will_try = false;
 
             notable=null;
-
+           
             for(int i = 0;i<settlement.Notables.Count;i++)
             {
                 notable=settlement.Notables.ElementAt(i);
 
-                // hero traits, relations for direction == true (not to revenge)
-                bool cannot_due_traits_and_relations_with_noble = CheckConditions(hero,notable,_cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithNotable); // lord cannot persuade notable in any way due to his traits and relations
-                bool cannot_due_traits_and_relations_with_settlement_owner = CheckConditions(hero,notable,_cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner); // lord cannot persuade notable in any way due to his traits and relations
+                bool notable_is_oposite = hero_trait_list_condition (notable ,_cfg.values.peasantRevengerExcludeTrait) != direction_to_revenge;
 
-                // hero personal interest
-
-                //bool revenge_to_lord = hero_trait_list_condition(hero,_cfg.values.lordRevengeToLordTraitsAndRelations);
-                //if(revenge_to_noble)
-                //{
-
-                //}
-                // kingdom interest
-                //bool different_faction = hero.MapFaction!=settlement.MapFaction;
-                if(direction_to_revenge)
+                if(notable_is_oposite)
                 {
+                    bool cannot_due_traits_and_relations_with_noble = CheckConditions(hero,notable,_cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithNotable); // lord cannot persuade notable in any way due to his traits and relations
+                    bool cannot_due_traits_and_relations_with_settlement_owner = CheckConditions(hero,notable,_cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner); // lord cannot persuade notable in any way due to his traits and relations
 
-                }
-                else
-                {
+                    // hero personal interest
+                    // traits of heroes should define their prefered direction of persuasion
+                    // direction_to_revenge is already defined by hero. Here should be something to do with quest...
+                    //bool revenge_to_lord = hero_trait_list_condition(hero,_cfg.values.lordRevengeToLordTraitsAndRelations);
+                    //if(revenge_to_noble)
+                    //{
+                    //}
+                    // kingdom interest
+                    // direction may depend of kingdom interest
+                    //bool different_faction = hero.MapFaction!=settlement.MapFaction;
+                    //bool can_because_of_different_faction = different_faction && !direction_to_revenge || !different_faction && direction_to_revenge;
 
-                }
+                    will_try = !cannot_due_traits_and_relations_with_noble && !cannot_due_traits_and_relations_with_settlement_owner;
 
-                will_try= !cannot_due_traits_and_relations_with_noble &&  !cannot_due_traits_and_relations_with_settlement_owner;
-               
-                if(will_try)
-                {
-#warning add random propability, ...
-                    break;
+                    if(will_try)
+                    {
+                        break;
+                    }
                 }
             }
             return will_try;
