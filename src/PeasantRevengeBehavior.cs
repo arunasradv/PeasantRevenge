@@ -1,6 +1,7 @@
 ﻿using Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -220,7 +221,6 @@ namespace PeasantRevenge
         private void OnNewGameCreatedEvent(CampaignGameStarter campaignGameStarter)
         {
             LoadConfiguration(campaignGameStarter);
-            AddGameMenus(campaignGameStarter);
         }
 
         private bool IsModuleVersionOlder(ApplicationVersion module_version, ApplicationVersion compare)
@@ -271,81 +271,7 @@ namespace PeasantRevenge
 
             return cfg_source;
         }
-
-        #region Help village menu
-
-
-        private void AddGameMenus(CampaignGameStarter campaignGameStarter)
-        {
-            campaignGameStarter.AddGameMenuOption(
-                "join_encounter",
-                "join_encounter_help_defenders_force",
-                "{=PRev0087}Declare war on {KINGDOM} and help {DEFENDER}.",
-                new GameMenuOption.OnConditionDelegate(this.game_menu_join_encounter_help_defenders_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(this.game_menu_join_encounter_help_defenders_on_consequence),
-                false, -1, false, null);
-        }
-
-        private bool game_menu_join_encounter_help_defenders_on_condition(MenuCallbackArgs args)
-        {
-            if (!_cfg.values.enableHelpNeutralVillageAndDeclareWarToAttackerMenu) return false;
-
-            args.optionLeaveType = GameMenuOption.LeaveType.DefendAction;
-            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
-            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            //IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
-
-            bool canStartHelpVillageMenu = encounteredBattle.MapEventSettlement != null &&
-                !mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
-                //!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction) &&
-                mapFactionAttacker != MobileParty.MainParty.MapFaction && // if removed can attack own party (not for this mod)
-                encounteredBattle.MapEventSettlement.IsVillage &&
-                encounteredBattle.MapEventSettlement.IsUnderRaid;
-
-            if (canStartHelpVillageMenu)
-            {
-                MBTextManager.SetTextVariable("KINGDOM", mapFactionAttacker.Name.ToString());
-                if (mapFactionAttacker.NotAttackableByPlayerUntilTime.IsFuture)
-                {
-                    args.IsEnabled = false;
-                    args.Tooltip = GameTexts.FindText("str_enemy_not_attackable_tooltip", null);
-                }
-            }
-
-            return canStartHelpVillageMenu;
-        }
-        private void game_menu_join_encounter_help_defenders_on_consequence(MenuCallbackArgs args)
-        {
-            MapEvent encounteredBattle = PlayerEncounter.EncounteredBattle;
-            IFaction mapFactionAttacker = encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker).MapFaction;
-            IFaction mapFactionDefender = encounteredBattle.GetLeaderParty(BattleSideEnum.Defender).MapFaction;
-
-            PartyBase encounteredParty = PlayerEncounter.EncounteredParty;
-
-            if (!mapFactionAttacker.IsAtWarWith(MobileParty.MainParty.MapFaction))
-            {
-                BeHostileAction.ApplyEncounterHostileAction(PartyBase.MainParty, encounteredBattle.GetLeaderParty(BattleSideEnum.Attacker));
-                //if (MobileParty.MainParty.MapFaction == mapFactionAttacker)
-                //{
-                //    ChangeCrimeRatingAction.Apply(MobileParty.MainParty.MapFaction, 61f);
-                //}
-            }
-
-            if (((encounteredParty != null) ? encounteredParty.MapEvent : null) != null)
-            {
-                PlayerEncounter.JoinBattle(BattleSideEnum.Defender);
-                GameMenu.ActivateGameMenu("encounter");
-                if (!mapFactionDefender.IsAtWarWith(MobileParty.MainParty.MapFaction))
-                {
-                    TextObject menuText = new TextObject("{=PRev0086}You decide to...");
-                    MBTextManager.SetTextVariable("ENCOUNTER_TEXT", menuText, true);
-                }
-                return;
-            }
-        }
-
-        #endregion
-       
+               
         private void StopRevengeForNotableIfAny(Hero revenger)
         {
             if(revenger!=null)
@@ -1346,6 +1272,13 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
                     }
+
+                    if(_cfg.values.CfgVersion < 22)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner();
+                        _cfg.values.ai.default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner();
+                        _cfg.values.ai.default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner();
+                    }
                 }
             }
             else
@@ -1405,8 +1338,7 @@ namespace PeasantRevenge
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
         {
-            LoadConfiguration(campaignGameStarter);
-            AddGameMenus(campaignGameStarter);
+            LoadConfiguration(campaignGameStarter);          
         }
         #endregion
 
@@ -2713,13 +2645,6 @@ namespace PeasantRevenge
             return can_remove_notable_from_village();
         }
 
-        private bool can_remove_notable_from_village()
-        {
-            return (Hero.OneToOneConversationHero!=null
-                && Hero.OneToOneConversationHero.HomeSettlement!= null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables != null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables.Count>1);
-        }
         #region peasant revenge persuede
 
         #region persuation task
@@ -2819,6 +2744,16 @@ namespace PeasantRevenge
                     () => { return this.persuasion_setup_option_i(2); },
                     new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsMainHero),
                     new ConversationSentence.OnMultipleConversationConsequenceDelegate(this.IsNotableHero));
+            dialog.AddPlayerLine (
+                    "peasant_revenge_persuasion_select_option_cancel" ,
+                    "peasant_revenge_persuasion_select_option" ,
+                    "peasant_revenge_persuasion_start_reservation" ,
+                    "{=PRev0094}I must leave now." ,
+                    () => { return true; } ,
+                    () => { persuasion_cancel_on_consequence(); } ,
+                    this ,100 , null , null ,
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate (this.IsMainHero) ,
+                    new ConversationSentence.OnMultipleConversationConsequenceDelegate (this.IsNotableHero));
             #endregion
             //RESPONSE
             dialog.AddDialogLine(
@@ -2894,6 +2829,51 @@ namespace PeasantRevenge
             return argstr;
         }
 
+        private List<PeasantRevengeConfiguration.TraitAndValue> GetTraitsAndValuesByTaskAndOption(int task_index, int option)
+        {
+            switch(task_index)
+            {
+                case 0:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption2;
+                        default: return null;
+                    }
+                case 1:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption2;
+                        default:
+                            return null;
+                    }
+                case 2:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption2;
+                        default:
+                            return null;
+                    }
+                default: return null;
+            }
+        }
+
+
+
         private PersuasionTask GetPersuasionTask(int task_index)
         {
             PersuasionTask persuasionTask = new PersuasionTask(0);
@@ -2905,45 +2885,45 @@ namespace PeasantRevenge
             if (task_index == 0)
             {
                 PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive, 
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption0),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,0)),
                     false, new TextObject("{=PRev0132}No one should be afraid of these criminals.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
                 PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption1),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,1)),
                     false, new TextObject("{=PRev0133}Someone must be held accountable for the destruction of our village!", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
                 PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Negative,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableToRevengeTraitsForOption2),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,2)),
                     false, new TextObject("{=PRev0134}Take justice into your own hands!", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
             else if (task_index == 1)
             {
                 PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Valor, TraitEffect.Positive,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption0),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,0)),
                     false, new TextObject("{=PRev0135}These criminals are too dangerous.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
                 PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Engineering, DefaultTraits.Mercy, TraitEffect.Positive,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption1),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,1)),
                     false, new TextObject("{=PRev0136}Pity for your enemy is cruelty onto your ally.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
                 PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive,
-                     GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption2),
+                     GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,2)),
                     false, new TextObject("{=PRev0137}Let the nobles take care of the judgement. You are not important enough.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
             else if (task_index == 2)
             {
                 PersuasionOptionArgs option0 = new PersuasionOptionArgs(DefaultSkills.Roguery, DefaultTraits.Valor, TraitEffect.Positive,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption0),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,0)),
                     false, new TextObject("{=PRev0138}Everyone has heard of your hostile speeches against nobles.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option0);
                 PersuasionOptionArgs option1 = new PersuasionOptionArgs(DefaultSkills.Leadership, DefaultTraits.Mercy, TraitEffect.Negative,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption1),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,1)),
                     false, new TextObject("{=PRev0139}Your kindness to the enemy is harmful enough to consider it criminal.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option1);
                 PersuasionOptionArgs option2 = new PersuasionOptionArgs(DefaultSkills.Charm, DefaultTraits.Honor, TraitEffect.Positive,
-                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,_cfg.values.ai.AccuseNotableTraitsForOption2),
+                    GetPersuationArgumentStrength(Hero.OneToOneConversationHero.CharacterObject,GetTraitsAndValuesByTaskAndOption(task_index,2)),
                     false, new TextObject("{=PRev0140}Everyone knows I'm telling the truth.", null), null, false, false, false);
                 persuasionTask.AddOptionToTask(option2);
             }
@@ -3038,6 +3018,22 @@ namespace PeasantRevenge
             }
         }
 
+        private int get_task_index_by_persuade_status (persuade_type persuade)
+        {
+            switch(persuade)
+            {
+                case persuade_type.bribe:
+                    return 3; /*TODO: Bribing persuation task game - hero could say: Lets talk about "gold icon"... 0: Everything has price; 1: Nobody will know...; 2: Your farm needs some repairs; 3: Just a gift...; ...  while bribing*/
+                case persuade_type.teach_to_revenge:
+                    return 0;
+                case persuade_type.teach_to_not_revenge:
+                    return 1;
+                case persuade_type.accusation:
+                    return 2;
+                default: return 0;
+            }
+        }
+
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
         {
             bool can_revenge = notable_can_do_revenge(Hero.OneToOneConversationHero);
@@ -3045,12 +3041,13 @@ namespace PeasantRevenge
 
             if (can_revenge)
             {
-                task_index = 1;
+                task_index = get_task_index_by_persuade_status (persuade_status);
                 persuade_status = persuade_type.teach_to_not_revenge;
             }
             else
             {
                 persuade_status = persuade_type.teach_to_revenge;
+                task_index = get_task_index_by_persuade_status (persuade_status);
             }
 
             _task = GetPersuasionTask(task_index);
@@ -3080,10 +3077,22 @@ namespace PeasantRevenge
             return false;
         }
 
+        private void persuasion_cancel_on_consequence ()
+        {
+            if(this._task.Options.Count > 0)
+            {
+                this._task.BlockAllOptions ( );
+            }
+        }
+
         private void persuasion_select_option_i_on_consequence(int option_index)
         {
             if (this._task.Options.Count > 0)
             {
+                int task_index = get_task_index_by_persuade_status (persuade_status);
+                var traits_values = GetTraitsAndValuesByTaskAndOption(task_index,option_index);
+                OnLordPersuedeNotableUseTraitsAndValues (Hero.MainHero ,traits_values);
+
                 if (persuade_status == persuade_type.accusation)
                 {
                     this._task.BlockAllOptions();
@@ -3603,6 +3612,12 @@ namespace PeasantRevenge
         #endregion
 
         #region trait developement
+
+        public void OnLordPersuedeNotableUseTraitsAndValues (Hero hero,List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
+        {
+            OnChangeTraits (hero ,GetAffectedTraits (traits_and_values));
+        }
+
         public void OnLordPersuedeNotableToRevenge(Hero hero)
         {
             OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge));
@@ -3654,6 +3669,11 @@ namespace PeasantRevenge
             {
                 int traitLevel = referenceHero.GetTraitLevel(trait);
                 Campaign.Current.PlayerTraitDeveloper.AddTraitXp(trait, xpValue);
+                if(xpValue != 0)
+                { 
+                    log ($"{referenceHero.Name} {trait.Name} {(xpValue>0?"+":"")}{xpValue}");
+                }
+                
                 if (traitLevel != referenceHero.GetTraitLevel(trait))
                 {
                     CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
@@ -3661,6 +3681,12 @@ namespace PeasantRevenge
             }
             else
             {
+                if(xpValue != 0)
+                {
+                    log ($"{referenceHero.Name} {trait.Name} {(xpValue > 0 ? "+" : "")}{xpValue}");
+                    int traitLevel = referenceHero.GetTraitLevel(trait) + xpValue;
+                    SetHeroTraitValue (referenceHero ,trait.Name.ToString() ,traitLevel);
+                }
                 //???AddTraitXp(trait, xpValue); //Only player can develop trait XP by the game design.
             }
         }

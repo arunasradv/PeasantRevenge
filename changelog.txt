@@ -166,6 +166,10 @@ Fix: Option where supportive hero pays reparation in place of player.
 Feature: Added option for player to pay the reparation, when blaming another hero for the crime does not succeed.
 241211 v15.1.3.15
 Feature: support v1.2.12
------- ---------
+------ v15.1.4.0
 Added: lordPersuadeNotableExcludeTraitsAndRelationsWithNotable
 Added: lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner
+Added: lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
+Added: lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
+Added: lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;
+Added: lordTryPersuadeNotableProbability;

@@ -71,6 +71,8 @@
 - -5 Mercy, +5 Valor, when player tried to persuade the notable peasant to do revenges.
 - +5 Mercy, -5 Valor, when player tried to persuade the notable peasant not to do revenges.
 - -2 Mercy, -3 Honor, when player executed the notable peasant after or before the notable peasant did his quest.
+Choosing different persuasion options will affect traits in different way, when persuading peasant to revenge or not:
+- 
 When paying the reparation heroes will gain charisma and generosity exp (default game process).  
   - Hero (player only) can change notable peasant traits via dialogue, when encouraging them to initiate (or not to) the peasant revenge.
     Notable peasant will get:
@@ -150,6 +152,7 @@ If you enable notable parties, sometimes village will get 1 more notable for a s
   - enableOtherNobleTraitsChangeAfterNobleExecution - If this value is false, traits of other notables will not change due another notable peasant execution in the same village.
   - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest -
   - lordCanTryAsManyTimesToPersuadeTheNotable - when player try to persuade peasant to revenge or not , he can try it only limited times. (reset after game reload) 
+  - lordTryPersuadeNotableProbability - hero (when in the village) will try to persuade the notable peasant to be able to revenge or not to revenge.
   - ai - AI parameters, what can have several values (the lists); 
 	  - partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet -
 	  - settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet - 
@@ -166,3 +169,21 @@ If you enable notable parties, sometimes village will get 1 more notable for a s
       - lordTraitChangeWhenRemainsOfLordAreAbandoned - (for player only) 
       - lordWillDeclineRansomTheVictimRemains -
       - lordWillAbandonTheVictimRemains -
+      - lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest;
+      - lordTraitChangeWhenLordPersuedeNotableNotToRevenge;
+      - lordTraitChangeWhenLordPersuedeNotableToRevenge;
+      - notableWillAcceptTheBribe;
+      - PersuadeNotableToRevengeTraitsForOption0;
+      - PersuadeNotableToRevengeTraitsForOption1;
+      - PersuadeNotableToRevengeTraitsForOption2;
+      - PersuadeNotableNotToRevengeTraitsForOption0;
+      - PersuadeNotableNotToRevengeTraitsForOption1;
+      - PersuadeNotableNotToRevengeTraitsForOption2;
+      - AccuseNotableTraitsForOption0;
+      - AccuseNotableTraitsForOption1;
+      - AccuseNotableTraitsForOption2;
+      - lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
+      - lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
+      - lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
+      - lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
+      - lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;

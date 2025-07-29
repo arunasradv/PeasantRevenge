@@ -342,6 +342,7 @@
     <Compile Include="src\Common.cs" />
     <Compile Include="src\GiftBarterable.cs" />
     <Compile Include="src\Helpers\XmlCfg.cs" />
+    <Compile Include="src\HelpNeutralVillageBehavior.cs" />
     <Compile Include="src\HeroPersuadeNotableBehavior.cs" />
     <Compile Include="src\PeasantRevengeBehavior.cs" />
     <Compile Include="src\PeasantRevengeConfiguration.cs" />
@@ -380,6 +381,9 @@
     <Content Include="ModuleData\pr_items.xml" />
     <Content Include="SubModule.xml" />
     <Content Include="WorkshopUpdate.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
