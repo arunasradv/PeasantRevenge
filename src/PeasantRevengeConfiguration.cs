@@ -72,7 +72,7 @@ namespace PeasantRevenge
         public float peasantRevengerIntimidationPowerScale = 0.5f;
         public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
-        public float lordTryPersuadeNotableProbability = 0.5f;
+        public float lordTryPersuadeNotableProbability = 0.6f;
         public AIfilters ai;
 
         public static string default_file_name ()

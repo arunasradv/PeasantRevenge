@@ -29,6 +29,23 @@ namespace PeasantRevenge
             return hero_trait_list_condition (hero ,_cfg.values.peasantRevengerExcludeTrait);
         }
 
+        private bool has_persuade_quest (Hero hero)
+        {
+            /*TODO: Add lord persuade notables to rebel quest.*/
+            return true;
+        }
+
+        private bool check_probability (float chance ,int seed)
+        {
+            Random random = new Random(seed);
+
+            if(random.Next (0 ,100) <= (chance * 100))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void SettlementEntered (MobileParty party ,Settlement settlement ,Hero hero)
         {
             if(settlement.IsVillage)
@@ -36,54 +53,58 @@ namespace PeasantRevenge
                 if(settlement.Notables != null && hero != null && !hero.IsHumanPlayerCharacter && hero.IsLord)
                 {
                     if(settlement.Notables.Count > 0)
-                    {/*TODO: Add lord persuade notables to rebel quest. 
-                      * If lord has the quest to persuade - random element is not included.*/
-                        bool lordHsNoPersuadeQuest = true;
+                    {
+                        bool lordHasPersuadeQuest = has_persuade_quest(hero);
+                        float chance = lordHasPersuadeQuest ?
+                            (float)(_cfg.values.lordTryPersuadeNotableProbability * 1.33):
+                            (float)_cfg.values.lordTryPersuadeNotableProbability;                            
 
-                        if(lordHsNoPersuadeQuest)
-                        {
-                            Random random = new Random((int)hero.Age);
+                        bool probability_condition = check_probability ( chance, (int)hero.Age);
 
-                            if(random.Next (0 ,100) <= (_cfg.values.lordTryPersuadeNotableProbability * 100))
+                        if(probability_condition) {
+
+                            bool to_revenge = GetPersuadeDirection(hero);
+
+                            if(HeroWillTryToPersuadeTheNotable (hero ,settlement ,to_revenge ,out Hero notable))
                             {
-                                return;
-                            }
-
-                        }
-
-                        bool to_revenge = GetPersuadeDirection(hero);
-
-                        if(HeroWillTryToPersuadeTheNotable (hero ,settlement ,to_revenge ,out Hero notable))
-                        {
-                            if(notable != null)
-                            {
-
-                                if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner))
+                                if(notable != null)
                                 {
-                                    TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,!to_revenge);
-#warning TODO add trait change for hero. Move trait developement into new class.
-                                    if(to_revenge)
+                                    bool _teach = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner);
+                                    bool _expel = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner);
+                                    bool _kill = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner);
+
+                                    
+                                    if(_teach)
                                     {
-                                        log ($"{hero.Name} persuaded {notable.Name} to revenge");
+                                        TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,!to_revenge);
+#warning TODO add trait change for hero. Move trait developement into new class.
+                                        if(to_revenge)
+                                        {
+                                            log ($"{hero.Name} persuaded {notable.Name} to revenge");
+                                        }
+                                        else
+                                        {
+                                            log ($"{hero.Name} persuaded {notable.Name} not to revenge");
+                                        }
                                     }
                                     else
                                     {
-                                        log ($"{hero.Name} persuaded {notable.Name} not to revenge");
-                                    }
-                                }
-                                else
-                                {
-                                    if(can_remove_notable_from_village ( ))
-                                    {
-                                        if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner))
+                                        if(can_remove_notable_from_village ( ))
                                         {
-                                            log ($"{hero.Name} killed {notable.Name}");
-                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
-                                        }
-                                        else if(CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner))
-                                        {
-                                            log ($"{hero.Name} expeled {notable.Name}");
-                                            KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                            if(_kill)
+                                            {
+                                                log ($"{hero.Name} killed {notable.Name}");
+                                                KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                            }
+                                            else if(_expel)
+                                            {
+                                                log ($"{hero.Name} expeled {notable.Name}");
+                                                KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                            }
+                                            else
+                                            {
+                                                log ($"{hero.Name} took no action to remove {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
+                                            }
                                         }
                                     }
                                 }
@@ -93,8 +114,6 @@ namespace PeasantRevenge
                 }
             }
         }
-
-
 
         private bool HeroWillTryToPersuadeTheNotable (Hero hero ,Settlement settlement ,bool direction_to_revenge ,out Hero notable)
         {
@@ -130,6 +149,11 @@ namespace PeasantRevenge
                     if(will_try)
                     {
                         break;
+                    } else {
+                        if(cannot_due_traits_and_relations_with_noble)
+                        log ($"{hero.Name} cannot_due_traits_and_relations_with_noble {notable.Name} persuade {(direction_to_revenge?"to revenge":"to be pasive")}");
+                        if(cannot_due_traits_and_relations_with_settlement_owner)
+                        log ($"{hero.Name} cannot_due_traits_and_relations_with_settlement_owner {notable.Name} persuade {(direction_to_revenge ? "to revenge" : "to be pasive")}");
                     }
                 }
             }
