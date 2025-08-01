@@ -72,12 +72,20 @@ namespace PeasantRevenge
                                     bool _teach = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner);
                                     bool _expel = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner);
                                     bool _kill = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner);
+                                    bool _bribe = false; /*TODO?*/
+                                    persuade_type persuade_status = persuade_type.none;
+                                    int task_index;                                   
+                                    List<PeasantRevengeConfiguration.TraitAndValue> traits_values;
+                                    int option_index;
 
-                                    
                                     if(_teach)
                                     {
-                                        TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,!to_revenge);
-#warning TODO add trait change for hero. Move trait developement into new class.
+                                        persuade_status = to_revenge ? persuade_type.teach_to_revenge  : persuade_type.teach_to_not_revenge;
+                                        task_index = GetTaskIndexByPersuadeStatus (persuade_status);
+                                        option_index = GetOptionIndexByHeroTraits(hero ,task_index);
+                                        traits_values = GetTraitsAndValuesByTaskAndOption (task_index ,option_index);
+                                        OnLordPersuedeNotableUseTraitsAndValues (hero ,traits_values);
+
                                         if(to_revenge)
                                         {
                                             log ($"{hero.Name} persuaded {notable.Name} to revenge");
@@ -89,24 +97,35 @@ namespace PeasantRevenge
                                     }
                                     else
                                     {
-                                        if(can_remove_notable_from_village ( ))
+                                        if(can_remove_notable_from_village (notable))
                                         {
                                             if(_kill)
                                             {
-                                                log ($"{hero.Name} killed {notable.Name}");
+                                                log ($"{hero.Name} killed {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
                                                 KillCharacterAction.ApplyByRemove (notable ,true ,true);
                                             }
                                             else if(_expel)
                                             {
+                                                persuade_status = persuade_type.accusation;
+                                                task_index = GetTaskIndexByPersuadeStatus (persuade_status);
+                                                option_index = GetOptionIndexByHeroTraits (hero ,task_index);
+                                                traits_values = GetTraitsAndValuesByTaskAndOption (task_index ,option_index);
+                                                OnLordPersuedeNotableUseTraitsAndValues (hero ,traits_values);
                                                 log ($"{hero.Name} expeled {notable.Name}");
                                                 KillCharacterAction.ApplyByRemove (notable ,true ,true);
                                             }
+                                            else if(_bribe)
+                                            {
+                                                log ($"{hero.Name} bribed {notable.Name}");
+                                            }
                                             else
                                             {
-                                                log ($"{hero.Name} took no action to remove {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
+                                                //log ($"{hero.Name} took no action to remove {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
                                             }
                                         }
                                     }
+                                    
+                                   
                                 }
                             }
                         }
@@ -143,9 +162,11 @@ namespace PeasantRevenge
                     // direction may depend of kingdom interest
                     //bool different_faction = hero.MapFaction!=settlement.MapFaction;
                     //bool can_because_of_different_faction = different_faction && !direction_to_revenge || !different_faction && direction_to_revenge;
-
+#if false
                     will_try = !cannot_due_traits_and_relations_with_noble && !cannot_due_traits_and_relations_with_settlement_owner;
-
+#else
+                    will_try = true;
+#endif
                     if(will_try)
                     {
                         break;

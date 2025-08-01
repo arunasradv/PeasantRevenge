@@ -45,20 +45,7 @@ namespace PeasantRevenge
             public uint persuade_try_count = 0;
         }
         #region notable persuade TODO: someday move it to quest
-        public enum persuade_type
-        {
-            none,
-            bribe,
-            teach_to_revenge,
-            teach_to_not_revenge,
-            show_example_success,
-            show_example_fail,
-            bribe_success,
-            bribe_fail,
-            accusation,
-            accusation_fail,
-            accusation_success
-        }
+       
 
         persuade_type persuade_status = persuade_type.none;
         bool previous_can_revenge = false;
@@ -2637,12 +2624,12 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_end_accusation_companion_clickable(out TextObject explanation)
         {
             explanation=null;
-            return can_remove_notable_from_village();
+            return can_remove_notable_from_village_on_conversation();
         }
         private bool peasant_revenge_player_not_happy_with_peasant_end_accusation_clickable(out TextObject explanation)
         {
             explanation=null;
-            return can_remove_notable_from_village();
+            return can_remove_notable_from_village_on_conversation();
         }
 
         #region peasant revenge persuede
@@ -2829,48 +2816,7 @@ namespace PeasantRevenge
             return argstr;
         }
 
-        private List<PeasantRevengeConfiguration.TraitAndValue> GetTraitsAndValuesByTaskAndOption(int task_index, int option)
-        {
-            switch(task_index)
-            {
-                case 0:
-                    switch(option)
-                    {
-                        case 0:
-                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption0;
-                        case 1:
-                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption1;
-                        case 2:
-                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption2;
-                        default: return null;
-                    }
-                case 1:
-                    switch(option)
-                    {
-                        case 0:
-                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption0;
-                        case 1:
-                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption1;
-                        case 2:
-                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption2;
-                        default:
-                            return null;
-                    }
-                case 2:
-                    switch(option)
-                    {
-                        case 0:
-                            return _cfg.values.ai.AccuseNotableTraitsForOption0;
-                        case 1:
-                            return _cfg.values.ai.AccuseNotableTraitsForOption1;
-                        case 2:
-                            return _cfg.values.ai.AccuseNotableTraitsForOption2;
-                        default:
-                            return null;
-                    }
-                default: return null;
-            }
-        }
+        
 
 
 
@@ -3014,25 +2960,11 @@ namespace PeasantRevenge
             }
             else
             {                
-                ConversationManager.StartPersuasion(2f, 1f, 0f, 2f, 2f, 0f, PersuasionDifficulty.Hard);
+                ConversationManager.StartPersuasion(1f, 1f, 0f, 1f, 1f, 0f, PersuasionDifficulty.Hard);
             }
         }
 
-        private int get_task_index_by_persuade_status (persuade_type persuade)
-        {
-            switch(persuade)
-            {
-                case persuade_type.bribe:
-                    return 3; /*TODO: Bribing persuation task game - hero could say: Lets talk about "gold icon"... 0: Everything has price; 1: Nobody will know...; 2: Your farm needs some repairs; 3: Just a gift...; ...  while bribing*/
-                case persuade_type.teach_to_revenge:
-                    return 0;
-                case persuade_type.teach_to_not_revenge:
-                    return 1;
-                case persuade_type.accusation:
-                    return 2;
-                default: return 0;
-            }
-        }
+       
 
         private void peasant_revenge_player_not_happy_with_peasant_teach_consequence()
         {
@@ -3041,15 +2973,14 @@ namespace PeasantRevenge
 
             if (can_revenge)
             {
-                task_index = get_task_index_by_persuade_status (persuade_status);
-                persuade_status = persuade_type.teach_to_not_revenge;
+                persuade_status = persuade_type.teach_to_not_revenge;                             
             }
             else
             {
-                persuade_status = persuade_type.teach_to_revenge;
-                task_index = get_task_index_by_persuade_status (persuade_status);
+                persuade_status = persuade_type.teach_to_revenge;               
             }
 
+            task_index = GetTaskIndexByPersuadeStatus (persuade_status);
             _task = GetPersuasionTask(task_index);
             _task.UnblockAllOptions();
 
@@ -3089,27 +3020,34 @@ namespace PeasantRevenge
         {
             if (this._task.Options.Count > 0)
             {
-                int task_index = get_task_index_by_persuade_status (persuade_status);
+                int task_index = GetTaskIndexByPersuadeStatus (persuade_status);
                 var traits_values = GetTraitsAndValuesByTaskAndOption(task_index,option_index);
                 OnLordPersuedeNotableUseTraitsAndValues (Hero.MainHero ,traits_values);
 
-                if (persuade_status == persuade_type.accusation)
-                {
-                    this._task.BlockAllOptions();
-                }
-                else
-                {
-                    this._task.Options[option_index].BlockTheOption(true);
-                }
+                this._task.BlockAllOptions ( );
+                // no need to allow select different option, because player is developing hero in one way.
+                //if (persuade_status == persuade_type.accusation)
+                //{
+                //    this._task.BlockAllOptions();
+                //}
+                //else
+                //{
+                //    this._task.Options[option_index].BlockTheOption(true);
+                //}
             }
         }
 
         private bool persuasion_clickable_option_i_on_condition(int option_index, out TextObject hintText)
-        {
-            hintText = new TextObject("{=9ACJsI6S}Blocked", null);
+        { 
+            hintText = TextObject.Empty;   
+           
             if (this._task.Options.Count > 0)
-            {
-                hintText = this._task.Options.ElementAt(option_index).IsBlocked ? hintText : TextObject.Empty;
+            { 
+                string s = Common.GetInfoStringForTraitsAndValues (GetTraitsAndValuesByTaskAndOption(
+                    GetTaskIndexByPersuadeStatus (persuade_status),option_index));
+            TextObject traitHintText = new TextObject ( s,null);
+            TextObject blockedHintText = new TextObject("{=9ACJsI6S}Blocked", null);
+                hintText = this._task.Options.ElementAt(option_index).IsBlocked ? blockedHintText : traitHintText;
                 return !this._task.Options.ElementAt(option_index).IsBlocked;
             }
             return false;
@@ -3429,7 +3367,7 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_companion_take_notable_prisoner_clickable(out TextObject text)
         {
             text=new TextObject("{=PRev0146}Expell the peasant");
-            return can_remove_notable_from_village();
+            return can_remove_notable_from_village_on_conversation();
         }
 
 
@@ -3609,92 +3547,11 @@ namespace PeasantRevenge
             }
         }
 
-        #endregion
-
-        #region trait developement
-
-        public void OnLordPersuedeNotableUseTraitsAndValues (Hero hero,List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
-        {
-            OnChangeTraits (hero ,GetAffectedTraits (traits_and_values));
-        }
-
-        public void OnLordPersuedeNotableToRevenge(Hero hero)
-        {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge));
-        }
-        public void OnLordPersuedeNotableNotToRevenge(Hero hero)
-        {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));           
-        }
-
-        public void OnLordRemainsAbandoned(Hero hero)
-        {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned));
-        }
-
-        public void OnRansomRemainsOfferDeclined(Hero hero)
-        {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined));
-        }
-
-        public void OnRansomRemainsOfferAccepted(Hero hero)
-        {
-            OnChangeTraits(hero, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted));
-        }
-
-        private Tuple<TraitObject, int>[] GetAffectedTraits(List<PeasantRevengeConfiguration.TraitAndValue> traitsAndValues)
-        {
-            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[traitsAndValues.Count];
-            for (int i = 0; i < affectedTraits.Length; i++)
-            {
-                affectedTraits[i] = Tuple.Create(
-                    TraitObject.All.Where((x) => x.StringId.ToString() ==
-                    traitsAndValues[i].trait).First(),
-                    traitsAndValues[i].value);
-            }
-
-            return affectedTraits;
-        }
-
-        public void OnChangeTraits(Hero targetHero, Tuple<TraitObject, int>[] effectedTraits)
-        {
-            foreach (Tuple<TraitObject, int> tuple in effectedTraits)
-            {
-                ApplyTraitXP(tuple.Item1, tuple.Item2, ActionNotes.DefaultNote, targetHero);
-            }
-        }
-        private void ApplyTraitXP(TraitObject trait, int xpValue, ActionNotes context, Hero referenceHero)
-        {
-            if (referenceHero == Hero.MainHero)
-            {
-                int traitLevel = referenceHero.GetTraitLevel(trait);
-                Campaign.Current.PlayerTraitDeveloper.AddTraitXp(trait, xpValue);
-                if(xpValue != 0)
-                { 
-                    log ($"{referenceHero.Name} {trait.Name} {(xpValue>0?"+":"")}{xpValue}");
-                }
-                
-                if (traitLevel != referenceHero.GetTraitLevel(trait))
-                {
-                    CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
-                }
-            }
-            else
-            {
-                if(xpValue != 0)
-                {
-                    log ($"{referenceHero.Name} {trait.Name} {(xpValue > 0 ? "+" : "")}{xpValue}");
-                    int traitLevel = referenceHero.GetTraitLevel(trait) + xpValue;
-                    SetHeroTraitValue (referenceHero ,trait.Name.ToString() ,traitLevel);
-                }
-                //???AddTraitXp(trait, xpValue); //Only player can develop trait XP by the game design.
-            }
-        }
-        #endregion
+        #endregion       
 
         private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
         {
-            OnChangeTraits(executioner, GetAffectedTraits(_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest));
+            OnLordExecuteRevengerAfterOrBeforeQuest (executioner);
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, executioner, true, true);
         }

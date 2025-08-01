@@ -17,6 +17,21 @@ namespace PeasantRevenge
     {
         public static PeasantRevengeModCfg _cfg;
 
+        public enum persuade_type
+        {
+            none,
+            bribe,
+            teach_to_revenge,
+            teach_to_not_revenge,
+            show_example_success,
+            show_example_fail,
+            bribe_success,
+            bribe_fail,
+            accusation,
+            accusation_fail,
+            accusation_success
+        }
+
         private static bool IsModuleVersionOlder (ApplicationVersion module_version ,ApplicationVersion compare)
         {
             bool is_older = true;
@@ -204,12 +219,15 @@ namespace PeasantRevenge
             }
         }
 
-        public static bool can_remove_notable_from_village ()
+        public static bool can_remove_notable_from_village (Hero hero)
         {
-            return (Hero.OneToOneConversationHero != null
-                && Hero.OneToOneConversationHero.HomeSettlement != null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables != null &&
-                Hero.OneToOneConversationHero.HomeSettlement.Notables.Count > 1);
+            return (hero != null && hero.HomeSettlement != null && hero.HomeSettlement.Notables != null &&
+                hero.HomeSettlement.Notables.Count > 1);
+        }
+
+        public static bool can_remove_notable_from_village_on_conversation ()
+        {
+            return can_remove_notable_from_village (Hero.OneToOneConversationHero);
         }
 
         public static bool notable_can_do_revenge (Hero hero)
@@ -436,5 +454,213 @@ namespace PeasantRevenge
                 }
             }
         }
+
+        public static string GetInfoStringForTraitsAndValues (List<PeasantRevengeConfiguration.TraitAndValue> traits_values)
+        {
+            string s = "";
+
+            foreach(var traitAndValue in traits_values)
+            {
+                if(traitAndValue.value != 0)
+                {
+                    s += $"{traitAndValue.trait} {(traitAndValue.value > 0 ? "+" : "")}{traitAndValue.value} ";
+                }
+            }
+            return s;
+        }
+
+        #region trait developement
+
+        public static void OnLordPersuedeNotableUseTraitsAndValues (Hero hero ,List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (traits_and_values)}");
+            OnChangeTraits (hero ,GetAffectedTraits (traits_and_values));
+        }
+
+        public static void OnLordPersuedeNotableToRevenge (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge));
+        }
+        public static void OnLordPersuedeNotableNotToRevenge (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));
+        }
+
+        public static void OnLordRemainsAbandoned (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned));
+        }
+
+        public static void OnRansomRemainsOfferDeclined (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined));
+        }
+
+        public static void OnRansomRemainsOfferAccepted (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted));
+        }
+
+        public static void OnLordExecuteRevengerAfterOrBeforeQuest (Hero hero)
+        {
+            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest)}");
+            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest));
+        }
+
+        public static Tuple<TraitObject ,int> [] GetAffectedTraits (List<PeasantRevengeConfiguration.TraitAndValue> traitsAndValues)
+        {
+            Tuple<TraitObject, int>[] affectedTraits = new Tuple<TraitObject, int>[traitsAndValues.Count];
+            for(int i = 0;i < affectedTraits.Length;i++)
+            {
+                affectedTraits [i] = Tuple.Create (
+                    TraitObject.All.Where ((x) => x.StringId.ToString ( ) ==
+                    traitsAndValues [i].trait).First ( ) ,
+                    traitsAndValues [i].value);
+            }
+
+            return affectedTraits;
+        }
+
+        public static void OnChangeTraits (Hero targetHero ,Tuple<TraitObject ,int> [] effectedTraits)
+        {
+            foreach(Tuple<TraitObject ,int> tuple in effectedTraits)
+            {
+                ApplyTraitXP (tuple.Item1 ,tuple.Item2 ,ActionNotes.DefaultNote ,targetHero);
+            }
+        }
+        public static void ApplyTraitXP (TraitObject trait ,int xpValue ,ActionNotes context ,Hero referenceHero)
+        {
+            if(referenceHero == Hero.MainHero)
+            {
+                int traitLevel = referenceHero.GetTraitLevel(trait);
+                Campaign.Current.PlayerTraitDeveloper.AddTraitXp (trait ,xpValue);
+                if(traitLevel != referenceHero.GetTraitLevel (trait))
+                {
+                    CampaignEventDispatcher.Instance.OnPlayerTraitChanged (trait ,traitLevel);
+                }
+            }
+            else
+            {
+                if(xpValue != 0)
+                {
+
+                    int traitLevel = referenceHero.GetTraitLevel(trait) + xpValue;
+                    SetHeroTraitValue (referenceHero ,trait.Name.ToString ( ) ,traitLevel);
+                }
+            }
+        }
+        #endregion
+
+        /*
+         See usage in GetPersuasionTask()
+         */
+        public static List<PeasantRevengeConfiguration.TraitAndValue> GetTraitsAndValuesByTaskAndOption (int task_index ,int option)
+        {
+            switch(task_index)
+            {
+                case 0:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.PersuadeNotableToRevengeTraitsForOption2;
+                        default:
+                            return null;
+                    }
+                case 1:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.PersuadeNotableNotToRevengeTraitsForOption2;
+                        default:
+                            return null;
+                    }
+                case 2:
+                    switch(option)
+                    {
+                        case 0:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption0;
+                        case 1:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption1;
+                        case 2:
+                            return _cfg.values.ai.AccuseNotableTraitsForOption2;
+                        default:
+                            return null;
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        public static int GetTaskIndexByPersuadeStatus (persuade_type persuade)
+        {
+            switch(persuade)
+            {
+                case persuade_type.bribe:
+                    return 3; /*TODO: Bribing persuation task game - hero could say: Lets talk about "gold icon"... 0: Everything has price; 1: Nobody will know...; 2: Your farm needs some repairs; 3: Just a gift...; ...  while bribing*/
+                case persuade_type.teach_to_revenge:
+                    return 0;
+                case persuade_type.teach_to_not_revenge:
+                    return 1;
+                case persuade_type.accusation:
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
+
+        /*Hero will choose option what is the most similar to hero traits */
+        public static int GetOptionIndexByHeroTraits (Hero hero ,int task_index)
+        {
+            int option_count = 3;
+            int option = 0;
+
+            int[] option_cor = { 0,0,0};
+
+            int max_cor_option_val  = 0;
+            int max_cor_option_ind  = -1;
+
+            for(;option < option_count;option++)
+            {
+                Tuple<TraitObject ,int> [] affected_traits = GetAffectedTraits(GetTraitsAndValuesByTaskAndOption ( task_index, option));
+
+                option_cor [option] = affected_traits [option].Item2 * GetHeroTraitValue (hero ,affected_traits [option].Item1.Name.ToString ( ));
+
+            }
+
+            for(option = 0; option < option_count;option++)
+            {
+                if(max_cor_option_val < option_cor [option])
+                {
+                    max_cor_option_val = option_cor [option];
+                    max_cor_option_ind = option;
+                }
+            }
+
+            if(max_cor_option_ind == -1)
+            {
+                Random random = new Random(0);
+                max_cor_option_ind = random.Next (0 ,2);
+            }
+
+            /*TODO use random choise when more options have same value*/
+
+            return max_cor_option_ind;
+        }
+
+
+
     }
 }
