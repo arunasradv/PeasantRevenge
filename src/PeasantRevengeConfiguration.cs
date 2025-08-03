@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 23;
+        public int CfgVersion = 24;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -139,6 +139,9 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
             public List<RelationsPerTraits> lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
             public List<RelationsPerTraits> lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner;
+
+            public List<MoneyPerTraits> lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe;
 
             public void Default ()
             {
@@ -176,6 +179,8 @@ namespace PeasantRevenge
                 default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner ( );
                 default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner ( );
                 default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner ( );
+                default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner ( );
+                default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe ( );
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet ()
@@ -543,6 +548,29 @@ namespace PeasantRevenge
                      new RelationsPerTraits {traits = "Honor > 0&Generosity > 0", relations = "Relations > 0" }
                 };
             }
+
+            public void default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner ()
+            {
+                lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                    new RelationsPerTraits { traits = "Calculating <= 0&Generosity > 0" ,relations = "Relations > 50" }
+                };
+            }
+
+            public void default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe ()
+            {
+                lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe =
+                new List<MoneyPerTraits>
+                {
+                new MoneyPerTraits {traits = "Generosity < -1", percent = 1 },
+                new MoneyPerTraits {traits = "Generosity == -1", percent = 5 },
+                new MoneyPerTraits {traits = "Generosity == 0", percent = 10 },
+                new MoneyPerTraits {traits = "Generosity == 1", percent = 15 },
+                new MoneyPerTraits {traits = "Generosity > 1", percent = 20 },
+                };
+            }
+
+
         }
 
         //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."

@@ -6,10 +6,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
+using static PeasantRevenge.PeasantRevengeConfiguration;
 
 namespace PeasantRevenge
 {
@@ -150,6 +152,12 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner ( );
                         _cfg.values.ai.default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner ( );
                         _cfg.values.ai.default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 24)
+                    {
+                        _cfg.values.ai.default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner ( );
+                        _cfg.values.ai.default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe ( );
                     }
                 }
             }
@@ -451,6 +459,7 @@ namespace PeasantRevenge
                     }
 
                     SetHeroTraitValue (hero ,$"{a [0]}" ,value);
+                    log ($"{hero.Name} learned new trait {a [0]} {(value > 0 ? "+" : "")}{value}");
                 }
             }
         }
@@ -533,13 +542,13 @@ namespace PeasantRevenge
                 ApplyTraitXP (tuple.Item1 ,tuple.Item2 ,ActionNotes.DefaultNote ,targetHero);
             }
         }
-        public static void ApplyTraitXP (TraitObject trait ,int xpValue ,ActionNotes context ,Hero referenceHero)
+        public static void ApplyTraitXP (TraitObject trait ,int xpValue ,ActionNotes context ,Hero hero)
         {
-            if(referenceHero == Hero.MainHero)
+            if(hero == Hero.MainHero)
             {
-                int traitLevel = referenceHero.GetTraitLevel(trait);
+                int traitLevel = hero.GetTraitLevel(trait);
                 Campaign.Current.PlayerTraitDeveloper.AddTraitXp (trait ,xpValue);
-                if(traitLevel != referenceHero.GetTraitLevel (trait))
+                if(traitLevel != hero.GetTraitLevel (trait))
                 {
                     CampaignEventDispatcher.Instance.OnPlayerTraitChanged (trait ,traitLevel);
                 }
@@ -548,9 +557,10 @@ namespace PeasantRevenge
             {
                 if(xpValue != 0)
                 {
-
-                    int traitLevel = referenceHero.GetTraitLevel(trait) + xpValue;
-                    SetHeroTraitValue (referenceHero ,trait.Name.ToString ( ) ,traitLevel);
+                    int oldTraitLevel = hero.GetTraitLevel(trait);
+                    int traitLevel = oldTraitLevel + xpValue;
+                    SetHeroTraitValue (hero ,trait.Name.ToString ( ) ,traitLevel);
+                    log ($"{hero.Name} new {trait.Name} is {traitLevel} (was {oldTraitLevel}).");
                 }
             }
         }
@@ -640,7 +650,7 @@ namespace PeasantRevenge
 
             }
 
-            for(option = 0; option < option_count;option++)
+            for(option = 0;option < option_count;option++)
             {
                 if(max_cor_option_val < option_cor [option])
                 {
@@ -659,8 +669,52 @@ namespace PeasantRevenge
 
             return max_cor_option_ind;
         }
+        public static int get_notable_bribe_amount (Hero hero)
+        {
+            int bribe_percents = _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal;
+            int bribe = hero.Gold * bribe_percents / 100;
+            return bribe;
+        }
 
+        public static bool CanAffordToSpendMoney (Hero hero ,int goldNeeded ,List<PeasantRevengeConfiguration.MoneyPerTraits> traits)
+        {
+            if(hero.Gold == 0 || hero.Gold < goldNeeded)
+                return false;
 
+            int percent = 100 * goldNeeded / hero.Gold;
 
+            foreach(PeasantRevengeConfiguration.MoneyPerTraits mpt in traits)
+            {
+                if(mpt.percent >= percent)
+                {
+                    if(hero_trait_list_condition (hero ,mpt.traits))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static void OnHeroChopNotableHeadConsequence (Hero executioner_hero ,Hero victim)
+        {
+            bool chop_purpose = notable_can_do_revenge(victim); // true if notable can do the revenge, but hero want to prohibit            
+
+            foreach(Hero hero in victim.HomeSettlement.Notables)
+            {
+                if(hero != victim)
+                {
+                    int nobles_relations = hero.GetRelation(victim);// smaller the relation - bigger chance to get positive result towards player
+                    int hero_noble_relation = hero.GetRelation(executioner_hero); // bigger the relation - bigger chance to get positive result towards player 
+                    int relation_change = (hero_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes (executioner_hero ,hero ,relation_change ,true);
+                    if(_cfg.values.enableOtherNobleTraitsChangeAfterNobleExecution)
+                    {
+                        bool direction = MBRandom.RandomInt(-100, 100) < hero_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
+                        TeachHeroTraits (hero ,_cfg.values.peasantRevengerExcludeTrait ,chop_purpose ? direction : !direction);
+                    }
+                }
+            }
+        }
     }
 }

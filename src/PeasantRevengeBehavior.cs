@@ -1485,27 +1485,6 @@ namespace PeasantRevenge
             return all_found;
         }
 
-        private bool CanAffordToSpendMoney(Hero hero, int goldNeeded, List<PeasantRevengeConfiguration.MoneyPerTraits> traits)
-        {
-            if (hero.Gold == 0 || hero.Gold < goldNeeded) return false;
-
-            int percent = 100 * goldNeeded / hero.Gold;
-
-            foreach (PeasantRevengeConfiguration.MoneyPerTraits mpt in traits)
-            {
-                if (mpt.percent >= percent)
-                {
-                    if (hero_trait_list_condition(hero, mpt.traits))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return true;
-        }
-       
-
-
         private List<Hero> GetHeroSuportersWhoCouldSaveVictim(Hero victim, int goldNeeded)
         {
             List<Hero> list = new List<Hero>();
@@ -3264,18 +3243,13 @@ namespace PeasantRevenge
             return pdata != null ? pdata.persuade_try_count : 0;
         }
 
-        private int get_notable_bribe_amount()
-        {
-            int bribe_percents = _cfg.values.goldPercentOfPeasantTotallGoldToTeachPeasantToBeLoyal;
-            int bribe = Hero.OneToOneConversationHero.Gold * bribe_percents / 100;
-            return bribe;
-        }
+      
 
         private void peasant_revenge_player_not_happy_with_peasant_bribe_consequence()
         {
-            add_notable_persuaded_count();
-
-            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount());
+            /*add_notable_persuaded_count();*/ 
+            /*Makes more sense, since huge amount of bribes should work*/
+            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount(Hero.OneToOneConversationHero));
             if (CheckConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe))
             {
                 persuade_status = persuade_type.bribe_success;
@@ -3295,7 +3269,7 @@ namespace PeasantRevenge
 
             TextObject textObject = new TextObject(msg, null);
 
-            int bribe = get_notable_bribe_amount();
+            int bribe = get_notable_bribe_amount(Hero.OneToOneConversationHero);
 
             textObject.SetTextVariable("BRIBEVALUE", bribe);
 
@@ -3325,7 +3299,7 @@ namespace PeasantRevenge
         {
             bool will_accept_bribe = CheckConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
             bool traits_allow = CheckOnlyTraitsConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe);
-            bool have_gold = Hero.MainHero.Gold >= get_notable_bribe_amount();
+            bool have_gold = Hero.MainHero.Gold >= get_notable_bribe_amount(Hero.OneToOneConversationHero);
             bool can_bribe = will_accept_bribe && have_gold;
             text = TextObject.Empty;
 
@@ -3380,21 +3354,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_hero_not_happy_with_peasant_chop_consequence(Hero executioner_hero, Hero victim)
         {
-            bool chop_purpose = notable_can_do_revenge(victim); // true if notable can do the revenge, but hero want to prohibit            
-
-            foreach (Hero hero in victim.HomeSettlement.Notables)
-            {
-                int nobles_relations = hero.GetRelation(victim);// smaller the relation - bigger chance to get positive result towards player
-                int hero_noble_relation = hero.GetRelation(executioner_hero); // bigger the relation - bigger chance to get positive result towards player 
-                int relation_change = (hero_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(executioner_hero, hero, relation_change, true);
-                if (_cfg.values.enableOtherNobleTraitsChangeAfterNobleExecution)
-                {
-
-                    bool direction = MBRandom.RandomInt(-100, 100) < hero_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
-                    TeachHeroTraits(hero, _cfg.values.peasantRevengerExcludeTrait, chop_purpose ? direction : !direction);
-                }
-            }
+            OnHeroChopNotableHeadConsequence (executioner_hero , victim);           
         }
 
         private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()

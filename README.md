@@ -187,3 +187,5 @@ If you enable notable parties, sometimes village will get 1 more notable for a s
       - lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
       - lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
       - lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;
+      - lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner;
+      - lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe;

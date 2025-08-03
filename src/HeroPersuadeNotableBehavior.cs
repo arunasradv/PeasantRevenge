@@ -72,27 +72,57 @@ namespace PeasantRevenge
                                     bool _teach = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner);
                                     bool _expel = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner);
                                     bool _kill = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner);
-                                    bool _bribe = false; /*TODO?*/
+                                    bool _bribe = CheckConditions (hero ,notable ,_cfg.values.ai.lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner);
+
+                                    int goldNeeded = get_notable_bribe_amount (notable);
+                                    bool money_con = CanAffordToSpendMoney(hero,goldNeeded , _cfg.values.ai.lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe);
+                                    bool will_accept_bribe = CheckConditions(notable, hero, _cfg.values.ai.notableWillAcceptTheBribe);
+                                    bool traits_allow = CheckOnlyTraitsConditions(notable, hero, _cfg.values.ai.notableWillAcceptTheBribe);
+
                                     persuade_type persuade_status = persuade_type.none;
-                                    int task_index;                                   
+                                    int task_index;
                                     List<PeasantRevengeConfiguration.TraitAndValue> traits_values;
                                     int option_index;
 
                                     if(_teach)
                                     {
-                                        persuade_status = to_revenge ? persuade_type.teach_to_revenge  : persuade_type.teach_to_not_revenge;
+                                        TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,!to_revenge);
+                                        persuade_status = to_revenge ? persuade_type.teach_to_revenge : persuade_type.teach_to_not_revenge;
                                         task_index = GetTaskIndexByPersuadeStatus (persuade_status);
-                                        option_index = GetOptionIndexByHeroTraits(hero ,task_index);
+                                        option_index = GetOptionIndexByHeroTraits (hero ,task_index);
                                         traits_values = GetTraitsAndValuesByTaskAndOption (task_index ,option_index);
                                         OnLordPersuedeNotableUseTraitsAndValues (hero ,traits_values);
+                                        log ($"{hero.Name} persuaded {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) {(to_revenge ? "to revenge" : "to be pasive")}.");
+                                    } 
+                                    else if(_bribe)
+                                    {
 
-                                        if(to_revenge)
+
+                                        if(money_con && will_accept_bribe && traits_allow)
                                         {
-                                            log ($"{hero.Name} persuaded {notable.Name} to revenge");
+                                            TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,!to_revenge);
+                                            GiveGoldAction.ApplyBetweenCharacters (hero ,notable ,goldNeeded ,false);
+                                            log ($"{hero.Name} bribed {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) {(to_revenge ? "to revenge" : "to be pasive")}.");
+                                        }
+                                        else if(!will_accept_bribe && traits_allow)
+                                        {
+                                            GiveGoldAction.ApplyBetweenCharacters (hero ,notable ,goldNeeded ,false);
+                                            log ($"{hero.Name} failed to bribe {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) {(to_revenge ? "to revenge" : "to be pasive")}.");
                                         }
                                         else
                                         {
-                                            log ($"{hero.Name} persuaded {notable.Name} not to revenge");
+                                            if(!money_con)
+                                            {
+                                                log ($"{hero.Name} do not have money to bribe the {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) {(to_revenge ? "to revenge" : "to be pasive")}.");
+                                            }
+                                            else if(!will_accept_bribe)
+                                            {
+                                                log ($" {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) does not accepted the bribe ({(to_revenge ? "to revenge" : "to be pasive")}) from {hero.Name}.");
+                                            }
+                                            else if(!traits_allow)
+                                            {
+                                                log ($"{hero.Name} did not bribed ({(to_revenge ? "to revenge" : "to be pasive")}) the {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}), because traits does not allow bribing.");
+                                            }
                                         }
                                     }
                                     else
@@ -101,8 +131,9 @@ namespace PeasantRevenge
                                         {
                                             if(_kill)
                                             {
-                                                log ($"{hero.Name} killed {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
-                                                KillCharacterAction.ApplyByRemove (notable ,true ,true);
+                                                OnHeroChopNotableHeadConsequence (hero , notable);
+                                                log ($"{hero.Name} killed {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) while seeking {(to_revenge ? "to revenge" : "to be pasive")}.");
+                                                KillCharacterAction.ApplyByRemove (notable ,true ,true);                                                
                                             }
                                             else if(_expel)
                                             {
@@ -111,21 +142,15 @@ namespace PeasantRevenge
                                                 option_index = GetOptionIndexByHeroTraits (hero ,task_index);
                                                 traits_values = GetTraitsAndValuesByTaskAndOption (task_index ,option_index);
                                                 OnLordPersuedeNotableUseTraitsAndValues (hero ,traits_values);
-                                                log ($"{hero.Name} expeled {notable.Name}");
+                                                log ($"{hero.Name} expeled {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) {(to_revenge ? "to revenge" : "to be pasive")}.");
                                                 KillCharacterAction.ApplyByRemove (notable ,true ,true);
-                                            }
-                                            else if(_bribe)
-                                            {
-                                                log ($"{hero.Name} bribed {notable.Name}");
                                             }
                                             else
                                             {
-                                                //log ($"{hero.Name} took no action to remove {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}");
+                                               // log ($"{hero.Name} took no action to remove {notable.Name} while seeking {(to_revenge ? "to revenge" : "to be pasive")}.");
                                             }
                                         }
                                     }
-                                    
-                                   
                                 }
                             }
                         }
@@ -172,9 +197,9 @@ namespace PeasantRevenge
                         break;
                     } else {
                         if(cannot_due_traits_and_relations_with_noble)
-                        log ($"{hero.Name} cannot_due_traits_and_relations_with_noble {notable.Name} persuade {(direction_to_revenge?"to revenge":"to be pasive")}");
+                        log ($"{hero.Name} cannot_due_traits_and_relations_with_noble {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) persuade {(direction_to_revenge?"to revenge":"to be pasive")}");
                         if(cannot_due_traits_and_relations_with_settlement_owner)
-                        log ($"{hero.Name} cannot_due_traits_and_relations_with_settlement_owner {notable.Name} persuade {(direction_to_revenge ? "to revenge" : "to be pasive")}");
+                        log ($"{hero.Name} cannot_due_traits_and_relations_with_settlement_owner {notable.Name} ({(hero.MapFaction.IsAtWarWith (notable.MapFaction) ? "enemy" : "ally")}) persuade {(direction_to_revenge ? "to revenge" : "to be pasive")}");
                     }
                 }
             }
