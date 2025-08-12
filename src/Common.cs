@@ -31,7 +31,9 @@ namespace PeasantRevenge
             bribe_fail,
             accusation,
             accusation_fail,
-            accusation_success
+            accusation_success,
+            expeled,
+            killed
         }
 
         private static bool IsModuleVersionOlder (ApplicationVersion module_version ,ApplicationVersion compare)
@@ -158,6 +160,12 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner ( );
                         _cfg.values.ai.default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe ( );
+                    }
+
+                    if(_cfg.values.CfgVersion < 25)
+                    {
+                         _cfg.values.ai.default_lordTraitsOpposingPeasantsPower ( );
+                         _cfg.values.ai.default_lordTraitsApprovePeasantsPower ( );                      
                     }
                 }
             }
@@ -480,45 +488,43 @@ namespace PeasantRevenge
 
         #region trait developement
 
-        public static void OnLordPersuedeNotableUseTraitsAndValues (Hero hero ,List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
+        public static void OnLordUseTraitsAndValues (Hero hero ,List<PeasantRevengeConfiguration.TraitAndValue> traits_and_values)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (traits_and_values)}");
-            OnChangeTraits (hero ,GetAffectedTraits (traits_and_values));
+            Tuple<TraitObject ,int> [] traits = GetAffectedTraits (traits_and_values);
+            if(hero != Hero.MainHero)
+            {
+                    traits = ApplyProbabilityOfTraitChange (traits ,(int)_cfg.values.lordGainNewTraitProbability * 100);
+            }
+            OnChangeTraits (hero , traits);
         }
 
         public static void OnLordPersuedeNotableToRevenge (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableToRevenge);
         }
         public static void OnLordPersuedeNotableNotToRevenge (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenLordPersuedeNotableNotToRevenge);
         }
 
         public static void OnLordRemainsAbandoned (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenRemainsOfLordAreAbandoned);
         }
 
         public static void OnRansomRemainsOfferDeclined (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenRansomRemainsDeclined);
         }
 
         public static void OnRansomRemainsOfferAccepted (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenRansomRemainsAccepted);
         }
 
         public static void OnLordExecuteRevengerAfterOrBeforeQuest (Hero hero)
         {
-            log ($"{hero.Name} {GetInfoStringForTraitsAndValues (_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest)}");
-            OnChangeTraits (hero ,GetAffectedTraits (_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest));
+            OnLordUseTraitsAndValues (hero ,_cfg.values.ai.lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest);
         }
 
         public static Tuple<TraitObject ,int> [] GetAffectedTraits (List<PeasantRevengeConfiguration.TraitAndValue> traitsAndValues)
@@ -533,6 +539,33 @@ namespace PeasantRevenge
             }
 
             return affectedTraits;
+        }
+
+        public static Tuple<TraitObject ,int> [] ApplyProbabilityOfTraitChange(Tuple<TraitObject ,int> [] traits, int chance)
+        {
+            int count = 0;
+            bool[] indexes = new bool[count];
+
+            for(int i = 0;i < traits.Length;i++)
+            {
+                indexes[i] = MBRandom.RandomInt (0 ,100) <= chance;
+                if(indexes [i])
+                {
+                    count++;
+                }
+            } 
+
+            Tuple<TraitObject, int>[] appliedTraits = new Tuple<TraitObject, int>[count];
+            
+            for(int i = 0;i < traits.Length;i++)
+            {
+                if(indexes [i])
+                {
+                    appliedTraits [i] = traits [i];
+                }                
+            }
+
+            return appliedTraits;
         }
 
         public static void OnChangeTraits (Hero targetHero ,Tuple<TraitObject ,int> [] effectedTraits)
@@ -552,6 +585,7 @@ namespace PeasantRevenge
                 {
                     CampaignEventDispatcher.Instance.OnPlayerTraitChanged (trait ,traitLevel);
                 }
+                log ($"{hero.Name} {trait.Name} xp: {xpValue}.");
             }
             else
             {
@@ -559,8 +593,12 @@ namespace PeasantRevenge
                 {
                     int oldTraitLevel = hero.GetTraitLevel(trait);
                     int traitLevel = oldTraitLevel + xpValue;
-                    SetHeroTraitValue (hero ,trait.Name.ToString ( ) ,traitLevel);
-                    log ($"{hero.Name} new {trait.Name} is {traitLevel} (was {oldTraitLevel}).");
+                    traitLevel = MBMath.ClampInt (traitLevel ,trait.MinValue ,trait.MaxValue);
+                    if(traitLevel != oldTraitLevel)
+                    {
+                        SetHeroTraitValue (hero ,trait.Name.ToString ( ) ,traitLevel);
+                        log ($"{hero.Name} new {trait.Name} is {traitLevel} (was {oldTraitLevel}).");
+                    }
                 }
             }
         }
@@ -700,18 +738,18 @@ namespace PeasantRevenge
         {
             bool chop_purpose = notable_can_do_revenge(victim); // true if notable can do the revenge, but hero want to prohibit            
 
-            foreach(Hero hero in victim.HomeSettlement.Notables)
+            foreach(Hero notable in victim.HomeSettlement.Notables)
             {
-                if(hero != victim)
+                if(notable != victim)
                 {
-                    int nobles_relations = hero.GetRelation(victim);// smaller the relation - bigger chance to get positive result towards player
-                    int hero_noble_relation = hero.GetRelation(executioner_hero); // bigger the relation - bigger chance to get positive result towards player 
+                    int nobles_relations = notable.GetRelation(victim);// smaller the relation - bigger chance to get positive result towards player
+                    int hero_noble_relation = notable.GetRelation(executioner_hero); // bigger the relation - bigger chance to get positive result towards player 
                     int relation_change = (hero_noble_relation > nobles_relations) ? _cfg.values.relationChangeWhenLordTeachPeasant : -_cfg.values.relationChangeWhenLordTeachPeasant;
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes (executioner_hero ,hero ,relation_change ,true);
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes (executioner_hero ,notable ,relation_change ,true);
                     if(_cfg.values.enableOtherNobleTraitsChangeAfterNobleExecution)
                     {
                         bool direction = MBRandom.RandomInt(-100, 100) < hero_noble_relation; // bigger relation means bigger chance direction is similar to chop purpose
-                        TeachHeroTraits (hero ,_cfg.values.peasantRevengerExcludeTrait ,chop_purpose ? direction : !direction);
+                        TeachHeroTraits (notable ,_cfg.values.peasantRevengerExcludeTrait ,chop_purpose ? direction : !direction);
                     }
                 }
             }

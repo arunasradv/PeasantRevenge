@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.BarterSystem;
@@ -1320,7 +1321,7 @@ namespace PeasantRevenge
             FindRevengesForRevengeParties();
             AddRaidingParties();
             
-            //Test();
+            Test();
         }
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
@@ -1336,6 +1337,9 @@ namespace PeasantRevenge
             int sum_hearts = 0;
             float max_hearts = 0;
             float min_hearts = 100000;
+
+#warning DISABLE TESTS BEFORE RELEASE !!!         
+#if false
             foreach (Settlement s in Settlement.All)
             {
                 if (s.IsVillage)
@@ -1379,6 +1383,35 @@ namespace PeasantRevenge
                     log($" {s.Name}  {s.Gold} {s.Clan?.Name} {(victims > 0 ? "blame: " + victims.ToString() : "")} {(both > 0 ? "both: " + both.ToString() : "")}");
                 }
             }
+#endif
+
+            /**/
+            log ($"Testing lord oppose or approve peasant's power \t oppose | approve");
+            foreach(Hero L in Hero.AllAliveHeroes)
+            {
+                if(L.IsLord)
+                {
+                    int oppose = 0;
+                    int approve = 0;
+                    foreach(Hero P in Hero.AllAliveHeroes)
+                    {
+                        if(P.IsRuralNotable && L.Id.ToString ( ) != P.Id.ToString ( ))
+                        {
+                            if(CheckConditions (L ,P ,_cfg.values.ai.lordTraitsOpposingPeasantsPower))
+                            {
+                                oppose++;
+                            }
+                            if(CheckConditions (L ,P ,_cfg.values.ai.lordTraitsApprovePeasantsPower))
+                            {
+                                approve++;
+                            }
+                        }
+                    }
+                    log ($" {L.Name} {L.Clan?.Name} \t\t{oppose}, {approve}");
+                }
+            }
+
+
         }
 
         void AddRaidingParties()
@@ -2569,6 +2602,7 @@ namespace PeasantRevenge
               () => { peasant_revenge_player_not_happy_with_peasant_chop_consequence(); leave_encounter_and_mission(); }
               , 90,
              new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_not_happy_with_peasant_end_accusation_clickable));
+           /*TODO: Companion trait developement - maybe persuade by specfic reason with different traits*/
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_companion",
               "peasant_revenge_player_not_happy_with_peasant_end_accusation_options",
@@ -3001,7 +3035,7 @@ namespace PeasantRevenge
             {
                 int task_index = GetTaskIndexByPersuadeStatus (persuade_status);
                 var traits_values = GetTraitsAndValuesByTaskAndOption(task_index,option_index);
-                OnLordPersuedeNotableUseTraitsAndValues (Hero.MainHero ,traits_values);
+                OnLordUseTraitsAndValues (Hero.MainHero ,traits_values);
 
                 this._task.BlockAllOptions ( );
                 // no need to allow select different option, because player is developing hero in one way.
@@ -3507,7 +3541,7 @@ namespace PeasantRevenge
             }
         }
 
-        #endregion       
+        #endregion
 
         private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
         {
@@ -3934,7 +3968,7 @@ namespace PeasantRevenge
         {
             if (PlayerEncounter.Current == null) return;
                 PlayerEncounter.LeaveEncounter = true;
-            if (currentRevenge.xParty != null) currentRevenge.xParty.Ai.SetMoveModeHold();
+            currentRevenge.xParty?.Ai.SetMoveModeHold();
         }
 
         private void leave_encounter_and_mission()
@@ -3943,10 +3977,8 @@ namespace PeasantRevenge
                 return;
             PlayerEncounter.LeaveEncounter=true;
             if(PlayerEncounter.InsideSettlement)
-                if(CampaignMission.Current != null)
-                    CampaignMission.Current.EndMission();
-            if(currentRevenge.xParty!=null)
-                currentRevenge.xParty.Ai.SetMoveModeHold();
+                CampaignMission.Current?.EndMission ();
+            currentRevenge.xParty?.Ai.SetMoveModeHold();
         }
 
         private void peasant_revenge_party_need_compensation_not_payed_consequence()
