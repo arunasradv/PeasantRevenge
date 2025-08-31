@@ -190,20 +190,20 @@ namespace PeasantRevenge
 
                     bool at_war = hero.MapFaction.IsAtWarWith (notable.MapFaction);
                     bool same_faction = hero.MapFaction == notable.MapFaction;
+                    bool approve_revenge = CheckConditions (hero ,notable ,_cfg.values.ai.lordTraitsApprovePeasantsPower);
+                    bool oppose_revenge = CheckConditions (hero ,notable ,_cfg.values.ai.lordTraitsOpposingPeasantsPower);
+
+                    if(approve_revenge == false && oppose_revenge == false)
+                    {
+                        //choose random or stick to the quest task
+                    }
 
                     if(direction_to_revenge) 
                     { 
                         will_try = CheckConditions (hero ,notable ,_cfg.values.ai.lordTraitsApprovePeasantsPower);
                         if(same_faction)
                         {
-                            /*same faction and persuading to revenge means heroes faction peasants are more with power to demand justice against foreign lords 
-                             should have:
-                            generosity < 0
-                            mercy < 0
-                            valor > 0 
-                            honor 
-                             */
-                          
+                                                     
                         }
                         else
                         {
@@ -212,7 +212,7 @@ namespace PeasantRevenge
                     }
                     else
                     {
-                        will_try = CheckConditions (hero ,notable ,_cfg.values.ai.lordTraitsOpposingPeasantsPower);
+                        will_try = 
                        // will_try &= at_war || !same_faction;
                     }
 

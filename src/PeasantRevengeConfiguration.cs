@@ -519,7 +519,7 @@ namespace PeasantRevenge
             {
                 lordPersuadeNotableExcludeTraitsAndRelationsWithNotable = new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Calculating > 0&Honor > 0", relations = "Relations > 30" }
+                     new RelationsPerTraits {traits = "Calculating > 0&Honor > 0", relations = "Relations > 70" }
                 };
             }
 
@@ -528,7 +528,7 @@ namespace PeasantRevenge
             {
                 lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 30" }
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 70" }
                 };
             }
 
@@ -560,7 +560,7 @@ namespace PeasantRevenge
             {
                 lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
                 {
-                    new RelationsPerTraits { traits = "Calculating <= 0&Generosity > 0" ,relations = "Relations > 50" }
+                    new RelationsPerTraits { traits = "Calculating <= 0&Generosity > 0" ,relations = "Relations > 0" }
                 };
             }
 
@@ -588,7 +588,7 @@ namespace PeasantRevenge
             {
                 lordTraitsOpposingPeasantsPower = new List<RelationsPerTraits>
                    {
-                     new RelationsPerTraits { traits = "Calculating > 0&Mercy < 0&Generosity < 0" ,relations = "Relations <= 100" }
+                     new RelationsPerTraits { traits = "Calculating > 0&Mercy <= 0&Generosity < 0" ,relations = "Relations <= 100" }
                    };
             }
             /*The ruler who does approve peasants:
@@ -603,7 +603,7 @@ namespace PeasantRevenge
             {
                 lordTraitsApprovePeasantsPower = new List<RelationsPerTraits>
                    {
-                     new RelationsPerTraits { traits = "Calculating < 0&Mercy > 0&Generosity > 0&Valor <= 0" ,relations = "Relations <= 100" }
+                     new RelationsPerTraits { traits = "Calculating < 0&Mercy > 0&Generosity > 0" ,relations = "Relations <= 100" }
                    };
             }
 

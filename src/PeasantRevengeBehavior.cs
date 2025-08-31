@@ -1389,7 +1389,7 @@ namespace PeasantRevenge
             log ($"Testing lord oppose or approve peasant's power \t oppose | approve");
             foreach(Hero L in Hero.AllAliveHeroes)
             {
-                if(L.IsLord)
+                if(L.IsLord && L.IsActive && L.IsAlive)
                 {
                     int oppose = 0;
                     int approve = 0;
