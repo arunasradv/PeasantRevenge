@@ -136,6 +136,14 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
+            public List<RelationsPerTraits> lastWordsIdPRev0149;
+            public List<RelationsPerTraits> lastWordsIdPRev0150;
+            public List<RelationsPerTraits> lastWordsIdPRev0151;
+            public List<RelationsPerTraits> lastWordsIdPRev0152;
+            public List<RelationsPerTraits> lastWordsIdPRev0153;
+            public List<RelationsPerTraits> lastWordsIdPRev0154;
+            public List<RelationsPerTraits> lastWordsIdPRev0155;
+            public List<RelationsPerTraits> lastWordsIdPRev0156;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
             public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
@@ -188,6 +196,14 @@ namespace PeasantRevenge
                 default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe ( );
                 default_lordTraitsOpposingPeasantsPower ( );
                 default_lordTraitsApprovePeasantsPower ( );
+                default_lastWordsIdPRev0149 ( );
+                default_lastWordsIdPRev0150 ( );
+                default_lastWordsIdPRev0151 ( );
+                default_lastWordsIdPRev0152 ( );
+                default_lastWordsIdPRev0153 ( );
+                default_lastWordsIdPRev0154 ( );
+                default_lastWordsIdPRev0155 ( );
+                default_lastWordsIdPRev0156 ( );
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet ()
@@ -515,6 +531,78 @@ namespace PeasantRevenge
                    };
             }
 
+            public void default_lastWordsIdPRev0149 ()
+            {
+                lastWordsIdPRev0149 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                };
+            }
+            public void default_lastWordsIdPRev0150 ()
+            {
+                lastWordsIdPRev0150 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0151 ()
+            {
+                lastWordsIdPRev0151 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0152 ()
+            {
+                lastWordsIdPRev0152 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0153 ()
+            {
+                lastWordsIdPRev0153 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0154 ()
+            {
+                lastWordsIdPRev0154 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Generosity < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0155 ()
+            {
+                lastWordsIdPRev0155 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0156 ()
+            {
+                lastWordsIdPRev0156 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+
             public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable ()
             {
                 lordPersuadeNotableExcludeTraitsAndRelationsWithNotable = new List<RelationsPerTraits>
@@ -607,46 +695,48 @@ namespace PeasantRevenge
                    };
             }
 
-        }
 
-        //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
-        //"Valor represents your reputation for risking your life to win glory or wealth or advance your cause."
-        //"Honor represents your reputation for respecting your formal commitments, like keeping your word and obeying the law."
-        //"Generosity represents your loyalty to your kin and those who serve you, and your gratitude to those who have done you a favor."
-        //"Calculating represents your ability to control your emotions for the sake of your long-term interests."
+            //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
+            //"Valor represents your reputation for risking your life to win glory or wealth or advance your cause."
+            //"Honor represents your reputation for respecting your formal commitments, like keeping your word and obeying the law."
+            //"Generosity represents your loyalty to your kin and those who serve you, and your gratitude to those who have done you a favor."
+            //"Calculating represents your ability to control your emotions for the sake of your long-term interests."
 
+           
+
+            // public bool prisonerAILordCannotRansomTheCriminal = true;
+            // public bool raidedSettlementOwnerCanInfluencePeasantRevenge = true;
+        } 
+        
         public class MoneyPerTraits
-        {
-            [XmlAttribute]
-            public string traits = "";
-            [XmlAttribute]
-            public int percent = 0;
-        }
+            {
+                [XmlAttribute]
+                public string traits = "";
+                [XmlAttribute]
+                public int percent = 0;
+            }
 
-        public class RelationsPerTraits
-        {
-            [XmlAttribute]
-            public string traits = "";
-            [XmlAttribute]
-            public string relations = "";
-        }
-        public class TraitAndValue
-        {
-            [XmlAttribute]
-            public string trait = "";
-            [XmlAttribute]
-            public int value = 0;
-        }
+            public class RelationsPerTraits
+            {
+                [XmlAttribute]
+                public string traits = "";
+                [XmlAttribute]
+                public string relations = "";
+            }
+            public class TraitAndValue
+            {
+                [XmlAttribute]
+                public string trait = "";
+                [XmlAttribute]
+                public int value = 0;
+            }
 
-        public class TraitsAndValue
-        {
-            [XmlAttribute]
-            public string traits = "";
-            [XmlAttribute]
-            public int percent = 0;
-        }
-
-        // public bool prisonerAILordCannotRansomTheCriminal = true;
-        // public bool raidedSettlementOwnerCanInfluencePeasantRevenge = true;
+            public class TraitsAndValue
+            {
+                [XmlAttribute]
+                public string traits = "";
+                [XmlAttribute]
+                public int percent = 0;
+            }
     }
 }

@@ -211,9 +211,8 @@ namespace PeasantRevenge
                         }
                     }
                     else
-                    {
-                        will_try = 
-                       // will_try &= at_war || !same_faction;
+                    {                       
+                       will_try &= at_war || !same_faction;
                     }
 
 

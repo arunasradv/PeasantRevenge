@@ -25,6 +25,8 @@
      - do not agree to pay the reparation (depending on AI hero traits and relations, player will be executed or spared);
      - blame other prisoner for the crime. More options will be available:
        - confirm the blame (blamed hero will be executed);
+	   - player can choose to pay the reparation, if the accusation fails.
+	 - (**not implemented**) agree to pay only half of the reparation, if the accusation fails completely. Hero who is accused may be executed.
      - Depending on AI hero traits and relations, AI will decide, if blamed hero or/and criminal will be executed, or will not allow the execution due to disagreements);
    - change the mind (dialogue will return to previous options);
  3. When hero (from player clan or kingdom) caught the criminal, who has been raiding player's clan or kingdom village. Notable peasant dialogue options are:
@@ -47,6 +49,7 @@
      - teach the notable peasant (use player's traits to change notable peasant's traits);
      - bribe the notable peasant (use money to change notable peasant's traits);
    - (**not implemented**) bribing effect should be temporary and depend on traits and relations.
+ 6. (**not implemented**) When AI and the player are the prisoners and AI is blaming the player for the crime. Dialogue options.
  #### - Dialogues for notable peasant for mod configuration purpose:
  1. Enable or disable notable peasant parties,
  2. Enable or disable "help neutral village" menu option.
