@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="日本語" />
+  </tags>
+  <strings>
+     <string id="PRev0001" text="あなたは近くの村を略奪しました.農民は誰かの頭を切り落とすように要求します.あなたは何と言いますか?[rf:idle_angry][ib:closed][if:idle_angry]" />
+     <string id="PRev0002" text="ちょっと興味深いのですが、{PEASANTREVENGER.LINK} はあなたが以前に自分の村を略奪したと言っています。農民はあなたの首を絞めたいと思っています。あなたは何と言いますか?[if:convo_thinking][if:idle_happy]" />
+     <string id="PRev0003" text="{REPARATION}{GOLD_ICON} を支払います。" />
+     <string id="PRev0004" text="払いません。" />
+     <string id="PRev0005" text="このネズミには払いません。" />
+     <string id="PRev0006" text="すべて {COMPANION.NAME} の計画だった! (嘘)" />
+     <string id="PRev0007" text="本当にあなたの言う通りでしたか?[if:convo_thinking][ib:closed]" />
+     <string id="PRev0008" text="いいえ!" />
+     <string id="PRev0009" text="はい!" />
+     <string id="PRev0010" text="まあ、農民があなたの運命を決めるのではないかもしれません...[if:convo_thinking]" />
+     <string id="PRev0011" text="罪を償え。[rf:idle_angry][if:convo_bored]" />
+     <string id="PRev0012" text="それで満足です.[ib:happy]" />
+     <string id="PRev0013" text="それは残念です。[ib:warrior][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0014" text="あなたの囚人 {CRIMINAL.LINK} が私たちの村を略奪しました.私たちは犯罪者の頭をスパイクで要求します!あなたは何と言いますか?[if:convo_furious][ib:aggressive]" />
+     <string id="PRev0015" text="{CRIMINAL.NAME} は死にます。" />
+     <string id="PRev0016" text="{CRIMINAL.NAME} は {REPARATION}{GOLD_ICON} を支払います。" />
+     <string id="PRev0017" text="いいえ、それはあなたの仕事ではありません!" />
+     <string id="PRev0018" text="靴、靴...[ib:closed][if:convo_bared_teeth]" />
+     <string id="PRev0019" text="何もないよりまし...[ib:closed][if:idle_normal]" />
+     <string id="PRev0020" text="リベンジ![if:convo_happy][ib:happy]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} は {CRIMINAL.LINK} が私たちの村を略奪しているのを見つけました。私たちは犯罪者の首を絞めることを要求します。ろくでなしは犯罪の代償を払わなければならないからです! あなたは何と言いますか?[ib:aggressive][if:convo_furious]" />
+     <string id="PRev0022" text="農民の要求には屈しません! {HERO.NAME} もそうすべきです!" />
+     <string id="PRev0023" text="払いません！ 犯罪者 {CVICTIM.NAME} は死ぬかもしれません!" />
+     <string id="PRev0024" text="なんてことだ!死ぬぞ!" />
+     <string id="PRev0025" text="何もないよりまし...[ib:closed][if:idle_angry][rf:idle_angry]" />
+     <string id="PRev0026" text="靴、靴...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0027" text="そして、あなたの頭を {HERO.NAME} にお送りします!" />
+     <string id="PRev0028" text="だから犯人は死ぬ。[ib:closed][if:happy]" />
+     <string id="PRev0029" text="犯罪者は死んだ![ib:closed][if:happy]" />
+     <string id="PRev0030" text="ほら、農民が私たちの囚人を殺した![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}レディ{?}主{\\?} {GIFT_RECEIVER.LINK} はあなたに身代金 {RANSOM_COMPENSATION}{GOLD_ICON} を要求しています。[ib:convo_nervous][if:convo_grave]" />
+     <string id="PRev0032" text="一切払いません。" />
+     <string id="PRev0033" text="この贈り物を {GIFT_RECEIVER.NAME} に届けてください。" />
+     <string id="PRev0034" text="あなたの身代金は死んだ、あなたも死ぬ!" />
+     <string id="PRev0035" text="プレゼント?[if:convo_thinking]" />
+     <string id="PRev0036" text="お支払いいただけません...[ib:closed][if:idle_angry]" />
+     <string id="PRev0037" text="喜んでおります.[if:convo_happy]" />
+     <string id="PRev0038" text="不公平です.[ib:closed][if:idle_angry]" />
+     <string id="PRev0039" text="しかし、私はメッセンジャーです...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+	   <string id="PRev0040" text="{PARTYOWNER.NAME} は、{SAVER.NAME} が {REPARATION}{GOLD_ICON} を支払ったため、{PRISONER.NAME} を処刑しませんでした。" />
+     <string id="PRev0041" text="{PARTYOWNER.NAME} は、{PRISONER.NAME} が {REPARATION}{GOLD_ICON} を支払ったため、{PRISONER.NAME} を処刑しませんでした" />
+     <string id="PRev0042" text="{PARTYOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。王国が異なるためです" />
+     <string id="PRev0043" text="{PARTYOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。{SAVER.NAME} が農民の著名な {EXECUTIONER.NAME} を処刑したためです" />
+     <string id="PRev0044" text="{PARTYOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。友人のためです" />
+     <string id="PRev0045" text="{SAVER.NAME} は、{PRISONER.NAME} の首の代金として {REPARATION}{GOLD_ICON} を {EXECUTIONER.NAME} に支払いました。" />
+     <string id="PRev0046" text="{HERO.NAME} が {REPARATION}{GOLD_ICON} を {EXECUTIONER.NAME} に支払いました。" />
+     <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。友人のためです" />
+    <string id="PRev0048" text="この村で犯罪者と取引していますか?" />
+    <string id="PRev0049" text="いいえ、気にしません。[ib:closed]" />
+    <string id="PRev0050" text="あなたの犯罪的意図は私にはよく知られています。" />
+    <string id="PRev0051" text="私の例で教えてあげましょう..." />
+    <string id="PRev0052" text="ここで {BRIBEVALUE}{GOLD_ICON} を取りましょう。犯罪者に罪を償わせてください!" />
+    <string id="PRev0053" text="どうもありがとうございました![if:convo_astonished]" />
+    <string id="PRev0054" text="彼らはやりたいことをやります。 干渉するのは私の仕事ではありません。[ib:closed][if:angry]" />
+    <string id="PRev0055" text="必要な特性がありません" />
+    <string id="PRev0056" text="{SETTLEMENTOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。関係は良好です。" />
+    <string id="PRev0057" text="{SETTLEMENTOWNER.NAME} は親戚であるため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0058" text="{PARTYOWNER.NAME} は {PRISONER.NAME} を処刑しませんでした。関係は良好です。" />
+    <string id="PRev0059" text="{PARTYOWNER.NAME} は親戚であるため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0060" text="{PROPOSEDTO.NAME} へのギフト" />
+    <string id="PRev0061" text="{PROPOSING_HERO.NAME} 修復 " />
+    <string id="PRev0062" text="支払いをしないとどうなりますか?" />
+    <string id="PRev0063" text="農民はあなたの頭を持つでしょう.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="大丈夫です。[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="賠償金を払ってくれる友人がいます。" />
+    <string id="PRev0066" text="{SAVER.NAME} がサポートします。" />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} 人のヒーローがあなたをサポートします。" />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} は {CRIMINAL.LINK} が私たちの村を略奪しているのを発見し、{CVICTIM.LINK} はすべてを計画したとして告発されました。私たちは正義を要求します![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} は、{CRIMINALBLAMED.NAME} が村を略奪したとして告発しました。" />
+    <string id="PRev0070" text="どちらも犯罪者です!" />
+    <string id="PRev0071" text="犯人はそれについて何と言っていますか?" />
+    <string id="PRev0072" text="このクソ野郎に耳を傾けるな.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="断言できます! すべて {CVICTIM.LINK} の計画でした![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} が犯人です。[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="信じます。" />
+    <string id="PRev0076" text="あなたは嘘をついています。" />
+    <string id="PRev0077" text="二人とも農民の復讐に値する!" />
+    <string id="PRev0078" text="話す時間がありません.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="あなたの問題についてどのように私に話すか教えてください." />
+    <string id="PRev0080" text="どのような問題がありますか?[if:convo_thinking]" />
+    <string id="PRev0081" text="あなたのことですぐに私の邪魔をするべきではありません." />
+    <string id="PRev0082" text="あなたの問題はすぐに中断してください。" />
+    <string id="PRev0083" text="気にしないでください。" />
+    <string id="PRev0084" text="はい、私の {?MAINHERO.GENDER}レディ{?}主{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="リベンジャー" />
+    <string id="PRev0086" text="あなたは…に決めました" />
+    <string id="PRev0087" text="{KINGDOM} に宣戦布告し、{DEFENDER} を助けてください。" />
+    <string id="PRev0088" text="著名な農民モバイル パーティーを無効にする" />
+    <string id="PRev0089" text="注目の農民移動パーティを有効にする" />
+    <string id="PRev0090" text="移動中立パーティから村を守るオプションを無効にする" />
+    <string id="PRev0091" text="中立の機動隊から村を守るオプションを有効にする" />
+    <string id="PRev0092" text="略奪者から村を守ります。" />
+    <string id="PRev0093" text="私は敵からのみ村を守ります。" />
+    <string id="PRev0094" text="今すぐ出発しなければなりません。" />
+    <string id="PRev0095" text="話したいことがある." />
+    <string id="PRev0096" text="{RANSOMER.LINK} は、{CAPTIVE_HERO.NAME} の遺体を差し出す場合、身代金として {GOLD_AMOUNT}{GOLD_ICON} を提供します。" />
+    <string id="PRev0097" text="{CAPTIVE_HERO.NAME} の代金を払いたくない人は誰もいません" />
+    <string id="PRev0098" text="決断できません..." />
+    <string id="PRev0099" text="良い決断でした...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="決断できません...[if:convo_ Thinking][ib:closed]" />
+    <string id="PRev0101" text="それでいい[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="良い決断でした..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} は、容疑が矛盾しているため、{PRISONER.NAME} を処刑しませんでした。" />
+    <string id="PRev0105" text="遺骨は引き取ります。" />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="復讐をやめるべきか、そうでなければ..." />
+    <string id="PRev0108" text="他には何がありますか?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="あなたの首を切り落とします!" />
+    <string id="PRev0110" text="村に帰りましょう!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} と {CVICTIM.LINK} は死んだ! 私の復讐は完了した![if:happy]" />
+    <string id="PRev0112" text="{CVICTIM.LINK} への復讐を終えました![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} は {GOLD_ICON} を支払うか、それとも死ぬことになります![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="{CRIMINAL.LINK} への私の復讐は誰も止められません![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="あなたのパーティーは小さすぎます" />
+    <string id="PRev0116" text="{CRIMINAL.LINK} は死ぬでしょう![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="もう十分です、私の意図は変わりません![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="ここでは、{BRIBEVALUE}{GOLD_ICON} を取り上げます。高貴な人々はあなたにとって犯罪者ではありません。" />
+    <string id="PRev0119" text="今はできません。" />
+    <string id="PRev0120" text="彼らは法律を破っており、その犯罪の報いに直面するでしょう。[ib:closed][if:angry]" />
+    <string id="PRev0121" text="約束はできません..[ib:closed]" />
+    <string id="PRev0122" text="賄賂はまだ機能しません。" />
+    <string id="PRev0123" text="賄賂はできません。農民の特性により許可されません。" />
+    <string id="PRev0124" text="はい。なぜ質問するのですか?[ib:closed][rf:convo_thinking]" />
+    <string id="PRev0125" text="認めます。[rf:convo_thinking][if:convo_grave]" />
+    <string id="PRev0126" text="{EXECUTIONER.LINK} はあなたの首を切り落とします!" />
+    <string id="PRev0127" text="正義はあなたの犯罪の代償を支払うことを要求します。" />
+    <string id="PRev0128" text="その通りです。" />
+    <string id="PRev0129" text="何を話し合う必要がありますか?" />
+    <string id="PRev0130" text="もしかしたら..." />
+    <string id="PRev0131" text="私は...[ib:convo_thinking]" /> だと思います
+    <string id="PRev0132" text="誰もこの犯罪者を恐れるべきではありません。" />
+    <string id="PRev0133" text="私たちの村の破壊については誰かが責任を負わなければなりません。" />
+    <string id="PRev0134" text="正義を自分の手で守りましょう。" />
+    <string id="PRev0135" text="これらの犯罪者は危険すぎます。" />
+    <string id="PRev0136" text="敵を憐れむことは友人を見つけることです。" />
+    <string id="PRev0137" text="貴族の手に正義を与えてください。あなたはそれほど重要ではありません。" />
+    <string id="PRev0138" text="高貴な人々に対するあなたの敵対的な演説を誰もが聞いています。" />
+    <string id="PRev0139" text="敵に対するあなたの優しさは犯罪的なものです。" />
+    <string id="PRev0140" text="私が真実を語っていることは誰もが知っています。" />
+    <string id="PRev0141" text="あなたの非難には根拠がありません。[ib:nervous][if:convo_astonished]"/>
+    <string id="PRev0142" text="私のやり方が変わるとは期待しないでください。" />
+    <string id="PRev0143" text="それは誤解だったとしましょう。" />
+    <string id="PRev0144" text="素晴らしい質問です。例を示しましょう..." />
+    <string id="PRev0145" text="農民を説得するために" />
+    <string id="PRev0146" text="農民を追放する" />
+    <string id="PRev0147" text="農民を追放するか処刑する" />
+    <string id="PRev0148" text="農民はあなたとあなたの仲間を罰するだろう {ACCUSEDHERO.LINK}." />
+
+  </strings>
+</base>

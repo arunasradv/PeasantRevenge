@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Deutsch" />
+  </tags>
+  <strings>
+     <string id="PRev0001" text="Du hast ein Dorf in der Nähe geplündert. Bauern verlangen, jemandem den Kopf abzuschneiden. Was wirst du sagen?[rf:idle_angry][ib:closed][if:idle_angry]" />
+     <string id="PRev0002" text="Nur neugierig, der {PEASANTREVENGER.LINK} sagt, dass du vorhin dein eigenes Dorf geplündert hast. Bauern wollen dir den Kopf abreißen. Was wirst du sagen?[if:convo_thinking][if:idle_happy]" />
+     <string id="PRev0003" text="Ich bezahle {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0004" text="Ich werde nicht bezahlen." />
+     <string id="PRev0005" text="Ich werde diese Ratte nicht bezahlen." />
+     <string id="PRev0006" text="Es war alles der Plan von {COMPANION.NAME}! (Lüge)" />
+     <string id="PRev0007" text="Bist du sicher, dass es so war, wie du sagst?[if:convo_thinking][ib:closed]" />
+     <string id="PRev0008" text="Nein!" />
+     <string id="PRev0009" text="Ja!" />
+     <string id="PRev0010" text="Nun, vielleicht ist es nicht Sache des Bauern, über dein Schicksal zu entscheiden...[if:convo_thinking]" />
+     <string id="PRev0011" text="Bezahle für dein Verbrechen.[rf:idle_angry][if:convo_bored]" />
+     <string id="PRev0012" text="Nun, ich bin damit zufrieden.[ib:happy]" />
+     <string id="PRev0013" text="Nun, das ist bedauerlich.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+     <string id="PRev0014" text="Dein Gefangener {CRIMINAL.LINK} hat unser Dorf geplündert. Wir fordern den Kopf des Verbrechers auf der Spitze! Was wirst du sagen?[if:convo_furious][ib:aggressive]" />
+     <string id="PRev0015" text="{CRIMINAL.NAME} wird sterben." />
+     <string id="PRev0016" text="{CRIMINAL.NAME} zahlt {REPARATION}{GOLD_ICON}." />
+     <string id="PRev0017" text="Nein, das geht dich nichts an, Bauer!" />
+     <string id="PRev0018" text="Schuh, Schuh...[ib:closed][if:convo_bared_teeth]" />
+     <string id="PRev0019" text="Besser als nichts...[ib:closed][if:idle_normal]" />
+     <string id="PRev0020" text="Rache![if:convo_happy][ib:happy]" />
+     <string id="PRev0021" text="{PARTYLEADER.LINK} hat {CRIMINAL.LINK} beim Plündern unseres Dorfes erwischt. Wir fordern den Kopf des Verbrechers auf Spießen, weil der Bastard für das Verbrechen bezahlen muss! Was wirst du sagen?[ib:aggressive][if:convo_furious]" />
+     <string id="PRev0022" text="Ich werde mich den Forderungen der Bauern nicht beugen! Und {HERO.NAME} sollte es auch tun!" />
+     <string id="PRev0023" text="Ich werde nicht bezahlen! Der Kriminelle {CVICTIM.NAME} kann sterben!" />
+     <string id="PRev0024" text="Wie kannst du es wagen! Du wirst sterben!" />
+     <string id="PRev0025" text="Besser als nichts...[ib:closed][if:idle_angry][rf:idle_angry]" />
+     <string id="PRev0026" text="Schuh, Schuh...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0027" text="Und ich schicke deinen Kopf zu {HERO.NAME}!" />
+     <string id="PRev0028" text="Also wird der Verbrecher sterben.[ib:closed][if:happy]" />
+     <string id="PRev0029" text="Der kriminelle herrscher ist tot![ib:closed][if:happy]" />
+     <string id="PRev0030" text="Schau, der Bauer hat unseren Gefangenen getötet![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+     <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}Dame{?}Herrscher{\\?} {GIFT_RECEIVER.LINK} bittet Sie um Lösegeld in Gold {RANSOM_COMPENSATION}{GOLD_ICON}.[ib :convo_nervous][if:convo_grave]" />
+     <string id="PRev0032" text="Ich bezahle nichts." />
+     <string id="PRev0033" text="Bitte bring dieses Geschenk zu {GIFT_RECEIVER.NAME}." />
+     <string id="PRev0034" text="Dein Lösegeld ist tot und jetzt wirst du auch sterben!" />
+     <string id="PRev0035" text="Ein Geschenk?[if:convo_thinking]" />
+     <string id="PRev0036" text="Du kannst also nicht bezahlen...[ib:closed][if:idle_angry]" />
+     <string id="PRev0037" text="Wir freuen uns.[if:convo_happy]" />
+     <string id="PRev0038" text="Es ist unfair.[ib:closed][if:idle_angry]" />
+     <string id="PRev0039" text="Aber ich bin der Bote...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+     <string id="PRev0040" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil {SAVER.NAME} {REPARATION}{GOLD_ICON} bezahlt hat." />
+     <string id="PRev0041" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil {PRISONER.NAME} {REPARATION}{GOLD_ICON} bezahlt hat" />
+     <string id="PRev0042" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil anderes Königreich" />
+     <string id="PRev0043" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil {SAVER.NAME} den angesehenen Bauern {EXECUTIONER.NAME} hingerichtet hat" />
+     <string id="PRev0044" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil Freunde" />
+     <string id="PRev0045" text="{SAVER.NAME} hat {REPARATION}{GOLD_ICON} für den Kopf von {PRISONER.NAME} an {EXECUTIONER.NAME} bezahlt." />
+     <string id="PRev0046" text="{HERO.NAME} hat {REPARATION}{GOLD_ICON} an {EXECUTIONER.NAME} gezahlt." />
+     <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil Freunde" />
+    <string id="PRev0048" text="Haben Sie in diesem Dorf mit Kriminellen zu tun?" />
+    <string id="PRev0049" text="Nein, das ist mir egal.[ib:closed]" />
+    <string id="PRev0050" text="Ihre kriminellen Absichten sind mir wohlbekannt." />
+    <string id="PRev0051" text="Ich kann versuchen, es dir anhand meines Beispiels beizubringen..." />
+    <string id="PRev0052" text="Hier, nimm {BRIBEVALUE}{GOLD_ICON}. Lass Kriminelle für ihre Verbrechen bezahlen!" />
+    <string id="PRev0053" text="Vielen Dank![if:convo_astonished]" />
+    <string id="PRev0054" text="Sie werden tun, was sie wollen. Es ist nicht meine Aufgabe, mich einzumischen.[ib:closed][if:angry]" />
+    <string id="PRev0055" text="Haben keine erforderlichen Eigenschaften" />
+    <string id="PRev0056" text="{SETTLEMENTOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil er gute Beziehungen hat." />
+    <string id="PRev0057" text="{SETTLEMENTOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil es Verwandte sind." />
+    <string id="PRev0058" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, weil er gute Beziehungen hat." />
+    <string id="PRev0059" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} nicht hingerichtet, da es sich um Verwandte handelt." />
+    <string id="PRev0060" text="Geschenk an {PROPOSEDTO.NAME}" />
+    <string id="PRev0061" text="{PROPOSING_HERO.NAME} REPARATUR " />
+    <string id="PRev0062" text="Und wenn ich nicht bezahle?" />
+    <string id="PRev0063" text="Bauer wird deinen Kopf haben.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="Dir wird es gut gehen.[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="Ich habe Freunde, die die Wiedergutmachung zahlen." />
+    <string id="PRev0066" text="{SAVER.NAME} wird Sie dabei unterstützen." />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} Helden können dich unterstützen." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} hat {CRIMINAL.LINK} dabei erwischt, wie er unser Dorf plünderte, und {CVICTIM.LINK} wurde beschuldigt, das alles geplant zu haben. Wir fordern Gerechtigkeit![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} beschuldigte {CRIMINALBLAMED.NAME}, das Dorf geplündert zu haben." />
+    <string id="PRev0070" text="Sie sind beide Kriminelle!" />
+    <string id="PRev0071" text="Was sagt der Täter dazu?" />
+    <string id="PRev0072" text="Hör nicht auf diesen Drecksack.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Ich kann schwören! Es war alles der Plan von {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} ist der Verbrecher.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Ich glaube dir." />
+    <string id="PRev0076" text="Du lügst." />
+    <string id="PRev0077" text="Ihr verdient beide bäuerliche Rache!" />
+    <string id="PRev0078" text="Ich habe keine Zeit zum Reden.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Lassen Sie mich Ihnen sagen, wie Sie mit mir über Ihre Probleme sprechen werden." />
+    <string id="PRev0080" text="Welche Probleme?[if:convo_thinking]" />
+    <string id="PRev0081" text="Sie sollten mich nicht gleich mit Ihrem Anliegen unterbrechen." />
+    <string id="PRev0082" text="Du solltest mich sofort mit deinem Anliegen unterbrechen." />
+    <string id="PRev0083" text="Macht nichts." />
+    <string id="PRev0084" text="Ja, meine {?MAINHERO.GENDER}Dame{?}Herrscher{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Rächer" />
+    <string id="PRev0086" text="Du hast dich entschieden..." />
+    <string id="PRev0087" text="Erkläre {KINGDOM} den Krieg und hilf {DEFENDER}." />
+    <string id="PRev0088" text="Bemerkenswerte Bauernmobilpartei deaktivieren" />
+    <string id="PRev0089" text="Bemerkenswerte Bauernmobilpartei aktivieren" />
+    <string id="PRev0090" text="Deaktiviere die Option, das Dorf gegen neutrale mobile Parteien zu verteidigen" />
+    <string id="PRev0091" text="Aktiviere die Option, das Dorf gegen neutrale mobile Parteien zu verteidigen" />
+    <string id="PRev0092" text="Ich werde Dörfer gegen Plünderer verteidigen." />
+    <string id="PRev0093" text="Ich werde Dörfer nur gegen meine Feinde verteidigen." />
+    <string id="PRev0094" text="Ich muss jetzt gehen." />
+    <string id="PRev0095" text="Ich möchte etwas besprechen." />
+    <string id="PRev0096" text="{RANSOMER.LINK} bietet Ihnen {GOLD_AMOUNT}{GOLD_ICON} Lösegeld an, wenn Sie {CAPTIVE_HERO.NAME} Reste geben.“" />
+    <string id="PRev0097" text="Niemand will für {CAPTIVE_HERO.NAME} bezahlen bleibt übrig" />
+    <string id="PRev0098" text="Ich kann die Entscheidung nicht treffen..." />
+    <string id="PRev0099" text="Eine gute Entscheidung...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Ich kann die Entscheidung nicht treffen...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="So sei es[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Eine gute Entscheidung..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} hat {PRISONER.NAME} aufgrund widersprüchlicher Anschuldigungen nicht hingerichtet." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} hat {PRISONER.NAME} aufgrund widersprüchlicher Anschuldigungen nicht hingerichtet." />
+    <string id="PRev0105" text="Ich nehme die Überreste." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="Du solltest deine Rache aufgeben, sonst..." />
+    <string id="PRev0108" text="Was noch?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="Ich werde dir den Kopf abschlagen!" />
+    <string id="PRev0110" text="Geh zurück in dein Dorf!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} und {CVICTIM.LINK} sind tot! Meine Rache ist vollendet![if:happy]" />
+    <string id="PRev0112" text="Ich habe die Rache an {CVICTIM.LINK} beendet![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} wird {GOLD_ICON} bezahlen oder sterben![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="Niemand kann meine Rache an {CRIMINAL.LINK} stoppen![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Ihre Gruppe ist zu klein" />
+    <string id="PRev0116" text="{CRIMINAL.LINK} wird sterben![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="Genug, ich werde meine Absichten nicht ändern![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="Hier nimm {BRIBEVALUE}{GOLD_ICON}. Edle Menschen sind für dich keine Kriminellen." />
+    <string id="PRev0119" text="Nicht jetzt." />
+    <string id="PRev0120" text="Sie verstoßen gegen das Gesetz und müssen mit Konsequenzen für ihre Verbrechen rechnen.[ib:closed][if:angry]" />
+    <string id="PRev0121" text="Ich kann keine Versprechungen machen..[ib:closed]" />
+    <string id="PRev0122" text="Bestechung wird noch nicht funktionieren." />
+    <string id="PRev0123" text="Kann nicht bestechen. Bauerneigenschaften erlauben es nicht." />
+    <string id="PRev0124" text="Ja. Warum fragen Sie?[ib:closed][rf:convo_thinking]" />
+    <string id="PRev0125" text="Ich gebe zu.[if:convo_thinking][if:convo_grave]" />
+    <string id="PRev0126" text="{EXECUTIONER.LINK} wird dir den Kopf abschlagen!" />
+    <string id="PRev0127" text="Die Gerechtigkeit verlangt, dass Sie für Ihre Verbrechen bezahlen." />
+    <string id="PRev0128" text="Du hast recht." />
+    <string id="PRev0129" text="Was gibt es zu besprechen?" />
+    <string id="PRev0130" text="Vielleicht..." />
+    <string id="PRev0131" text="Ich denke...[ib:thinking]" />
+    <string id="PRev0132" text="Niemand sollte Angst vor diesen Kriminellen haben." />
+    <string id="PRev0133" text="Jemand muss für die Zerstörung unserer Dörfer zur Verantwortung gezogen werden." />
+    <string id="PRev0134" text="Behalten Sie die Gerechtigkeit in Ihren eigenen Händen." />
+    <string id="PRev0135" text="Diese Kriminellen sind zu gefährlich." />
+    <string id="PRev0136" text="Einen Feind zu bemitleiden bedeutet, einen Freund zu finden." />
+    <string id="PRev0137" text="Gib Gerechtigkeit in die Hände von Adligen. Du bist nicht so wichtig." />
+    <string id="PRev0138" text="Jeder hat Ihre feindseligen Reden gegen edle Menschen gehört." />
+    <string id="PRev0139" text="Ihre Freundlichkeit gegenüber dem Feind ist kriminell." />
+    <string id="PRev0140" text="Jeder weiß, dass ich die Wahrheit sage." />
+    <string id="PRev0141" text="Ihre Anschuldigung ist unbegründet.[ib:nervous][if:convo_astonished]"/>
+    <string id="PRev0142" text="Erwarten Sie nicht, dass ich mein Verhalten ändere." />
+    <string id="PRev0143" text="Sagen wir, es war ein Missverständnis." />
+    <string id="PRev0144" text="Tolle Frage! Lassen Sie mich mein Beispiel zeigen..." />
+    <string id="PRev0145" text="Um zu versuchen, den Bauern zu überzeugen" />
+    <string id="PRev0146" text="Vertreibe den Bauern" />
+    <string id="PRev0147" text="Vertreibung oder Hinrichtung des Bauern" />
+    <string id="PRev0148" text="Die Bauern werden dich und deine Gefährten bestrafen {ACCUSEDHERO.LINK}." />
+
+  </strings>
+</base>
