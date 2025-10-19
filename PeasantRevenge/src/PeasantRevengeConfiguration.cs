@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 20;
+        public int CfgVersion = 25;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = false;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -42,6 +42,7 @@ namespace PeasantRevenge
         public string peasantRevengerExcludeTrait = "Mercy >= 0|Valor =< 0";
         public string lordNotExecuteMessengerTrait = "Mercy > -1&Calculating > -1|Honor >= 1&Calculating > 0&Generosity > 0";
 #if TESTING
+#warning DISABLE TESTS BEFORE RELEASE !!! 
         public string log_file_name = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
 #else
         public string log_file_name = "";// Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "log.xml");
@@ -72,6 +73,8 @@ namespace PeasantRevenge
         public float peasantRevengerIntimidationPowerScale = 0.5f;
         public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
+        public float lordTryPersuadeNotableProbability = 0.6f;
+        public float lordGainNewTraitProbability = 0.5f;
         public AIfilters ai;
 
         public static string default_file_name()
@@ -133,6 +136,25 @@ namespace PeasantRevenge
             public List<TraitAndValue> AccuseNotableTraitsForOption0;
             public List<TraitAndValue> AccuseNotableTraitsForOption1;
             public List<TraitAndValue> AccuseNotableTraitsForOption2;
+            public List<RelationsPerTraits> lastWordsIdPRev0149;
+            public List<RelationsPerTraits> lastWordsIdPRev0150;
+            public List<RelationsPerTraits> lastWordsIdPRev0151;
+            public List<RelationsPerTraits> lastWordsIdPRev0152;
+            public List<RelationsPerTraits> lastWordsIdPRev0153;
+            public List<RelationsPerTraits> lastWordsIdPRev0154;
+            public List<RelationsPerTraits> lastWordsIdPRev0155;
+            public List<RelationsPerTraits> lastWordsIdPRev0156;
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
+            public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner;
+            public List<RelationsPerTraits> lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner;
+
+            public List<MoneyPerTraits> lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe;
+
+            public List<RelationsPerTraits> lordTraitsOpposingPeasantsPower;
+            public List<RelationsPerTraits> lordTraitsApprovePeasantsPower;
 
             public void Default()
             {
@@ -165,7 +187,23 @@ namespace PeasantRevenge
                 default_AccuseNotableTraitsForOption0();
                 default_AccuseNotableTraitsForOption1();
                 default_AccuseNotableTraitsForOption2();
-
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable();
+                default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner();
+                default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe();
+                default_lordTraitsOpposingPeasantsPower();
+                default_lordTraitsApprovePeasantsPower();
+                default_lastWordsIdPRev0149();
+                default_lastWordsIdPRev0150();
+                default_lastWordsIdPRev0151();
+                default_lastWordsIdPRev0152();
+                default_lastWordsIdPRev0153();
+                default_lastWordsIdPRev0154();
+                default_lastWordsIdPRev0155();
+                default_lastWordsIdPRev0156();
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -177,7 +215,7 @@ namespace PeasantRevenge
             }
             public void default_settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
             {
-             settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
+                settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
               {
                     new RelationsPerTraits {traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
               };
@@ -220,17 +258,18 @@ namespace PeasantRevenge
             }
             public void default_lordWillAffordToHelpPayLostRansom()
             {
-                 lordWillAffordToHelpPayLostRansom =
-                  new List<RelationsPerTraits>
-                  {
+                lordWillAffordToHelpPayLostRansom =
+                 new List<RelationsPerTraits>
+                 {
                     new RelationsPerTraits {traits = "Mercy < -1|Generosity < -1", relations = "Relations > 20" },
                     new RelationsPerTraits {traits = "Mercy == -1|Generosity == -1", relations = "Relations > 10" },
                     new RelationsPerTraits {traits = "Mercy == 0|Generosity == 0", relations = "Relations > 0" },
                     new RelationsPerTraits {traits = "Mercy == 1|Generosity == 1&Honor > 0", relations = "Relations > -10" },
                     new RelationsPerTraits {traits = "Mercy > 1|Generosity > 1&Honor > 0", relations = "Relations > -20" },
-                  };
+                 };
             }
-            public void default_lordIfFriendsWillHelpTheCriminal() { 
+            public void default_lordIfFriendsWillHelpTheCriminal()
+            {
                 lordIfFriendsWillHelpTheCriminal =
                  new List<RelationsPerTraits>
                  {
@@ -239,7 +278,8 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
                 new RelationsPerTraits { traits = "Mercy == 1&Honor > 0", relations = "Relations > -20" },
                 new RelationsPerTraits { traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -30" },
-                 };}
+                 };
+            }
             public void default_lordIfRelativesWillHelpTheCriminal()
             {
                 lordIfRelativesWillHelpTheCriminal =
@@ -251,37 +291,6 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
                 new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
                   };
-                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict =
-                  new List<RelationsPerTraits>
-                  {
-                new RelationsPerTraits {traits = "Mercy < -1", relations = "Relations > 20" },
-                new RelationsPerTraits {traits = "Mercy == -1", relations = "Relations > 10" },
-                new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > -30"},
-                new RelationsPerTraits {traits = "Mercy == 1&Honor > 0", relations = "Relations > -50"},
-                new RelationsPerTraits {traits = "Mercy > 1&Honor > 0&Generosity > 0", relations =  "Relations > -70"},
-                  };
-
-                default_lordWillKillBothAccusedHeroAndCriminalLord();
-                default_criminalWillBlameOtherLordForTheCrime();
-                default_lordTraitChangeWhenRansomRemainsDeclined();
-                default_lordTraitChangeWhenRansomRemainsAccepted();
-                default_lordTraitChangeWhenRemainsOfLordAreAbandoned();
-                default_lordWillDeclineRansomTheVictimRemains();
-                default_lordWillAbandonTheVictimRemains();
-                default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict();
-                default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest();
-                default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge();
-                default_lordTraitChangeWhenLordPersuedeNotableToRevenge();
-                default_PersuadeNotableToRevengeTraitsForOption0();
-                default_PersuadeNotableToRevengeTraitsForOption1();
-                default_PersuadeNotableToRevengeTraitsForOption2();
-                default_PersuadeNotableNotToRevengeTraitsForOption0();
-                default_PersuadeNotableNotToRevengeTraitsForOption1();
-                default_PersuadeNotableNotToRevengeTraitsForOption2();
-                default_AccuseNotableTraitsForOption0();
-                default_AccuseNotableTraitsForOption1();
-                default_AccuseNotableTraitsForOption2();
-
             }
 
             public void default_lordWillKillBothAccusedHeroAndCriminalLord()
@@ -341,7 +350,7 @@ namespace PeasantRevenge
                     };
             }
 
-            
+
             public void default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest()
             {
                 lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest =
@@ -371,7 +380,7 @@ namespace PeasantRevenge
 
             public void default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict()
             {
-              lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
+                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
                     new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 20" },
                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
@@ -379,12 +388,12 @@ namespace PeasantRevenge
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge()
             {
-                    lordTraitChangeWhenLordPersuedeNotableNotToRevenge =
-                    new List<TraitAndValue>
-                    {
+                lordTraitChangeWhenLordPersuedeNotableNotToRevenge =
+                new List<TraitAndValue>
+                {
                         new TraitAndValue { trait = "Mercy", value = 5},
                         new TraitAndValue { trait = "Valor", value = -5},
-                    };
+                };
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableToRevenge()
             {
@@ -415,39 +424,39 @@ namespace PeasantRevenge
                         new TraitAndValue { trait = "Honor", value = 0},
                         new TraitAndValue { trait = "Calculating", value = -1},
                         new TraitAndValue { trait = "Valor", value = 1},
-                        new TraitAndValue { trait = "Generosity", value = 1}
+                        new TraitAndValue { trait = "Generosity", value = 0}
                    };
             }
 
             public void default_PersuadeNotableToRevengeTraitsForOption1()
             {
-                PersuadeNotableToRevengeTraitsForOption1=
+                PersuadeNotableToRevengeTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = -1},
-                        new TraitAndValue { trait = "Honor", value = 0},
-                        new TraitAndValue { trait = "Calculating", value = -1},
-                        new TraitAndValue { trait = "Valor", value = 1},
-                        new TraitAndValue { trait = "Generosity", value = 1}
+                        new TraitAndValue { trait = "Honor", value = 1},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = 0},
+                        new TraitAndValue { trait = "Generosity", value = -1}
                    };
             }
 
             public void default_PersuadeNotableToRevengeTraitsForOption2()
             {
-                PersuadeNotableToRevengeTraitsForOption2=
+                PersuadeNotableToRevengeTraitsForOption2 =
                    new List<TraitAndValue>
                    {
-                        new TraitAndValue { trait = "Mercy", value = 0},
+                        new TraitAndValue { trait = "Mercy", value = -1},
                         new TraitAndValue { trait = "Honor", value = -1},
                         new TraitAndValue { trait = "Calculating", value = -1},
-                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Valor", value = 2},
                         new TraitAndValue { trait = "Generosity", value = -1}
                    };
             }
 
             public void default_PersuadeNotableNotToRevengeTraitsForOption0()
             {
-                PersuadeNotableNotToRevengeTraitsForOption0=
+                PersuadeNotableNotToRevengeTraitsForOption0 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
@@ -459,51 +468,51 @@ namespace PeasantRevenge
             }
             public void default_PersuadeNotableNotToRevengeTraitsForOption1()
             {
-                PersuadeNotableNotToRevengeTraitsForOption1=
+                PersuadeNotableNotToRevengeTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
-                        new TraitAndValue { trait = "Honor", value = 0},
-                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Honor", value = 1},
+                        new TraitAndValue { trait = "Calculating", value = -1},
                         new TraitAndValue { trait = "Valor", value = -1},
-                        new TraitAndValue { trait = "Generosity", value = -1}
+                        new TraitAndValue { trait = "Generosity", value = 1}
                    };
             }
 
             public void default_PersuadeNotableNotToRevengeTraitsForOption2()
             {
-                PersuadeNotableNotToRevengeTraitsForOption2=
+                PersuadeNotableNotToRevengeTraitsForOption2 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
-                        new TraitAndValue { trait = "Honor", value = 0},
+                        new TraitAndValue { trait = "Honor", value = 1},
                         new TraitAndValue { trait = "Calculating", value = 1},
-                        new TraitAndValue { trait = "Valor", value = -1},
+                        new TraitAndValue { trait = "Valor", value = -2},
                         new TraitAndValue { trait = "Generosity", value = 1}
                    };
             }
 
             public void default_AccuseNotableTraitsForOption0()
             {
-                AccuseNotableTraitsForOption0=
+                AccuseNotableTraitsForOption0 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = -1},
                         new TraitAndValue { trait = "Honor", value = -1},
-                        new TraitAndValue { trait = "Calculating", value = -1},
-                        new TraitAndValue { trait = "Valor", value = 1},
+                        new TraitAndValue { trait = "Calculating", value = 1},
+                        new TraitAndValue { trait = "Valor", value = 0},
                         new TraitAndValue { trait = "Generosity", value = -1}
                    };
             }
 
             public void default_AccuseNotableTraitsForOption1()
             {
-                AccuseNotableTraitsForOption1=
+                AccuseNotableTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
                         new TraitAndValue { trait = "Honor", value = 0},
-                        new TraitAndValue { trait = "Calculating", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 1},
                         new TraitAndValue { trait = "Valor", value = -1},
                         new TraitAndValue { trait = "Generosity", value = -1}
                    };
@@ -511,23 +520,193 @@ namespace PeasantRevenge
 
             public void default_AccuseNotableTraitsForOption2()
             {
-                AccuseNotableTraitsForOption2=
+                AccuseNotableTraitsForOption2 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 0},
                         new TraitAndValue { trait = "Honor", value = 1},
-                        new TraitAndValue { trait = "Calculating", value = 1},
-                        new TraitAndValue { trait = "Valor", value = 0},
+                        new TraitAndValue { trait = "Calculating", value = 0},
+                        new TraitAndValue { trait = "Valor", value = -1},
                         new TraitAndValue { trait = "Generosity", value = 1}
                    };
             }
-        }
 
-        //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
-        //"Valor represents your reputation for risking your life to win glory or wealth or advance your cause."
-        //"Honor represents your reputation for respecting your formal commitments, like keeping your word and obeying the law."
-        //"Generosity represents your loyalty to your kin and those who serve you, and your gratitude to those who have done you a favor."
-        //"Calculating represents your ability to control your emotions for the sake of your long-term interests."
+            public void default_lastWordsIdPRev0149()
+            {
+                lastWordsIdPRev0149 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                };
+            }
+            public void default_lastWordsIdPRev0150()
+            {
+                lastWordsIdPRev0150 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0151()
+            {
+                lastWordsIdPRev0151 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0152()
+            {
+                lastWordsIdPRev0152 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0153()
+            {
+                lastWordsIdPRev0153 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0154()
+            {
+                lastWordsIdPRev0154 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Generosity < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0155()
+            {
+                lastWordsIdPRev0155 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0156()
+            {
+                lastWordsIdPRev0156 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithNotable()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelationsWithNotable = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Calculating > 0&Honor > 0", relations = "Relations > 70" }
+                };
+            }
+
+
+            public void default_lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 70" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy > 0&Calculating > 0", relations = "Relations > 20" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableChooseExecuteTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0&Honor < 0", relations = "Relations < 20" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableChooseExpelTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Honor > 0&Generosity > 0", relations = "Relations > 0" }
+                };
+            }
+
+            public void default_lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner()
+            {
+                lordPersuadeNotableChooseBribeTraitsAndRelationsWithSettlementOwner = new List<RelationsPerTraits>
+                {
+                    new RelationsPerTraits { traits = "Calculating <= 0&Generosity > 0" ,relations = "Relations > 0" }
+                };
+            }
+
+            public void default_lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe()
+            {
+                lordPersuadeNotableWillAffordPartOfHisSavingsToPayForBribe =
+                new List<MoneyPerTraits>
+                {
+                new MoneyPerTraits {traits = "Generosity < -1", percent = 1 },
+                new MoneyPerTraits {traits = "Generosity == -1", percent = 5 },
+                new MoneyPerTraits {traits = "Generosity == 0", percent = 10 },
+                new MoneyPerTraits {traits = "Generosity == 1", percent = 15 },
+                new MoneyPerTraits {traits = "Generosity > 1", percent = 20 },
+                };
+            }
+            /*The character traits of a medieval ruler who opposes peasant autonomy and does not allow decision-making power regarding the loss of peasant property and life during invasions, ranked from strongest to weakest, would be:
+            Strength of the trait:
+            4 Calculating: The ruler is primarily strategic and pragmatic, prioritizing his own power and control over the well-being of the peasants, often making decisions based on calculations of benefit and consequence.
+            3 Honor: The ruler values his authority and the perceived legitimacy of his decisions, even if they are harsh or morally questionable, believing he upholds his duty to maintain order and control.
+            2 Valor: The ruler demonstrates courage in defending his lands and asserting authority, but this valor is directed toward military strength and dominance rather than compassion.
+            1 Mercy: The ruler shows little mercy, as his policies are strict and uncompromising, refusing to protect the peasants or show compassion for their hardships.
+            0 Generosity: The ruler is least characterized by generosity, as his focus is on control and suppression rather than acts of kindness or charity toward the peasantry.
+            */
+            public void default_lordTraitsOpposingPeasantsPower()
+            {
+                lordTraitsOpposingPeasantsPower = new List<RelationsPerTraits>
+                   {
+                     new RelationsPerTraits { traits = "Calculating > 0&Mercy <= 0&Generosity < 0" ,relations = "Relations <= 100" }
+                   };
+            }
+            /*The ruler who does approve peasants:
+             * Strength of the trait:
+            4 Mercy: The ruler shows compassion and understanding, valuing the well-being of the peasants and being more willing to forgive or mitigate harsh consequences during invasions or conflicts.
+            3 Honor: The ruler maintains a strong sense of integrity and respect for the peasants' rights, acting in accordance with moral principles and fairness.
+            2 Generosity: The ruler is more generous, willing to share resources, offer protection, and support the peasants in maintaining their property and lives during difficult times.
+            1 Calculating: While still strategic, the ruler may balance his calculations with concern for social harmony and the welfare of his subjects.
+            0 Valor: The ruler demonstrates bravery, but in this context, it is more aligned with defending the rights and freedoms of the peasants or standing up for their autonomy, rather than solely focusing on military dominance.
+            */
+            public void default_lordTraitsApprovePeasantsPower()
+            {
+                lordTraitsApprovePeasantsPower = new List<RelationsPerTraits>
+                   {
+                     new RelationsPerTraits { traits = "Calculating < 0&Mercy > 0&Generosity > 0" ,relations = "Relations <= 100" }
+                   };
+            }
+
+
+            //"Mercy represents your general aversion to suffering and your willingness to help strangers or even enemies."
+            //"Valor represents your reputation for risking your life to win glory or wealth or advance your cause."
+            //"Honor represents your reputation for respecting your formal commitments, like keeping your word and obeying the law."
+            //"Generosity represents your loyalty to your kin and those who serve you, and your gratitude to those who have done you a favor."
+            //"Calculating represents your ability to control your emotions for the sake of your long-term interests."
+
+
+
+            // public bool prisonerAILordCannotRansomTheCriminal = true;
+            // public bool raidedSettlementOwnerCanInfluencePeasantRevenge = true;
+        }
 
         public class MoneyPerTraits
         {
@@ -559,8 +738,5 @@ namespace PeasantRevenge
             [XmlAttribute]
             public int percent = 0;
         }
-
-        // public bool prisonerAILordCannotRansomTheCriminal = true;
-        // public bool raidedSettlementOwnerCanInfluencePeasantRevenge = true;
     }
 }

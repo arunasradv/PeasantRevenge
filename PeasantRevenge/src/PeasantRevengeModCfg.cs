@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PeasantRevenge
 {
-    public class PeasantRevengeModCfg: XmlCfg
+    public class PeasantRevengeModCfg : XmlCfg
     {
         public PeasantRevengeConfiguration values = new PeasantRevengeConfiguration();
 
