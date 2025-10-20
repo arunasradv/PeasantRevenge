@@ -3810,22 +3810,36 @@ namespace PeasantRevenge
                 ApplyTraitXP(tuple.Item1, tuple.Item2, ActionNotes.DefaultNote, targetHero);
             }
         }
-        private void ApplyTraitXP(TraitObject trait, int xpValue, ActionNotes context, Hero referenceHero)
+        private void ApplyTraitXP(TraitObject trait, int xpValue, ActionNotes context, Hero hero)
         {
-            if (referenceHero == Hero.MainHero)
+            if (hero == Hero.MainHero)
             {
-                int traitLevel = referenceHero.GetTraitLevel(trait);
-                Campaign.Current.PlayerTraitDeveloper.SetPropertyValue(trait, xpValue);
-                if (traitLevel != referenceHero.GetTraitLevel(trait))
+                int traitLevel = hero.GetTraitLevel(trait);
+                int xp = Campaign.Current.PlayerTraitDeveloper.GetPropertyValue(trait);
+                xp += xpValue;
+                Campaign.Current.PlayerTraitDeveloper.SetPropertyValue(trait, xp);
+                if (traitLevel != hero.GetTraitLevel(trait))
                 {
                     CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
                 }
+                log($"{hero.Name} {trait.Name} new xp: {xp}.");
             }
             else
             {
-                //???AddTraitXp(trait, xpValue); //Only player can develop trait XP by the game design.
+                /*if (xpValue != 0)
+                {
+                    int oldTraitLevel = hero.GetTraitLevel(trait);
+                    int traitLevel = oldTraitLevel + xpValue;
+                    traitLevel = MBMath.ClampInt(traitLevel, trait.MinValue, trait.MaxValue);
+                    if (traitLevel != oldTraitLevel)
+                    {
+                        SetHeroTraitValue(hero, trait.Name.ToString(), traitLevel);
+                        log($"{hero.Name} new {trait.Name} is {traitLevel} (was {oldTraitLevel}).");
+                    }
+                }*/
             }
         }
+
         #endregion
 
         private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
