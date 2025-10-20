@@ -74,7 +74,7 @@ namespace PeasantRevenge
         public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
         public float lordTryPersuadeNotableProbability = 0.6f;
-        public float lordGainNewTraitProbability = 0.5f;
+        public float lordGainNewTraitProbability = 0.05f;
         public AIfilters ai;
 
         public static string default_file_name()

@@ -11,10 +11,11 @@
     <Company/>
     <Product>PeasantRevenge</Product>
     <PackageId>PeasantRevenge</PackageId>
-    <AssemblyVersion>15.1.3.17</AssemblyVersion>
-    <FileVersion>15.1.3.17</FileVersion>
+    <AssemblyVersion>15.1.3.18</AssemblyVersion>
+    <FileVersion>15.1.3.18</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Copyright>"Copyright ©  2023"</Copyright>
+
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SandBox">

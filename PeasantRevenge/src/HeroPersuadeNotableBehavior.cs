@@ -162,6 +162,7 @@ namespace PeasantRevenge
 
                                     if (_kill && persuaded == persuade_type.none)
                                     {
+                                        OnLordExecuteRevengerAfterOrBeforeQuest(hero);
                                         OnHeroChopNotableHeadConsequence(hero, notable);
                                         log($"{hero.Name} killed {notable.Name} ({(hero.MapFaction.IsAtWarWith(notable.MapFaction) ? "enemy" : "ally")}) while seeking {(to_revenge ? "to revenge" : "to be pasive")}.");
                                         KillCharacterAction.ApplyByRemove(notable, true, true);
@@ -288,7 +289,7 @@ namespace PeasantRevenge
                     }
 
 
-                    log($"{hero.Name}\t\t{prefered_to_revenge_count}\t\t{notable_is_oposite_count}\t\t{cannot_due_traits_and_relations_with_noble_count}\t\t{cannot_due_traits_and_relations_with_settlement_owner_count}\t\t{approve_revenge_count}\t\t{oppose_revenge_count}");
+                    log($"{hero.Name}\t{prefered_to_revenge_count}\t{notable_is_oposite_count}\t{cannot_due_traits_and_relations_with_noble_count}\t{cannot_due_traits_and_relations_with_settlement_owner_count}\t{approve_revenge_count}\t{oppose_revenge_count}");
 
 
                     notable_is_oposite_count = 0;

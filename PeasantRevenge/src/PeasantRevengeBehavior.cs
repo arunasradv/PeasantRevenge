@@ -3492,14 +3492,10 @@ namespace PeasantRevenge
             return true;
         }
 
-        private void peasant_revenge_hero_not_happy_with_peasant_chop_consequence(Hero executioner_hero, Hero victim)
-        {
-            OnHeroChopNotableHeadConsequence(executioner_hero, victim);
-        }
-
         private void peasant_revenge_player_not_happy_with_peasant_chop_consequence()
         {
-            peasant_revenge_hero_not_happy_with_peasant_chop_consequence(Hero.MainHero, Hero.OneToOneConversationHero);
+            OnLordExecuteRevengerAfterOrBeforeQuest(Hero.MainHero);
+            OnHeroChopNotableHeadConsequence(Hero.MainHero, Hero.OneToOneConversationHero);
             MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
         }
@@ -3508,9 +3504,11 @@ namespace PeasantRevenge
         {
             if (hero != null)
             {
-                peasant_revenge_hero_not_happy_with_peasant_chop_consequence(hero, Hero.OneToOneConversationHero);
+                OnLordExecuteRevengerAfterOrBeforeQuest(hero);
+                OnHeroChopNotableHeadConsequence(hero, Hero.OneToOneConversationHero);
                 MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
                 KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
+
             }
         }
 

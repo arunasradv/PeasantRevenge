@@ -345,11 +345,12 @@ namespace PeasantRevenge
                         {
                             if (a[0] == "Relations")
                             {
-                                if (!target.IsEmpty())
-                                    for (int k = 0; k < target.Length; k++)
-                                    {
-                                        ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                                    }
+                                if (target != null)
+                                    if (!target.IsEmpty())
+                                        for (int k = 0; k < target.Length; k++)
+                                        {
+                                            ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
+                                        }
                             }
                             else
                             {
@@ -486,8 +487,10 @@ namespace PeasantRevenge
             Tuple<TraitObject, int>[] traits = GetAffectedTraits(traits_and_values);
             if (hero != Hero.MainHero)
             {
-                traits = ApplyProbabilityOfTraitChange(traits, (int)_cfg.values.lordGainNewTraitProbability * 100);
+                traits = ApplyProbabilityOfTraitChange(traits, (int)(_cfg.values.lordGainNewTraitProbability * 100.0));
             }
+            if (traits.IsEmpty())
+                return;
             OnChangeTraits(hero, traits);
         }
 
@@ -536,25 +539,43 @@ namespace PeasantRevenge
 
         public static Tuple<TraitObject, int>[] ApplyProbabilityOfTraitChange(Tuple<TraitObject, int>[] traits, int chance)
         {
+
+            if (traits == null || traits.Length == 0)
+            {
+                log("No traits to apply probability.");
+                return Array.Empty<Tuple<TraitObject, int>>();
+            }
+
+
             int count = 0;
-            bool[] indexes = new bool[count];
+            bool[] indexes = new bool[traits.Length];
 
             for (int i = 0; i < traits.Length; i++)
             {
-                indexes[i] = MBRandom.RandomInt(0, 100) <= chance;
+                int rchance = MBRandom.RandomInt(0, 100);
+                log($"rchance {i} : {rchance} vs chance {chance}");
+                indexes[i] = rchance <= chance;
                 if (indexes[i])
                 {
                     count++;
                 }
             }
 
-            Tuple<TraitObject, int>[] appliedTraits = new Tuple<TraitObject, int>[count];
+            if (count == 0)
+            {
+                log("No traits passed probability check.");
+                return Array.Empty<Tuple<TraitObject, int>>();
+            }
 
+
+            Tuple<TraitObject, int>[] appliedTraits = new Tuple<TraitObject, int>[count];
+            int index = 0;
             for (int i = 0; i < traits.Length; i++)
             {
                 if (indexes[i])
                 {
-                    appliedTraits[i] = traits[i];
+                    appliedTraits[index] = traits[i];
+                    index++;
                 }
             }
 
@@ -580,7 +601,7 @@ namespace PeasantRevenge
                 {
                     CampaignEventDispatcher.Instance.OnPlayerTraitChanged(trait, traitLevel);
                 }
-                log($"{hero.Name} {trait.Name} xp: {xp}.");
+                log($"{hero.Name} {trait.Name} new xp: {xp}.");
             }
             else
             {
@@ -589,6 +610,7 @@ namespace PeasantRevenge
                     int oldTraitLevel = hero.GetTraitLevel(trait);
                     int traitLevel = oldTraitLevel + xpValue;
                     traitLevel = MBMath.ClampInt(traitLevel, trait.MinValue, trait.MaxValue);
+                    log($"{trait.Name} min {trait.MinValue},max {trait.MaxValue}.");
                     if (traitLevel != oldTraitLevel)
                     {
                         SetHeroTraitValue(hero, trait.Name.ToString(), traitLevel);
