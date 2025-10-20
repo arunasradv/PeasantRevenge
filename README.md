@@ -203,10 +203,14 @@ If you enable notable parties, sometimes village will get 1 more notable for a s
 
 - Check: Force the use of a specific Stream Play compatibility tool.
 - Select: Proton 10.0-2 (beta)
+- Uncheck: Enable the Steam Overlay while in the game.
+- At "Launch Options" write: gamemoderun %command% -useallavailablecores
 
 - Start the game. And exit the game.
 
-- With "Protontricks (Flatpak)" install NET v6.0 Runtime.
+- With "Protontricks (Flatpak)"
+- install NET v6.0 Runtime using Protronicks.
+- Select "Run winecfg" and change windows version to windows 10 using Protronicks.
   
 - For VisualCode instal NET 6.0 Runtime for linux from microsoft page.
 

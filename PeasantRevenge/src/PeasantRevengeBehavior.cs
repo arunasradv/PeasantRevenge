@@ -1335,7 +1335,7 @@ namespace PeasantRevenge
         {
 #if TESTING
 #warning DISABLE TESTS BEFORE RELEASE !!!         
-#if false
+#if true
             int sum = 0;
             int total = 0;
             int sum_hearts = 0;

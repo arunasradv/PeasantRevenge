@@ -345,10 +345,11 @@ namespace PeasantRevenge
                         {
                             if (a[0] == "Relations")
                             {
-                                for (int k = 0; k < target.Length; k++)
-                                {
-                                    ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                                }
+                                if (!target.IsEmpty())
+                                    for (int k = 0; k < target.Length; k++)
+                                    {
+                                        ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
+                                    }
                             }
                             else
                             {
@@ -370,10 +371,11 @@ namespace PeasantRevenge
                     {
                         if (a[0] == "Relations")
                         {
-                            for (int k = 0; k < target.Length; k++)
-                            {
-                                ANDresult = hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                            }
+                            if (!target.IsEmpty())
+                                for (int k = 0; k < target.Length; k++)
+                                {
+                                    ANDresult = hero_relation_on_condition(hero, target[k], a[1], a[2]);
+                                }
                         }
                         else
                         {
@@ -568,7 +570,7 @@ namespace PeasantRevenge
         }
         public static void ApplyTraitXP(TraitObject trait, int xpValue, ActionNotes context, Hero hero)
         {
-            if (hero == Hero.MainHero)
+            if (hero.IsHumanPlayerCharacter)
             {
                 int traitLevel = hero.GetTraitLevel(trait);
                 int xp = Campaign.Current.PlayerTraitDeveloper.GetPropertyValue(trait);

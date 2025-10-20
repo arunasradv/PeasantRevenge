@@ -676,7 +676,7 @@ namespace PeasantRevenge
             {
                 lordTraitsOpposingPeasantsPower = new List<RelationsPerTraits>
                    {
-                     new RelationsPerTraits { traits = "Calculating > 0&Mercy <= 0&Generosity < 0" ,relations = "Relations <= 100" }
+                     new RelationsPerTraits { traits = "Calculating >= 0&Mercy <= 0&Generosity < 0" ,relations = "Relations <= 100" }
                    };
             }
             /*The ruler who does approve peasants:
@@ -691,7 +691,7 @@ namespace PeasantRevenge
             {
                 lordTraitsApprovePeasantsPower = new List<RelationsPerTraits>
                    {
-                     new RelationsPerTraits { traits = "Calculating < 0&Mercy > 0&Generosity > 0" ,relations = "Relations <= 100" }
+                     new RelationsPerTraits { traits = "Calculating <= 0&Mercy >= 0&Generosity > 0" ,relations = "Relations <= 100" }
                    };
             }
 

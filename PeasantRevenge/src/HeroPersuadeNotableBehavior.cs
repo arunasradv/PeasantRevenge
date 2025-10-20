@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,16 @@ namespace PeasantRevenge
         public override void RegisterEvents()
         {
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, SettlementEntered);
+            //CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTickEvent);
+
         }
+
+        private void DailyTickEvent()
+        {
+            //TestHeroPersuadeTheNotable();
+            TestHeroPersuadeNotableConditions();
+        }
+
         /// <summary>
         /// Checks 
         /// </summary>
@@ -63,14 +73,14 @@ namespace PeasantRevenge
                             (float)(_cfg.values.lordTryPersuadeNotableProbability * 1.33) :
                             (float)_cfg.values.lordTryPersuadeNotableProbability;
 
-                bool probability_condition = check_probability(chance, (int)hero.Age);
+                bool probability_condition = true; //check_probability(chance, (int)hero.Age);
 
                 if (probability_condition)
                 {
 
-                    bool to_revenge = GetHeroPreferedPersuadeDirection(hero);
-
-                    if (HeroWillTryToPersuadeTheNotable(hero, settlement, to_revenge, out Hero notable))
+                    bool to_revenge = CheckOnlyTraitsConditions(hero, null, _cfg.values.ai.lordTraitsApprovePeasantsPower);
+                    int reason = HeroWillTryToPersuadeTheNotable(hero, settlement, to_revenge, out Hero notable);
+                    if (reason > 0)
                     {
                         if (notable != null)
                         {
@@ -165,14 +175,16 @@ namespace PeasantRevenge
                                 }
                             }
                         }
+
                     }
+
                 }
             }
         }
 
-        private bool HeroWillTryToPersuadeTheNotable(Hero hero, Settlement settlement, bool direction_to_revenge, out Hero notable)
+        private int HeroWillTryToPersuadeTheNotable(Hero hero, Settlement settlement, bool direction_to_revenge, out Hero notable)
         {
-            bool will_try = false;
+            int will_try = 0;
 
             notable = null;
 
@@ -180,7 +192,9 @@ namespace PeasantRevenge
             {
                 notable = settlement.Notables.ElementAt(i);
 
-                bool notable_is_oposite = hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait) != direction_to_revenge;
+                bool notable_can_revenge = !hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait);
+
+                bool notable_is_oposite = notable_can_revenge != direction_to_revenge;
 
                 if (notable_is_oposite) // it means notable peasant is doing the opposite to hero preferred circumstances.
                 {
@@ -190,6 +204,7 @@ namespace PeasantRevenge
 
                     bool at_war = hero.MapFaction.IsAtWarWith(notable.MapFaction);
                     bool same_faction = hero.MapFaction == notable.MapFaction;
+                    bool same_clan = hero.Clan == notable.Clan;
                     bool approve_revenge = CheckConditions(hero, notable, _cfg.values.ai.lordTraitsApprovePeasantsPower);
                     bool oppose_revenge = CheckConditions(hero, notable, _cfg.values.ai.lordTraitsOpposingPeasantsPower);
 
@@ -200,19 +215,12 @@ namespace PeasantRevenge
 
                     if (direction_to_revenge)
                     {
-                        will_try = CheckConditions(hero, notable, _cfg.values.ai.lordTraitsApprovePeasantsPower);
-                        if (same_faction)
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
+                        will_try |= (approve_revenge && (same_faction || same_clan)) ? 1 : 0;
                     }
                     else
                     {
-                        will_try &= at_war || !same_faction;
+                        will_try |= (oppose_revenge && (same_faction || same_clan)) ? 16 : 0;
+                        will_try |= (at_war || !(same_faction || same_clan)) ? 2 : 0;
                     }
 
 
@@ -225,27 +233,113 @@ namespace PeasantRevenge
                     //}
                     // kingdom interest
                     // direction may depend of kingdom interest
-                    //bool different_faction = hero.MapFaction!=settlement.MapFaction;
-                    //bool can_because_of_different_faction = different_faction && !direction_to_revenge || !different_faction && direction_to_revenge;
-#if true
-                    will_try &= !cannot_due_traits_and_relations_with_noble && !cannot_due_traits_and_relations_with_settlement_owner;
-#else
-                    will_try = true;
-#endif
-                    if (will_try)
+
+                    if (cannot_due_traits_and_relations_with_noble && cannot_due_traits_and_relations_with_settlement_owner)
                     {
-                        break;
+                        will_try = 0;
                     }
                     else
                     {
-                        if (cannot_due_traits_and_relations_with_noble)
-                            log($"{hero.Name} cannot_due_traits_and_relations_with_noble {notable.Name} ({(hero.MapFaction.IsAtWarWith(notable.MapFaction) ? "enemy" : "ally")}) persuade {(direction_to_revenge ? "to revenge" : "to be pasive")}");
-                        if (cannot_due_traits_and_relations_with_settlement_owner)
-                            log($"{hero.Name} cannot_due_traits_and_relations_with_settlement_owner {notable.Name} ({(hero.MapFaction.IsAtWarWith(notable.MapFaction) ? "enemy" : "ally")}) persuade {(direction_to_revenge ? "to revenge" : "to be pasive")}");
+                        will_try |= (!cannot_due_traits_and_relations_with_noble ? 4 : 0) | (!cannot_due_traits_and_relations_with_settlement_owner ? 8 : 0);
+                    }
+
+
+                    if (will_try > 0)
+                    {
+                        break;
                     }
                 }
             }
             return will_try;
+        }
+
+        private void TestHeroPersuadeNotableConditions()
+        {
+            int approve_revenge_count = 0;
+            int oppose_revenge_count = 0;
+            int prefered_to_revenge_count = 0;
+            int cannot_due_traits_and_relations_with_noble_count = 0;
+            int cannot_due_traits_and_relations_with_settlement_owner_count = 0;
+            int notable_is_oposite_count = 0;
+
+            log($"prefered_to_revenge_count\tnotable_is_oposite_count\tcannot_due_traits_and_relations_with_noble_count\tcannot_due_traits_and_relations_with_settlement_owner_count\tapprove_revenge_count\toppose_revenge_count");
+
+            foreach (Hero hero in Hero.AllAliveHeroes)
+            {
+                if (hero.IsLord && !hero.IsHumanPlayerCharacter)
+                {
+                    foreach (Settlement settlement in Settlement.All)
+                    {
+                        if (settlement.IsVillage && settlement.Notables != null && settlement.Notables.Count > 0)
+                        {
+                            for (int i = 0; i < settlement.Notables.Count; i++)
+                            {
+                                Hero notable = settlement.Notables.ElementAt(i);
+                                bool direction_to_revenge = CheckOnlyTraitsConditions(hero, null, _cfg.values.ai.lordTraitsApprovePeasantsPower);
+                                prefered_to_revenge_count += direction_to_revenge ? 1 : 0;
+                                notable_is_oposite_count += (!hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait) != direction_to_revenge) ? 1 : 0;
+                                cannot_due_traits_and_relations_with_noble_count += CheckConditions(hero, notable, _cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithNotable) ? 1 : 0; // lord cannot persuade notable in any way due to his traits and relations
+                                cannot_due_traits_and_relations_with_settlement_owner_count += CheckConditions(hero, notable, _cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner) ? 1 : 0; // lord cannot persuade notable in any way due to his traits and relations
+                                approve_revenge_count += CheckConditions(hero, notable, _cfg.values.ai.lordTraitsApprovePeasantsPower) ? 1 : 0;
+                                oppose_revenge_count += CheckConditions(hero, notable, _cfg.values.ai.lordTraitsOpposingPeasantsPower) ? 1 : 0;
+                            }
+
+                        }
+                    }
+
+
+                    log($"{hero.Name}\t\t{prefered_to_revenge_count}\t\t{notable_is_oposite_count}\t\t{cannot_due_traits_and_relations_with_noble_count}\t\t{cannot_due_traits_and_relations_with_settlement_owner_count}\t\t{approve_revenge_count}\t\t{oppose_revenge_count}");
+
+
+                    notable_is_oposite_count = 0;
+                    cannot_due_traits_and_relations_with_noble_count = 0;
+                    cannot_due_traits_and_relations_with_settlement_owner_count = 0;
+                    prefered_to_revenge_count = 0;
+                    approve_revenge_count = 0;
+                    oppose_revenge_count = 0;
+
+                }
+            }
+        }
+
+        private void TestHeroPersuadeTheNotable()
+        {
+            int hero_persuade_to_revenge_count = 0;
+            int hero_persuade_to_not_revenge_count = 0;
+
+            foreach (Hero hero in Hero.AllAliveHeroes)
+            {
+                if (hero.IsLord && !hero.IsHumanPlayerCharacter)
+                {
+                    foreach (Settlement settlement in Settlement.All)
+                    {
+                        if (settlement.IsVillage && settlement.Notables != null && settlement.Notables.Count > 0)
+                        {
+                            bool to_revenge = CheckOnlyTraitsConditions(hero, null, _cfg.values.ai.lordTraitsApprovePeasantsPower);
+                            if (HeroWillTryToPersuadeTheNotable(hero, settlement, to_revenge, out Hero notable) > 0)
+                            {
+                                if (notable != null)
+                                {
+                                    hero_persuade_to_revenge_count += to_revenge ? 1 : 0;
+                                    hero_persuade_to_not_revenge_count += !to_revenge ? 1 : 0;
+
+
+                                }
+                            }
+                        }
+                    }
+                    if (hero_persuade_to_revenge_count > 0)
+                    {
+                        log($"{hero.Name} RE {hero_persuade_to_revenge_count} vilages.");
+                    }
+                    if (hero_persuade_to_not_revenge_count > 0)
+                    {
+                        log($"{hero.Name} NR {hero_persuade_to_not_revenge_count} vilages.");
+                    }
+                    hero_persuade_to_revenge_count = 0;
+                    hero_persuade_to_not_revenge_count = 0;
+                }
+            }
         }
 
         public override void SyncData(IDataStore dataStore)
