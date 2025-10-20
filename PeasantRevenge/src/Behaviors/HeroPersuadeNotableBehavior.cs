@@ -51,15 +51,20 @@ namespace PeasantRevenge
         {
             Random random = new Random(seed);
 
-            if (random.Next(0, 100) <= (chance * 100))
+            if (random.Next(0, 100) < (chance * 100))
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         private void SettlementEntered(MobileParty party, Settlement settlement, Hero hero)
         {
+            if (_cfg.values.lordTryPersuadeNotableProbability < 0.00001)
+            {
+                return;
+            }
+
             bool condition_for_village_notables = settlement.IsVillage &&
                 settlement.Notables != null &&
                 hero != null &&
@@ -73,7 +78,7 @@ namespace PeasantRevenge
                             (float)(_cfg.values.lordTryPersuadeNotableProbability * 1.33) :
                             (float)_cfg.values.lordTryPersuadeNotableProbability;
 
-                bool probability_condition = true; //check_probability(chance, (int)hero.Age);
+                bool probability_condition = check_probability(chance, (int)hero.Age);
 
                 if (probability_condition)
                 {

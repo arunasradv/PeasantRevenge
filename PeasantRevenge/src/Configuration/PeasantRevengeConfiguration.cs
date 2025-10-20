@@ -1,4 +1,4 @@
-﻿#define TESTING
+﻿//#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +13,8 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 25;
-        public bool enableRevengerMobileParty = true;
+        public int CfgVersion = 28;
+        public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;
@@ -66,6 +66,7 @@ namespace PeasantRevenge
         public float peasantRevengePartyTalkToLordDistance = 2.0f;
         public float peasantRevengePartyWaitLordDistance = 0.5f;
         public bool allowLordToKillMessenger = true;
+        public bool disableMessages = false;
         public bool allowPeasantToKillLord = true;
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
@@ -75,6 +76,9 @@ namespace PeasantRevenge
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
         public float lordTryPersuadeNotableProbability = 0.6f;
         public float lordGainNewTraitProbability = 0.05f;
+        public bool onlyPlayerCanExecuteLords = false;
+        public float lastWordsSuccessChance = 0.9f;
+        public bool criminalAlwaysWillBlameOtherLordForTheCrime = true;
         public AIfilters ai;
 
         public static string default_file_name()
@@ -144,6 +148,7 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lastWordsIdPRev0154;
             public List<RelationsPerTraits> lastWordsIdPRev0155;
             public List<RelationsPerTraits> lastWordsIdPRev0156;
+            public List<RelationsPerTraits> lastWordsIdPRev0168;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
             public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
@@ -204,6 +209,7 @@ namespace PeasantRevenge
                 default_lastWordsIdPRev0154();
                 default_lastWordsIdPRev0155();
                 default_lastWordsIdPRev0156();
+                default_lastWordsIdPRev0168();
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -536,7 +542,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0149 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Honor > 0", relations = "Relations > 30" }
                 };
             }
             public void default_lastWordsIdPRev0150()
@@ -544,7 +550,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0150 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 30" }
                 };
             }
 
@@ -599,6 +605,15 @@ namespace PeasantRevenge
                 new List<RelationsPerTraits>
                 {
                      new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0168()
+            {
+                lastWordsIdPRev0168 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 30" }
                 };
             }
 

@@ -27,9 +27,10 @@ namespace PeasantRevenge
                 if (campaignGameStarter != null)
                 {
                     LoadConfiguration(campaignGameStarter);
-                    campaignGameStarter.AddBehavior(new PeasantRevengeBehavior());
+                    /*Custom quest system - state machine (destined for replacement with quests)*/
+                    //campaignGameStarter.AddBehavior(new PeasantRevengeBehavior());
                     /*Quests*/
-                    //campaignGameStarter.AddBehavior(new NotableWantRevengeIssueBehavior());
+                    campaignGameStarter.AddBehavior(new NotableWantRevengeIssueBehavior());
                     /*Notable persuasions*/
                     campaignGameStarter.AddBehavior(new NotablePersuasionConversationsBehavior());
                     campaignGameStarter.AddBehavior(new HeroPersuadeNotableBehavior());

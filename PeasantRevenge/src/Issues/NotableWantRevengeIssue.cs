@@ -162,7 +162,7 @@ namespace PeasantRevenge
             return false;
         }
 
-        protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill)
+        protected override bool CanPlayerTakeQuestConditions(Hero issueGiver, out PreconditionFlags flag, out Hero relationHero, out SkillObject skill, out int requiredGold)
         {
             skill = null;
             relationHero = null;
@@ -172,6 +172,7 @@ namespace PeasantRevenge
                 flag |= IssueBase.PreconditionFlags.Relation;
                 relationHero = issueGiver;
             }
+            requiredGold = 0;
             return flag == IssueBase.PreconditionFlags.None;
         }
         protected override void CompleteIssueWithTimedOutConsequences()
@@ -192,6 +193,7 @@ namespace PeasantRevenge
 
         protected override void OnGameLoad()
         {
+
         }
     }
 }
