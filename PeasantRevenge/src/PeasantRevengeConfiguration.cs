@@ -177,7 +177,7 @@ namespace PeasantRevenge
             }
             public void default_settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
             {
-             settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
+                settlementLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet = new List<RelationsPerTraits>
               {
                     new RelationsPerTraits {traits = "Generosity > 0&Calculating > 0&Mercy < 0&Valor > 0", relations = "Relations >= 10" },//loyal,impulsive,cruel or honorable,impulsive,loyal
               };
@@ -220,17 +220,18 @@ namespace PeasantRevenge
             }
             public void default_lordWillAffordToHelpPayLostRansom()
             {
-                 lordWillAffordToHelpPayLostRansom =
-                  new List<RelationsPerTraits>
-                  {
+                lordWillAffordToHelpPayLostRansom =
+                 new List<RelationsPerTraits>
+                 {
                     new RelationsPerTraits {traits = "Mercy < -1|Generosity < -1", relations = "Relations > 20" },
                     new RelationsPerTraits {traits = "Mercy == -1|Generosity == -1", relations = "Relations > 10" },
                     new RelationsPerTraits {traits = "Mercy == 0|Generosity == 0", relations = "Relations > 0" },
                     new RelationsPerTraits {traits = "Mercy == 1|Generosity == 1&Honor > 0", relations = "Relations > -10" },
                     new RelationsPerTraits {traits = "Mercy > 1|Generosity > 1&Honor > 0", relations = "Relations > -20" },
-                  };
+                 };
             }
-            public void default_lordIfFriendsWillHelpTheCriminal() { 
+            public void default_lordIfFriendsWillHelpTheCriminal()
+            {
                 lordIfFriendsWillHelpTheCriminal =
                  new List<RelationsPerTraits>
                  {
@@ -239,7 +240,8 @@ namespace PeasantRevenge
                 new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 0"},
                 new RelationsPerTraits { traits = "Mercy == 1&Honor > 0", relations = "Relations > -20" },
                 new RelationsPerTraits { traits = "Mercy > 1&Honor > 0&Generosity > 0", relations = "Relations > -30" },
-                 };}
+                 };
+            }
             public void default_lordIfRelativesWillHelpTheCriminal()
             {
                 lordIfRelativesWillHelpTheCriminal =
@@ -341,7 +343,7 @@ namespace PeasantRevenge
                     };
             }
 
-            
+
             public void default_lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest()
             {
                 lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest =
@@ -371,7 +373,7 @@ namespace PeasantRevenge
 
             public void default_lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict()
             {
-              lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
+                lordWillNotKillBothAccusedHeroAndCriminalLordDueConflict = new List<RelationsPerTraits>
                   {
                     new RelationsPerTraits {traits = "Mercy == 0", relations = "Relations > 20" },
                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 0" },
@@ -379,12 +381,12 @@ namespace PeasantRevenge
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableNotToRevenge()
             {
-                    lordTraitChangeWhenLordPersuedeNotableNotToRevenge =
-                    new List<TraitAndValue>
-                    {
+                lordTraitChangeWhenLordPersuedeNotableNotToRevenge =
+                new List<TraitAndValue>
+                {
                         new TraitAndValue { trait = "Mercy", value = 5},
                         new TraitAndValue { trait = "Valor", value = -5},
-                    };
+                };
             }
             public void default_lordTraitChangeWhenLordPersuedeNotableToRevenge()
             {
@@ -421,7 +423,7 @@ namespace PeasantRevenge
 
             public void default_PersuadeNotableToRevengeTraitsForOption1()
             {
-                PersuadeNotableToRevengeTraitsForOption1=
+                PersuadeNotableToRevengeTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = -1},
@@ -434,7 +436,7 @@ namespace PeasantRevenge
 
             public void default_PersuadeNotableToRevengeTraitsForOption2()
             {
-                PersuadeNotableToRevengeTraitsForOption2=
+                PersuadeNotableToRevengeTraitsForOption2 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 0},
@@ -447,7 +449,7 @@ namespace PeasantRevenge
 
             public void default_PersuadeNotableNotToRevengeTraitsForOption0()
             {
-                PersuadeNotableNotToRevengeTraitsForOption0=
+                PersuadeNotableNotToRevengeTraitsForOption0 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
@@ -459,7 +461,7 @@ namespace PeasantRevenge
             }
             public void default_PersuadeNotableNotToRevengeTraitsForOption1()
             {
-                PersuadeNotableNotToRevengeTraitsForOption1=
+                PersuadeNotableNotToRevengeTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
@@ -472,7 +474,7 @@ namespace PeasantRevenge
 
             public void default_PersuadeNotableNotToRevengeTraitsForOption2()
             {
-                PersuadeNotableNotToRevengeTraitsForOption2=
+                PersuadeNotableNotToRevengeTraitsForOption2 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
@@ -485,7 +487,7 @@ namespace PeasantRevenge
 
             public void default_AccuseNotableTraitsForOption0()
             {
-                AccuseNotableTraitsForOption0=
+                AccuseNotableTraitsForOption0 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = -1},
@@ -498,7 +500,7 @@ namespace PeasantRevenge
 
             public void default_AccuseNotableTraitsForOption1()
             {
-                AccuseNotableTraitsForOption1=
+                AccuseNotableTraitsForOption1 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 1},
@@ -511,7 +513,7 @@ namespace PeasantRevenge
 
             public void default_AccuseNotableTraitsForOption2()
             {
-                AccuseNotableTraitsForOption2=
+                AccuseNotableTraitsForOption2 =
                    new List<TraitAndValue>
                    {
                         new TraitAndValue { trait = "Mercy", value = 0},
