@@ -11,7 +11,7 @@ namespace PeasantRevenge
     {
         public static PeasantRevengeModCfg _cfg;
 
-        public enum persuade_type
+        public enum event_status
         {
             none,
             bribe,
@@ -556,17 +556,17 @@ namespace PeasantRevenge
             }
         }
 
-        public static int GetTaskIndexByPersuadeStatus(persuade_type persuade)
+        public static int GetTaskIndexByPersuadeStatus(event_status persuade)
         {
             switch (persuade)
             {
-                case persuade_type.bribe:
+                case event_status.bribe:
                     return 3; /*TODO: Bribing persuation task game - hero could say: Lets talk about "gold icon"... 0: Everything has price; 1: Nobody will know...; 2: Your farm needs some repairs; 3: Just a gift...; ...  while bribing*/
-                case persuade_type.teach_to_revenge:
+                case event_status.teach_to_revenge:
                     return 0;
-                case persuade_type.teach_to_not_revenge:
+                case event_status.teach_to_not_revenge:
                     return 1;
-                case persuade_type.accusation:
+                case event_status.accusation:
                     return 2;
                 default:
                     return 0;

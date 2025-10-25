@@ -46,7 +46,7 @@ namespace PeasantRevenge
         #region notable persuade TODO: someday move it to quest
 
 
-        persuade_type persuade_status = persuade_type.none;
+        event_status persuade_status = event_status.none;
         bool previous_can_revenge = false;
         #endregion
 
@@ -3002,7 +3002,7 @@ namespace PeasantRevenge
             {
                 TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
 
-                if (persuade_status == persuade_type.accusation)
+                if (persuade_status == event_status.accusation)
                 {
                     textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0141}Your accusation is baseless.[ib:nervous][if:convo_astonished]", null));
                 }
@@ -3072,7 +3072,7 @@ namespace PeasantRevenge
 
         private void persuasion_start_with_notable_on_consequence()
         {
-            if (persuade_status == persuade_type.accusation)
+            if (persuade_status == event_status.accusation)
             {
 
                 ConversationManager.StartPersuasion(1f, 1f, 0f, 1f, 1f, 0f, PersuasionDifficulty.Hard);
@@ -3090,11 +3090,11 @@ namespace PeasantRevenge
 
             if (can_revenge)
             {
-                persuade_status = persuade_type.teach_to_not_revenge;
+                persuade_status = event_status.teach_to_not_revenge;
             }
             else
             {
-                persuade_status = persuade_type.teach_to_revenge;
+                persuade_status = event_status.teach_to_revenge;
             }
 
             task_index = GetTaskIndexByPersuadeStatus(persuade_status);
@@ -3106,7 +3106,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_player_not_happy_with_peasant_accuse_consequence()
         {
-            persuade_status = persuade_type.accusation;
+            persuade_status = event_status.accusation;
             _task = GetPersuasionTask(2);
             _task.UnblockAllOptions();
         }
@@ -3237,39 +3237,39 @@ namespace PeasantRevenge
         private void peasant_revenge_persuasion_rejected_on_consequence()
         {
             ConversationManager.EndPersuasion();
-            if (persuade_status == persuade_type.accusation)
+            if (persuade_status == event_status.accusation)
             {
-                persuade_status = persuade_type.accusation_fail;
+                persuade_status = event_status.accusation_fail;
             }
             else
             {
-                persuade_status = persuade_type.show_example_fail;
+                persuade_status = event_status.show_example_fail;
             }
         }
 
         private void peasant_revenge_persuasion_failed_on_consequence()
         {
             ConversationManager.EndPersuasion();
-            if (persuade_status == persuade_type.accusation)
+            if (persuade_status == event_status.accusation)
             {
-                persuade_status = persuade_type.accusation_fail;
+                persuade_status = event_status.accusation_fail;
             }
             else
             {
-                persuade_status = persuade_type.show_example_fail;
+                persuade_status = event_status.show_example_fail;
             }
         }
 
         private void peasant_revenge_persuasion_success_on_consequence()
         {
             ConversationManager.EndPersuasion();
-            if (persuade_status == persuade_type.accusation)
+            if (persuade_status == event_status.accusation)
             {
-                persuade_status = persuade_type.accusation_success;
+                persuade_status = event_status.accusation_success;
             }
             else
             {
-                persuade_status = persuade_type.show_example_success;
+                persuade_status = event_status.show_example_success;
             }
         }
 
@@ -3277,7 +3277,7 @@ namespace PeasantRevenge
 
         private void peasant_revenge_player_not_happy_with_peasant_teaching_consequence()
         {
-            if (persuade_status == persuade_type.show_example_fail || persuade_status == persuade_type.show_example_success)
+            if (persuade_status == event_status.show_example_fail || persuade_status == event_status.show_example_success)
             {
                 if (previous_can_revenge)
                 {
@@ -3288,13 +3288,13 @@ namespace PeasantRevenge
                     OnLordPersuedeNotableToRevenge(Hero.MainHero);
                 }
 
-                if (persuade_status == persuade_type.show_example_success)
+                if (persuade_status == event_status.show_example_success)
                 {
                     TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, previous_can_revenge);
                 }
             }
 
-            if (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.bribe_success)
+            if (persuade_status == event_status.bribe_fail || persuade_status == event_status.bribe_success)
             {
                 //TODO: make notable traits depended negative outcome
                 int relation_change = //persuade_status == persuade_type.bribe_fail ? -_cfg.values.relationChangeWhenLordBribePeasant :
@@ -3309,7 +3309,7 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_can_revenge_on_condition()
         {
             if (!previous_can_revenge &&
-            (persuade_status == persuade_type.bribe_success || persuade_status == persuade_type.show_example_success))
+            (persuade_status == event_status.bribe_success || persuade_status == event_status.show_example_success))
             {
                 return true;
             }
@@ -3318,7 +3318,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_not_revenge_on_condition()
         {
-            if (previous_can_revenge && (persuade_status == persuade_type.bribe_success || persuade_status == persuade_type.show_example_success))
+            if (previous_can_revenge && (persuade_status == event_status.bribe_success || persuade_status == event_status.show_example_success))
             {
                 return true;
             }
@@ -3332,7 +3332,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_learned_fail_on_condition()
         {
-            if (persuade_status == persuade_type.bribe_fail || persuade_status == persuade_type.show_example_fail)
+            if (persuade_status == event_status.bribe_fail || persuade_status == event_status.show_example_fail)
             {
                 TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
                 textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0121}I can't make any promises..[ib:closed]", null));
@@ -3340,7 +3340,7 @@ namespace PeasantRevenge
                 return true;
             }
 
-            if (persuade_status == persuade_type.accusation_fail)
+            if (persuade_status == event_status.accusation_fail)
             {
                 TextObject textObject = new TextObject("{=*}{COMMENT_LINE}", null);
                 textObject.SetTextVariable("COMMENT_LINE", new TextObject("{=PRev0143}Let's say it was a misunderstanding.", null));
@@ -3353,7 +3353,7 @@ namespace PeasantRevenge
 
         private bool peasant_revenge_player_not_happy_with_peasant_post_accusation_success_on_condition()
         {
-            return persuade_status == persuade_type.accusation_success;
+            return persuade_status == event_status.accusation_success;
         }
 
         private void add_notable_persuaded_count()
@@ -3390,12 +3390,12 @@ namespace PeasantRevenge
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, get_notable_bribe_amount(Hero.OneToOneConversationHero));
             if (CheckConditions(Hero.OneToOneConversationHero, Hero.MainHero, _cfg.values.ai.notableWillAcceptTheBribe))
             {
-                persuade_status = persuade_type.bribe_success;
+                persuade_status = event_status.bribe_success;
                 TeachHeroTraits(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, notable_can_do_revenge(Hero.OneToOneConversationHero));
             }
             else
             {
-                persuade_status = persuade_type.bribe_fail;
+                persuade_status = event_status.bribe_fail;
             }
         }
 

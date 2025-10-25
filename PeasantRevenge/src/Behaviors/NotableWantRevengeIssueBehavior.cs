@@ -198,7 +198,7 @@ namespace PeasantRevenge
             protected override void DefineClassTypes()
             {
                 base.AddClassDefinition(typeof(NotableWantRevengeIssue), 1, null);
-                base.AddClassDefinition(typeof(NotableWantRevengeIssueQuest), 2, null);
+                base.AddClassDefinition(typeof(NotableWantRevengeQuest), 2, null);
             }
         }
     }

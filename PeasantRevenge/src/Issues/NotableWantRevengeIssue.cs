@@ -188,7 +188,7 @@ namespace PeasantRevenge
 
         protected override QuestBase GenerateIssueQuest(string questId)
         {
-            return new NotableWantRevengeIssueQuest(questId, base.IssueOwner,
+            return new NotableWantRevengeQuest(questId, base.IssueOwner,
                 CampaignTime.DaysFromNow(100f), this.RewardGold, this._targetSettlement, this._targetHero);
         }
 

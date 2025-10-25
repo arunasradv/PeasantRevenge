@@ -22,23 +22,8 @@ using TaleWorlds.SaveSystem;
 using static PeasantRevenge.Common;
 namespace PeasantRevenge
 {
-    public class NotableWantRevengeIssueQuest : QuestBase
+    public class NotableWantRevengeQuest : QuestBase
     {
-        public enum event_status
-        {
-            none,
-            bribe,
-            teach_to_revenge,
-            teach_to_not_revenge,
-            show_example_success,
-            show_example_fail,
-            bribe_success,
-            bribe_fail,
-            accusation,
-            accusation_fail,
-            accusation_success
-        }
-
         [SaveableField(10)]
         private Settlement _targetSettlement; // The raided village
 
@@ -56,7 +41,7 @@ namespace PeasantRevenge
 
         private event_status pr_event_status = event_status.none;
 
-        public NotableWantRevengeIssueQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,
+        public NotableWantRevengeQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,
             Settlement targetSettlement, Hero targetRaider) : base(questId, questGiver, duration, rewardGold)
         {
             this._targetSettlement = targetSettlement;

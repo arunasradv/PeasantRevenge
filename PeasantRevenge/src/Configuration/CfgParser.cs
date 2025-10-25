@@ -50,7 +50,7 @@ namespace PeasantRevenge
 
             if (string.IsNullOrEmpty(conditions))
             {
-                /*parseerror="Error conditions are empty.";*/
+                parseerror = "Error conditions are empty.";
                 return false;
             }
             string[] equation;
