@@ -1,11 +1,9 @@
 ﻿using Helpers;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.BarterSystem;
@@ -34,7 +32,7 @@ namespace PeasantRevenge
     {
         bool revengerPartiesCleanUp = true;
         string revengerPartyNameStart = "Revenger_";
-
+        public PeasantRevengeModCfg _cfg = new PeasantRevengeModCfg();
 
         List<PeasantRevengeData> revengeData = new List<PeasantRevengeData>();
 
@@ -880,7 +878,7 @@ namespace PeasantRevenge
                                 }
                                 else
                                 {
-                                    if (hero_trait_list_condition(saver, _cfg.values.lordNotExecuteMessengerTrait))
+                                    if (CfgParser.hero_trait_list_condition(saver, _cfg.values.lordNotExecuteMessengerTrait, out string trait_name))
                                     {//not Kill
                                         GiveGoldAction.ApplyBetweenCharacters(saver, executioner, (int)revenge.reparation, true);
                                         LogMessage.Add("{=PRev0040}{PARTYOWNER.NAME} did not executed {PRISONER.NAME}, because {SAVER.NAME} paid {REPARATION}{GOLD_ICON}.");
@@ -1161,7 +1159,7 @@ namespace PeasantRevenge
             }
             else
             {
-                var valid = settlement.Notables.Where((x) => !hero_trait_list_condition(x, _cfg.values.peasantRevengerExcludeTrait) && x.Issue == null);
+                var valid = settlement.Notables.Where((x) => !CfgParser.hero_trait_list_condition(x, _cfg.values.peasantRevengerExcludeTrait, out string parseerror) && x.Issue == null);
                 if (valid.IsEmpty())
                 {
                     log($"Village {settlement.Name} notables cannot demand revenge.");
@@ -3024,7 +3022,7 @@ namespace PeasantRevenge
             PersuasionDifficulty diff = min_difficulty;
 
             bool can_revenge = notable_can_do_revenge(hero_target);
-            bool main_have_exclude_trait = hero_trait_list_condition(hero_initiator, _cfg.values.peasantRevengerExcludeTrait);
+            bool main_have_exclude_trait = CfgParser.hero_trait_list_condition(hero_initiator, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
             bool can_revenge_have_ex_traits = can_revenge && main_have_exclude_trait;
             bool cannot_revenge_have_no_ex_traits = !can_revenge && !main_have_exclude_trait;
             bool have_traits = can_revenge_have_ex_traits || cannot_revenge_have_no_ex_traits;
@@ -3459,8 +3457,8 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_not_happy_with_peasant_start_teach_clickable(out TextObject text)
         {
 
-            bool can_revenge_have_ex_traits = notable_can_do_revenge(Hero.OneToOneConversationHero) && hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
-            bool cannot_revenge_have_no_ex_traits = !notable_can_do_revenge(Hero.OneToOneConversationHero) && !hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait);
+            bool can_revenge_have_ex_traits = notable_can_do_revenge(Hero.OneToOneConversationHero) && CfgParser.hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
+            bool cannot_revenge_have_no_ex_traits = !notable_can_do_revenge(Hero.OneToOneConversationHero) && !CfgParser.hero_trait_list_condition(Hero.MainHero, _cfg.values.peasantRevengerExcludeTrait, out parseerror);
 
             bool start = Hero.OneToOneConversationHero != null && (can_revenge_have_ex_traits || cannot_revenge_have_no_ex_traits) && get_notable_persuaded_count() <= _cfg.values.lordCanTryAsManyTimesToPersuadeTheNotable;
 
@@ -3658,7 +3656,7 @@ namespace PeasantRevenge
         private bool peasant_revenge_player_config_mod_start_condition()
         {
             bool start = (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable) &&
-                !hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait) &&
+                !CfgParser.hero_trait_list_condition(Hero.OneToOneConversationHero, _cfg.values.peasantRevengerExcludeTrait, out string parseerror) &&
                 (Hero.OneToOneConversationHero.HomeSettlement.OwnerClan == Hero.MainHero.Clan ||
                 Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == Hero.MainHero.Clan.Kingdom ||
                 Hero.OneToOneConversationHero.HomeSettlement.OwnerClan.Kingdom == null ?
@@ -4014,13 +4012,13 @@ namespace PeasantRevenge
         {
             bool rezult =
                 receiverHero.Gold < _cfg.values.lordWillDemandRansomMoneyIfHasLessGoldThan ||
-                hero_trait_list_condition(receiverHero, _cfg.values.lordWillAskRansomMoneyIfHasTraits);
+                CfgParser.hero_trait_list_condition(receiverHero, _cfg.values.lordWillAskRansomMoneyIfHasTraits, out string parseerror);
             return rezult;
         }
 
         private bool WillLordSupportHeroClaim(Hero suporterHero, Hero receiverHero)
         {
-            bool rezult = hero_trait_list_condition(suporterHero, _cfg.values.lordWillOfferRansomMoneyIfHasTraits, receiverHero);
+            bool rezult = CfgParser.hero_trait_list_condition(suporterHero, _cfg.values.lordWillOfferRansomMoneyIfHasTraits, out string parseerror, receiverHero);
 
             if (!rezult)
             {

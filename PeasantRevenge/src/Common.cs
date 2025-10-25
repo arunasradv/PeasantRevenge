@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
-using static PeasantRevenge.PeasantRevengeConfiguration;
 
 namespace PeasantRevenge
 {
@@ -248,7 +240,7 @@ namespace PeasantRevenge
 
         public static bool notable_can_do_revenge(Hero hero)
         {
-            return !hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait);
+            return !CfgParser.hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
         }
 
         /// <summary>
@@ -265,9 +257,9 @@ namespace PeasantRevenge
 
             foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
             {
-                if (hero_trait_list_condition(hero, rpt.relations, target))
+                if (CfgParser.hero_trait_list_condition(hero, rpt.relations, out string parseerror, target))
                 {
-                    if (hero_trait_list_condition(hero, rpt.traits, target))
+                    if (CfgParser.hero_trait_list_condition(hero, rpt.traits, out parseerror, target))
                     {
                         return true;
                     }
@@ -284,117 +276,12 @@ namespace PeasantRevenge
 
             foreach (PeasantRevengeConfiguration.RelationsPerTraits rpt in traits)
             {
-                if (hero_trait_list_condition(hero, rpt.traits, target))
+                if (CfgParser.hero_trait_list_condition(hero, rpt.traits, out string parseerror, target))
                 {
                     return true;
                 }
             }
             return false;
-        }
-
-        public static bool hero_relation_on_condition(Hero hero, Hero target, string operation, string weight)
-        {
-            if (hero == null || target == null)
-                return false;
-            return get_result(hero.GetRelation(target), operation, weight);
-        }
-
-        public static bool hero_trait_on_condition(Hero hero, string tag, string operation, string weight)
-        {
-            if (hero == null)
-                return false;
-            return get_result(GetHeroTraitValue(hero, tag), operation, weight);
-        }
-
-        static bool get_result(int value, string operation, string weight)
-        {
-            bool result = operation == "==" ? value == int.Parse(weight) :
-                         operation == ">=" ? value >= int.Parse(weight) :
-                         operation == "<=" ? value <= int.Parse(weight) :
-                         operation == ">" ? value > int.Parse(weight) :
-                         operation == "<" ? value < int.Parse(weight) :
-                         operation == "!=" ? value != int.Parse(weight) : false;
-            return result;
-        }
-
-
-        public static bool hero_trait_list_condition(Hero hero, string conditions, params Hero[] target)
-        {
-            if (string.IsNullOrEmpty(conditions))
-                return true;
-
-            string[] equation;
-
-            conditions.Replace(";", "&"); // compatibility
-
-            equation = conditions.Split('|');
-
-            bool result = false;
-
-            foreach (string equationItem in equation)
-            {
-                bool ANDresult = false;
-                if (equationItem.Contains("&"))
-                {
-                    ANDresult = true;
-                    string[] equationAND = equationItem.Split('&');
-                    for (int i = 0; i < equationAND.Length; i++)
-                    {
-                        string[] a = equationAND[i].Split(' ');
-                        if (a.Length == 3)
-                        {
-                            if (a[0] == "Relations")
-                            {
-                                if (target != null)
-                                    if (!target.IsEmpty())
-                                        for (int k = 0; k < target.Length; k++)
-                                        {
-                                            ANDresult = ANDresult && hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                                        }
-                            }
-                            else
-                            {
-                                ANDresult = ANDresult && hero_trait_on_condition(hero, a[0], a[1], a[2]);
-                            }
-                        }
-                        else
-                        {
-                            //log("Error in equation: "+equationAND.ToString()+". Now will be using default cfg. Please fix or Delete cfg file.");
-                            ResetConfiguration();
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    string[] a = equationItem.Split(' ');
-                    if (a.Length == 3)
-                    {
-                        if (a[0] == "Relations")
-                        {
-                            if (!target.IsEmpty())
-                                for (int k = 0; k < target.Length; k++)
-                                {
-                                    ANDresult = hero_relation_on_condition(hero, target[k], a[1], a[2]);
-                                }
-                        }
-                        else
-                        {
-                            ANDresult = hero_trait_on_condition(hero, a[0], a[1], a[2]);
-                        }
-                    }
-                    else
-                    {
-                        //log("Error in equation: "+equationItem.ToString()+". Now will be using default cfg. Please fix or Delete cfg file.");
-                        ResetConfiguration();
-                        break;
-                    }
-                }
-
-                result = result || ANDresult;
-            }
-
-            return result;
         }
 
         public static int GetHeroTraitValue(Hero hero, string tag)
@@ -742,7 +629,7 @@ namespace PeasantRevenge
             {
                 if (mpt.percent >= percent)
                 {
-                    if (hero_trait_list_condition(hero, mpt.traits))
+                    if (CfgParser.hero_trait_list_condition(hero, mpt.traits, out string parseerror))
                     {
                         return true;
                     }

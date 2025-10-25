@@ -36,7 +36,7 @@ namespace PeasantRevenge
         /// persuasion direction should be 'to revenge'</returns>
         private bool GetHeroPreferedPersuadeDirection(Hero hero)
         {
-            bool hero_tend_to_revenge = !hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait);
+            bool hero_tend_to_revenge = !CfgParser.hero_trait_list_condition(hero, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
 
             return hero_tend_to_revenge;
         }
@@ -193,7 +193,7 @@ namespace PeasantRevenge
             {
                 notable = settlement.Notables.ElementAt(i);
 
-                bool notable_can_revenge = !hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait);
+                bool notable_can_revenge = !CfgParser.hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
 
                 bool notable_is_oposite = notable_can_revenge != direction_to_revenge;
 
@@ -278,7 +278,7 @@ namespace PeasantRevenge
                                 Hero notable = settlement.Notables.ElementAt(i);
                                 bool direction_to_revenge = CheckOnlyTraitsConditions(hero, null, _cfg.values.ai.lordTraitsApprovePeasantsPower);
                                 prefered_to_revenge_count += direction_to_revenge ? 1 : 0;
-                                notable_is_oposite_count += (!hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait) != direction_to_revenge) ? 1 : 0;
+                                notable_is_oposite_count += (!CfgParser.hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait, out string parseerror) != direction_to_revenge) ? 1 : 0;
                                 cannot_due_traits_and_relations_with_noble_count += CheckConditions(hero, notable, _cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithNotable) ? 1 : 0; // lord cannot persuade notable in any way due to his traits and relations
                                 cannot_due_traits_and_relations_with_settlement_owner_count += CheckConditions(hero, notable, _cfg.values.ai.lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner) ? 1 : 0; // lord cannot persuade notable in any way due to his traits and relations
                                 approve_revenge_count += CheckConditions(hero, notable, _cfg.values.ai.lordTraitsApprovePeasantsPower) ? 1 : 0;
