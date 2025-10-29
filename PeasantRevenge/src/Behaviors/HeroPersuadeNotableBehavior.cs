@@ -193,6 +193,11 @@ namespace PeasantRevenge
             {
                 notable = settlement.Notables.ElementAt(i);
 
+                // if (notable == null || notable.Issue != null)
+                // {
+                //     continue;
+                // }
+
                 bool notable_can_revenge = !CfgParser.hero_trait_list_condition(notable, _cfg.values.peasantRevengerExcludeTrait, out string parseerror);
 
                 bool notable_is_oposite = notable_can_revenge != direction_to_revenge;

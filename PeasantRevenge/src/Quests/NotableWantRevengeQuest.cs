@@ -39,7 +39,10 @@ namespace PeasantRevenge
         [SaveableField(15)]
         private Hero _accusedHeroByTargetHero; // Hero who got accused of the crime by _targetHero       
 
+        [SaveableField(16)]
         private event_status pr_event_status = event_status.none;
+
+        private const string revengerPartyNameStart = "Revenger_";
 
         public NotableWantRevengeQuest(string questId, Hero questGiver, CampaignTime duration, int rewardGold,
             Settlement targetSettlement, Hero targetRaider) : base(questId, questGiver, duration, rewardGold)
@@ -84,7 +87,16 @@ namespace PeasantRevenge
             CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this, HeroPrisonerReleased);
             CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, VillageBeingRaided);
             CampaignEvents.ConversationEnded.AddNonSerializedListener(this, ConversationEnded);
+            CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, QuestCompleted);
             //TODO: Add check for player, if player is waitting in settlement, revenger should try to ambush the player... 
+        }
+
+        private void QuestCompleted(QuestBase quest, QuestCompleteDetails is_success)
+        {
+            if (quest == this)
+            {
+                _disband_quest_giver_party();
+            }
         }
 
         private void ConversationEnded(IEnumerable<CharacterObject> obj)
@@ -127,8 +139,10 @@ namespace PeasantRevenge
 
         private void HeroPrisonerReleased(Hero prisoner, PartyBase party, IFaction faction, EndCaptivityDetail detail, bool showNotification)
         {
-            UpdateJournalProgress(prisoner, 0);
-            RevengerStopTraveling();
+            if (UpdateJournalProgress(prisoner, 0))
+            {
+                RevengerStopTraveling();
+            }
         }
 
         private void HeroPrisonerTaken(PartyBase party, Hero prisoner)
@@ -136,6 +150,14 @@ namespace PeasantRevenge
             if (UpdateJournalProgress(prisoner, 1))
             {
                 RevengerTravelStartCounter();
+            }
+        }
+
+        protected TextObject IssueOwnerTravelReturningLogText
+        {
+            get
+            {
+                return new TextObject("{=*}Revenger is returning home.", null);
             }
         }
 
@@ -193,8 +215,25 @@ namespace PeasantRevenge
         public static bool HeroIsPlayersPrisoner(Hero hero)
         {
             if (hero == null)
+            {
                 return false;
-            return (Hero.MainHero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(hero.CharacterObject) ?? false);
+            }
+            else
+            {
+                return (Hero.MainHero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(hero.CharacterObject) ?? false);
+            }
+        }
+
+        public static bool PlayerIsHeroPrisoner(Hero hero)
+        {
+            if (hero == null)
+            {
+                return false;
+            }
+            else
+            {
+                return (hero.PartyBelongedToAsPrisoner?.PrisonerHeroes?.Contains(Hero.MainHero.CharacterObject) ?? false);
+            }
         }
 
         private int _get_reparation_value()
@@ -214,26 +253,29 @@ namespace PeasantRevenge
         {
             if (base.QuestGiver.PartyBelongedTo != null)
             {
-                //base.AddLog(IssueOwnerTravelEndsLogText);
+                base.AddLog(IssueOwnerTravelReturningLogText);
+                base.QuestGiver.PartyBelongedTo.IgnoreForHours(2f);
                 base.QuestGiver.PartyBelongedTo.SetMoveGoToSettlement(_targetSettlement, MobileParty.NavigationType.Default, false);
             }
         }
 
         private void RevengerTravelProgress()
         {
-            if (_questGiverTravelStart.IsPast)
+            if (this.QuestGiver != null && _questGiverTravelStart.IsPast)
             {
-                if (this.QuestGiver == null && this._targetHero != null && this._targetHero.IsPrisoner)
+                if (this.QuestGiver.PartyBelongedTo == null && this._targetHero != null && this._targetHero.IsPrisoner)
                 {
                     if (this._targetHero.PartyBelongedToAsPrisoner != null && this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
                     {
-                        this.QuestGiver.PartyBelongedTo.SetMoveEscortParty(this._targetHero.PartyBelongedToAsPrisoner.MobileParty, MobileParty.NavigationType.Default, false);
+                        CreateNotableParty().SetMoveEscortParty(this._targetHero.PartyBelongedToAsPrisoner.MobileParty, MobileParty.NavigationType.Default, false);
                         base.AddLog(IssueOwnerTravelingLogText);
                     }
                 }
-                else if (this.QuestGiver != null && this.QuestGiver.PartyBelongedTo != null)
+                else if (this.QuestGiver.PartyBelongedTo != null)
                 {
-                    if (this._targetHero != null && this._targetHero.PartyBelongedToAsPrisoner != null && this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
+                    if (this._targetHero != null &&
+                         this._targetHero.PartyBelongedToAsPrisoner != null &&
+                        this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
                     {
                         RevengerPartyMoveNearTarget(this._targetHero.PartyBelongedToAsPrisoner.MobileParty);
 
@@ -255,9 +297,23 @@ namespace PeasantRevenge
                     }
                     else
                     {
+                        if (base.JournalEntries.Last().LogText.Equals(IssueOwnerTravelReturningLogText))
+                        {
+                            if (base.QuestGiver.PartyBelongedTo.Position.Distance(base.QuestGiver.HomeSettlement.Position) < 2f)
+                            {
+                                if (base.QuestGiver.StayingInSettlement != base.QuestGiver.HomeSettlement)
+                                {
+                                    _disband_quest_giver_party();
+                                }
+                            }
+                        }
                         //TODO: case where targetHero left prisoner state in mobile party (usualy transfered to the settlement...)
                     }
                 }
+            }
+            else
+            {
+
             }
         }
 
@@ -293,7 +349,41 @@ namespace PeasantRevenge
 
         private MobileParty CreateNotableParty()
         {
-            string revengerPartyNameStart = "Revenger_";
+            /*
+                        int size = (int)QuestGiver.CharacterObject.HeroObject.HomeSettlement.Village.Hearth >= _cfg.values.peasantRevengeMaxPartySize - 1 ?
+                               _cfg.values.peasantRevengeMaxPartySize - 1 : (int)QuestGiver.CharacterObject.HeroObject.HomeSettlement.Village.Hearth;
+
+                        TextObject textObject = new TextObject($"{revengerPartyNameStart}{QuestGiver.Name}".Replace(' ', '_'), null);
+                        MobileParty mobileParty =
+                        CustomPartyComponent.CreateCustomPartyWithTroopRoster(
+                            QuestGiver.CurrentSettlement.GatePosition,
+                            1f,
+                            QuestGiver.CurrentSettlement,
+                            textObject,
+                             null,
+                             TroopRoster.CreateDummyTroopRoster(),
+                             TroopRoster.CreateDummyTroopRoster(),
+                             null);
+                        CharacterObject villager = QuestGiver.CharacterObject.Culture.Villager;
+                        TroopRoster troopRoster = new TroopRoster(mobileParty.Party);
+                        mobileParty.Party.SetCustomName(new TextObject("{=PRev0085}Revenger"));
+                        troopRoster.AddToCounts(QuestGiver.CharacterObject, 1, true, 0, 0, true);
+                        troopRoster.AddToCounts(villager, size, false, 0, 0, true);
+                        mobileParty.InitializeMobilePartyAtPosition(troopRoster, new TroopRoster(mobileParty.Party), QuestGiver.HomeSettlement.Position);
+                        mobileParty.InitializePartyTrade(200);
+                        mobileParty.SetCustomHomeSettlement(QuestGiver.CharacterObject.HeroObject.HomeSettlement);
+                        mobileParty.SetPartyUsedByQuest(true);
+                        mobileParty.ShouldJoinPlayerBattles = false;
+                        mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("sumpter_horse"), size);
+                        mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("butter"), size);
+                        mobileParty.ItemRoster.AddToCounts(MBObjectManager.Instance.GetObject<ItemObject>("cheese"), size);
+                        //mobileParty.IgnoreForHours(_cfg.values.peasantRevengeTimeoutInDays*24f*10f); //if not ignored, ai can kill them and notable will respawn in the village
+                        mobileParty.Ai.SetDoNotMakeNewDecisions(true);
+                        mobileParty.Party.SetVisualAsDirty();
+                        base.AddTrackedObject(mobileParty);
+                        mobileParty.Aggressiveness = 0f;
+                        return mobileParty;
+            */
             int peasantRevengeMaxPartySize = 20;
             float _ignoreForHours = 6f;
             int size = (int)base.QuestGiver.HomeSettlement.Village.Hearth >= peasantRevengeMaxPartySize - 1 ? peasantRevengeMaxPartySize - 1 : (int)base.QuestGiver.HomeSettlement.Village.Hearth;
@@ -315,9 +405,11 @@ namespace PeasantRevenge
             mobileParty.IgnoreForHours(_ignoreForHours);
             mobileParty.Ai.SetDoNotMakeNewDecisions(true);
             mobileParty.Party.SetVisualAsDirty();
+            base.AddTrackedObject(mobileParty);
             mobileParty.Party.SetCustomOwner(base.QuestGiver);
             mobileParty.Aggressiveness = 0f;
             return mobileParty;
+
         }
 
         //TODO: Finish setting dialogs
@@ -327,18 +419,36 @@ namespace PeasantRevenge
             return Hero.OneToOneConversationHero == base.QuestGiver;
         }
 
+        private bool NotableCancelDialogCondition()
+        {
+            return (Hero.OneToOneConversationHero == base.QuestGiver &&
+            CfgParser.hero_trait_list_condition(base.QuestGiver, _cfg.values.peasantRevengerExcludeTrait, out string parseerror));
+        }
+
         private bool CapturerPartyLeaderDialogCondition()
         {
-
-
             bool can_party_leader_start_dialogue = (Hero.OneToOneConversationHero != null &&
-                    (this._targetHero != null && this._targetHero.PartyBelongedToAsPrisoner != null && Hero.OneToOneConversationHero == this._targetHero.PartyBelongedToAsPrisoner.LeaderHero));
+                    (this._targetHero != null &&
+                     this._targetHero.PartyBelongedToAsPrisoner != null &&
+                     Hero.OneToOneConversationHero == this._targetHero.PartyBelongedToAsPrisoner.LeaderHero));
 
             return can_party_leader_start_dialogue;
         }
 
+        private void QuestCanceledConsequences()
+        {
+            this.CompleteQuestWithCancel();
+        }
+
         private void QuestAcceptedConsequences()
         {
+            if (NotableCancelDialogCondition())
+            {
+                this._startQuestLog = base.AddLog(new TextObject("{=*}But suddenly {QUEST_GIVER.LINK} canceled the issue quest, because of ...", null));
+                //base.CompleteQuestWithCancel();
+                return;
+            }
+
             base.StartQuest();
 
             TextObject textObject;
@@ -370,6 +480,7 @@ namespace PeasantRevenge
             if (this._targetHero != null)
             {
                 StringHelpers.SetCharacterProperties("TARGET_HERO", this._targetHero.CharacterObject, textObject, false);
+                base.AddTrackedObject(this._targetHero);
             }
             StringHelpers.SetCharacterProperties("QUEST_GIVER", base.QuestGiver.CharacterObject, textObject, false);
             StringHelpers.SetCharacterProperties("PLAYER", Hero.MainHero.CharacterObject, textObject, false);
@@ -494,7 +605,7 @@ namespace PeasantRevenge
 
         /// <summary>
         /// discussing the quest with targetHero while hero is not prisoner of player
-        /// If hero is not prisoner:
+        /// If hero is not prisoner - with his party:
         /// * 
         /// If hero is prisoner of other AI hero party:
         /// *
@@ -554,7 +665,8 @@ namespace PeasantRevenge
               "peasant_revenge_talk_to_captured_hero_reaction_0_id",
               "peasant_revenge_talk_to_captured_hero_reaction_0",
               "peasant_revenge_talk_to_captured_hero_reaction_pl_options",
-              "{=*}What do we need to discuss here?[if:convo_shocked]", null,
+              "{=*}What do we need to discuss here?[if:convo_shocked]",
+              () => { return IsTargetHero(this._targetHero); },
               null,
               this, 100, null, null, null);
 
@@ -564,10 +676,7 @@ namespace PeasantRevenge
                "peasant_revenge_talk_to_captured_hero_reaction_pl_options",
                "close_window",
                "{=*}Nothing important...",
-               () =>
-               {
-                   return true;
-               },
+               () => { return (Hero.OneToOneConversationHero == this._targetHero); },
                () => { leave_encounter_and_mission(); }, this, 100, (out TextObject hintText) =>
                {
                    hintText = new TextObject("{=*} Leave conversation.");
@@ -579,10 +688,7 @@ namespace PeasantRevenge
                   "peasant_revenge_talk_to_captured_hero_reaction_pl_options",
                   "peasant_revenge_talk_to_captured_hero_answer_options",
                   "{=*}It is very serious mater.",
-                  () =>
-                  {
-                      return true;
-                  },
+                  () => { return (Hero.OneToOneConversationHero == this._targetHero); },
                   () => { /*TODO: should change player's trait exp on used option here.*/ },
                   this, 100, (out TextObject hintText) =>
                   {
@@ -599,7 +705,7 @@ namespace PeasantRevenge
               () =>
               {
                   bool same_settlement_clan = this._targetHero.Clan == this._targetSettlement.OwnerClan;
-                  return same_settlement_clan;
+                  return same_settlement_clan && IsTargetHero(this._targetHero);
               },
              null,
              this, 100, null, null, null);
@@ -612,7 +718,7 @@ namespace PeasantRevenge
              () =>
              {
                  bool same_settlement_clan = this._targetHero.Clan == this._targetSettlement.OwnerClan;
-                 return !same_settlement_clan;
+                 return !same_settlement_clan && IsTargetHero(this._targetHero);
              },
             null,
             this, 100, null, null, null);
@@ -631,7 +737,7 @@ namespace PeasantRevenge
         /// - Abandon the quest
         /// - Return to previous meniu
         /// </summary>
-        /// TODO: fix crash when encountered quest pary whitch is now enemy and map event is deciding if party should join battle.        ///  
+        /// TODO: fix crash when encountered quest pary which is now enemy and map event is deciding if party should join battle.        ///  
         /// TODO: fix dialog conditions when discussing the quest with notable, so other quest wont dublicate dialog optins
         /// <returns></returns>
         private DialogFlow GetPlayerDecideTheFateOfRaidersDialogFlow()
@@ -1028,7 +1134,7 @@ namespace PeasantRevenge
         {
             DialogFlow dialog = DialogFlow.CreateDialogFlow("start", 125).
                     NpcLine(new TextObject("{=PRev0001}You looted nearby village. Peasants demand to cut someone's head off. What will you say?[rf:idle_angry][ib:closed][if:idle_angry]", null), null, null).
-                    Condition(new ConversationSentence.OnConditionDelegate(this.CapturerPartyLeaderDialogCondition)).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
+                    Condition(() => { return this.CapturerPartyLeaderDialogCondition() && PlayerIsHeroPrisoner(Hero.OneToOneConversationHero); }).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
 
             /*PAY*/
             dialog.AddPlayerLine(
@@ -1831,6 +1937,13 @@ namespace PeasantRevenge
             return agent.Character == CharacterObject.PlayerCharacter;
         }
 
+        private bool IsTargetHero(Hero hero)
+        {
+            if (!(Hero.OneToOneConversationHero != null && _targetHero != null && _targetHero.CharacterObject == Hero.OneToOneConversationHero.CharacterObject))
+                return false;
+            return hero == Hero.OneToOneConversationHero;
+        }
+
         private void leave_encounter_and_mission()
         {
             if (PlayerEncounter.Current == null)
@@ -2156,10 +2269,19 @@ namespace PeasantRevenge
         {
             if (base.QuestGiver.PartyBelongedTo != null)
             {
-                if (base.QuestGiver.PartyBelongedTo.MapEvent == null) // crash during battle update map event, if not checked
+                if (base.QuestGiver.PartyBelongedTo.MapEvent == null && !base.QuestGiver.PartyBelongedTo.IsDisbanding) // crash during battle update map event, if not checked
                 {
+                    log($"Disbanding party of quest giver {base.QuestGiver.Name}.");
                     DestroyPartyAction.ApplyForDisbanding(base.QuestGiver.PartyBelongedTo, base.QuestGiver.HomeSettlement);
                 }
+                else
+                {
+                    log($"Cannot disband party of quest giver {base.QuestGiver.Name}, because MapEvent is not null or party is already disbanding.");
+                }
+            }
+            else
+            {
+                log($"Quest giver {base.QuestGiver.Name} has no party to disband.");
             }
         }
 

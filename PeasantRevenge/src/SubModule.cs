@@ -28,9 +28,13 @@ namespace PeasantRevenge
                 {
                     LoadConfiguration(campaignGameStarter);
                     //campaignGameStarter.AddBehavior(new PeasantRevengeBehavior());
+                    /*Quests*/
                     campaignGameStarter.AddBehavior(new NotableWantRevengeIssueBehavior());
-                    campaignGameStarter.AddBehavior(new HelpNeutralVillageBehavior());
+                    /*Notable persuasions*/
+                    campaignGameStarter.AddBehavior(new NotablePersuasionConversationsBehavior());
                     campaignGameStarter.AddBehavior(new HeroPersuadeNotableBehavior());
+                    /*Other*/
+                    campaignGameStarter.AddBehavior(new HelpNeutralVillageBehavior());
                 }
             }
         }

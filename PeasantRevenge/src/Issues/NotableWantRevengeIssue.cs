@@ -1,5 +1,4 @@
 ﻿using Helpers;
-using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -7,6 +6,11 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.ObjectSystem;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using static PeasantRevenge.Common;
 
 namespace PeasantRevenge
 {
@@ -16,11 +20,12 @@ namespace PeasantRevenge
         private Settlement _targetSettlement; // The raided village
         [SaveableField(101)]
         private Hero _targetHero; // Hero who raided the village           
-        //[SaveableField(104)]
-        //private JournalLosg _questProgressLogTest;
+                                  //[SaveableField(104)]
+                                  //private JournalLosg _questProgressLogTest;
 
         //[SaveableField(107)]
         //private Hero _targetPartyHero; // Party hero who has raider or accused hero as prissoner
+
 
         public NotableWantRevengeIssue(Hero issueOwner) : base(issueOwner, CampaignTime.DaysFromNow(100f))
         {
@@ -71,7 +76,7 @@ namespace PeasantRevenge
                     {
                         if (this._targetHero.CharacterObject.IsPlayerCharacter)
                         {
-                            textObject = new TextObject("{=*}It's you! I'll someday get revenge on you![if:convo_shocked][if:convo_astonished][if:convo_bared_teeth]", null);
+                            textObject = new TextObject("{=*}It's you! Pay reparation or die! I'll someday get revenge on you overwise![if:convo_shocked]", null);
                         }
                         else
                         {
@@ -169,21 +174,9 @@ namespace PeasantRevenge
             }
             return flag == IssueBase.PreconditionFlags.None;
         }
-
-        private void _disband_quest_giver_party()
-        {
-            if (base.IssueOwner.PartyBelongedTo != null)
-            {
-                if (base.IssueOwner.PartyBelongedTo.MapEvent == null) // crash during battle update map event, if not checked
-                {
-                    DestroyPartyAction.ApplyForDisbanding(base.IssueOwner.PartyBelongedTo, base.IssueOwner.HomeSettlement);
-                }
-            }
-        }
-
         protected override void CompleteIssueWithTimedOutConsequences()
         {
-            _disband_quest_giver_party();
+            log($"NotableWantRevengeIssue Timed out for {base.IssueOwner.Name}");
         }
 
         protected override QuestBase GenerateIssueQuest(string questId)
