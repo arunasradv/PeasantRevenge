@@ -18,6 +18,14 @@
 
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Xml.Serialization">
+      <HintPath>../../../../.steam/debian-installation/steamapps/common/Mount &amp; Blade II Bannerlord/bin/SandBox/bin/Win64_Shipping_Client/Microsoft.NETCore.App/System.Xml.Serialization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>../../../../.steam/debian-installation/steamapps/common/Mount &amp; Blade II Bannerlord/bin/SandBox/bin/Win64_Shipping_Client/Microsoft.NETCore.App/System.Xml.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="SandBox">
       <HintPath>../../../../.steam/debian-installation/steamapps/common/Mount &amp; Blade II Bannerlord/Modules/SandBox/bin/Win64_Shipping_Client/SandBox.dll</HintPath>
       <Private>False</Private>

@@ -46,7 +46,8 @@ namespace PeasantRevenge
 
         private bool ConditionsHold(Hero issueGiver)
         {
-            if (issueGiver.HomeSettlement != null &&
+            if (issueGiver != null &&
+                issueGiver.HomeSettlement != null &&
                 issueGiver.HomeSettlement.IsVillage &&
                 issueGiver.HomeSettlement.LastAttackerParty != null &&
                 issueGiver.IsRuralNotable &&
@@ -61,6 +62,12 @@ namespace PeasantRevenge
 
         private void OnCheckForIssue(Hero hero)
         {
+
+            if (hero == null)
+            {
+                return;
+            }
+
             if (this.ConditionsHold(hero))
             {
                 Campaign.Current.IssueManager.AddPotentialIssueData(

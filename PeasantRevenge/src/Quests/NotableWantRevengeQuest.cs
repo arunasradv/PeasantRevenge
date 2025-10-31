@@ -582,25 +582,66 @@ namespace PeasantRevenge
                 Condition(new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition)).
                 Consequence(new ConversationSentence.OnConsequenceDelegate(this.QuestAcceptedConsequences)).CloseDialog();
 
-            this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100).
-                NpcLine(new TextObject("{=*}How are you dealing with my problem?[if:convo_delighted][ib:hip]", null), null, null).
-                Condition(new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition)).
-                Consequence(delegate
-                {
-                    Campaign.Current.ConversationManager.ConversationEndOneShot += MapEventHelper.OnConversationEnd;
-                }).
-            BeginPlayerOptions().
-            PlayerOption(new TextObject("{=*}It is in a progress.", null), null).
-            NpcLine(new TextObject("{=*}That's very good to hear![if:convo_merry]", null), null, null).
-            CloseDialog().
-            PlayerOption(new TextObject("{=*}Let's discuss it.", null), null).
-            NpcLine(new TextObject("{=*}I aggree.[if:convo_happy]", null), null, null).
-            CloseDialog().GotoDialogState("peasant_revenge_discuss_fate_start").
-            PlayerOption(new TextObject("{=*}I need to check something actually.", null), null).
-            NpcLine(new TextObject("{=*}Came back, when you have something.", null), null, null).
-            CloseDialog().
-            EndPlayerOptions().
-            CloseDialog();
+            this.DiscussDialogFlow = DialogFlow.CreateDialogFlow("quest_discuss", 100);
+
+            this.DiscussDialogFlow.AddDialogLine(
+              "quest_discuss_notable_revenge_quest_notable_start",
+              "quest_discuss",
+              "quest_discuss_notable_revenge_quest_pl_options",
+              "{=*}How are you dealing with my problem?[if:convo_delighted][ib:hip]",
+              new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+              null,
+              this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddPlayerLine(
+                "quest_discuss_notable_revenge_quest_pl_options_1",
+                "quest_discuss_notable_revenge_quest_pl_options",
+                "quest_discuss_notable_revenge_quest_re_answer_1",
+                "{=*}It is in a progress.",
+                () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+                null, this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddPlayerLine(
+                "quest_discuss_notable_revenge_quest_pl_options_2",
+                "quest_discuss_notable_revenge_quest_pl_options",
+                "peasant_revenge_discuss_fate_start",
+                "{=*}Let's discuss it.",
+                () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+                null, this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddPlayerLine(
+               "quest_discuss_notable_revenge_quest_pl_options_3",
+               "quest_discuss_notable_revenge_quest_pl_options",
+               "quest_discuss_notable_revenge_quest_re_answer_2",
+               "{=*}I need to check something actually.",
+               () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+               null, this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddDialogLine(
+             "quest_discuss_notable_revenge_quest_re_answer_1_id",
+             "quest_discuss_notable_revenge_quest_re_answer_1",
+             "close_window",
+             "{=*}That's very good to hear![if:convo_merry]",
+             new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+             null,
+             this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddDialogLine(
+            "quest_discuss_notable_revenge_quest_re_answer_2_id",
+            "quest_discuss_notable_revenge_quest_re_answer_2",
+            "close_window",
+            "{=*}Came back, when you have something.",
+            new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+            null,
+            this, 100, null, null, null);
+
+
+            // NpcLine(new TextObject("{=*}How are you dealing with my problem?[if:convo_delighted][ib:hip]", null), null, null).
+            //     Condition(new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition)).
+            //     Consequence(delegate
+            //     {
+            //         Campaign.Current.ConversationManager.ConversationEndOneShot += MapEventHelper.OnConversationEnd;
+            //     }).
         }
 
         /// <summary>
@@ -634,6 +675,12 @@ namespace PeasantRevenge
                 "{TALK_TO_CAPTURED_RAIDER_START}",
                 () =>
                 {
+                    /*When _targetHero is null , because party got destroyed before quest accepted*/
+                    if (this._targetHero == null)
+                        return false;
+                    if (Hero.OneToOneConversationHero != this._targetHero)
+                        return false;
+
                     if (this._targetHero.CharacterObject.IsPlayerCharacter == false &&
                     HeroIsPlayersPrisoner(this._targetHero) == false &&
                     Hero.OneToOneConversationHero == this._targetHero)
@@ -765,7 +812,15 @@ namespace PeasantRevenge
                 {
                     if (!IsQuestGiverHero(this.QuestGiver))
                         return false;
-                    if (this._targetHero == Hero.MainHero)
+
+                    if (_targetHero == null)
+                    {
+                        TextObject text = new TextObject("{=*}I do not know who are the raiders. I failed you. I should be beheaded."); //All I can do is to let you kill whoever you find guilty.
+                        MBTextManager.SetTextVariable("DISCUSS_LET_KILL_RAIDER", text);
+                        return true;
+
+                    }
+                    else if (this._targetHero == Hero.MainHero)
                     {
                         TextObject text = new TextObject("{=*}You can have my head.");
                         MBTextManager.SetTextVariable("DISCUSS_LET_KILL_RAIDER", text);
@@ -781,8 +836,19 @@ namespace PeasantRevenge
                 },
                 () =>
                 {
-                    ExecuteHero(base.QuestGiver, this._targetHero);
+                    if (_targetHero != null)
+                    {
+                        ExecuteHero(base.QuestGiver, this._targetHero);
+                        CompleteQuestWithSuccessConsequences();
+                    }
+                    else
+                    {
+                        ExecuteHero(base.QuestGiver, Hero.MainHero);
+                        CompleteQuestWithFailConsequences();
+                    }
+
                     CompleteQuestWithSuccessConsequences();
+
                 }, this, 100, null, null, null);
             /*RAIDER PAY*/
             dialog.AddPlayerLine(
@@ -794,7 +860,12 @@ namespace PeasantRevenge
                {
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
-                   if (_targetHero == Hero.MainHero)
+
+                   if (_targetHero == null)
+                   {
+                       return false;
+                   }
+                   else if (_targetHero == Hero.MainHero)
                    {
                        TextObject text = new TextObject("{=*}I'll pay {REPARATION}{GOLD_ICON}.");
                        MBTextManager.SetTextVariable("REPARATION", _get_reparation_value(), text);
@@ -821,7 +892,8 @@ namespace PeasantRevenge
                {
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
-                   if (_targetHero != Hero.MainHero /*&& !HeroIsPlayersPrisoner(this._targetHero)*/)
+
+                   if (_targetHero != null && _targetHero != Hero.MainHero /*&& !HeroIsPlayersPrisoner(this._targetHero)*/)
                    {
                        TextObject text = new TextObject("{=*}I'll pay {REPARATION}{GOLD_ICON} in place of {TARGET_HERO.NAME}.");
                        StringHelpers.SetCharacterProperties("TARGET_HERO", this._targetHero.CharacterObject, text, false);
@@ -829,6 +901,14 @@ namespace PeasantRevenge
                        MBTextManager.SetTextVariable("DISCUSS_PAY_IN_RAIDER", text);
 
                        return true;
+                   }
+                   else if (_targetHero == null)
+                   {
+                       TextObject text = new TextObject("{=*}I'll pay {REPARATION}{GOLD_ICON} in place of the raider.");
+                       MBTextManager.SetTextVariable("REPARATION", _get_reparation_value(), text);
+                       MBTextManager.SetTextVariable("DISCUSS_PAY_IN_RAIDER", text);
+                       return true;
+
                    }
                    else
                    {
@@ -844,6 +924,9 @@ namespace PeasantRevenge
                "{=*}But {TARGET_HERO.NAME} may be not the criminal...",
                () =>
                {
+                   if (_targetHero == null)
+                       return false;
+
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
                    StringHelpers.SetCharacterProperties("TARGET_HERO", this._targetHero.CharacterObject);
@@ -859,7 +942,12 @@ namespace PeasantRevenge
                "peasant_revenge_discuss_fate_pl_blame_id",
                "peasant_revenge_discuss_fate_pl_blame",
                "peasant_revenge_discuss_fate_pl_blame_options",
-               "{=*}Who is then?[if:convo_furious]", null,
+               "{=*}Who is then?[if:convo_furious]", () =>
+               {
+                   if (!IsQuestGiverHero(this.QuestGiver))
+                       return false;
+                   return true;
+               },
                null,
                this, 100, null, null, null);
 
@@ -893,6 +981,8 @@ namespace PeasantRevenge
                "{=*}{accuseD1.NAME}",
                () =>
                {
+                   if (_targetHero == null)
+                       return false;
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
                    return _hero_can_accuse_condition(this._targetHero, 1);
@@ -915,6 +1005,8 @@ namespace PeasantRevenge
                "{=*}{accuseD2.NAME}",
                () =>
                {
+                   if (_targetHero == null)
+                       return false;
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
                    return _hero_can_accuse_condition(this._targetHero, 2);
@@ -937,6 +1029,8 @@ namespace PeasantRevenge
                "{=*}{accuseD3.NAME}",
                () =>
                {
+                   if (_targetHero == null)
+                       return false;
                    if (!IsQuestGiverHero(this.QuestGiver))
                        return false;
                    return _hero_can_accuse_condition(this._targetHero, 3);
@@ -959,6 +1053,8 @@ namespace PeasantRevenge
               "{=*}{accuseD0.NAME}",
               () =>
               {
+                  if (_targetHero == null)
+                      return false;
                   if (!IsQuestGiverHero(this.QuestGiver))
                       return false;
                   return _hero_can_accuse_prisoner_condition(Hero.MainHero, this._targetHero, 0) &&
@@ -996,7 +1092,7 @@ namespace PeasantRevenge
              "peasant_revenge_any_revenger_or_else",
              "peasant_revenge_discuss_fate_stop_or_else",
              "peasant_revenge_discuss_fate_stop_or_else_options",
-             "{=*}What else?[rf:idle_angry][ib:closed][if:idle_angry]", null, null, this, 200, null, null, null);
+             "{=*}What else?[rf:idle_angry][ib:closed][if:idle_angry]", () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; }, null, this, 200, null, null, null);
 
             dialog.AddPlayerLine(
              "peasant_revenge_discuss_fate_stop_or_else_options_0",
@@ -1009,7 +1105,7 @@ namespace PeasantRevenge
                  TextObject text = new TextObject("{=*}You beheaded the {QUESTGIVER.LINK}.");
                  StringHelpers.SetCharacterProperties($"QUESTGIVER", QuestGiver.CharacterObject, text);
                  base.AddLog(text);
-                 ExecuteHero(this._targetHero, this.QuestGiver);
+                 ExecuteHero(Hero.MainHero, this.QuestGiver);
                  base.AddLog(IssueSuccessText);
              },
              this, 100, null, null);
@@ -1056,10 +1152,20 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
              "close_window",
              "{=PRev0037}I'm pleased.[if:convo_happy]",
-             () => { return hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver, this._targetHero); },
              () =>
              {
-                 _pay_reparation(this._targetHero, base.QuestGiver);
+                 if (!IsQuestGiverHero(this.QuestGiver))
+                     return false;
+                 if (this._targetHero == null)
+                     return false;
+                 return hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver, this._targetHero);
+             },
+             () =>
+             {
+                 if (_targetHero != null)
+                 {
+                     _pay_reparation(this._targetHero, base.QuestGiver);
+                 }
                  base.AddLog(IssueSuccessText);
              }, this, 100, null, null, null);
 
@@ -1068,7 +1174,14 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
              "peasant_revenge_discuss_fate_pl_options",
              "{=*}{PL_PAY_INSTEAD_OF_CR}",
-             () => { return !hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver, this._targetHero); },
+             () =>
+             {
+                 if (!IsQuestGiverHero(this.QuestGiver))
+                     return false;
+                 if (this._targetHero == null)
+                     return false;
+                 return !hero_would_accept_reparation_from_others_instead_of_criminal(this.QuestGiver, this._targetHero);
+             },
              () =>
              {
                  /* _pay_reparation(this._targetHero,base.QuestGiver);
@@ -1100,7 +1213,14 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_received_pay",
              "close_window",
              "{=PRev0037}I'm pleased.[if:convo_happy]",
-             null,
+             () =>
+             {
+                 if (!IsQuestGiverHero(this.QuestGiver))
+                     return false;
+                 if (this._targetHero == null)
+                     return false;
+                 return true; //hero_would_accept_reparation_from_criminal(this.QuestGiver, this._targetHero);
+             },
              () =>
              {
                  _pay_reparation(this._targetHero, base.QuestGiver);
@@ -1910,6 +2030,9 @@ namespace PeasantRevenge
 
         private bool IsPlayersCapturerHero(IAgent agent)
         {
+            if (agent == null || agent.Character == null)
+                return false;
+
             if (Hero.OneToOneConversationHero != null &&
                 Hero.OneToOneConversationHero.PartyBelongedToAsPrisoner != null &&
                 Hero.OneToOneConversationHero == Hero.OneToOneConversationHero.PartyBelongedToAsPrisoner.LeaderHero)
@@ -1919,6 +2042,9 @@ namespace PeasantRevenge
 
         private bool IsQuestGiverHero(Hero hero)
         {
+            if (hero == null)
+                return false;
+
             if (!(Hero.OneToOneConversationHero != null && (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable)))
                 return false;
             bool quest_giver = hero.CharacterObject == this.QuestGiver.CharacterObject && hero.CharacterObject == Hero.OneToOneConversationHero.CharacterObject;
@@ -1927,6 +2053,9 @@ namespace PeasantRevenge
 
         private bool IsNotableHero(IAgent agent)
         {
+            if (agent == null || agent.Character == null)
+                return false;
+
             if (!(Hero.OneToOneConversationHero != null && (Hero.OneToOneConversationHero.IsHeadman || Hero.OneToOneConversationHero.IsRuralNotable)))
                 return false;
             return agent.Character == Hero.OneToOneConversationHero.CharacterObject;
@@ -1934,13 +2063,22 @@ namespace PeasantRevenge
 
         private bool IsMainHero(IAgent agent)
         {
+            if (agent == null || agent.Character == null)
+                return false;
             return agent.Character == CharacterObject.PlayerCharacter;
         }
 
         private bool IsTargetHero(Hero hero)
         {
-            if (!(Hero.OneToOneConversationHero != null && _targetHero != null && _targetHero.CharacterObject == Hero.OneToOneConversationHero.CharacterObject))
+
+            if (_targetHero == null)
                 return false;
+
+            if (Hero.OneToOneConversationHero == null)
+            {
+                return false;
+            }
+
             return hero == Hero.OneToOneConversationHero;
         }
 
