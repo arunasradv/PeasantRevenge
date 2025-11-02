@@ -25,7 +25,29 @@ namespace PeasantRevenge
             accusation_fail,
             accusation_success,
             expeled,
-            killed
+            killed,
+
+            village_denied,
+            party_denied,
+            clan_denied,
+            kingdom_denied,
+            party_no_decision,
+            clan_leader_no_decision,
+            saver_no_decision,
+            notable_interrupted,
+            accusation_fail_both_blamed,
+            criminal_paid,
+            party_paid,
+            clan_paid,
+            kingdom_paid,
+            criminal_killed,
+            accused_hero_killed,
+            notable_killed,
+            messenger_killed,
+            accused_hero_paid,
+            ransom_paid_to_party,
+            ransom_not_paid_to_party,
+            cancelled
         }
 
         private static bool IsModuleVersionOlder(ApplicationVersion module_version, ApplicationVersion compare)

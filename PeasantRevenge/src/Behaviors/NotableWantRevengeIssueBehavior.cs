@@ -76,16 +76,6 @@ namespace PeasantRevenge
                         this.OnStartIssue),
                         typeof(NotableWantRevengeIssue),
                     IssueBase.IssueFrequency.VeryCommon, null));
-
-                if (hero.HomeSettlement.LastAttackerParty.LeaderHero != null)
-                {
-                    if (hero.HomeSettlement.LastAttackerParty.LeaderHero == Hero.MainHero)
-                    {
-                        hero.Issue.StartIssueWithQuest();
-                        log($"Start Revenge {hero.Name} of {hero.HomeSettlement?.Name}");
-                    }
-                }
-                return;
             }
             else
             {
