@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -22,6 +23,8 @@ using TaleWorlds.SaveSystem;
 using static PeasantRevenge.Common;
 namespace PeasantRevenge
 {
+    //TODO: FIX Because CurrentSettlement in IssueBase class is requested by OnSettlementOwnerChanged() it crashes.
+    // Any method that is calling it will crash the game.
     public class NotableWantRevengeQuest : QuestBase
     {
         [SaveableField(10)]
@@ -40,12 +43,13 @@ namespace PeasantRevenge
         private Hero _accusedHeroByTargetHero; // Hero who got accused of the crime by _targetHero       
 
         [SaveableField(16)]
-        private event_status pr_event_status = event_status.none;
+        List<event_status> _status = new List<event_status>();
+        //private event_status pr_event_status = event_status.none;
 
         //[SaveableField(17)]
         PersuasionTask _task;
 
-        List<event_status> _status;
+
 
         private const string revengerPartyNameStart = "Revenger_";
 
@@ -97,7 +101,16 @@ namespace PeasantRevenge
             CampaignEvents.VillageBeingRaided.AddNonSerializedListener(this, VillageBeingRaided);
             CampaignEvents.ConversationEnded.AddNonSerializedListener(this, ConversationEnded);
             CampaignEvents.OnQuestCompletedEvent.AddNonSerializedListener(this, QuestCompleted);
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeEventStarted);
             //TODO: Add check for player, if player is waitting in settlement, revenger should try to ambush the player... 
+        }
+
+        private void OnSiegeEventStarted(SiegeEvent siegeEvent)
+        {
+            if (!siegeEvent.BesiegedSettlement.BoundVillages.Where(x => x.Name == this.QuestGiver.HomeSettlement.Name).IsEmpty())
+            {
+                _disband_quest_giver_party();
+            }
         }
 
         private void QuestCompleted(QuestBase quest, QuestCompleteDetails is_success)
@@ -273,15 +286,54 @@ namespace PeasantRevenge
             }
         }
 
+        private void CheckStatus()
+        {
+            if (_status.Contains(event_status.none))
+            {
+
+            }
+            else if (_status.Contains(event_status.clan_paid) ||
+            _status.Contains(event_status.accused_hero_paid) ||
+            _status.Contains(event_status.accused_hero_killed) ||
+             _status.Contains(event_status.criminal_paid) ||
+              _status.Contains(event_status.criminal_killed) ||
+               _status.Contains(event_status.kingdom_paid))
+            {
+
+                base.RemoveTrackedObject(this._targetHero);
+                this._targetHero = null;
+                //base.AddLog(IssueSuccessText);
+            }
+            else if (_status.Contains(event_status.party_denied) ||
+             _status.Contains(event_status.clan_denied) ||
+             _status.Contains(event_status.kingdom_denied) ||
+             _status.Contains(event_status.clan_leader_no_decision) ||
+             _status.Contains(event_status.notable_killed) ||
+             _status.Contains(event_status.notable_interrupted))
+
+            {
+                base.AddLog(IssueFailText);
+            }
+            else
+            {
+
+            }
+        }
+
         private void RevengerTravelProgress()
         {
+            if (this.QuestGiver.HomeSettlement.Village.Bound.Town.IsUnderSiege)
+            {
+                return;//preventing crash when village is after siege and change the owner.
+            }
+
             if (this.QuestGiver != null && _questGiverTravelStart.IsPast)
             {
-                if (this.QuestGiver.PartyBelongedTo == null && this._targetHero != null && this._targetHero.IsPrisoner)
+                if (this.QuestGiver.PartyBelongedTo == null && this._targetHero != null && this._targetHero.IsPrisoner && this._targetHero.IsAlive)
                 {
                     if (this._targetHero.PartyBelongedToAsPrisoner != null && this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
                     {
-                        CreateNotableParty().SetMoveEscortParty(this._targetHero.PartyBelongedToAsPrisoner.MobileParty, MobileParty.NavigationType.Default, false);
+                        CreateNotableParty().SetMoveEscortParty(this._targetHero.PartyBelongedToAsPrisoner.MobileParty, MobileParty.NavigationType.All, false);
                         base.AddLog(IssueOwnerTravelingLogText);
                     }
                 }
@@ -314,40 +366,16 @@ namespace PeasantRevenge
                                 {
                                     // TODO: here AI deals with peasants revenge
                                     _status = HeroProcessRevengerDemands();
+                                    // TODO: if quest is not finished, need to add checks of _status, so revenger will know that he had revenged and will not repeat the traveling
+                                    CheckStatus();
 
-                                    if (_status.Contains(event_status.none))
+                                    if (base.QuestGiver != null && base.QuestGiver.IsAlive && base.QuestGiver.PartyBelongedTo != null)
                                     {
-
-                                    }
-                                    else if (_status.Contains(event_status.clan_paid) ||
-                                    _status.Contains(event_status.accused_hero_paid) ||
-                                    _status.Contains(event_status.accused_hero_killed) ||
-                                     _status.Contains(event_status.criminal_paid) ||
-                                      _status.Contains(event_status.criminal_killed) ||
-                                       _status.Contains(event_status.kingdom_paid))
-                                    {
-                                        base.AddLog(IssueSuccessText);
-                                    }
-                                    else if (_status.Contains(event_status.party_denied) ||
-                                     _status.Contains(event_status.clan_denied) ||
-                                     _status.Contains(event_status.kingdom_denied) ||
-                                     _status.Contains(event_status.clan_leader_no_decision) ||
-                                     _status.Contains(event_status.notable_killed) ||
-                                     _status.Contains(event_status.notable_interrupted))
-
-                                    {
-                                        base.AddLog(IssueFailText);
+                                        RevengerStopTraveling();
                                     }
                                     else
                                     {
-                                        if (base.QuestGiver != null && base.QuestGiver.IsAlive && base.QuestGiver.PartyBelongedTo != null)
-                                        {
-                                            base.AddLog(IssueOwnerTravelReturningLogText);
-                                        }
-                                        else
-                                        {
 
-                                        }
                                     }
 
                                     CheckLog();
@@ -2168,13 +2196,13 @@ namespace PeasantRevenge
           () => { return _hero_can_accuse_condition(this._targetHero, 0); },
             () =>
             {
-                Hero hero_accused = (pr_event_status == event_status.accusation_success) ? this._accusedHeroByTargetHero : this._targetHero;
+                Hero hero_accused = _status.Contains(event_status.accusation_success) ? this._accusedHeroByTargetHero : this._targetHero;
                 TextObject text = new TextObject("{=*}You blamed {accuseD0.LINK} for the crime.");
                 StringHelpers.SetCharacterProperties($"accuseD{0}", hero_accused.CharacterObject, text);
                 base.AddLog(text);
                 ExecuteHero(this.QuestGiver, hero_accused);
 
-                if (pr_event_status == event_status.accusation_success)
+                if (_status.Contains(event_status.accusation_success))
                 {
                     base.AddLog(IssueSuccessText);
                 }
@@ -2426,19 +2454,19 @@ namespace PeasantRevenge
 
         private void persuasion_success_on_consequence()
         {
-            pr_event_status = event_status.accusation_success;
+            _status.Add(event_status.accusation_success);
             ConversationManager.EndPersuasion();
         }
 
         private void persuasion_failed_on_consequence()
         {
-            pr_event_status = event_status.accusation_fail;
+            _status.Add(event_status.accusation_fail);
             ConversationManager.EndPersuasion();
         }
 
         private void persuasion_rejected_on_consequence()
         {
-            pr_event_status = event_status.accusation_fail;
+            _status.Add(event_status.accusation_fail);
             ConversationManager.EndPersuasion();
         }
 
@@ -3184,5 +3212,4 @@ namespace PeasantRevenge
         }
         #endregion
     }
-
 }

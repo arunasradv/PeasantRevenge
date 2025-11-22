@@ -36,6 +36,7 @@ namespace PeasantRevenge
 
         public override void SyncData(IDataStore dataStore)
         {
+
         }
 
         private void OnGameLoadedEvent(CampaignGameStarter campaignGameStarter)
