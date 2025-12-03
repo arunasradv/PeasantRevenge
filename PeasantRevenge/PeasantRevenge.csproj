@@ -11,8 +11,8 @@
     <Company/>
     <Product>PeasantRevenge</Product>
     <PackageId>PeasantRevenge</PackageId>
-    <AssemblyVersion>15.1.8.0</AssemblyVersion>
-    <FileVersion>15.1.8.0</FileVersion>
+    <AssemblyVersion>15.1.9.0</AssemblyVersion>
+    <FileVersion>15.1.9.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Copyright>"Copyright ©  2023"</Copyright>
   </PropertyGroup>

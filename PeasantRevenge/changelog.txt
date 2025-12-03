@@ -180,3 +180,18 @@ Feature: support v1.3.5
 Feature: support v1.3.7
 251130 v15.1.8.0
 Feature: support v1.3.8
+251203 v15.1.9.0
+Feature: support v1.3.9
+Feature: Reduced notable peasant persuasion points recruitement to 1 success/fail.
+Feature: Different options (used in peasant persuasion see config   
+PersuadeNotableToRevengeTraitsForOption0;
+PersuadeNotableToRevengeTraitsForOption1;
+PersuadeNotableToRevengeTraitsForOption2;
+PersuadeNotableNotToRevengeTraitsForOption0;
+PersuadeNotableNotToRevengeTraitsForOption1;
+PersuadeNotableNotToRevengeTraitsForOption2;
+AccuseNotableTraitsForOption0;
+AccuseNotableTraitsForOption1;
+AccuseNotableTraitsForOption2;) will give different trait exp.
+Feature: Companions have probability (see config lordGainNewTraitProbability - default is 5%) 
+to learn new traits (lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest) if they execute notable peasant.
