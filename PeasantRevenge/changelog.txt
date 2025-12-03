@@ -177,3 +177,6 @@ Feature: Changed persuations for the notable peasants. Now different options wil
 TODO: Add persuade dialogs from PeasantRevengeBehavior.
 TODO: Fix quests.
 TODO: Fix traits balance.
+251130 v20.1.0.0
+No quests.
+Feature: Improved dialogs.

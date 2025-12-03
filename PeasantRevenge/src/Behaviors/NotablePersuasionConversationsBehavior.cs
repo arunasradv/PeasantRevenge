@@ -145,7 +145,6 @@ namespace PeasantRevenge
                 () => { return !notable_can_do_revenge(Hero.OneToOneConversationHero); }, null, 100, null);
             #endregion
             #region options
-#warning Add crime rating increase if executed noble
             //EXECUTE
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_player_not_happy_with_peasant_start_fast",
@@ -204,7 +203,7 @@ namespace PeasantRevenge
               () =>
               {
                   peasant_revenge_player_not_happy_with_peasant_teaching_consequence();
-#warning TODO Check if notable has active revenge quest.
+                  /*Other process must check, if notable can do the revenge.*/
                   //StopRevengeForNotableIfAny(Hero.OneToOneConversationHero);
                   leave_encounter();
               },
