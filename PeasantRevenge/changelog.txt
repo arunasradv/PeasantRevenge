@@ -195,3 +195,5 @@ AccuseNotableTraitsForOption1;
 AccuseNotableTraitsForOption2;) will give different trait exp.
 Feature: Companions have probability (see config lordGainNewTraitProbability - default is 5%) 
 to learn new traits (lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest) if they execute notable peasant.
+251204 v15.1.9.1
+Disabled debuging message.

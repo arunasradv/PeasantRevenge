@@ -1043,7 +1043,7 @@ namespace PeasantRevenge
 
             if (!string.IsNullOrEmpty(message))
             {
-                log(message);
+                //log(message);
 
                 if (!LogMessage.IsEmpty())
                 {
