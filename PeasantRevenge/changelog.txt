@@ -199,3 +199,5 @@ to learn new traits (lordTraitChangeWhenLordExecuteRevengerAfterOrBeforeQuest) i
 Disabled debuging message.
 251205 v15.1.10.0
 Feature: support v1.3.10
+****** v15.1.10.*
+Improved lord/player last comment just after execution decision.

@@ -181,6 +181,18 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lordTraitsOpposingPeasantsPower();
                         _cfg.values.ai.default_lordTraitsApprovePeasantsPower();
                     }
+
+                    if (_cfg.values.CfgVersion < 26)
+                    {
+                        _cfg.values.ai.default_lastWordsIdPRev0149();
+                        _cfg.values.ai.default_lastWordsIdPRev0150();
+                        _cfg.values.ai.default_lastWordsIdPRev0151();
+                        _cfg.values.ai.default_lastWordsIdPRev0152();
+                        _cfg.values.ai.default_lastWordsIdPRev0153();
+                        _cfg.values.ai.default_lastWordsIdPRev0154();
+                        _cfg.values.ai.default_lastWordsIdPRev0155();
+                        _cfg.values.ai.default_lastWordsIdPRev0156();
+                    }
                 }
             }
             else

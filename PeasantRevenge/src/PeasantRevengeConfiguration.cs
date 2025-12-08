@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 25;
+        public int CfgVersion = 26;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -536,7 +536,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0149 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 30" }
                 };
             }
             public void default_lastWordsIdPRev0150()
@@ -544,7 +544,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0150 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 30" }
                 };
             }
 

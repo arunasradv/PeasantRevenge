@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <tags>
     <tag language="English" />
   </tags>
@@ -21,7 +22,7 @@
     <string id="PRev0015" text="{=PRev0015}{CRIMINAL.NAME} will die." />
     <string id="PRev0016" text="{=PRev0016}{CRIMINAL.NAME} will pay {REPARATION}{GOLD_ICON}." />
     <string id="PRev0017" text="{=PRev0017}No, it is not your business. Peasant!" />
-    <string id="PRev0018" text="{=PRev0018}But, but...[ib:closed][if:convo_bared_teeth]" />
+    <string id="PRev0018" text="{=PRev0018}But, but...[ib:demure][if:convo_shocked]" />
     <string id="PRev0019" text="{=PRev0019}Better than nothing...[ib:closed][if:idle_normal]" />
     <string id="PRev0020" text="{=PRev0020}Revenge![if:convo_happy][ib:happy]" />
     <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand the criminal's head to be impaled on a spike. This bastard must pay for their crime in blood![ib:aggressive][if:convo_furious]" />
