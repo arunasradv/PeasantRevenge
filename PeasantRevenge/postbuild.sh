@@ -1,4 +1,4 @@
-rm -r "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge"
+#rm -r "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge"
 mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge"
 mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/bin"
 mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/bin/Win64_Shipping_Client"
