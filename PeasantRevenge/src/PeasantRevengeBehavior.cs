@@ -1227,7 +1227,7 @@ namespace PeasantRevenge
             FindRevengesForRevengeParties();
             AddRaidingParties();
             AddGameMenus(campaignGameStarter);
-            //Test();           
+            //Test();
         }
         #endregion
 
@@ -1254,7 +1254,7 @@ namespace PeasantRevenge
                 }
             }
 
-            //log($"Total vilages {total}. Can revenge :{sum}. Average hearts: {sum_hearts / total}. MinHearts {min_hearts}. MaxHearts{max_hearts}");
+            log($"Total vilages {total}. Can revenge :{sum}. Average hearts: {sum_hearts / total}. MinHearts {min_hearts}. MaxHearts{max_hearts}");
 
             List<PeasantRevengeConfiguration.RelationsPerTraits> criminalWillBlameOtherLordForTheCrime = _cfg.values.ai.criminalWillBlameOtherLordForTheCrime;
 
@@ -1278,7 +1278,7 @@ namespace PeasantRevenge
                             }
                         }
                     }
-                    //log($" {s.Name}  {s.Gold} {s.Clan?.Name} {(victims > 0 ? "blame: " + victims.ToString() : "")} {(both > 0 ? "both: " + both.ToString() : "")}");
+                    log($" {s.Name}  {s.Gold} {s.Clan?.Name} {(victims > 0 ? "blame: " + victims.ToString() : "")} {(both > 0 ? "both: " + both.ToString() : "")}");
                 }
             }
         }
@@ -1655,13 +1655,13 @@ namespace PeasantRevenge
                 "start",
                 "peasant_revenge_lord_start_grievance_received",
                 "{=PRev0001}You looted a nearby village. They now demand to cut someone's head off. How are you going to respond?[rf:idle_angry][ib:closed][if:idle_angry]",
-                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition), null, 100, null);
+                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition), null, 200, null);
             campaignGameStarter.AddDialogLine(
                 "peasant_revenge_lord_start_grievance",
                 "start",
                 "peasant_revenge_lord_start_grievance_received",
                 "{=PRev0002}Just curious, the {PEASANTREVENGER.LINK} say that you looted your own village earlier. The peasants want your head off. How are you going to respond?[if:convo_thinking][if:idle_happy]",
-                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray), null, 100, null);
+                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_lord_start_condition_betray), null, 200, null);
 
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_lord_start_grievance_requested_ask_if_not_pay",
@@ -1818,15 +1818,15 @@ namespace PeasantRevenge
 
             campaignGameStarter.AddPlayerLine(
        "peasant_revenge_lord_start_grievance_denied_pay_end_comment_silent",
-       "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
-       "close_window",
-       "{PLCOMMENT}",
-       () =>
-       {
-           TextObject text = new TextObject("{=PRev0106}...");
-           MBTextManager.SetTextVariable("PLCOMMENT", text);
-           return true;
-       },
+            "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
+            "close_window",
+            "{PLCOMMENT}",
+            () =>
+            {
+                TextObject text = new TextObject("{=PRev0106}...");
+                MBTextManager.SetTextVariable("PLCOMMENT", text);
+                return true;
+            },
       new ConversationSentence.OnConsequenceDelegate(peasant_revenge_lord_start_end_consequence), 102, null, null);
 
             /*TODO: peasant_revenge_lord_start_grievance_denied_pay_end_pl_c should be persuation*/
@@ -1893,7 +1893,7 @@ namespace PeasantRevenge
                "start",
                "peasant_revenge_peasants_start_grievance_received",
                "{=PRev0014}Your prisoner {CRIMINAL.LINK} looted our village. We demand to impale their head on a spike![if:convo_furious][ib:aggressive]",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_start_condition), null, 120, null);
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_start_condition), null, 200, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_die",
                "peasant_revenge_peasants_start_grievance_received",
@@ -1936,7 +1936,7 @@ namespace PeasantRevenge
               "{=PRev0073}I swear! It was all {CVICTIM.LINK}'s plan![rf:convo_grave][ib:closed]",
               new ConversationSentence.OnConditionDelegate(peasant_revenge_ask_criminal_start_condition),
               null,
-              120, null);
+              200, null);
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_ask_criminal_explain",
              "peasant_revenge_peasants_ask_criminal_options_start",
@@ -2089,7 +2089,7 @@ namespace PeasantRevenge
                "start",
                "peasant_revenge_peasants_messenger_start_grievance_received",
                "{PEASANTDEMANDS}",
-               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 120, null);
+               new ConversationSentence.OnConditionDelegate(this.peasant_revenge_peasant_messenger_start_condition), null, 200, null);
 
             //will pay
             campaignGameStarter.AddPlayerLine(
@@ -2200,7 +2200,7 @@ namespace PeasantRevenge
                "peasant_revenge_party_need_compensation_ask_support",
                "{=PRev0030}See that? Our prisoner was just killed by a peasant![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]",
                new ConversationSentence.OnConditionDelegate(this.peasant_revenge_party_need_compensation_condition),
-               null, 120, null);
+               null, 220, null);
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_party_need_compensation_support",
                "peasant_revenge_party_need_compensation_ask_support",
@@ -4399,15 +4399,6 @@ namespace PeasantRevenge
             {
                 return prisoners.First();
             }
-            else
-            {
-#warning REMOVE BEFORE RELEASE !
-                return hero.Clan.AliveLords.Where((x) => x != null &&
-              x.CharacterObject.HeroObject != null &&
-              x.CharacterObject.HeroObject.Clan != null && x != hero).FirstOrDefault()?.CharacterObject;
-            }
-
-
             return null;
         }
 
