@@ -2564,7 +2564,7 @@ namespace PeasantRevenge
                 }
                 else if (PRev0157)
                 {
-                    text = new TextObject("{=PRev0157}The bitch is lucky again...");
+                    text = new TextObject("{=PRev0157}The hag is lucky again...");
                 }
                 else if (PRev0165)
                 {
