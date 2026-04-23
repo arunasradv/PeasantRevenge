@@ -28,19 +28,7 @@ Features what I'm not planing to develop in near future, by myself:
 - "Notable bribing effect should be temporary".
 
 ### What contributions I'm not looking for.
-Code related features:
-
-- "The code is a mess. Need to rewrite all". (But I'm thinking to make quests similar how TW did - quest based not a my custom "state machine" someday in the future)
-- Dependency on other mods. (I think many things like mod configuration should be done not in menu , but by in game dialogues, gameplay features (diplomacy, interactions with npc...))
-- Save-able mod module content (quests, classes, parameters... Until main mod features are not fully completed save-able content should not be added).
-
-New events:
-
-- Lord's revenge to notable peasant, due to peasant's past doings.
-- Lord's revenge to other lord, because of past revenge event.
-
-> Such events will expand the mod too much. And basically mod will need to be renamed to i.e. "Revenges". And other mods may have implemented same features already. If you do want these features, when you should fork this repository and/or create your own version of the mod.
-
+- Only what breaks the mod and is not fun.
 # Before you contribute.
 
 Working on your first Pull Request? You can learn how from this: [source: [YouTube](https://www.youtube.com/results?search_query=how+to+contribute+tu+github)]
