@@ -205,3 +205,5 @@ Fix revenge start.
 Support v1.3.11
 251225 v15.1.13.0
 Support v1.3.13
+260424 v26.0.0.0
+Added configuration parameter (called disableMessages) to disable all mod related messages.

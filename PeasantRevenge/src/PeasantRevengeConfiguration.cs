@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 25;
+        public int CfgVersion = 26;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -66,6 +66,7 @@ namespace PeasantRevenge
         public float peasantRevengePartyTalkToLordDistance = 2.0f;
         public float peasantRevengePartyWaitLordDistance = 0.5f;
         public bool allowLordToKillMessenger = true;
+        public bool disableMessages = false;
         public bool allowPeasantToKillLord = true;
         public string logColorForClan = "hFF0000FF";
         public string logColorForKingdom = "hBB1111BB";
