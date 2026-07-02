@@ -77,9 +77,10 @@ namespace PeasantRevenge
         public static PeasantRevengeConfiguration CheckModules(PeasantRevengeConfiguration cfg_source)
         {
             string[] moduleNames = Utilities.GetModulesNames();
-
+            //log("Checking modules for PeasantRevenge mod configuration... ");
             foreach (string modulesId in moduleNames)
             {
+                //log($"{modulesId}");
                 if (modulesId.Contains("Bannerlord.Diplomacy")) // Diplomacy mod patch
                 {
                     bool need_patch = IsModuleVersionOlder(
@@ -91,7 +92,11 @@ namespace PeasantRevenge
                         cfg_source.allowLordToKillMessenger = false;
                         cfg_source.allowPeasantToKillLord = false;
                     }
-                    break; // because there is no more module patches it should end the configuration
+                }
+
+                if (modulesId.Contains("Cutscenes_Extended"))
+                {
+                    cfg_source.allowPeasantToKillLord = false;
                 }
             }
 
@@ -181,6 +186,18 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lordTraitsOpposingPeasantsPower();
                         _cfg.values.ai.default_lordTraitsApprovePeasantsPower();
                     }
+
+                    if (_cfg.values.CfgVersion < 26)
+                    {
+                        _cfg.values.ai.default_lastWordsIdPRev0149();
+                        _cfg.values.ai.default_lastWordsIdPRev0150();
+                        _cfg.values.ai.default_lastWordsIdPRev0151();
+                        _cfg.values.ai.default_lastWordsIdPRev0152();
+                        _cfg.values.ai.default_lastWordsIdPRev0153();
+                        _cfg.values.ai.default_lastWordsIdPRev0154();
+                        _cfg.values.ai.default_lastWordsIdPRev0155();
+                        _cfg.values.ai.default_lastWordsIdPRev0156();
+                    }
                 }
             }
             else
@@ -241,6 +258,8 @@ namespace PeasantRevenge
 
         public static void log(string text)
         {
+            if (_cfg.values.disableMessages)
+                return;
             TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(text, null);
             InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForClan)));
             if (!string.IsNullOrEmpty(_cfg.values.log_file_name))

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <tags>
     <tag language="English" />
   </tags>
@@ -21,7 +22,7 @@
     <string id="PRev0015" text="{=PRev0015}{CRIMINAL.NAME} will die." />
     <string id="PRev0016" text="{=PRev0016}{CRIMINAL.NAME} will pay {REPARATION}{GOLD_ICON}." />
     <string id="PRev0017" text="{=PRev0017}No, it is not your business. Peasant!" />
-    <string id="PRev0018" text="{=PRev0018}But, but...[ib:closed][if:convo_bared_teeth]" />
+    <string id="PRev0018" text="{=PRev0018}But, but...[ib:demure][if:convo_shocked]" />
     <string id="PRev0019" text="{=PRev0019}Better than nothing...[ib:closed][if:idle_normal]" />
     <string id="PRev0020" text="{=PRev0020}Revenge![if:convo_happy][ib:happy]" />
     <string id="PRev0021" text="{=PRev0021}{PARTYLEADER.LINK} caught {CRIMINAL.LINK} looting our village. We demand the criminal's head to be impaled on a spike. This bastard must pay for their crime in blood![ib:aggressive][if:convo_furious]" />
@@ -152,5 +153,25 @@
     <string id="PRev0146" text="{=PRev0146}Expell the peasant" />
     <string id="PRev0147" text="{=PRev0147}Expell or execute the peasant" />
     <string id="PRev0148" text="{=PRev0148}Peasants will punish you and your associate {ACCUSEDHERO.LINK}." />
+
+    <string id="PRev0149" text="{=PRev0149}So my friend got away with it." />
+    <string id="PRev0150" text="{=PRev0150}I'm glad my friend is safe." />
+    <string id="PRev0151" text="{=PRev0151}This bastard should have died." />
+    <string id="PRev0152" text="{=PRev0152}This bastard deserve your pity." />
+    <string id="PRev0153" text="{=PRev0153}Death by a peasant's axe is not honorable to me." />
+    <string id="PRev0154" text="{=PRev0154}I have got nothing from that village looting." />
+    <string id="PRev0155" text="{=PRev0155}This bastard should have died." />
+    <string id="PRev0156" text="{=PRev0156}I do not deserve such a fate." />
+    <string id="PRev0157" text="{=PRev0157}The hag is lucky again..." />
+    <string id="PRev0158" text="{=PRev0158}Hope the princess is happy with all the treasures." />
+    <string id="PRev0159" text="{=PRev0159}This bastard deserved to die." />
+    <string id="PRev0160" text="{=PRev0160}I'm glad. This bastard does not deserved your pity." />
+    <string id="PRev0161" text="{=PRev0161}The hag run out of luck this time." />
+    <string id="PRev0162" text="{=PRev0162}Was a good friend, but friendship ended today." />
+    <string id="PRev0163" text="{=PRev0163}I have got nothing from that village looting anyway." />
+    <string id="PRev0164" text="{=PRev0164}Such a shameful end for the greedy bastard." />
+    <string id="PRev0165" text="{=PRev0165}The clan leaders are always immune to peasant opinions." />
+    <string id="PRev0166" text="{=PRev0166}The clan leader is responsible for all of this!" />
+    <string id="PRev0167" text="{=PRev0167}The bad clan leader is not the good example." />
   </strings>
 </base>

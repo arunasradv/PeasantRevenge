@@ -207,3 +207,10 @@ Support v1.3.11
 Support v1.3.13
 260424 v26.0.0.0
 Added configuration parameter (called disableMessages) to disable all mod related messages.
+Improved lord/player last comment just after execution decision.
+
+2026-06-30 Mod version: 26.1.0.0. Game version: 1.4.6.
+     Added configuration parameter (called disableMessages) to disable all mod related messages.
+     Added lord/player last comment just after execution decision.
+     Added patch for Cutscenes_Extended mod so peasant will not be allowed to kill the noble.
+     

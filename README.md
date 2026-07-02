@@ -34,7 +34,7 @@
 
 - change the mind (dialogue will return to previous options);
 
- 3. When hero (from player clan or kingdom) caught the criminal, who has been raiding player's clan or kingdom village. Notable peasant dialogue options are:
+ 1. When hero (from player clan or kingdom) caught the criminal, who has been raiding player's clan or kingdom village. Notable peasant dialogue options are:
      - agree to pay the reparation to notable peasant (the criminal is not executed);
 
 - disagree to pay the reparation and demand to spare the criminal (the criminal is not executed);
@@ -47,11 +47,11 @@
   - agree to pay "lost ransom";
   - kill the soldier, who asked for "lost ransom";
 
- 4. When player encounter notable party before notable could meet the hero, who has the criminal as a prisoner. Notable peasant dialogue options are:
+ 1. When player encounter notable party before notable could meet the hero, who has the criminal as a prisoner. Notable peasant dialogue options are:
      - kill notable peasant (revenge is aborted);
      - disband notable peasant mobile party (revenge is aborted, notable peasant will go back to his village);
      - leave notable peasant (notable peasant will continue his revenge);
- 5. Dialogue for notable peasant to encourage them to initiate (or not to) the peasant revenge. Notable peasant dialogue options are:
+ 2. Dialogue for notable peasant to encourage them to initiate (or not to) the peasant revenge. Notable peasant dialogue options are:
      - execute the notable peasant (game will replace the notable peasant with a new one);
      - teach the notable peasant (use player's traits to change notable peasant's traits);
      - bribe the notable peasant (use money to change notable peasant's traits);
@@ -213,6 +213,7 @@ If you enable notable parties, sometimes village will get 1 more notable for a s
 - Use "dev_linux" branch for VisualCode solution.
 - You will need to change all incorrect paths in the files (i.e. user name...), and probably fix the VC enviroment.
 - Build the project (PeasantRevenge.sln).
+- Use "update_to_new_versions.py" to modify files with new assembly and game version id (update AssemblyVersion and SupportedGameVersion)
 - Use "postbuild.sh" to copy all mod files into M&B Modules.
 
   Play game.

@@ -537,7 +537,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0149 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 30" }
                 };
             }
             public void default_lastWordsIdPRev0150()
@@ -545,7 +545,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0150 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 50" }
+                     new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations > 30" }
                 };
             }
 
