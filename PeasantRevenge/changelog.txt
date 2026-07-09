@@ -214,3 +214,6 @@ Improved lord/player last comment just after execution decision.
      Added lord/player last comment just after execution decision.
      Added patch for Cutscenes_Extended mod so peasant will not be allowed to kill the noble.
      
+
+2026-07-09 Mod version: 26.2.0.0. Game version: 1.4.7.
+     v26.2.0.0
