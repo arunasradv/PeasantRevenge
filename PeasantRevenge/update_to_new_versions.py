@@ -1,18 +1,9 @@
-''' This script is used to update the mod files: 
-changelog.txt, 
-PeasantRevenge.csproj, 
-AssemblyInfo.cs, 
-WorkshopUpdate.xml, 
-SubModule.xml
-with new versions defined here
-'''
-
 import os
 import time
 import subprocess
 
-AssemblyVersion = "26.1.0.0"
-SupportedGameVersion = "1.4.6"
+AssemblyVersion = "26.2.0.0"
+SupportedGameVersion = "1.4.7"
 FileVersion = AssemblyVersion
 
 def get_commit_info():
@@ -74,7 +65,7 @@ with open(os.path.join(file_dirr, "WorkshopUpdate.xml"), "r") as f:
     lines = f.readlines()
     for i in range(len(lines)):
         if "ChangeNotes" in lines[i]:
-            lines[i] = f"        <ChangeNotes Value=\"Feature: Support v{SupportedGameVersion}. {commit_message}\"/>\n"
+            lines[i] = f"        <ChangeNotes Value=\"Mod version: {AssemblyVersion}. Game version: {SupportedGameVersion}.\"/>\n"
         if "<Tag Value=\"v" in lines[i]:
             lines[i] = f"        <Tag Value=\"v{SupportedGameVersion}\"/>\n"
 with open(os.path.join(file_dirr, "WorkshopUpdate.xml"), "w") as f:
