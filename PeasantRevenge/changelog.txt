@@ -217,3 +217,9 @@ Improved lord/player last comment just after execution decision.
 
 2026-07-09 Mod version: 26.2.0.0. Game version: 1.4.7.
      v26.2.0.0
+
+2026-08-11 Mod version: 26.3.0.0. Game version: 1.4.8.
+     Update change log.
+
+2026-08-17 Mod version: 27.0.0.0. Game version: 1.4.8.
+     Addedconfiguration variable  "onlyPlayerCanExecuteLords". Added "lastWordsSuccessChance" (not quite finished feature). For now it is random chance (90%) to revert the execution. improved "Kingdom" checks so null exception may not happen in some very moded games.
