@@ -173,5 +173,6 @@
     <string id="PRev0165" text="{=PRev0165}The clan leaders are always immune to peasant opinions." />
     <string id="PRev0166" text="{=PRev0166}The clan leader is responsible for all of this!" />
     <string id="PRev0167" text="{=PRev0167}The bad clan leader is not the good example." />
+    <string id="PRev0168" text="{=PRev0168}You will regret it!" />
   </strings>
 </base>

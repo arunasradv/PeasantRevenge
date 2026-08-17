@@ -11,6 +11,58 @@ namespace PeasantRevenge
     {
         public static PeasantRevengeModCfg _cfg;
 
+        public static List<string> emotion_list = new List<string> {
+            "[if:convo_normal]",
+            "[if:convo_nonchalant]",
+            "[if:convo_pondering]",
+            "[if:convo_thinking]",
+            "[if:convo_contemptuous]",
+            "[ib:closed]",
+            "[if:convo_bemused]",
+            "[ib:normal][if:convo_calm_friendly]",
+            "[ib:confident2][if:convo_calm_friendly]",
+            "[ib:normal][if:convo_relaxed_happy]",
+            "[if:convo_happy]",
+            "[if:convo_focused_happy]",
+            "[if:convo_evil_smile]",
+            "[if:convo_merry]",
+            "[if:convo_huge_smile]",
+            "[if:convo_excited]",
+            "[if:convo_approving]",
+            "[if:convo_shocked]",
+            "[if:convo_astonished]",
+            "[if:convo_disbelief]",
+            "[if:convo_confused_normal]",
+            "[if:convo_confused_annoyed]",
+            "[ib:hip][if:convo_uncomfortable_voice]",
+            "[if:convo_worried]",
+            "[ib:closed][if:convo_worried]",
+            "[if:convo_nervous]",
+            "[ib:nervous][if:convo_bared_teeth]",
+            "[if:convo_nervous2]",
+            "[if:convo_annoyed]",
+            "[if:convo_annoyed][ib:warrior2]",
+            "[if:convo_insulted]",
+            "[if:convo_contemptuous]",
+            "[if:convo_mocking_teasing]",
+            "[if:convo_mocking_aristocratic]",
+            "[if:convo_mocking_revenge]",
+            "[if:convo_very_stern]",
+            "[if:convo_stern]",
+            "[if:convo_grave]",
+            "[ib:closed2][if:convo_grave]",
+            "[if:convo_aggressive]",
+            "[ib:aggressive][if:convo_bared_teeth]",
+            "[if:convo_furious]",
+            "[if:convo_undecided_open]",
+            "[ib:demure][if:convo_undecided_open]",
+            "[ib:confident][if:convo_undecided_closed]",
+            "[ib:closed][if:convo_nervous]",
+            "[ib:nervous][if:convo_nervous2]",
+            "[ib:hip2][if:convo_huge_smile]",
+            "[ib:warrior][if:convo_furious]"
+            };
+
         public enum event_status
         {
             none,
@@ -197,6 +249,11 @@ namespace PeasantRevenge
                         _cfg.values.ai.default_lastWordsIdPRev0154();
                         _cfg.values.ai.default_lastWordsIdPRev0155();
                         _cfg.values.ai.default_lastWordsIdPRev0156();
+                    }
+
+                    if (_cfg.values.CfgVersion < 27)
+                    {
+                        _cfg.values.ai.default_lastWordsIdPRev0168();
                     }
                 }
             }

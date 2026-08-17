@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 26;
+        public int CfgVersion = 27;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -76,6 +76,8 @@ namespace PeasantRevenge
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
         public float lordTryPersuadeNotableProbability = 0.6f;
         public float lordGainNewTraitProbability = 0.05f;
+        public bool onlyPlayerCanExecuteLords = true;
+        public float lastWordsSuccessChance = 0.9f;
         public AIfilters ai;
 
         public static string default_file_name()
@@ -145,6 +147,7 @@ namespace PeasantRevenge
             public List<RelationsPerTraits> lastWordsIdPRev0154;
             public List<RelationsPerTraits> lastWordsIdPRev0155;
             public List<RelationsPerTraits> lastWordsIdPRev0156;
+            public List<RelationsPerTraits> lastWordsIdPRev0168;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithNotable;
             public List<RelationsPerTraits> lordPersuadeNotableExcludeTraitsAndRelationsWithSettlementOwner;
             public List<RelationsPerTraits> lordPersuadeNotableChooseTeachTraitsAndRelationsWithSettlementOwner;
@@ -205,6 +208,7 @@ namespace PeasantRevenge
                 default_lastWordsIdPRev0154();
                 default_lastWordsIdPRev0155();
                 default_lastWordsIdPRev0156();
+                default_lastWordsIdPRev0168();
             }
 
             public void default_partyLordLetNotableToKillTheCriminalEvenIfOtherConditionsDoNotLet()
@@ -537,7 +541,7 @@ namespace PeasantRevenge
                 lastWordsIdPRev0149 =
                 new List<RelationsPerTraits>
                 {
-                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 30" }
+                     new RelationsPerTraits {traits = "Honor > 0", relations = "Relations > 30" }
                 };
             }
             public void default_lastWordsIdPRev0150()
@@ -600,6 +604,15 @@ namespace PeasantRevenge
                 new List<RelationsPerTraits>
                 {
                      new RelationsPerTraits {traits = "Mercy > 0", relations = "Relations < 0" }
+                };
+            }
+
+            public void default_lastWordsIdPRev0168()
+            {
+                lastWordsIdPRev0168 =
+                new List<RelationsPerTraits>
+                {
+                     new RelationsPerTraits {traits = "Mercy < 0", relations = "Relations > 30" }
                 };
             }
 
