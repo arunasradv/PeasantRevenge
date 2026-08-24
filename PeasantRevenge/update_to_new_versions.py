@@ -2,7 +2,7 @@ import os
 import time
 import subprocess
 
-AssemblyVersion = "27.0.0.0"
+AssemblyVersion = "28.0.0.0"
 SupportedGameVersion = "1.4.8"
 FileVersion = AssemblyVersion
 

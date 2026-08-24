@@ -174,5 +174,11 @@
     <string id="PRev0166" text="{=PRev0166}The clan leader is responsible for all of this!" />
     <string id="PRev0167" text="{=PRev0167}The bad clan leader is not the good example." />
     <string id="PRev0168" text="{=PRev0168}You will regret it!" />
+    <string id="PRev0169" text="{=PRev0169}{ACCUSED_HERO.NAME} is my sibling after all." />
+    <string id="PRev0170" text="{=PRev0170}{ACCUSED_HERO.NAME} is my wife." />
+    <string id="PRev0171" text="{=PRev0171}{ACCUSED_HERO.NAME} is my husband." />
+    <string id="PRev0172" text="{=PRev0172}{ACCUSED_HERO.NAME} is of the same clan." />
+    <string id="PRev0173" text="{=PRev0173}{ACCUSED_HERO.NAME} is of the same kingdom." />
+    <string id="PRev0174" text="{=PRev0174}Princess, you say?." />
   </strings>
 </base>

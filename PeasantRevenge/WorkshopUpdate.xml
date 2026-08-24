@@ -6,7 +6,7 @@
     <UpdateItem>
         <ModuleFolder Value="F:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\PeasantRevenge"/>
         <!-- A direct path of your module -->
-        <ChangeNotes Value="Mod version: 27.0.0.0. Game version: 1.4.8."/>
+        <ChangeNotes Value="Mod version: 28.0.0.0. Game version: 1.4.8."/>
         Added configuration parameter (called disableMessages) to disable all mod related messages.
         Added lord/player last comment just after execution decision.
         Added patch for Cutscenes_Extended mod so peasant will not be allowed to kill the noble."/>

@@ -104,6 +104,7 @@ namespace PeasantRevenge
             public CampaignTime startTime;
             public CampaignTime dueTime;
 
+            public bool execution_reverse_after_blame = false;
             private bool can_peasant_revenge_lord_start = false;
             private bool can_peasant_revenge_peasant_start = false;
             private bool can_peasant_revenge_messenger_peasant_start = false;
@@ -1971,7 +1972,7 @@ namespace PeasantRevenge
           "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c",
           "peasant_revenge_lord_start_grievance_denied_pay_end_pl_c_ai_reaction",/*TODO: create ai reaction to this comment*/
           "{PLCOMMENTLAST}", () => { return peasant_revenge_hero_last_words_condition(Hero.MainHero); },
-         null,
+         () => { currentRevenge.execution_reverse_after_blame = MBRandom.RandomInt(0, 100) <= _cfg.values.lastWordsSuccessChance * 100; },
           100, new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_player_last_words_clickable));
 
             campaignGameStarter.AddDialogLine(
@@ -1981,7 +1982,7 @@ namespace PeasantRevenge
             "{COMMENTLASTANSWER}",//"{=PRev0011}Pay for your crime![rf:idle_angry][if:convo_bored]",
              () =>
              {
-                 return peasant_revenge_hero_last_words_success_condition(Hero.MainHero) == false;
+                 return peasant_revenge_hero_last_words_success_condition(Hero.MainHero, Hero.OneToOneConversationHero, currentRevenge.accused_hero.HeroObject) == false;
              },
              null, 100, null);
 
@@ -1992,9 +1993,24 @@ namespace PeasantRevenge
             "{COMMENTLASTANSWER}",//"{=PRev0143}Let's say it was a misunderstanding.",
              () =>
              {
-                 return peasant_revenge_hero_last_words_success_condition(Hero.MainHero);
+                 return peasant_revenge_hero_last_words_success_condition(Hero.MainHero, Hero.OneToOneConversationHero, currentRevenge.accused_hero.HeroObject);
              }, () =>
              {
+                 //Result is depending of what situation has been changed. 
+                 //Here we need a feedback, what condition has been activated in peasant_revenge_hero_last_words_success_condition.
+                 if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.party_no_decision))
+                 {
+                     // so now party has come with new decision - kill the criminal, accused.
+                 }
+                 else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
+                 {
+                     // so now party has come with new decision - not to kill accused.
+                 }
+                 else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
+                 {
+                     // so now party has come with new decision - not to kill criminal.
+                 }
+
                  currentRevenge.quest_Results.Clear();
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision);
              }, 100, null);
@@ -2224,13 +2240,13 @@ namespace PeasantRevenge
                  leave_encounter();
              }, 90, null, null);
             campaignGameStarter.AddPlayerLine(
-             "peasant_revenge_player_demand_lost_ransom_take_c_body_ransom",
+             "peasant_revenge_peasants_finish_criminal_killed_c_pl_options_last_words",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
              "close_window",
              "{=PRev0143}Let's say it was a misunderstanding.",
              () =>
              {
-                 return true;
+                 return currentRevenge.accused_hero != null;
              }, () =>
              {
                  currentRevenge.quest_Results.Clear();
@@ -2669,26 +2685,208 @@ namespace PeasantRevenge
             Campaign.Current.ConversationManager.AddDialogFlow(this.GetNotablePersuasionDialogFlow(), this);
         }
 
-        private bool peasant_revenge_hero_last_words_success_condition(Hero hero)
+        private List<bool> hero_last_words_conditions(Hero criminal_hero, Hero accused_hero)
         {
-            bool retval = true;
+            List<bool> conditions = new List<bool>();
 
-            if (hero == null)
+            if (criminal_hero == null || accused_hero == null)
+            {
+                return conditions;
+            }
+
+            /*Checking MainHero traits and relations with accused hero*/
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0149));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0150));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0151));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0152));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0153));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0154));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0155));
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0156));
+            conditions.Add(accused_hero.IsFemale);
+            conditions.Add(CheckConditions(accused_hero, criminal_hero, _cfg.values.ai.lastWordsIdPRev0154));
+            conditions.Add(accused_hero.IsClanLeader);
+            conditions.Add(CheckConditions(criminal_hero, accused_hero, _cfg.values.ai.lastWordsIdPRev0168));
+
+
+            return conditions;
+        }
+
+
+        private bool peasant_revenge_hero_last_words_success_condition(Hero criminal_hero, Hero hero_speeker, Hero hero_accused)
+        {
+            bool retval = currentRevenge.execution_reverse_after_blame;
+
+            if (criminal_hero == null || hero_speeker == null || hero_accused == null || hero_accused.Clan == null || hero_speeker.Clan == null)
             {
                 retval = false;
             }
             else
             {
-                retval = MBRandom.RandomInt(0, 100) <= _cfg.values.lastWordsSuccessChance * 100; //TODO: make this success to be calculated at the start of dialogue, so this function will return true/false - the same when it is used more times.
-
                 TextObject text;
+                List<TextObject> text_list = new List<TextObject>();
 
                 int emotion_index = MBRandom.RandomInt(0, Common.emotion_list.Count - 1);
 
+                bool is_sibling_of_speeker = hero_speeker.Siblings.Any(x => x == hero_accused);
+                bool is_wife_of_speeker = hero_speeker.Spouse == hero_accused && hero_accused.IsFemale;
+                bool is_husband_of_speeker = hero_speeker.Spouse == hero_accused && !hero_accused.IsFemale;
+                bool is_same_clan = hero_accused.Clan != null ? hero_speeker.Clan != null ? hero_speeker.Clan == hero_accused.Clan : false : false;
+                bool is_same_kingdom = hero_accused.Clan.Kingdom != null ? hero_speeker.Clan.Kingdom != null ? hero_speeker.Clan.Kingdom == hero_accused.Clan.Kingdom : false : false;
+
+                List<bool> conditions = hero_last_words_conditions(criminal_hero, hero_accused);
+                int c_count = conditions.Count;
+                conditions.Add(is_sibling_of_speeker);
+                conditions.Add(is_wife_of_speeker);
+                conditions.Add(is_husband_of_speeker);
+                conditions.Add(is_same_clan);
+                conditions.Add(is_same_kingdom);
+
                 if (retval)
                 {
-                    //The situation has been reverted.
                     text = new TextObject("{=PRev0129}What's there to discuss?");
+
+                    //The folowing situation has been reverted.
+
+                    if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.party_no_decision))
+                    {
+                        //TODO:Actually it could be reverting to kill the hero... but for now it will only revert to "no decision".
+                        //text = new TextObject("{=PRev0102}A good decision...");
+
+                        if (conditions.ElementAt(11))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(0))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(1))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(2))
+                        {
+                            text_list.Add(new TextObject("{=PRev0098}I cannot decide..."));
+                        }
+                        if (conditions.ElementAt(3))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(8))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                        if (conditions.ElementAt(10))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                    }
+                    else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
+                    {
+                        //TODO:Actually it could be reverting to kill the accused hero... but for now it will only revert to "no decision".
+                        text = new TextObject("{=PRev0143}Let's say it was a misunderstanding.");
+
+                        if (conditions.ElementAt(4))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(5))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(6))
+                        {
+                            text_list.Add(new TextObject("{=PRev0098}I cannot decide..."));
+                        }
+                        if (conditions.ElementAt(7))
+                        {
+                            text_list.Add(new TextObject("{=PRev0128}You're right."));
+                        }
+                        if (conditions.ElementAt(8))
+                        {
+                            text_list.Add(new TextObject("{=PRev0169}Princess, you say?."));
+                        }
+                        if (conditions.ElementAt(10))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                    }
+                    else if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed))
+                    { // no accused hero killing.
+
+                        text = new TextObject("{=PRev0076}You are lying.");
+
+                        if (conditions.ElementAt(2))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                        if (conditions.ElementAt(3))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                        if (conditions.ElementAt(8))
+                        {
+                            text_list.Add(new TextObject("{=PRev0119}Not now."));
+                        }
+                        if (conditions.ElementAt(1))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+                        if (conditions.ElementAt(5))
+                        {
+                            text_list.Add(new TextObject("{=PRev0076}You are lying."));
+                        }
+                        if (conditions.ElementAt(9))
+                        {
+                            text_list.Add(new TextObject("{=PRev0143}Let's say it was a misunderstanding."));
+                        }
+
+                        if (conditions.ElementAt(10))
+                        {
+                            text_list.Add(new TextObject("{=PRev0174}{ACCUSED_HERO.NAME} is good clan leader."));
+                            StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                        }
+                    }
+                    else
+                    {
+                        retval = false;
+                    }
+
+                    if (conditions.ElementAt(c_count))
+                    {
+                        text_list.Add(new TextObject("{=PRev0169}{ACCUSED_HERO.NAME} is my sibling after all."));
+                        StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                    }
+
+                    if (conditions.ElementAt(c_count + 1))
+                    {
+                        text_list.Add(new TextObject("{=PRev0170}{ACCUSED_HERO.NAME} is my wife."));
+                        StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                    }
+
+                    if (conditions.ElementAt(c_count + 2))
+                    {
+                        text_list.Add(new TextObject("{=PRev0171}{ACCUSED_HERO.NAME} is my husband."));
+                        StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                    }
+
+                    if (conditions.ElementAt(c_count + 3))
+                    {
+                        text_list.Add(new TextObject("{=PRev0172}{ACCUSED_HERO.NAME} is of the same clan."));
+                        StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                    }
+
+                    if (conditions.ElementAt(c_count + 4))
+                    {
+                        text_list.Add(new TextObject("{=PRev0173}{ACCUSED_HERO.NAME} is of the same kingdom."));
+                        StringHelpers.SetCharacterProperties("ACCUSED_HERO", hero_accused.CharacterObject, text_list.Last(), false);
+                    }
+
+                    if (!text_list.IsEmpty())
+                    {
+                        text = text_list.ElementAt(MBRandom.RandomInt(0, text_list.Count - 1));
+                    }
                 }
                 else
                 {
@@ -2703,86 +2901,52 @@ namespace PeasantRevenge
             return retval;
         }
 
-        private bool peasant_revenge_hero_last_words_condition(Hero hero)
+
+        private bool peasant_revenge_hero_last_words_condition(Hero criminal_hero)
         {
             TextObject text = new TextObject("{=PRev0129}What's there to discuss?");
 
-            if (hero == null)
+            if (criminal_hero == null ||
+             currentRevenge.accused_hero == null ||
+             currentRevenge.accused_hero.HeroObject == null ||
+              currentRevenge.criminal == null ||
+              currentRevenge.criminal.HeroObject == null)
             {
                 MBTextManager.SetTextVariable("PLCOMMENTLAST", text, false);
                 return false;
             }
 
-            //List<bool> conditions = new List<bool>();
+            List<bool> conditions = hero_last_words_conditions(criminal_hero, currentRevenge.accused_hero.HeroObject);
 
-
-
-            bool PRev0149 = false;
-            bool PRev0150 = false;
-            bool PRev0151 = false;
-            bool PRev0152 = false;
-            bool PRev0153 = false;
-            bool PRev0154 = false;
-            bool PRev0155 = false;
-            bool PRev0156 = false;
-            bool PRev0157 = false;
-            bool PRev0165 = false;
-            bool PRev0168 = false;
-            bool acc_PRev0154 = false;
-
-            if (currentRevenge.accused_hero != null)
-            {
-                /*Checking MainHero traits and relations with accused hero*/
-                PRev0149 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0149);
-                PRev0150 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0150);
-                PRev0151 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0151);
-                PRev0152 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0152);
-                PRev0153 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0153);
-                PRev0154 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0154);
-                PRev0155 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0155);
-                PRev0156 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0156);
-                PRev0157 = currentRevenge.accused_hero.IsFemale;
-                acc_PRev0154 = CheckConditions(currentRevenge.accused_hero.HeroObject, hero, _cfg.values.ai.lastWordsIdPRev0154);
-                PRev0165 = currentRevenge.accused_hero.HeroObject.IsClanLeader;
-                PRev0168 = CheckConditions(hero, currentRevenge.accused_hero.HeroObject, _cfg.values.ai.lastWordsIdPRev0168);
-                //log($"Conditions: {PRev0149},{PRev0150},{PRev0151},{PRev0152},{PRev0153},{PRev0154},{PRev0155},{PRev0156},{PRev0157}");
-
-            }
-            /*
-                        foreach (var x in currentRevenge.quest_Results)
-                        {
-                            log($"C: {x}");
-                        }
-            */
             if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.party_no_decision))
             {
                 text = new TextObject("{=PRev0102}A good decision...");
 
-                if (PRev0168)
+                if (conditions.ElementAt(11))
                 {
                     text = new TextObject("{=PRev0168}So my friend dodged the merciless execution.");
                 }
-                else if (PRev0149)
+                else if (conditions.ElementAt(0))
                 {
                     text = new TextObject("{=PRev0149}So my friend got away with it.");
                 }
-                else if (PRev0150)
+                else if (conditions.ElementAt(1))
                 {
                     text = new TextObject("{=PRev0150}I'm glad my friend is safe.");
                 }
-                else if (PRev0151)
+                else if (conditions.ElementAt(2))
                 {
                     text = new TextObject("{=PRev0151}This bastard should have died.");
                 }
-                else if (PRev0152)
+                else if (conditions.ElementAt(3))
                 {
                     text = new TextObject("{=PRev0152}This bastard deserve your pity.");
                 }
-                else if (PRev0157)
+                else if (conditions.ElementAt(8))
                 {
                     text = new TextObject("{=PRev0157}The hag is lucky again...");
                 }
-                else if (PRev0165)
+                else if (conditions.ElementAt(10))
                 {
                     text = new TextObject("{=PRev0165}The clan leaders are always immune to peasant opinions.");
                 }
@@ -2791,27 +2955,27 @@ namespace PeasantRevenge
             {
                 text = new TextObject("{=PRev0168}You will regret it!");
 
-                if (PRev0153)
+                if (conditions.ElementAt(4))
                 {
                     text = new TextObject("{=PRev0153}Death by a peasant's axe is not honorable to me.");
                 }
-                else if (PRev0154)
+                else if (conditions.ElementAt(5))
                 {
                     text = new TextObject("{=PRev0154}I have got nothing from that village looting.");
                 }
-                else if (PRev0155)
+                else if (conditions.ElementAt(6))
                 {
                     text = new TextObject("{=PRev0155}This bastard should have died.");
                 }
-                else if (PRev0156)
+                else if (conditions.ElementAt(7))
                 {
                     text = new TextObject("{=PRev0156}I do not deserve such a fate.");
                 }
-                else if (PRev0157)
+                else if (conditions.ElementAt(8))
                 {
                     text = new TextObject("{=PRev0158}Hope the princess is happy with all the treasures.");
                 }
-                else if (PRev0165)
+                else if (conditions.ElementAt(10))
                 {
                     text = new TextObject("{=PRev0166}The clan leader is responsible for all of this!");
                 }
@@ -2820,43 +2984,41 @@ namespace PeasantRevenge
             {
                 text = new TextObject("{=PRev0135}These criminals are too dangerous.");
 
-                if (PRev0151)
+                if (conditions.ElementAt(2))
                 {
                     text = new TextObject("{=PRev0159}This bastard deserved to die.");
                 }
-                else if (PRev0152)
+                else if (conditions.ElementAt(3))
                 {
                     text = new TextObject("{=PRev0160}I'm glad. This bastard does not deserved your pity.");
                 }
-                else if (PRev0157)
+                else if (conditions.ElementAt(8))
                 {
                     text = new TextObject("{=PRev0161}The hag run out of luck this time.");
                 }
-                else if (PRev0150)
+                else if (conditions.ElementAt(1))
                 {
                     text = new TextObject("{=PRev0162}Was a good friend, but friendship ended today.");
                 }
-                else if (PRev0154)
+                else if (conditions.ElementAt(5))
                 {
                     text = new TextObject("{=PRev0163}I have got nothing from that village looting anyway.");
                 }
-                else if (acc_PRev0154)
+                else if (conditions.ElementAt(9))
                 {
                     text = new TextObject("{=PRev0164}Such a shameful end for the greedy bastard.");
                 }
-                else if (PRev0165)
+                else if (conditions.ElementAt(10))
                 {
                     text = new TextObject("{=PRev0167}The bad clan leader is not the good example.");
                 }
-
-
             }
             else
             {
                 text = new TextObject("{=PRev0018}But, but...");
             }
 
-            if (hero.IsHumanPlayerCharacter == false)
+            if (criminal_hero.IsHumanPlayerCharacter == false)
             {
                 //Emotions can be added only for the npc.
                 int emotion_index = MBRandom.RandomInt(0, Common.emotion_list.Count - 1);
@@ -2865,13 +3027,13 @@ namespace PeasantRevenge
 
             MBTextManager.SetTextVariable("PLCOMMENTLAST", text, false);
 
-            if (hero.IsHumanPlayerCharacter)
+            if (criminal_hero.IsHumanPlayerCharacter)
             {
                 return true;
             }
             else
             {
-                return currentRevenge.criminal.HeroObject == hero;
+                return currentRevenge.criminal.HeroObject == criminal_hero;
             }
         }
 
@@ -4631,16 +4793,27 @@ namespace PeasantRevenge
               (x.HeroObject.Clan == hero.Clan ||
               (x.HeroObject.Clan.Kingdom != null ? hero.Clan.Kingdom != null ? x.HeroObject.Clan.Kingdom == hero.Clan.Kingdom : false : false)));
 
-            //Adding more optional prisoners for more interesting galmeplay.
-
-            if (prisoners == null || prisoners.IsEmpty())
+            //Adding more optional prisoners for more interesting galmeplay. It may result in accusing a lort who is enemy of the criminal and ally of the hero.
+            //This will make interesting situation, where hero must betray his ally, or accuse him of sabotage...
+            if (_cfg.values.criminalAlwaysWillBlameOtherLordForTheCrime)
             {
-                prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes;
+                if (prisoners == null || prisoners.IsEmpty())
+                {
+                    prisoners = hero.PartyBelongedToAsPrisoner.PrisonerHeroes.Where((x) =>
+                    x != null &&
+                    x.HeroObject != null &&
+                    x.HeroObject.Clan != null &&
+                    x.HeroObject != hero &&
+                    CheckConditions(hero, x.HeroObject, _cfg.values.ai.criminalWillBlameOtherLordForTheCrime)); // For AI lets leave the trait condition active.So hero will choose someone from different clan or kingdom.
+                }
             }
-
             if (prisoners != null && !prisoners.IsEmpty())
             {
                 return prisoners.First();
+            }
+            else
+            {
+                //log($"{hero.Name} has no blame hero to accuse. He will be executed without any chance to blame someone else.");
             }
 
             return null;
@@ -4668,9 +4841,22 @@ namespace PeasantRevenge
             if (currentRevenge.party.LeaderHero == Hero.OneToOneConversationHero)
             {
                 var victims = currentRevenge.party.PrisonerHeroes.Where((x) =>
-               !x.HeroObject.Clan.IsAtWarWith(Hero.MainHero.Clan) && x.HeroObject != Hero.MainHero &&
+                x.HeroObject != Hero.MainHero &&
+               !x.HeroObject.Clan.IsAtWarWith(Hero.MainHero.Clan) &&
                (x.HeroObject.Clan == Hero.MainHero.Clan || (x.HeroObject.Clan.Kingdom != null ? Hero.MainHero.Clan.Kingdom != null ?
                x.HeroObject.Clan.Kingdom == Hero.MainHero.Clan.Kingdom : false : false)));
+
+                if (victims.IsEmpty())
+                {
+                    if (_cfg.values.criminalAlwaysWillBlameOtherLordForTheCrime)
+                    {
+                        //Trying to blame someone else. 
+                        victims = currentRevenge.party.PrisonerHeroes.Where((x) =>
+                        x.HeroObject != null &&
+                        x.HeroObject.Clan != null &&
+                        x.HeroObject != Hero.MainHero);
+                    }
+                }
 
                 if (!victims.IsEmpty() &&
                     !currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accusation_fail_both_blamed))/*preventing to talk about the discussed topic again*/

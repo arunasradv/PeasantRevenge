@@ -173,6 +173,12 @@
     <string id="PRev0165" text="클랜 리더들은 농민들의 의견에 항상 면역을 가지고 있어요." />
     <string id="PRev0166" text="부족장이 이 모든 것에 책임이 있습니다!" />
     <string id="PRev0167" text="나쁜 클랜 리더는 좋은 예가 아닙니다." />
-
+    <string id="PRev0168" text="후회하게 될 거야!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME}은 결국 내 형제자매야." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME}은 내 아내야." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME}은 내 남편이야." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME}은 같은 가문 출신이야." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME}은 같은 왕국 출신이야." />
+    <string id="PRev0174" text="공주님이라고요?" />
   </strings>
 </base>

@@ -173,5 +173,12 @@
     <string id="PRev0165" text="Лидеры клана всегда иммунны к мнению крестьян." />
     <string id="PRev0166" text="Лидер клана несёт ответственность за всё это!" />
     <string id="PRev0167" text="Плохой лидер клана не является хорошим примером." />
+    <string id="PRev0168" text="Вы пожалеете об этом!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME} все-таки мой брат." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} моя жена." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} мой муж." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} из того же клана." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} из того же королевства." />
+    <string id="PRev0174" text="Принцесса, говорите?" />
   </strings>
 </base>

@@ -13,7 +13,7 @@ namespace PeasantRevenge
 #pragma warning disable IDE1006 // Naming Styles
     public class PeasantRevengeConfiguration
     {
-        public int CfgVersion = 27;
+        public int CfgVersion = 28;
         public bool enableRevengerMobileParty = false;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
@@ -76,8 +76,9 @@ namespace PeasantRevenge
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
         public float lordTryPersuadeNotableProbability = 0.6f;
         public float lordGainNewTraitProbability = 0.05f;
-        public bool onlyPlayerCanExecuteLords = true;
+        public bool onlyPlayerCanExecuteLords = false;
         public float lastWordsSuccessChance = 0.9f;
+        public bool criminalAlwaysWillBlameOtherLordForTheCrime = true;
         public AIfilters ai;
 
         public static string default_file_name()

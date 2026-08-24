@@ -173,5 +173,12 @@
     <string id="PRev0165" text="Liderzy klanu są zawsze odporni na opinie kреśćяniów." />
     <string id="PRev0166" text="Lider klanu jest odpowiedzialny za wszystko to!" />
     <string id="PRev0167" text="Zły lider klanu nie jest dobrym przykładem." />
+    <string id="PRev0168" text="Pożałujesz!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME} jest jednak moim rodzeństwem." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} jest moją żoną." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} jest moim mężem." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} jest z tego samego klanu." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} jest z tego samego królestwa." />
+    <string id="PRev0174" text="Księżniczka, powiadasz?." />
   </strings>
 </base>

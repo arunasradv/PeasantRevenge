@@ -172,5 +172,12 @@
     <string id="PRev0165" text="Los líderes de los clanes siempre son inmunes a las opiniones de los campesinos." />
     <string id="PRev0166" text="¡El líder del clan es el responsable de todo esto!" />
     <string id="PRev0167" text="El mal líder del clan no es un buen ejemplo." />
+    <string id="PRev0168" text="¡Te arrepentirás!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME} es mi hermano/a después de todo." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} es mi esposa." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} es mi esposo." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} es del mismo clan." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} es del mismo reino." />
+    <string id="PRev0174" text="¿Princesa, dices?." />
   </strings>
 </base>

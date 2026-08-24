@@ -173,5 +173,12 @@
     <string id="PRev0165" text="クランのリーダーたちは農民の意見に対して常に無関心である。" />
     <string id="PRev0166" text="クランのリーダーはすべての責任を負っている！" />
     <string id="PRev0167" text="悪いクランのリーダーは良い例ではない。" />
+    <string id="PRev0168" text="後悔するぞ！" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME}は私の兄弟だ。" />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME}は私の妻だ。" />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME}は私の夫だ。" />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME}は同じ一族だ。" />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME}は同じ王国だ。" />
+    <string id="PRev0174" text="王女だと？" />
   </strings>
 </base>

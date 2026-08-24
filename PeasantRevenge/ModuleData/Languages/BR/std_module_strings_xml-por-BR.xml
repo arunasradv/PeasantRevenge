@@ -173,5 +173,12 @@
     <string id="PRev0165" text="Os líderes das tribos são sempre imunes às opiniões dos camponeses." />
     <string id="PRev0166" text="O líder da tribo é responsável por tudo isso!" />
     <string id="PRev0167" text="O mau líder da tribo não é um bom exemplo." />
+    <string id="PRev0168" text="Vai arrepender-se!" />
+    <string id="PRev0169" text="Afinal, {ACCUSED_HERO.NAME} é meu irmão/minha irmã." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} é a minha mulher." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} é o meu marido." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} é do mesmo clã." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} é do mesmo reino." />
+    <string id="PRev0174" text="Princesa, disseste?" />
   </strings>
 </base>

@@ -173,5 +173,12 @@
     <string id="PRev0165" text="Die Clankführer sind immer immun gegenüber den Meinungen der Bauern." />
     <string id="PRev0166" text="Der Clankführer ist verantwortlich für all das!" />
     <string id="PRev0167" text="Der schlechte Clankführer ist kein guter Vorbild." />
+    <string id="PRev0168" text="Du wirst es bereuen!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME} ist doch mein Geschwisterkind." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} ist meine Frau." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} ist mein Mann." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} gehört demselben Clan an." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} gehört demselben Königreich an." />
+    <string id="PRev0174" text="Prinzessin, sagst du?" />
   </strings>
 </base>

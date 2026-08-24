@@ -255,6 +255,11 @@ namespace PeasantRevenge
                     {
                         _cfg.values.ai.default_lastWordsIdPRev0168();
                     }
+
+                    if (_cfg.values.CfgVersion < 28)
+                    {
+                        _cfg.values.criminalAlwaysWillBlameOtherLordForTheCrime = true;
+                    }
                 }
             }
             else
