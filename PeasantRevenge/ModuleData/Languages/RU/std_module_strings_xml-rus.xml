@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Русский" />
+  </tags>
+  <strings>
+    <string id="PRev0001" text="Вы разграбили соседнюю деревню. Крестьяне требуют отрубить кому-нибудь голову. Что вы скажете?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0002" text="Просто любопытно, {PEASANTREVENGER.LINK} говорит, что вы ранее разграбили свою деревню. Крестьянин хочет оторвать вам голову. Что вы скажете?[if: convo_thinking][if:idle_happy]" />
+    <string id="PRev0003" text="Я заплачу {REPARATION}{GOLD_ICON}." />
+    <string id="PRev0004" text="Я не буду платить." />
+    <string id="PRev0005" text="Я не буду платить этой крысе." />
+    <string id="PRev0006" text="Это был план {COMPANION.NAME}! (ложь)" />
+    <string id="PRev0007" text="Вы уверены, что все было именно так, как вы говорите?[if:convo_thinking][ib:closed]" />
+    <string id="PRev0008" text="Нет!" />
+    <string id="PRev0009" text="Да!" />
+    <string id="PRev0010" text="Ну, может быть, не крестьянину решать вашу судьбу...[if:convo_thinking]" />
+    <string id="PRev0011" text="Заплатите за свое преступление.[rf:idle_angry][if:convo_bored]" />
+    <string id="PRev0012" text="Ну, я доволен этим.[ib:happy]" />
+    <string id="PRev0013" text="Ну, это прискорбно.[ib:warrior][if:convo_bored][rf:convo_grave]" />
+    <string id="PRev0014" text="Ваш заключенный {CRIMINAL.LINK} разграбил нашу деревню. Мы требуем голову преступника на пике! Что вы скажете?[if:convo_furious][ib:aggressive]" />
+    <string id="PRev0015" text="{CRIMINAL.NAME} умрет." />
+    <string id="PRev0016" text="{CRIMINAL.NAME} выплатит {REPARATION}{GOLD_ICON}" />
+    <string id="PRev0017" text="Нет, это не твое дело, крестьянин!" />
+    <string id="PRev0018" text="Но, но...[ib:demure][if:convo_shocked]" />
+    <string id="PRev0019" text="Лучше, чем ничего...[ib:closed][if:idle_normal]" />
+    <string id="PRev0020" text="Месть![if:convo_happy][ib:happy]" />
+    <string id="PRev0021" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни. Мы требуем голову преступника на пике, потому что этот ублюдок должен заплатить за преступление! Что вы скажете?[ib:aggressive][if:convo_furious]" />
+    <string id="PRev0022" text="Я не подчиняюсь крестьянским требованиям! И {HERO.NAME} тоже должен!" />
+    <string id="PRev0023" text="Я не буду платить! Преступник {CVICTIM.NAME} может умереть!" />
+    <string id="PRev0024" text="Как ты смеешь! Ты умрешь!" />
+    <string id="PRev0025" text="Лучше, чем ничего...[ib:closed][if:idle_angry][rf:idle_angry]" />
+    <string id="PRev0026" text="Но, но...[if:convo_furious][ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+    <string id="PRev0027" text="И я отправлю твою голову {HERO.NAME}!" />
+    <string id="PRev0028" text="Значит, преступник умрет.[ib:closed][if:happy]" />
+    <string id="PRev0029" text="Криминальный авторитет мертв![ib:closed][if:happy]" />
+    <string id="PRev0030" text="Смотрите, крестьянин убил нашего пленника![ib:convo_bared_teeth][if:convo_shocked][if:convo_astonished]" />
+    <string id="PRev0031" text="{?GIFT_RECEIVER.GENDER}леди{?}правители{\\?} {GIFT_RECEIVER.LINK} просит у вас золото в качестве выкупа {RANSOM_COMPENSATION}{GOLD_ICON}.[ib:convo_nervous][if:convo_grave]" />
+    <string id="PRev0032" text="Я ничего не буду платить." />
+    <string id="PRev0033" text="Пожалуйста, передайте этот подарок {GIFT_RECEIVER.NAME}." />
+    <string id="PRev0034" text="Ваш выкуп мертв, и теперь вы тоже умрете!" />
+    <string id="PRev0035" text="Подарок?[if:convo_thinking]" />
+    <string id="PRev0036" text="Поэтому вы не можете заплатить...[ib:closed][if:idle_angry]" />
+    <string id="PRev0037" text="Мы довольны.[if:convo_happy]" />
+    <string id="PRev0038" text="Это несправедливо.[ib:closed][if:idle_angry]" />
+    <string id="PRev0039" text="Но я посыльный...[ib:convo_bared_teeth][ib:aggressive][if:convo_astonished]" />
+    <string id="PRev0040" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, поскольку {SAVER.NAME} заплатил {REPARATION}{GOLD_ICON}" />
+    <string id="PRev0041" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, поскольку {PRISONER.NAME} заплатил {REPARATION}{GOLD_ICON}" />
+    <string id="PRev0042" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, потому что это другое королевство" />
+    <string id="PRev0043" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, потому что {SAVER.NAME} казнил известного крестьянина {EXECUTIONER.NAME}" />
+    <string id="PRev0044" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, потому что друзья" />
+    <string id="PRev0045" text="{SAVER.NAME} заплатил {REPARATION}{GOLD_ICON} за голову {PRISONER.NAME} {EXECUTIONER.NAME}" />
+    <string id="PRev0046" text="{HERO.NAME} заплатил {REPARATION}{GOLD_ICON} {EXECUTIONER.NAME}." />
+    <string id="PRev0047" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME}, потому что друзья" />
+    <string id="PRev0048" text="Вы имеете дело с преступниками в этой деревне?" />
+    <string id="PRev0049" text="Нет, мне все равно.[ib:closed]" />
+    <string id="PRev0050" text="Ваши преступные намерения мне хорошо известны." />
+    <string id="PRev0051" text="Я могу научить вас своим примером..." />
+    <string id="PRev0052" text="Вот, возьмите {BRIBEVALUE}{GOLD_ICON}. Заставьте преступников заплатить за свои преступления!" />
+    <string id="PRev0053" text="Большое спасибо![if:convo_astonished]" />
+    <string id="PRev0054" text="Они будут делать то, что хотят. Не мое дело вмешиваться.[ib:closed][if:angry]" />
+    <string id="PRev0055" text="Не имеют необходимых характеристик" />
+    <string id="PRev0056" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME}, потому что у них хорошие отношения." />
+    <string id="PRev0057" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME}, так как является родственником." />
+    <string id="PRev0058" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME}, потому что у них хорошие отношения." />
+    <string id="PRev0059" text="{PARTYOWNER.NAME} не казнили {PRISONER.NAME}, так как являются родственниками." />
+    <string id="PRev0060" text="Подарок {PROPOSEDTO.NAME}" />
+    <string id="PRev0061" text="{PROPOSING_HERO.NAME} ВОЗМЕЩЕНИЕ " />
+    <string id="PRev0062" text="А что, если я не буду платить?" />
+    <string id="PRev0063" text="Крестьянин получит твою голову.[if:convo_thinking][rf:convo_grave][ib:closed]" />
+    <string id="PRev0064" text="Все будет хорошо.[if:convo_happy][if:convo_thinking][ib:closed]" />
+    <string id="PRev0065" text="У меня есть друзья, которые оплатят возмещение." />
+    <string id="PRev0066" text="{SAVER.NAME} поддержит вас." />
+    <string id="PRev0067" text="{SUPPORTERCOUNT} герои могут вас поддержать." />
+    <string id="PRev0068" text="{PARTYLEADER.LINK} поймал {CRIMINAL.LINK} на грабеже нашей деревни, а {CVICTIM.LINK} был обвинен в планировании всего этого. Мы требуем справедливости![ib:aggressive][if:convo_furious]" />
+    <string id="PRev0069" text="{CRIMINAL.NAME} обвинил {CRIMINALBLAMED.NAME} в разграблении деревни." />
+    <string id="PRev0070" text="Они оба преступники!" />
+    <string id="PRev0071" text="Что говорит об этом преступник?" />
+    <string id="PRev0072" text="Не слушайте этого подонка.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0073" text="Могу поклясться! Это был план {CVICTIM.LINK}![rf:convo_grave][ib:closed]" />
+    <string id="PRev0074" text="{CVICTIM.LINK} – преступник.[rf:convo_angry][ib:closed]" />
+    <string id="PRev0075" text="Я вам верю" />
+    <string id="PRev0076" text="Вы лжете." />
+    <string id="PRev0077" text="Вы оба заслуживаете крестьянской мести!" />
+    <string id="PRev0078" text="У меня нет времени говорить.[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0079" text="Позвольте мне рассказать вам, как вы будете говорить со мной о своих проблемах." />
+    <string id="PRev0080" text="Какие проблемы?[if:convo_thinking]" />
+    <string id="PRev0081" text="Вы не должны немедленно прерывать меня своими вопросами." />
+    <string id="PRev0082" text="Вы должны немедленно перебить меня любым вашим вопросом." />
+    <string id="PRev0083" text="Не важно." />
+    <string id="PRev0084" text="Да, моя {?MAINHERO.GENDER}леди{?}правители{\\?}.[rf:idle_happy]" />
+    <string id="PRev0085" text="Мститель" />
+    <string id="PRev0086" text="Вы решили..." />
+    <string id="PRev0087" text="Объявите войну {KINGDOM} и помогите {DEFENDER}." />
+    <string id="PRev0088" text="Отключить мобильную группу известных крестьян" />
+    <string id="PRev0089" text="Включить выдающуюся мобильную группу крестьян" />
+    <string id="PRev0090" text="Отключить возможность защищать деревню от нейтральной мобильной группы" />
+    <string id="PRev0091" text="Включить защиту деревни от нейтральной мобильной группы" />
+    <string id="PRev0092" text="Я буду защищать деревни от мародеров." />
+    <string id="PRev0093" text="Я буду защищать деревни только от врагов." />
+    <string id="PRev0094" text="Я должен уйти." />
+    <string id="PRev0095" text="Я хотел бы кое-что обсудить." />
+    <string id="PRev0096" text="{RANSOMER.LINK} предлагает вам {GOLD_AMOUNT}{GOLD_ICON} в качестве выкупа, если вы отдадите {CAPTIVE_HERO.NAME} останки." />
+    <string id="PRev0097" text="Никто не хочет платить за останки {CAPTIVE_HERO.NAME}" />
+    <string id="PRev0098" text="Я не могу принять решение..." />
+    <string id="PRev0099" text="Хорошее решение...[ib:happy][if:idle_normal]" />
+    <string id="PRev0100" text="Я не могу принять решение...[if:convo_thinking][ib:closed]" />
+    <string id="PRev0101" text="Да будет так[rf:convo_angry][ib:closed]" />
+    <string id="PRev0102" text="Хорошее решение..." />
+    <string id="PRev0103" text="{PARTYOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
+    <string id="PRev0104" text="{SETTLEMENTOWNER.NAME} не казнил {PRISONER.NAME} из-за противоречивых обвинений." />
+    <string id="PRev0105" text="Я возьму останки." />
+    <string id="PRev0106" text="..." />
+    <string id="PRev0107" text="Тебе следует отказаться от мести, иначе..." />
+    <string id="PRev0108" text="Что еще?[rf:idle_angry][ib:closed][if:idle_angry]" />
+    <string id="PRev0109" text="Я отрублю тебе голову!" />
+    <string id="PRev0110" text="Возвращайтесь в свою деревню!" />
+    <string id="PRev0111" text="{CRIMINAL.NAME} и {CVICTIM.LINK} мертвы! Моя месть завершена![if:happy]" />
+    <string id="PRev0112" text="Я завершил месть {CVICTIM.LINK}![if:happy]" />
+    <string id="PRev0113" text="{CRIMINAL.LINK} заплатит {GOLD_ICON} или умрет![rf:idle_angry][ib:angry]" />
+    <string id="PRev0114" text="Никто не сможет остановить мою месть {CRIMINAL.LINK}![rf:idle_angry][if:convo_furious][ib:angry]" />
+    <string id="PRev0115" text="Ваша группа слишком маленькая" />
+    <string id="PRev0116" text="{CRIMINAL.LINK} умрет![if:convo_furious][ib:angry]" />
+    <string id="PRev0117" text="Хватит, я не изменю своих намерений![ib:closed][if:convo_bared_teeth][if:idle_angry]" />
+    <string id="PRev0118" text="Вот возьмите {BRIBEVALUE}{GOLD_ICON}. Благородные люди для вас не преступники." />
+    <string id="PRev0119" text="Не сейчас." />
+    <string id="PRev0120" text="Они нарушают закон и понесут ответственность за свои преступления.[ib:closed][if:angry]" />
+    <string id="PRev0121" text="Я не могу обещать..[ib:closed]" />
+    <string id="PRev0122" text="Взятка пока не сработает." />
+    <string id="PRev0123" text="Невозможно дать взятку. Крестьянские качества не позволяют." />
+    <string id="PRev0124" text="Да. Почему вы спрашиваете?[ib:closed][rf:convo_thinking]" />
+    <string id="PRev0125" text="Я признаю.[if:convo_thinking][if:convo_grave]" />
+    <string id="PRev0126" text="{EXECUTIONER.LINK} отрубит вам голову!" />
+    <string id="PRev0127" text="Правосудие требует, чтобы вы заплатили за свои преступления." />
+    <string id="PRev0128" text="Вы правы." />
+    <string id="PRev0129" text="Что тут обсуждать?" />
+    <string id="PRev0130" text="Может быть..." />
+    <string id="PRev0131" text="Я думаю...[ib:thinking]" />
+    <string id="PRev0132" text="Никто не должен бояться этих преступников." />
+    <string id="PRev0133" text="Кто-то должен понести ответственность за разрушение наших деревень." />
+    <string id="PRev0134" text="Держите правосудие в своих руках." />
+    <string id="PRev0135" text="Эти преступники слишком опасны." />
+    <string id="PRev0136" text="Пожалеть врага - значит найти друга." />
+    <string id="PRev0137" text="Отдайте правосудие в руки знати. Вы не так важны." />
+    <string id="PRev0138" text="Все слышали ваши враждебные речи в адрес знатных людей." />
+    <string id="PRev0139" text="Ваша доброта к врагу преступна." />
+    <string id="PRev0140" text="Все знают, что я говорю правду." />
+    <string id="PRev0141" text="Ваше обвинение необоснованно.[ib:nervous][if:convo_astonished]"/>
+    <string id="PRev0142" text="Не ждите, что я изменю свой образ жизни." />
+    <string id="PRev0143" text="Допустим, это было недоразумение." />
+    <string id="PRev0144" text="Отличный вопрос! Позвольте мне показать мой пример..." />
+    <string id="PRev0145" text="Чтобы убедить крестьянина" />
+    <string id="PRev0146" text="Изгнать мужика" />
+    <string id="PRev0147" text="Изгнать или казнить крестьянина" />
+    <string id="PRev0148" text="Крестьяне накажут тебя и твоего сообщника {ACCUSEDHERO.LINK}." />
+
+    <string id="PRev0149" text="Так что моему другу это сошло с рук." />
+    <string id="PRev0150" text="Я рад, что мой друг в безопасности." />
+    <string id="PRev0151" text="Этот ублюдок должен был умереть." />
+    <string id="PRev0152" text="Этот ублюдок заслуживает вашего сочувствия." />
+    <string id="PRev0153" text="Смерть от секи крестьянина - это не честь для меня." />
+    <string id="PRev0154" text="Я не получил ничего от того, что было в деревне." />
+    <string id="PRev0155" text="Этот ублюдок должен был умереть." />
+    <string id="PRev0156" text="Я не заслуживаю такого исхода." />
+    <string id="PRev0157" text="Эта ведьма снова везёт..." />
+    <string id="PRev0158" text="Надеюсь, принцесса будет довольна всеми сокровищами." />
+    <string id="PRev0159" text="Этот ублюдок заслуживает смерти." />
+    <string id="PRev0160" text="Я рад. Этот ублюдок не заслуживает вашего сочувствия." />
+    <string id="PRev0161" text="Эта ведьма закончила свою удачу." />
+    <string id="PRev0162" text="Был хорошим другом, но дружба закончилась сегодня." />
+    <string id="PRev0163" text="В любом случае, я не получил ничего от того, что было в деревне." />
+    <string id="PRev0164" text="Такое позорное окончание для алчного ублюдка." />
+    <string id="PRev0165" text="Лидеры клана всегда иммунны к мнению крестьян." />
+    <string id="PRev0166" text="Лидер клана несёт ответственность за всё это!" />
+    <string id="PRev0167" text="Плохой лидер клана не является хорошим примером." />
+    <string id="PRev0168" text="Вы пожалеете об этом!" />
+    <string id="PRev0169" text="{ACCUSED_HERO.NAME} все-таки мой брат." />
+    <string id="PRev0170" text="{ACCUSED_HERO.NAME} моя жена." />
+    <string id="PRev0171" text="{ACCUSED_HERO.NAME} мой муж." />
+    <string id="PRev0172" text="{ACCUSED_HERO.NAME} из того же клана." />
+    <string id="PRev0173" text="{ACCUSED_HERO.NAME} из того же королевства." />
+    <string id="PRev0174" text="Принцесса, говорите?" />
+  </strings>
+</base>

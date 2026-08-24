@@ -1,0 +1,4 @@
+{
+    "dotnet.defaultSolution": "PeasantRevengeLinux.sln",
+    "idf.pythonInstallPath": "/usr/bin/python3"
+}

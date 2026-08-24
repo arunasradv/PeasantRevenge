@@ -1,0 +1,8 @@
+#rm -r "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge"
+mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge"
+mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/bin"
+mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/bin/Win64_Shipping_Client"
+mkdir -p "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/ModuleData"
+cp "/home/arunas/Developement/GitHub/PeasantRevenge/PeasantRevenge/SubModule.xml" "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/"
+cp "/home/arunas/Developement/GitHub/PeasantRevenge/PeasantRevenge/bin/Debug/net472/PeasantRevenge.dll" "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/bin/Win64_Shipping_Client/PeasantRevenge.dll"
+cp -r "/home/arunas/Developement/GitHub/PeasantRevenge/PeasantRevenge/ModuleData" "/home/arunas/.steam/debian-installation/steamapps/common/Mount & Blade II Bannerlord/Modules/PeasantRevenge/"
