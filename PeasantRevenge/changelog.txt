@@ -225,4 +225,4 @@ Improved lord/player last comment just after execution decision.
      Addedconfiguration variable  "onlyPlayerCanExecuteLords". Added "lastWordsSuccessChance" (not quite finished feature). For now it is random chance (90%) to revert the execution. improved "Kingdom" checks so null exception may not happen in some very moded games.
 
 2026-08-24 Mod version: 28.0.0.0. Game version: 1.4.8.
-     v27.0.0.0 Changelog.
+     Added criminalAlwaysWillBlameOtherLordForTheCrime, if it is true more heroes could be blamed by AI and player (with different clan, kingdom). AI still is using criminalWillBlameOtherLordForTheCrime. Added more dialog variations , when ending the blaming. Reverting the accusation only result in "no decision" for now.
