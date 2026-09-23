@@ -180,5 +180,6 @@
     <string id="PRev0172" text="{ACCUSED_HERO.NAME}は同じ一族だ。" />
     <string id="PRev0173" text="{ACCUSED_HERO.NAME}は同じ王国だ。" />
     <string id="PRev0174" text="王女だと？" />
+    <string id="PRev0175" text="それは事実ではありません。今度こそ、正しい決断をしましょう。" />
   </strings>
 </base>
