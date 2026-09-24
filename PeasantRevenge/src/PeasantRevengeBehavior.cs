@@ -2063,7 +2063,7 @@ namespace PeasantRevenge
                "peasant_revenge_peasants_start_grievance_received",
                "peasant_revenge_peasants_finish_criminal_comment",
                "{=PRev0015}{CRIMINAL.NAME} will die.",
-               null,
+               () => { return true; },
                () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_killed); }, 100, null, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_start_grievance_requested_pay",
@@ -2116,52 +2116,62 @@ namespace PeasantRevenge
               "peasant_revenge_peasants_ask_criminal_options",
               "peasant_revenge_peasants_finish_criminal_comment",
               "{=PRev0075}I believe you.",
-              null, () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.accused_hero_killed); }, 90, null, null);
+              () => { return true; }, () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.accused_hero_killed); }
+              , 90, null, null);
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_peasants_ask_criminal_option_1",
               "peasant_revenge_peasants_ask_criminal_options",
               "peasant_revenge_peasants_finish_criminal_comment",
               "{=PRev0076}You are lying.",
-              null, () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_killed); }, 90, null, null);
+              () => { return true; }, () => { currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_killed); }
+              , 90, null, null);
             campaignGameStarter.AddPlayerLine(
                "peasant_revenge_peasants_ask_criminal_option_2",
                "peasant_revenge_peasants_ask_criminal_options",
                "peasant_revenge_peasants_finish_criminal_comment",
                "{=PRev0077}You both deserve the peasants revenge!",
-               null, () =>
+               () => { return true; }, () =>
                {
                    currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.accused_hero_killed);
                    currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.criminal_killed);
                }, 90, null, null);
             campaignGameStarter.AddPlayerLine(
-               "peasant_revenge_peasants_ask_criminal_option_2",
+               "peasant_revenge_peasants_ask_criminal_option_3",
                "peasant_revenge_peasants_ask_criminal_options",
                "peasant_revenge_peasants_finish_criminal_comment",
                "{=PRev0098}I cannot decide...",
-               null, () =>
+               () => { return true; }, () =>
                {
                    currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision);
                },
                90, null, null);
+
             campaignGameStarter.AddDialogLine(
              "peasant_revenge_peasants_finish_criminal_killed_end",
              "peasant_revenge_peasants_finish_criminal_comment",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
              "{=PRev0020}Revenge![if:convo_happy][ib:happy]",
-             () => { return currentRevenge.executioner.HeroObject == Hero.OneToOneConversationHero; },
+             () =>
+             {
+                 return currentRevenge.executioner.HeroObject == Hero.OneToOneConversationHero;
+             },
              null, 120, null);
+
+            // TODO: Here must be differnt comments, because there is no accused hero and the criminal cannot blame other hero.
+            // This option is active from peasant_revenge_peasants_ask_criminal_options.
             campaignGameStarter.AddDialogLine(
-               "peasant_revenge_peasants_finish_criminal_comment_pos_end",
-               "peasant_revenge_peasants_finish_criminal_comment",
-               "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
-                "{PLCOMMENTLAST}", () => { return peasant_revenge_hero_last_words_condition(Hero.OneToOneConversationHero); },
-                null, 120, null);
+            "peasant_revenge_peasants_finish_criminal_comment_pos_end",
+            "peasant_revenge_peasants_finish_criminal_comment",
+            "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
+            "{PLCOMMENTLAST}", () => { return peasant_revenge_hero_last_words_condition(currentRevenge.criminal.HeroObject); },
+            null, 120, null);
+
             campaignGameStarter.AddPlayerLine(
               "peasant_revenge_player_demand_lost_ransom_leave",
               "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
               "close_window",
               "{=PRev0094}I must leave now.",
-              null, () =>
+              () => { return true; }, () =>
               {
                   if (currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.accused_hero_killed) &&
                     currentRevenge.quest_Results.Contains(PeasantRevengeData.quest_result.criminal_killed))
@@ -2191,6 +2201,7 @@ namespace PeasantRevenge
                   currentRevenge.Stop();
                   leave_encounter();
               }, 100, null, null);
+
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_player_demand_lost_ransom_take_c_body_ransom",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
@@ -2210,7 +2221,10 @@ namespace PeasantRevenge
                      peasant_revenge_peasant_messenger_kill_both_consequence();
                      AddKilledLordsCorpses(currentRevenge);
                      peasant_revenge_player_demand_ransom_consequence(currentRevenge.criminal.HeroObject);
-                     peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                     if (currentRevenge.accused_hero != null)
+                     {
+                         peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                     }
 
                  }
                  else
@@ -2225,12 +2239,17 @@ namespace PeasantRevenge
                      {
                          peasant_revenge_peasant_messenger_kill_victim_consequence();
                          AddKilledLordsCorpses(currentRevenge);
-                         peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                         if (currentRevenge.accused_hero != null)
+                         {
+                             peasant_revenge_player_demand_ransom_consequence(currentRevenge.accused_hero.HeroObject);
+                         }
                      }
                  }
                  currentRevenge.Stop();
                  leave_encounter();
              }, 90, null, null);
+
+
             campaignGameStarter.AddPlayerLine(
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options_last_words_fail",
              "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
@@ -2239,7 +2258,8 @@ namespace PeasantRevenge
              () =>
              {
                  return currentRevenge.accused_hero != null;
-             }, () =>
+             },
+             () =>
              {
                  currentRevenge.quest_Results.Clear();
                  currentRevenge.quest_Results.Add(PeasantRevengeData.quest_result.party_no_decision);
@@ -2247,19 +2267,26 @@ namespace PeasantRevenge
                  peasant_revenge_peasant_messenger_not_kill_hero_consequence();
                  leave_encounter();
              }, 80, null, null);
+
             campaignGameStarter.AddPlayerLine(
-                         "peasant_revenge_peasants_finish_criminal_killed_c_pl_options_last_words_success",
-                         "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
-                         "close_window",
-                         "{COMMENTLASTANSWER}",
-                         () =>
-                         {
-                             return peasant_revenge_hero_last_words_success_condition(currentRevenge.criminal.HeroObject, Hero.MainHero, currentRevenge.accused_hero.HeroObject);
-                         }, () =>
-                         {
-                             current_revenge_reverse_the_revenge_results();
-                             leave_encounter();
-                         }, 80, null, null);
+            "peasant_revenge_peasants_finish_criminal_killed_c_pl_options_last_words_success",
+            "peasant_revenge_peasants_finish_criminal_killed_c_pl_options",
+            "close_window",
+            "{COMMENTLASTANSWER}",
+            () =>
+            {
+                if (currentRevenge.accused_hero == null)
+                {
+                    return false;
+                }
+
+                return peasant_revenge_hero_last_words_success_condition(currentRevenge.criminal.HeroObject, Hero.MainHero, currentRevenge.accused_hero.HeroObject);
+            },
+            () =>
+            {
+                current_revenge_reverse_the_revenge_results();
+                leave_encounter();
+            }, 80, null, null);
 
             campaignGameStarter.AddDialogLine(
                "peasant_revenge_peasants_finish_denied_end",
