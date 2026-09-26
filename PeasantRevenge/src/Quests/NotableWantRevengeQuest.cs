@@ -27,22 +27,21 @@ namespace PeasantRevenge
     // Any method that is calling it will crash the game.
     public class NotableWantRevengeQuest : QuestBase
     {
-        [SaveableField(10)]
+        [SaveableField(1)]
         private Settlement _targetSettlement; // The raided village
 
-        [SaveableField(11)]
+        [SaveableField(2)]
         private Hero _targetHero; // Hero who raided the village
 
-        [SaveableField(13)]
+        [SaveableField(3)]
         private JournalLog _startQuestLog;
 
-        [SaveableField(14)]
+        [SaveableField(4)]
         private CampaignTime _questGiverTravelStart;
 
-        [SaveableField(15)]
+        [SaveableField(5)]
         private Hero _accusedHeroByTargetHero; // Hero who got accused of the crime by _targetHero       
 
-        [SaveableField(16)]
         List<event_status> _status = new List<event_status>();
         //private event_status pr_event_status = event_status.none;
 
@@ -239,6 +238,11 @@ namespace PeasantRevenge
             get { return new TextObject("{=*}You betrayed someone and completed the quest."); }
         }
 
+        protected TextObject IssueAICompletedTheQuestText
+        {
+            get { return new TextObject("{=*}Revenger completed the quest."); }
+        }
+
         public static bool HeroIsPlayersPrisoner(Hero hero)
         {
             if (hero == null)
@@ -302,7 +306,7 @@ namespace PeasantRevenge
 
                 base.RemoveTrackedObject(this._targetHero);
                 this._targetHero = null;
-                //base.AddLog(IssueSuccessText);
+                //base.AddLog(IssueSuccessText); //Letting the player to get to the peasant and complete the quest.
             }
             else if (_status.Contains(event_status.party_denied) ||
              _status.Contains(event_status.clan_denied) ||
@@ -831,7 +835,7 @@ namespace PeasantRevenge
                                         log_message.Add("{=PRev0043}{PARTYOWNER.NAME} decided not to execute {PRISONER.NAME} after {SAVER.NAME} executed the notable peasant {EXECUTIONER.NAME}");
                                         message += $"{this._targetHero.PartyBelongedToAsPrisoner.MobileParty.Owner.Name} did not executed {this._targetHero.Name}, because {saver.Name} executed peasant messenger {base.QuestGiver.Name}. Saver gold {saver.Gold}. Prisoner gold {this._targetHero.Gold}.";
                                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(this._targetHero.PartyBelongedToAsPrisoner.MobileParty.Owner, saver, _cfg.values.relationChangeWhenLordKilledMessenger, false);
-                                        KillCharacterAction.ApplyByExecution(base.QuestGiver, saver, false, false);
+                                        KillCharacterAction.ApplyByExecution(base.QuestGiver, saver, true, true);
                                     }
                                     else
                                     {
@@ -955,6 +959,17 @@ namespace PeasantRevenge
                 status.Add(event_status.party_denied);
             }
         SkipToEnd:
+
+            if (
+            status.Contains(event_status.criminal_killed) ||
+            status.Contains(event_status.accused_hero_killed) ||
+            status.Contains(event_status.criminal_paid) ||
+            status.Contains(event_status.clan_paid) ||
+            status.Contains(event_status.party_paid))
+            {
+                base.AddLog(IssueAICompletedTheQuestText);
+            }
+
             #region Log messages
 
             if (!string.IsNullOrEmpty(message))
@@ -1282,16 +1297,53 @@ namespace PeasantRevenge
               "quest_discuss",
               "quest_discuss_notable_revenge_quest_pl_options",
               "{=*}How are you dealing with my problem?[if:convo_delighted][ib:hip]",
-              new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+              () =>
+            {
+                bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                return this.NotableDialogCondition() && !AICompletedTheQuest;
+            },
               null,
               this, 100, null, null, null);
 
+            this.DiscussDialogFlow.AddDialogLine(
+              "quest_discuss_notable_revenge_quest_notable_start",
+              "quest_discuss",
+              "quest_discuss_notable_revenge_quest_pl_options",
+              "{=*}The issue is already solved by me.[if:convo_disbelief][ib:hip]",
+            () =>
+            {
+                bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                return this.NotableDialogCondition() && AICompletedTheQuest;
+            },
+              null,
+              this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddPlayerLine(
+                "quest_discuss_notable_revenge_quest_pl_options_0",
+                "quest_discuss_notable_revenge_quest_pl_options",
+                "close_window",
+                "{=*}Well, all right.",
+                () =>
+                {
+                    bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                    return this.NotableDialogCondition() && AICompletedTheQuest;
+                },
+                () =>
+                {
+                    CompleteQuestWithCancelConsequences();
+                }, this, 100, null, null, null);
+
+            //TODO:add more variations for the notable i.e: if player has no progress for some time, or other events... 
             this.DiscussDialogFlow.AddPlayerLine(
                 "quest_discuss_notable_revenge_quest_pl_options_1",
                 "quest_discuss_notable_revenge_quest_pl_options",
                 "quest_discuss_notable_revenge_quest_re_answer_1",
                 "{=*}It is in a progress.",
-                () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+                () =>
+                {
+                    bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                    return this.NotableDialogCondition() && !AICompletedTheQuest;
+                },
                 null, this, 100, null, null, null);
 
             this.DiscussDialogFlow.AddPlayerLine(
@@ -1299,7 +1351,7 @@ namespace PeasantRevenge
                 "quest_discuss_notable_revenge_quest_pl_options",
                 "peasant_revenge_discuss_fate_start",
                 "{=*}Let's discuss it.",
-                () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+                () => { return this.NotableDialogCondition(); },
                 null, this, 100, null, null, null);
 
             this.DiscussDialogFlow.AddPlayerLine(
@@ -1307,7 +1359,7 @@ namespace PeasantRevenge
                "quest_discuss_notable_revenge_quest_pl_options",
                "quest_discuss_notable_revenge_quest_re_answer_2",
                "{=*}I need to check something actually.",
-               () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+               () => { return this.NotableDialogCondition(); },
                null, this, 100, null, null, null);
 
             this.DiscussDialogFlow.AddDialogLine(
@@ -1315,18 +1367,37 @@ namespace PeasantRevenge
              "quest_discuss_notable_revenge_quest_re_answer_1",
              "close_window",
              "{=*}That's very good to hear![if:convo_merry]",
-             new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+            () => { return this.NotableDialogCondition(); },
              null,
              this, 100, null, null, null);
+
+            this.DiscussDialogFlow.AddDialogLine(
+            "quest_discuss_notable_revenge_quest_re_answer_2a_id",
+            "quest_discuss_notable_revenge_quest_re_answer_2",
+            "close_window",
+            "{=*}What's going on?. I already said-I took care of it.[ib:closed2][if:convo_astonished]",
+            () =>
+            {
+                bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                return this.NotableDialogCondition() && AICompletedTheQuest;
+            },
+            null,
+            this, 100, null, null, null);
 
             this.DiscussDialogFlow.AddDialogLine(
             "quest_discuss_notable_revenge_quest_re_answer_2_id",
             "quest_discuss_notable_revenge_quest_re_answer_2",
             "close_window",
             "{=*}Came back, when you have something.",
-            new ConversationSentence.OnConditionDelegate(this.NotableDialogCondition),
+            () =>
+            {
+                bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+                return this.NotableDialogCondition() && !AICompletedTheQuest;
+            },
             null,
             this, 100, null, null, null);
+
+
 
             PlayerDecideTheFateOfRaidersDialogFlow();
         }

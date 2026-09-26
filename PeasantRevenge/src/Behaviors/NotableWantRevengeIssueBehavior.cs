@@ -28,6 +28,24 @@ namespace PeasantRevenge
     /// </summary>
     internal class NotableWantRevengeIssueBehavior : CampaignBehaviorBase
     {
+        public class NotableWantRevengeIssueTypeDefiner : SaveableTypeDefiner
+        {
+            public NotableWantRevengeIssueTypeDefiner() : base(8269866)
+            {
+            }
+
+            protected override void DefineClassTypes()
+            {
+                base.AddClassDefinition(typeof(NotableWantRevengeIssue), 1);
+                base.AddClassDefinition(typeof(NotableWantRevengeQuest), 2);
+            }
+
+            // protected override void DefineEnumTypes()
+            // {
+            //     AddEnumDefinition(typeof(Common.event_status), 3);
+            // }
+        }
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnCheckForIssueEvent.AddNonSerializedListener(this, new Action<Hero>(this.OnCheckForIssue));
@@ -92,22 +110,5 @@ namespace PeasantRevenge
             return new NotableWantRevengeIssue(issueOwner);
         }
 
-        public class NotableWantRevengeIssueTypeDefiner : SaveableTypeDefiner
-        {
-            public NotableWantRevengeIssueTypeDefiner() : base(808269866)
-            {
-            }
-
-            protected override void DefineClassTypes()
-            {
-                base.AddClassDefinition(typeof(NotableWantRevengeIssue), 1, null);
-                base.AddClassDefinition(typeof(NotableWantRevengeQuest), 2, null);
-            }
-
-            // protected override void DefineEnumTypes()
-            // {
-            //     AddEnumDefinition(typeof(Common.event_status), 3);
-            // }
-        }
     }
 }

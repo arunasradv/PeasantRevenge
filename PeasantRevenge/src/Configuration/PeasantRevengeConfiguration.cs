@@ -1,4 +1,4 @@
-﻿//#define TESTING
+﻿#define TESTING
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,7 @@ namespace PeasantRevenge
     public class PeasantRevengeConfiguration
     {
         public int CfgVersion = 28;
-        public bool enableRevengerMobileParty = false;
+        public bool enableRevengerMobileParty = true;
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;

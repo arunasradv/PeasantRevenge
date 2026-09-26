@@ -16,9 +16,9 @@ namespace PeasantRevenge
 {
     public class NotableWantRevengeIssue : IssueBase
     {
-        [SaveableField(100)]
+        [SaveableField(1)]
         private Settlement _targetSettlement; // The raided village
-        [SaveableField(101)]
+        [SaveableField(2)]
         private Hero _targetHero; // Hero who raided the village           
                                   //[SaveableField(104)]
                                   //private JournalLosg _questProgressLogTest;
@@ -155,7 +155,9 @@ namespace PeasantRevenge
 
         public override bool IssueStayAliveConditions()
         {
-            if (base.IssueOwner.IsAlive)
+            if (base.IssueOwner.IsAlive &&
+            //The issue owner can change his traits. TODO: test it.
+            !CfgParser.hero_trait_list_condition(base.IssueOwner, _cfg.values.peasantRevengerExcludeTrait, out string parseerror))
             {
                 return true;
             }
