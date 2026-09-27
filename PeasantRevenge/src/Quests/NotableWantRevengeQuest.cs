@@ -347,8 +347,12 @@ namespace PeasantRevenge
                          this._targetHero.PartyBelongedToAsPrisoner != null &&
                         this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
                     {
+                        if (_status == null) //After game load it is null.
+                        {
+                            _status = new List<event_status>();
+                        }
 
-                        if (_status.IsEmpty() == false)// Has not reached any conclusion yet, so revenger want to move to target.
+                        if (_status.IsEmpty())// Has not reached any conclusion yet, so revenger want to move to target.
                         {
                             RevengerPartyMoveNearTarget(this._targetHero.PartyBelongedToAsPrisoner.MobileParty);
                         }
@@ -387,6 +391,7 @@ namespace PeasantRevenge
                                     }
 
                                     CheckLog();
+
                                 }
                             }
                         }
@@ -1584,6 +1589,8 @@ namespace PeasantRevenge
         /// - Pay (raider (player or AI))
         /// - Pay (in place of raider (AI)) // TODO: Need persuation
         /// * Blame other AI (player or AI) // TODO: Need persuation
+        ///     If player has the blamed hero as prisoner, then player execute the hero.
+        ///     TODO: Notable must be persueded to do execution of the accused hero.
         /// * Persuade the questGiver to drop the revenge  // TODO: Need persuation
         /// - Abandon the quest
         /// - Return to previous meniu
@@ -1773,8 +1780,11 @@ namespace PeasantRevenge
                    TextObject text = new TextObject("{=*}You blamed {accuseD0.LINK} for the crime.");
                    StringHelpers.SetCharacterProperties($"accuseD{0}", hero_accused.CharacterObject, text);
                    base.AddLog(text);
-                   ExecuteHero(this.QuestGiver, hero_accused);
-                   base.AddLog(IssueSuccessText);
+                   if (HeroIsPlayersPrisoner(hero_accused))
+                   {
+                       ExecuteHero(this.QuestGiver, hero_accused);
+                       base.AddLog(IssueSuccessText);
+                   }
                },
                this, 100, null, null);
 
@@ -1797,8 +1807,11 @@ namespace PeasantRevenge
                    TextObject text = new TextObject("{=*}You blamed {accuseD1.LINK} for the crime.");
                    StringHelpers.SetCharacterProperties($"accuseD{1}", hero_accused.CharacterObject, text);
                    base.AddLog(text);
-                   ExecuteHero(this.QuestGiver, hero_accused);
-                   base.AddLog(IssueSuccessText);
+                   if (HeroIsPlayersPrisoner(hero_accused))
+                   {
+                       ExecuteHero(this.QuestGiver, hero_accused);
+                       base.AddLog(IssueSuccessText);
+                   }
                },
                this, 100, null, null);
 
@@ -1821,8 +1834,11 @@ namespace PeasantRevenge
                    TextObject text = new TextObject("{=*}You blamed {accuseD2.LINK} for the crime.");
                    StringHelpers.SetCharacterProperties($"accuseD{2}", hero_accused.CharacterObject, text);
                    base.AddLog(text);
-                   ExecuteHero(this.QuestGiver, hero_accused);
-                   base.AddLog(IssueSuccessText);
+                   if (HeroIsPlayersPrisoner(hero_accused))
+                   {
+                       ExecuteHero(this.QuestGiver, hero_accused);
+                       base.AddLog(IssueSuccessText);
+                   }
                },
                this, 100, null, null);
 
@@ -1845,8 +1861,11 @@ namespace PeasantRevenge
                    TextObject text = new TextObject("{=*}You blamed {accuseD3.LINK} for the crime.");
                    StringHelpers.SetCharacterProperties($"accuseD{3}", hero_accused.CharacterObject, text);
                    base.AddLog(text);
-                   ExecuteHero(this.QuestGiver, hero_accused);
-                   base.AddLog(IssueSuccessText);
+                   if (HeroIsPlayersPrisoner(hero_accused))
+                   {
+                       ExecuteHero(this.QuestGiver, hero_accused);
+                       base.AddLog(IssueSuccessText);
+                   }
                },
                this, 100, null, null);
             /*When method get_prisoner_blamed fails to get the prisoner , we can blame any other prisoner in the target hero party prisoner roster*/
