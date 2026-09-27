@@ -251,7 +251,7 @@ namespace PeasantRevenge
             }
             else
             {
-                return (Hero.MainHero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(hero.CharacterObject) ?? false);
+                return Hero.MainHero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(hero.CharacterObject) ?? false;
             }
         }
 
@@ -263,7 +263,7 @@ namespace PeasantRevenge
             }
             else
             {
-                return (hero.PartyBelongedToAsPrisoner?.PrisonerHeroes?.Contains(Hero.MainHero.CharacterObject) ?? false);
+                return hero.PartyBelongedTo?.Party?.PrisonerHeroes?.Contains(Hero.MainHero.CharacterObject) ?? false;
             }
         }
 
@@ -305,7 +305,7 @@ namespace PeasantRevenge
             {
 
                 base.RemoveTrackedObject(this._targetHero);
-                this._targetHero = null;
+                //this._targetHero = null; // seting to null may be wrong.
                 //base.AddLog(IssueSuccessText); //Letting the player to get to the peasant and complete the quest.
             }
             else if (_status.Contains(event_status.party_denied) ||
@@ -347,7 +347,11 @@ namespace PeasantRevenge
                          this._targetHero.PartyBelongedToAsPrisoner != null &&
                         this._targetHero.PartyBelongedToAsPrisoner.MobileParty != null)
                     {
-                        RevengerPartyMoveNearTarget(this._targetHero.PartyBelongedToAsPrisoner.MobileParty);
+
+                        if (_status.IsEmpty() == false)// Has not reached any conclusion yet, so revenger want to move to target.
+                        {
+                            RevengerPartyMoveNearTarget(this._targetHero.PartyBelongedToAsPrisoner.MobileParty);
+                        }
 
                         if (HeroIsPlayersPrisoner(this._targetHero)) // Player has captured the target hero as prisoner - criminal.
                         {
@@ -364,7 +368,7 @@ namespace PeasantRevenge
                         {
                             //TODO: add dialog when player tries to talk to the prisoner, when prisoner is still captured by AI - create "Betray revenger branch"
 
-                            if (base.QuestGiver.PartyBelongedTo.Position.Distance(this._targetHero.PartyBelongedToAsPrisoner.Position) < 3f) // QuestGiver arrived at prisoner apturer party
+                            if (base.QuestGiver.PartyBelongedTo.Position.Distance(this._targetHero.PartyBelongedToAsPrisoner.Position) < 4f) // QuestGiver arrived at prisoner apturer party
                             {
                                 if (base.JournalEntries.Last().LogText.Equals(IssueOwnerTravelingLogText))
                                 {
@@ -1273,6 +1277,7 @@ namespace PeasantRevenge
              "{=*}{ISSUE_QUEST_START_QGIVER_OFFER_START}",
              () =>
              {
+                 //Target hero is null , if it is player... Should use these lines when player is the raider.
                  TextObject text;
                  if (this._targetHero != null && this._targetHero.IsHumanPlayerCharacter)
                  {
@@ -1950,7 +1955,7 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay_success",
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay",
              "close_window",
-             "{=PRev0037}I'm pleased.[if:convo_happy]",
+             "{=*}{PL_PAY_INSTEAD_OF_CR_ACC}",
              () =>
              {
                  if (!IsQuestGiverHero(this.QuestGiver))
@@ -2060,31 +2065,34 @@ namespace PeasantRevenge
         /// <returns></returns>
         private void GetPlayerDiscussRevengerDemandsDialogFlow()
         {
-            PlayerDiscussRevengerDemandsDialogFlow = DialogFlow.CreateDialogFlow("start", 125).
+            PlayerDiscussRevengerDemandsDialogFlow = DialogFlow.CreateDialogFlow("start", 500).
                     NpcLine(new TextObject("{=PRev0001}You looted nearby village. Peasants demand to cut someone's head off. What will you say?[rf:idle_angry][ib:closed][if:idle_angry]", null), null, null).
-                    Condition(() => { return this.CapturerPartyLeaderDialogCondition() && PlayerIsHeroPrisoner(Hero.OneToOneConversationHero); }).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
+                    Condition(() =>
+                    {
+                        bool player_is_target_and_prisoner = this.CapturerPartyLeaderDialogCondition() && PlayerIsHeroPrisoner(Hero.OneToOneConversationHero);
+                        return player_is_target_and_prisoner;
+                    }).GotoDialogState("peasant_revenge_discuss_pr_demands_pl_options");
 
             /*PAY*/
             PlayerDiscussRevengerDemandsDialogFlow.AddPlayerLine(
               "peasant_revenge_discuss_pr_demands_pl_options_pl_pay",
               "peasant_revenge_discuss_pr_demands_pl_options",
               "peasant_revenge_discuss_pr_demands_pl_pay_barter_line",
-              "{=*}I'll pay {REPARATION}{GOLD_ICON}.", new ConversationSentence.OnConditionDelegate(_hero_reparation_condition), null, this, 100, null);
+              "{=*}I'll pay {REPARATION}{GOLD_ICON}.", () => { return this.CapturerPartyLeaderDialogCondition() && this._hero_reparation_condition(); }, null, this, 100, null);
 
             PlayerDiscussRevengerDemandsDialogFlow.AddDialogLine(
               "peasant_revenge_discuss_pr_demands_pl_pay_line",
               "peasant_revenge_discuss_pr_demands_pl_pay_barter_line",
               "peasant_revenge_discuss_pr_demands_pl_pay_received_pay",
               "{=!}BARTER LINE - Covered by barter interface. Please do not remove these lines!",
-              null,
-              new ConversationSentence.OnConsequenceDelegate(this._player_barter_consequence), this, 100, null, null, null);
+              null, new ConversationSentence.OnConsequenceDelegate(this._player_barter_consequence), this, 100, null, null, null);
 
             /*NOT PAY*/
             PlayerDiscussRevengerDemandsDialogFlow.AddPlayerLine(
               "peasant_revenge_discuss_pr_demands_pl_options_not_pay",
               "peasant_revenge_discuss_pr_demands_pl_options",
               "peasant_revenge_discuss_pr_demands_pl_not_pay",
-              "{=*}I'll not pay.", null, null, this, 100,
+              "{=*}I'll not pay.", () => { return this.CapturerPartyLeaderDialogCondition(); }, null, this, 100,
               (out TextObject hintText) => { return this._hero_will_not_pay_reparation_on_clickable(_get_victim(), Hero.OneToOneConversationHero, out hintText); });
 
             /*OTHER AI PAY*/
@@ -2093,7 +2101,7 @@ namespace PeasantRevenge
               "peasant_revenge_discuss_pr_demands_pl_options",
               "peasant_revenge_discuss_pr_demands_friend_pay_choose",
               "{=PRev0065}I have friends, who will pay the reparation.",
-              () => { return !GetHeroSuportersWhoCouldPayUnpaidRansom(this._targetHero, _get_reparation_value()).IsEmpty(); },
+              () => { return this.CapturerPartyLeaderDialogCondition() && !GetHeroSuportersWhoCouldPayUnpaidRansom(this._targetHero, _get_reparation_value()).IsEmpty(); },
               null, this, 110,
               new ConversationSentence.OnClickableConditionDelegate(this.peasant_revenge_criminal_has_suporters_clickable_condition), null);
 
@@ -2133,7 +2141,7 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_pr_demands_friend_pay_choose_lord_3",
              "peasant_revenge_discuss_pr_demands_friend_pay_choose_options",
              "peasant_revenge_discuss_pr_demands_pl_options",
-             "{=*}I'm thinking about something else.", null, null, this, 90, null, null);
+             "{=*}I'm thinking about something else.", () => { return this.CapturerPartyLeaderDialogCondition(); }, null, this, 90, null, null);
 
             PlayerDiscussRevengerDemandsDialogFlow.AddDialogLine(
              "peasant_revenge_discuss_pr_demands_friend_pay_received_success",
@@ -2148,7 +2156,7 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_pr_demands_pl_options_pl_blame",
              "peasant_revenge_discuss_pr_demands_pl_options",
              "peasant_revenge_discuss_pr_demands_pl_blame_ask_options",
-             "{=*}I'm not a criminal...", null, null, this, 100, null);
+             "{=*}I'm not a criminal...", () => { return this.CapturerPartyLeaderDialogCondition(); }, null, this, 100, null);
 
             PlayerDiscussRevengerDemandsDialogFlow.AddDialogLine(
             "peasant_revenge_discuss_pr_demands_pl_blame_ask_options_start",
@@ -2251,7 +2259,7 @@ namespace PeasantRevenge
              "peasant_revenge_discuss_pr_demands_pl_options_pl_blame_n",
              "peasant_revenge_discuss_pr_demands_pl_blame_options",
              "peasant_revenge_discuss_pr_demands_pl_options",
-             "{=*}I will find out soon.", null, null, this, 100, null);
+             "{=*}I will find out soon.", () => { return this.CapturerPartyLeaderDialogCondition(); }, null, this, 100, null);
 
 
 
@@ -2994,13 +3002,51 @@ namespace PeasantRevenge
             bool reparation_is_ccepted =
                    (hero.GetTraitLevel(DefaultTraits.Honor) < 0 || hero.IsHumanPlayerCharacter) && hero.GetRelation(criminal) >= -10;
 
+            bool AICompletedTheQuest = base.JournalEntries.Any(x => x.LogText.Equals(IssueAICompletedTheQuestText));
+
             if (reparation_is_ccepted)
             {
-                /*TODO: variations, when accepted the payment*/
+                if (AICompletedTheQuest)
+                {
+                    if (_status.Contains(event_status.criminal_paid)
+                   || _status.Contains(event_status.party_paid)
+                   || _status.Contains(event_status.clan_paid)
+                   || _status.Contains(event_status.kingdom_paid))
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR_ACC",
+                        new TextObject("{=*}The reparation has been paid already, but I accept your generosity.[if:convo_approving][ib:normal]"), false);
+                    }
+                    else if (_status.Contains(event_status.criminal_killed))
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR_ACC",
+                        new TextObject("{=*}I accept your gold.[if:convo_evil_smile][ib:normal]"), false);
+                    }
+                }
+                else
+                {
+                    MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR_ACC",
+                       new TextObject("{=PRev0037}I'm pleased.[if:convo_happy]"), false);
+                }
             }
             else
             {
-                if (hero.GetTraitLevel(DefaultTraits.Honor) > 0)
+                if (AICompletedTheQuest)
+                {
+                    if (_status.Contains(event_status.criminal_paid)
+                    || _status.Contains(event_status.party_paid)
+                    || _status.Contains(event_status.clan_paid)
+                    || _status.Contains(event_status.kingdom_paid))
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
+                        new TextObject("{=*}The reparation has been paid already.[if:convo_approving][ib:closed]"), false);
+                    }
+                    else if (_status.Contains(event_status.criminal_killed))
+                    {
+                        MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
+                        new TextObject("{=*}I do not need your gold.[if:convo_confused_annoyed][ib:closed]"), false);
+                    }
+                }
+                else if (hero.GetTraitLevel(DefaultTraits.Honor) > 0)
                 {
                     MBTextManager.SetTextVariable("PL_PAY_INSTEAD_OF_CR",
                     new TextObject("{=*}No, I'll not accept your proposal. Criminal must pay the price.[if:convo_furious][ib:warrior]"), false);
