@@ -179,5 +179,6 @@
     <string id="PRev0172" text="{ACCUSED_HERO.NAME} es del mismo clan." />
     <string id="PRev0173" text="{ACCUSED_HERO.NAME} es del mismo reino." />
     <string id="PRev0174" text="¿Princesa, dices?." />
+    <string id="PRev0175" text="No es cierto. Tomemos la decisión correcta esta vez." />
   </strings>
 </base>

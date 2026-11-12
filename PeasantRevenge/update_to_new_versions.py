@@ -2,8 +2,8 @@ import os
 import time
 import subprocess
 
-AssemblyVersion = "28.0.0.0"
-SupportedGameVersion = "1.4.8"
+AssemblyVersion = "28.0.0.2"
+SupportedGameVersion = "1.5.7"
 FileVersion = AssemblyVersion
 
 def get_commit_info():

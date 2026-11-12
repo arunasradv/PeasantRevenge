@@ -180,5 +180,6 @@
     <string id="PRev0172" text="{ACCUSED_HERO.NAME} из того же клана." />
     <string id="PRev0173" text="{ACCUSED_HERO.NAME} из того же королевства." />
     <string id="PRev0174" text="Принцесса, говорите?" />
+    <string id="PRev0175" text="Это не так. Давайте на этот раз примем верное решение." />
   </strings>
 </base>

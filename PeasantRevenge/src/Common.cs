@@ -320,7 +320,7 @@ namespace PeasantRevenge
 
         public static void log(string text)
         {
-            if (_cfg.values.disableMessages)
+            if (_cfg == null || _cfg.values.disableMessages)
                 return;
             TaleWorlds.Localization.TextObject textObject = new TaleWorlds.Localization.TextObject(text, null);
             InformationManager.DisplayMessage(new InformationMessage(textObject.ToString(), Color.ConvertStringToColor(_cfg.values.logColorForClan)));
