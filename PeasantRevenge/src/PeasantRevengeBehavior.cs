@@ -3943,7 +3943,7 @@ namespace PeasantRevenge
         {
             OnLordExecuteRevengerAfterOrBeforeQuest(Hero.MainHero);
             OnHeroChopNotableHeadConsequence(Hero.MainHero, Hero.OneToOneConversationHero);
-            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, Hero.OneToOneConversationHero, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, Hero.MainHero, true, false);
         }
 
@@ -3953,7 +3953,7 @@ namespace PeasantRevenge
             {
                 OnLordExecuteRevengerAfterOrBeforeQuest(hero);
                 OnHeroChopNotableHeadConsequence(hero, Hero.OneToOneConversationHero);
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, SceneNotificationData.RelevantContextType.Map));
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(hero, Hero.OneToOneConversationHero, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map));
                 KillCharacterAction.ApplyByExecution(Hero.OneToOneConversationHero, hero, true, false);
 
             }
@@ -4098,7 +4098,7 @@ namespace PeasantRevenge
         private void peasant_revenge_peasant_kill_by_hero(Hero executioner)
         {
             OnLordExecuteRevengerAfterOrBeforeQuest(executioner);
-            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(executioner, currentRevenge.executioner.HeroObject, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, executioner, true, true);
         }
 
@@ -4582,7 +4582,7 @@ namespace PeasantRevenge
         private void peasant_revenge_peasant_messenger_killed_consequence()
         {
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, currentRevenge.party.LeaderHero, _cfg.values.relationChangeWhenLordKilledMessenger, _cfg.values.relationChangeWhenLordKilledMessenger != 0);
-            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.executioner.HeroObject, SceneNotificationData.RelevantContextType.Map));
+            MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(Hero.MainHero, currentRevenge.executioner.HeroObject, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map));
             KillCharacterAction.ApplyByExecution(currentRevenge.executioner.HeroObject, Hero.MainHero, true, true);
         }
 
@@ -4631,13 +4631,14 @@ namespace PeasantRevenge
         {
             if (_cfg.values.allowPeasantToKillLord)
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, currentRevenge.executioner.HeroObject, true, true);
                 //log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.executioner.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
             }
             else
             {
-                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.party.LeaderHero, victim, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.executioner.HeroObject, victim, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
+                MBInformationManager.ShowSceneNotification(HeroExecutionSceneNotificationData.CreateForInformingPlayer(currentRevenge.party.LeaderHero, victim, CampaignTime.Now, SceneNotificationData.RelevantContextType.Map)); // do not show because prisoner is in other party
                 KillCharacterAction.ApplyByExecution(victim, currentRevenge.party.LeaderHero, true, true);
                 //log($"{currentRevenge.party.LeaderHero.Name} captured and {currentRevenge.party.LeaderHero.Name} executed {victim.Name}, because lack {currentRevenge.reparation - victim.Gold} gold");
             }
