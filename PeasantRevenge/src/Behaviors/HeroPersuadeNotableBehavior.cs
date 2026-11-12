@@ -44,7 +44,7 @@ namespace PeasantRevenge
         private bool Has_persuade_quest(Hero hero)
         {
             /*TODO: Add lord persuade notables to rebel quest.*/
-            return true;
+            return false;
         }
 
         private bool check_probability(float chance, int seed)

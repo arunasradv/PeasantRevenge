@@ -161,6 +161,8 @@ namespace PeasantRevenge
             {
                 return true;
             }
+
+            log($"IssueStayAliveConditions for {base.IssueOwner.Name} failed.");
             return false;
         }
 
@@ -195,7 +197,7 @@ namespace PeasantRevenge
 
         protected override void OnGameLoad()
         {
-
+            log($"OnGameLoadedEvent:{this.IssueQuest?.Title?.ToString()}, {this.IssueOwner.Name}, owner: {this.IssueOwner}; IsOngoing: {this.IssueQuest?.IsOngoing}, IsSpecialQuest: {this.IssueQuest?.IsSpecialQuest}, IsReady: {this.IssueQuest?.IsReady}, IsInitialized: {this.IssueQuest?.IsInitialized}, IsFinalized: {this.IssueQuest?.IsFinalized}, IsOngoingWithoutQuest: {this.IsOngoingWithoutQuest}");
         }
     }
 }

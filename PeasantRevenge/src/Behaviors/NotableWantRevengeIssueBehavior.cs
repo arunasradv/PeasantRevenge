@@ -71,10 +71,77 @@ namespace PeasantRevenge
                 issueGiver.HomeSettlement.LastAttackerParty != null &&
                 issueGiver.IsRuralNotable &&
                 !CfgParser.hero_trait_list_condition(issueGiver, _cfg.values.peasantRevengerExcludeTrait, out string parseerror) &&
+                issueGiver.HomeSettlement.Village != null &&
+                issueGiver.HomeSettlement.Village.Bound != null &&
+                issueGiver.HomeSettlement.Village.Bound.Town != null &&
                 issueGiver.HomeSettlement.Village.Bound.Town.Security <= 99f)
             {
                 log($"Revenge {issueGiver.Name} of {issueGiver.HomeSettlement.Name}");
                 return true;
+            }
+            else
+            {
+                if (issueGiver == null)
+                {
+                    log($"issueGiver is null");
+                }
+                else
+                {
+                    if (issueGiver.HomeSettlement == null)
+                    {
+                        log($"{issueGiver.Name} issueGiver.HomeSettlement is null");
+                    }
+                    else
+                    {
+                        if (issueGiver.HomeSettlement.IsVillage == false)
+                        {
+                            log($"{issueGiver.Name}  issueGiver.HomeSettlement.IsVillage is false");
+                        }
+                        else
+                        {
+                            if (issueGiver.HomeSettlement.LastAttackerParty == null)
+                            {
+                                log($"{issueGiver.Name}  issueGiver.HomeSettlement.LastAttackerParty is null");
+                            }
+                            else
+                            {
+                                if (CfgParser.hero_trait_list_condition(issueGiver, _cfg.values.peasantRevengerExcludeTrait, out string parseerror2))
+                                {
+                                    log($"{issueGiver.Name} issueGiver has excluded trait");
+                                }
+                                else
+                                {
+                                    if (issueGiver.HomeSettlement.Village == null)
+                                    {
+                                        log($"{issueGiver.Name} issueGiver.HomeSettlement.Village is null");
+                                    }
+                                    else
+                                    {
+                                        if (issueGiver.HomeSettlement.Village.Bound == null)
+                                        {
+                                            log($"{issueGiver.Name} issueGiver.HomeSettlement.Village.Bound is null");
+                                        }
+                                        else
+                                        {
+                                            if (issueGiver.HomeSettlement.Village.Bound.Town == null)
+                                            {
+                                                log($"{issueGiver.Name} issueGiver.HomeSettlement.Village.Bound.Town is null");
+                                            }
+                                            else
+                                            {
+                                                if (issueGiver.HomeSettlement.Village.Bound.Town.Security > 99f)
+                                                {
+                                                    log($"{issueGiver.Name} issueGiver.HomeSettlement.Village.Bound.Town.Security is {issueGiver.HomeSettlement.Village.Bound.Town.Security}, which is > 99f");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
             }
             return false;
         }

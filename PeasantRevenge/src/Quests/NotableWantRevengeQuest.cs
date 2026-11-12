@@ -88,9 +88,12 @@ namespace PeasantRevenge
             RevengerTravelProgress();
         }
 
+        public override string SpecialQuestType => "NotableWantRevenge";
+
         protected override void InitializeQuestOnGameLoad()
         {
             this.SetDialogs();
+            log($"InitializeQuestOnGameLoad: {base.QuestGiver.Name} revenge quest loaded. Target settlement: {this._targetSettlement?.Name}, target hero: {this._targetHero?.Name}");
         }
 
         protected override void RegisterEvents()
@@ -1097,7 +1100,7 @@ namespace PeasantRevenge
 
         }
 
-        //TODO: Finish setting dialogs
+
         //TODO: Fix revenger party, when quest is completed and it i can be attacked (result crash if not fixed).
         private bool NotableDialogCondition()
         {
@@ -1426,54 +1429,118 @@ namespace PeasantRevenge
             NotCapturedRaiderDialogFlow = DialogFlow.CreateDialogFlow("hero_main_options", 100);
 
             NotCapturedRaiderDialogFlow.AddPlayerLine(
-                "peasant_revenge_talk_to_captured_start",
+               "peasant_revenge_talk_to_captured_start_unknown_targethero",
+               "hero_main_options",
+               "peasant_revenge_talk_to_captured_hero_reaction_0",
+               "{TALK_TO_CAPTURED_RAIDER_START}",
+               () =>
+               {
+                   /*When _targetHero is null , because party got destroyed before quest accepted*/
+                   if (this._targetHero == null)
+                   {
+                       if (Hero.OneToOneConversationHero.LastKnownClosestSettlement != null)
+                       {
+                           if (Hero.OneToOneConversationHero.LastKnownClosestSettlement.Name.Equals(this.QuestGiver.HomeSettlement.Name))
+                           {
+                               TextObject text;
+                               if (HeroIsPlayersPrisoner(Hero.OneToOneConversationHero))
+                               {
+                                   text = new TextObject("{=*}Did you recently attacked the village {RAIDEDVILLAGE} .");
+                               }
+                               else
+                               {
+                                   text = new TextObject("{=*}What did you do at the village {RAIDEDVILLAGE} recently?");
+                               }
+
+                               text = text.SetTextVariable("RAIDEDVILLAGE", this._targetSettlement.Name);
+                               MBTextManager.SetTextVariable("TALK_TO_CAPTURED_RAIDER_START", text);
+                               return true;
+                           }
+                           else
+                           {
+                               log($"NotCapturedRaiderDialogFlow targetHero==null and conversation hero last settlement is not {this.QuestGiver.HomeSettlement.Name}");
+                               return false;
+                           }
+                       }
+                       else
+                       {
+                           log($"NotCapturedRaiderDialogFlow targetHero==null LastKnownClosestSettlement null.");
+                           return false;
+                       }
+                   }
+                   else
+                   {
+                       return false;
+                   }
+               }, null, this, 120, null, null, null);
+
+            NotCapturedRaiderDialogFlow.AddPlayerLine(
+                "peasant_revenge_talk_to_captured_start_known_targethero_other_prisoner",
                 "hero_main_options",
                 "peasant_revenge_talk_to_captured_hero_reaction_0",
                 "{TALK_TO_CAPTURED_RAIDER_START}",
                 () =>
                 {
-                    /*When _targetHero is null , because party got destroyed before quest accepted*/
-
-                    if (this._targetHero == null)
+                    if (this._targetHero != null)
                     {
-                        if (Hero.OneToOneConversationHero.LastKnownClosestSettlement != null)
+                        if (Hero.OneToOneConversationHero != this._targetHero)
                         {
-                            if (Hero.OneToOneConversationHero.LastKnownClosestSettlement.Name.Equals(this.QuestGiver.HomeSettlement.Name))
+                            return false;
+                        }
+                        else
+                        {
+                            if (this._targetHero.CharacterObject.IsPlayerCharacter == false &&
+                                HeroIsPlayersPrisoner(this._targetHero) == false &&
+                                Hero.OneToOneConversationHero == this._targetHero &&
+                                this._targetHero.IsPrisoner == true)
                             {
-                                TextObject text;
-                                if (HeroIsPlayersPrisoner(Hero.OneToOneConversationHero))
+                                TextObject text = new TextObject("{=*}It is time for {QUEST_GIVER.NAME}'s revenge!");/*For identifying the unknown cases*/
+
+                                text.SetCharacterProperties("QUEST_GIVER", QuestGiver.CharacterObject);
+
+                                if (this._targetHero.PartyBelongedTo != null && this._targetHero.PartyBelongedToAsPrisoner == null) /*hero is with party and not prisoner*/
                                 {
-                                    text = new TextObject("{=*}Did you recently attacked the village {RAIDEDVILLAGE} .");
+                                    text = new TextObject("{=*}I have complaints from the village {RAIDEDVILLAGE} you recently attacked.");
+                                    text = text.SetTextVariable("RAIDEDVILLAGE", this._targetSettlement.Name);
                                 }
-                                else
+                                else if (this._targetHero.PartyBelongedToAsPrisoner != null) /*Target hero is prisoner*/
                                 {
-                                    text = new TextObject("{=*}What did you do at the village {RAIDEDVILLAGE} recently?");
+                                    text = new TextObject("{=*}You are in big trouble.");
                                 }
 
-                                text = text.SetTextVariable("RAIDEDVILLAGE", this._targetSettlement.Name);
                                 MBTextManager.SetTextVariable("TALK_TO_CAPTURED_RAIDER_START", text);
                                 return true;
                             }
                             else
                             {
-                                log($"NotCapturedRaiderDialogFlow targetHero==null and conversation hero last settlement is not {this.QuestGiver.HomeSettlement.Name}");
                                 return false;
                             }
-                        }
-                        else
-                        {
-                            log($"NotCapturedRaiderDialogFlow targetHero==null LastKnownClosestSettlement null.");
-                            return false;
                         }
                     }
                     else
                     {
-                        if (Hero.OneToOneConversationHero != this._targetHero)
-                            return false;
+                        return false;
+                    }
+                }, null, this, 120, null, null, null);
 
+            NotCapturedRaiderDialogFlow.AddPlayerLine(
+            "peasant_revenge_talk_to_captured_start_known_targethero_players_prisoner",
+            "hero_main_options",
+            "peasant_revenge_talk_to_captured_hero_reaction_0",
+            "{TALK_TO_CAPTURED_RAIDER_START}",
+            () =>
+            {
+                if (this._targetHero != null)
+                {
+                    if (Hero.OneToOneConversationHero != this._targetHero)
+                    {
+                        return false;
+                    }
+                    else
+                    {
                         if (this._targetHero.CharacterObject.IsPlayerCharacter == false &&
-                        HeroIsPlayersPrisoner(this._targetHero) == false &&
-                        Hero.OneToOneConversationHero == this._targetHero)
+                            HeroIsPlayersPrisoner(this._targetHero) == true &&
+                            Hero.OneToOneConversationHero == this._targetHero)
                         {
                             TextObject text = new TextObject("{=*}It is time for {QUEST_GIVER.NAME}'s revenge!");/*For identifying the unknown cases*/
 
@@ -1497,7 +1564,12 @@ namespace PeasantRevenge
                             return false;
                         }
                     }
-                }, null, this, 120, null, null, null);
+                }
+                else
+                {
+                    return false;
+                }
+            }, null, this, 120, null, null, null);
 
             NotCapturedRaiderDialogFlow.AddDialogLine(
               "peasant_revenge_talk_to_captured_hero_reaction_0_id",
@@ -1904,25 +1976,27 @@ namespace PeasantRevenge
                        return false;
                    return true;
                }, null, this, 100, null, null, null);
-            /*DROP REVENGE*/
+            /*DROP REVENGE
+            TODO: if player met the party and demand the drop revenge while player's party is lower strength, peasand should attack.
+            */
             this.DiscussDialogFlow.AddPlayerLine(
                "peasant_revenge_discuss_fate_pl_options_drop",
                "peasant_revenge_discuss_fate_pl_options",
                "peasant_revenge_discuss_fate_stop_or_else",
-               "{=*}You should drop your revenge, or else...", () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; }, null, this, 100, null, null, null);
+               "{=*}You should drop your revenge, or else...", () => { return IsQuestGiverHero(this.QuestGiver); }, null, this, 100, null, null, null);
 
             this.DiscussDialogFlow.AddDialogLine(
              "peasant_revenge_any_revenger_or_else",
              "peasant_revenge_discuss_fate_stop_or_else",
              "peasant_revenge_discuss_fate_stop_or_else_options",
-             "{=*}What else?[rf:idle_angry][ib:closed][if:idle_angry]", () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; }, null, this, 200, null, null, null);
+             "{=*}What else?[rf:idle_angry][ib:closed][if:idle_angry]", () => { return IsQuestGiverHero(this.QuestGiver); }, null, this, 200, null, null, null);
 
             this.DiscussDialogFlow.AddPlayerLine(
              "peasant_revenge_discuss_fate_stop_or_else_options_0",
              "peasant_revenge_discuss_fate_stop_or_else_options",
              "close_window",
              "{=*}I will chop your head off!",
-             () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; },
+             () => { return IsQuestGiverHero(this.QuestGiver); },
              () =>
              {
                  TextObject text = new TextObject("{=*}You beheaded the {QUESTGIVER.LINK}.");
@@ -1968,7 +2042,7 @@ namespace PeasantRevenge
                "peasant_revenge_discuss_fate_stop_or_else_options_n",
                "peasant_revenge_discuss_fate_stop_or_else_options",
                "quest_discuss",
-               "{=*}Nevermind.", () => { if (!IsQuestGiverHero(this.QuestGiver)) return false; return true; }, null, this, 100, null, null, null);
+               "{=*}Nevermind.", () => { return IsQuestGiverHero(this.QuestGiver); }, null, this, 100, null, null, null);
             /*PAYING INSTEAD OF CRIMINAL*/
             this.DiscussDialogFlow.AddDialogLine(
              "peasant_revenge_discuss_fate_pl_options_raider_pay_peasant_receiving_pay_success",
@@ -3296,24 +3370,28 @@ namespace PeasantRevenge
 
         private void CompleteQuestWithSuccessConsequences()
         {
+            log("Completing quest with success consequences.");
             _disband_quest_giver_party();
             base.CompleteQuestWithSuccess();
         }
 
         private void CompleteQuestWithFailConsequences()
         {
+            log("Completing quest with fail consequences.");
             _disband_quest_giver_party();
             base.CompleteQuestWithFail();
         }
 
         private void CompleteQuestWithCancelConsequences()
         {
+            log("Completing quest with cancel consequences.");
             _disband_quest_giver_party();
             base.CompleteQuestWithCancel();
         }
 
         private void CompleteQuestWithBetrayConsequences()
         {
+            log("Completing quest with betrayal consequences.");
             _disband_quest_giver_party();
             base.CompleteQuestWithBetrayal();
         }

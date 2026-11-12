@@ -14,7 +14,7 @@ namespace PeasantRevenge
     public class PeasantRevengeConfiguration
     {
         public int CfgVersion = 28;
-        public bool enableRevengerMobileParty = true;
+        public bool enableRevengerMobileParty = true; //When party is enabled, the peasant cancels the quests after game load.
         public bool enableHelpNeutralVillageAndDeclareWarToAttackerMenu = true;
         public int ReparationsScaleToSettlementHearts = 30;
         public int relationChangeAfterReparationsReceived = 2;
@@ -74,7 +74,7 @@ namespace PeasantRevenge
         public float peasantRevengerIntimidationPowerScale = 0.5f;
         public bool enableOtherNobleTraitsChangeAfterNobleExecution = true;
         public int lordCanTryAsManyTimesToPersuadeTheNotable = 5;
-        public float lordTryPersuadeNotableProbability = 0.6f;
+        public float lordTryPersuadeNotableProbability = 0.1f;
         public float lordGainNewTraitProbability = 0.05f;
         public bool onlyPlayerCanExecuteLords = false;
         public float lastWordsSuccessChance = 0.9f;
